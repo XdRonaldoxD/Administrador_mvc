@@ -1,0 +1,541 @@
+<!-- MODALES -->
+<div class="modal fade modal_cambio_transportista" data-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title mx-auto" id="perfilCrudModal">Cambiar Transportista</h4>
+            </div>
+            <div class="modal-body">
+                <input type="text" hidden name="" id="direccion_cliente">
+                <div class="row">
+
+                    <div class="col-md-7 my-2">
+                        <table>
+                            <tbody>
+                                <tr style="vertical-align: top; border:none;">
+
+                                    <td style="position: relative;width: 4.5rem;">
+                                        <i style="color: #5A8DEE;font-size: 4.5rem;margin: 0;position: absolute;top: 50%;-ms-transform: translateY(-50%);transform: translateY(-50%);"
+                                            class=" bx bxl-baidu icon-resume-client "></i>
+                                    </td>
+                                    <td>
+                                        <ul class="list-unstyled m-0" style="text-align: start !important;">
+                                            <li><strong>Pedido</strong></li>
+                                            <li>Nro Pedido: <span class="nro_pedido_md"></span></li>
+                                            <li>Estado Pedido: <span class="estado_pedido_md"></span></li>
+                                            <li>Estado Pago: <span class="estado_pago_pedido_md"></span></li>
+                                            <li>Estado Preparación: <span class="estado_preparacion_pedido_md"></span>
+                                            </li>
+                                            <li><b class="btn_dimensiones_pedido_detalle cursor-pointer">Ver
+                                                    Dimensiones</b> <i style="cursor: pointer;" data-toggle="tooltip"
+                                                    data-original-title="Ver Dimensiones"
+                                                    class="cursor-pointer mdi mdi-cube btn_dimensiones_pedido_detalle"></i>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-md-5 my-2">
+                        <table>
+                            <tbody>
+                                <tr style="vertical-align: top; border:none;">
+
+                                    <td style="position: relative;width: 4.5rem;">
+                                        <i style="color: #5A8DEE;font-size: 4.5rem;margin: 0;position: absolute;top: 50%;-ms-transform: translateY(-50%);transform: translateY(-50%);"
+                                            class=" bx bxs-user "></i>
+                                    </td>
+                                    <td>
+                                        <ul class="list-unstyled m-0" style="text-align: start !important;">
+                                            <li><strong>Cliente</strong></li>
+                                            <li></li>
+                                            <li></li>
+                                            <li>Teléfono: </li>
+                                            <li>Celular: </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <hr>
+                <input hidden class="form-control " type="text" name="" id="id_transportista_tmd">
+                <div id="alert-cambio-direcion">
+
+                </div>
+                <form action="" id="form_actualizar_direccion">
+                    <input type="text" hidden name="id_pedido" value="1">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="" class="d-block">Región</label>
+                            <select class="form-control" name="" id="region_tmd">
+
+                            </select>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="" class="d-block">Comuna</label>
+                            <select name="id_comuna" id="comuna_tmd" class="form-control "></select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="" class="d-block">Dirección</label>
+                            <input name="direccion" class="form-control " type="text" id="direccion_tmd">
+                        </div>
+                    </div>
+                </form>
+                <div class="">
+                    <button class="btn btn-success btn_actualizar_direccion d-flex align-items-center ml-auto">
+                        <i class='bx bx-refresh'></i> Actualizar Dirección Pedido</button>
+                </div>
+                <h6><b>Transportistas</b> </h6>
+                <div id="alert-cambio-transportista"></div>
+                <div class="table-responsive">
+                    <table id="tabla_transportistas_disponibles"
+                        class="table table-bordered center-text-table text-center w-100 bg-white">
+                        <thead>
+                            <tr>
+                                <th hidden>id transportista</th>
+                                <th>Seleccionado</th>
+                                <th>RUT</th>
+                                <th>Nombre</th>
+                                <th>Dirección</th>
+                                <th>Precio</th>
+                                <th hidden>Precio</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-12 col-md-12 text-right">
+                    <button type="button" style="padding-left: 9px;" data-dismiss="modal"
+                        class="btn btn-outline-secondary" id="btn-close-crud"><i style="vertical-align: text-bottom;"
+                            class="bx bx-left-arrow-alt"></i> Volver</button>
+                    <button type="button" class="btn btn-success btn_cambio_transportista"><i
+                            style="vertical-align: text-bottom;" class="bx bx-save"></i> Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade modal_dimensiones_pedido_detalle" id="modal_dimensiones_pedido_detalle" data-backdrop="static"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title mx-auto" id="perfilCrudModal">Dimensiones Pedido</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table id="dimensiones_pedido_detalle"
+                        class="table table-bordered center-text-table text-center w-100 bg-white">
+                        <thead>
+                            <tr>
+                                <th>SKU</th>
+                                <th>Producto</th>
+                                <th>Anchura</th>
+                                <th>Altura</th>
+                                <th>Profundidad</th>
+                                <th>Peso</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-12 col-md-12 text-right">
+                    <button type="button" style="padding-left: 9px;" data-dismiss="modal"
+                        class="btn btn-outline-secondary" id="btn-close-crud"><i style="vertical-align: text-bottom;"
+                            class="bx bx-left-arrow-alt"></i> Volver</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade modal_cambiar_estado_pago" id="modal_cambiar_estado_pago" data-backdrop="static"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width: 35%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title mx-auto" id="perfilCrudModal">Cambiar Estado Pago</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="">Estado Pago</label>
+                    <select class="form-control" name="" id="md_estado_pago">
+                        <option value="">Seleccione Estado Pago</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-12 col-md-12 text-right">
+                    <button type="button" style="padding-left: 9px;" data-dismiss="modal"
+                        class="btn btn-outline-secondary" id="btn-close-crud"><i style="vertical-align: text-bottom;"
+                            class="bx bx-left-arrow-alt"></i> Volver</button>
+                    <button type="button" class="btn btn-success btn_cambio_estado_pago"><i
+                            style="vertical-align: text-bottom;" class="bx bx-save"></i> Guardar </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<section id="dashboard-ecommerce">
+
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <div class="card">
+
+                <div class="card-content">
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Column -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex flex-row">
+                                            <div class="round align-self-center round-success"><i class="ti-wallet"></i>
+                                            </div>
+                                            <div class="m-l-10 align-self-center">
+                                                <h3 class="m-b-0">{{pedido?.valortotal_pedido | currency: 'S/':
+                                                    'symbol': '': 'en-PE'}}</h3>
+                                                <h5 class="text-muted m-b-0">Total</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Column -->
+                            <!-- Column -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex flex-row">
+                                            <div class="round align-self-center round-info"><i
+                                                    class="mdi mdi-message-text"></i></div>
+                                            <div class="m-l-10 align-self-center">
+                                                <h3 class="m-b-0">2690</h3>
+                                                <h5 class="text-muted m-b-0">Users</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Column -->
+                            <!-- Column -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex flex-row">
+                                            <div class="round align-self-center round-danger"><i
+                                                    class="ti-calendar"></i></div>
+                                            <div class="m-l-10 align-self-center">
+                                                <h3 class="m-b-0">{{pedido?.fechacreacion_pedido | date:'dd/MM/yy' }}
+                                                </h3>
+                                                <h5 class="text-muted m-b-0">Fecha</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Column -->
+                            <!-- Column -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex flex-row">
+                                            <div class="round align-self-center round-success"><i
+                                                    class="mdi mdi-cube"></i></div>
+                                            <div class="m-l-10 align-self-center">
+                                                <h3 class="m-b-0">{{PedidoDetalle.length}}</h3>
+                                                <h5 class="text-muted m-b-0">Productos</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Column -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class=" col-sm-12 col-12 col-md-12 col-lg-12 col-xl-6">
+            <div class="card">
+                <div class="card-content mt-2">
+                    <div class="card-body">
+                        <h5 class="m-0"><i class="bx bx-money"></i> PEDIDO <span class="etiqueta-general">N°
+                                {{pedido?.numero_pedido}}</span>
+                        </h5>
+                        <a class="ml-auto" download href="../../../imprimirDetallePedido/6" data-container="body"
+                            data-original-title="Descargar detalle" class="edit  editar-negocio">
+                            <button class="btn btn-outline-success"> <i class="mdi mdi-printer"></i> Imprimir
+                                Pedido</button>
+                        </a>
+                        <ul class="nav nav-pills m-t-30 m-b-30">
+                            <li class=" nav-item"> <a href="#estado" class="nav-link active" data-toggle="tab"
+                                    aria-expanded="false">ESTADO</a> </li>
+                            <li class="nav-item"> <a href="#documentos" class="nav-link" data-toggle="tab"
+                                    aria-expanded="false">DOCUMENTOS</a> </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="estado" aria-labelledby="estado-tab" role="tabpanel">
+
+                                <div id="alert-cambio-estado"
+                                    class="d-none alert bg-rgba-success alert-dismissible mb-2" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <div class="d-flex align-items-center">
+                                        <i class="bx bx-like"></i>
+                                        <span class="mx-auto">
+                                            <b> Estado:<span id="glosa-cambio-estado"></span> </b>
+                                        </span>
+                                        <span class="">
+                                            <b><span id="fecha-cambio-estado"></span></b>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <select class="form-control" [(ngModel)]="estado_pedido">
+                                            <option value="">Seleccionar Estado</option>
+                                            <option *ngFor="let item of EstadoPedido" value="{{item.id_estado_pedido}}">
+                                                {{item.glosa_estado_pedido}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 p-0">
+                                        <button class="btn btn-primary">ACTUALIZAR ESTADO</button>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <select class="form-control" [(ngModel)]="estado_preparacion">
+                                            <option value="">Seleccionar Preparación</option>
+                                            <option *ngFor="let item of EstadoPreparacion"
+                                                value="{{item.id_estado_preparacion}}">{{item.glosa_estado_preparacion}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 p-0">
+                                        <button class="btn btn-primary ">ACTUALIZAR ESTADO PREPARACION</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane " id="documentos" aria-labelledby="documentos-tab" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>FECHA</th>
+                                                <th>DOCUMENTO</th>
+                                                <th>NÚMERO</th>
+                                                <th>DESCARGAR</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr class="text-center">
+                                                <td colspan="4">Sin documentos</td>
+                                            </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <hr class="mt-4">
+
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item current">
+                                <a class="nav-link btn-sm active" id="transporte-tab" data-toggle="tab"
+                                    href="#transporte" aria-controls="transporte" role="tab" aria-selected="true">
+                                    <i class="bx bxs-truck align-middle"></i>
+                                    <span class="align-middle">TRANSPORTE</span>
+                                </a>
+                            </li>
+                        </ul> -->
+                        <!-- <div class="tab-content">
+                            <div class="tab-pane active" id="transporte" aria-labelledby="transporte-tab"
+                                role="tabpanel">
+                                <div class="table-responsive">
+                                    <table id="tabla_transportista_pedido" class="table text-center">
+                                        <thead>
+                                            <tr>
+                                                <th hidden>ID</th>
+                                                <th>FECHA</th>
+                                                <th>TRANSPORTISTA</th>
+                                                <th>PESO</th>
+                                                <th>COSTO ENVÍO</th>
+                                                <th>N° SEGUIMIENTO</th>
+                                                <th>ACCIONES</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-12 col-lg-12 col-xl-6">
+            <div class="card">
+                <div class="card-content">
+                    <div class="card-body">
+
+                        <h5 class="m-0"><i class="bx bxs-user"></i> CLIENTE N° {{pedido?.numero_pedido}}</h5>
+
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <div class="dato-cliente mt-2 p-1 bg-opacity-themecolor">
+                                    <label for="" class="d-block">DNI: <span>{{pedido?.dni_cliente}}</span></label>
+                                    <label for="" class="d-block mt-1">Teléfono:
+                                        <span>{{pedido?.telefono_cliente}}</span></label>
+                                    <label for="" class="d-block mt-1">Email: <a
+                                            href="javascript:void(0)">{{pedido?.e_mail_cliente}}</a></label>
+                                    <label for="" class="d-block mt-1">Cuenta registrada:
+                                        <span>{{pedido?.fechacreacion_pedido | date:'dd/MM/yyyy' }}</span></label>
+                                    <label for="" class="d-block mt-1">Pedidos pagados: <span>0</span></label>
+                                    <label for="" class="d-block mt-1">Total gastados desde su registro:
+                                        <span>0</span></label>
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="nota-privada mt-2">
+                                    <div class="cabecera-nota-privada ">
+                                        <h6 class="m-0"><i class="bx bxs-lock"></i>Nota Privada</h6>
+                                    </div>
+                                    <hr class="m-0 p-0">
+                                    <div class="cuerpo-nota-privada p-1">
+                                        <div class="form-group">
+                                            <textarea id="nota-pedido" class="form-control" name="" id="" cols="30"
+                                                rows="10"></textarea>
+                                        </div>
+                                        <div class="text-right">
+                                            <button class="btn btn-outline-secondary btn-guardar-nota ">
+                                                <i style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                Guardar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <!-- <hr class="mt-4"> -->
+                        <div class="row d-none">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item current">
+                                    <i class="mdi mdi-truck"></i>
+                                    <span class="align-middle">DIRECCIÓN DE ENVÍO</span>
+
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="direccion-envio" aria-labelledby="direccion-envio-tab"
+                                    role="tabpanel">
+                                    <div class="direccion row mt-2 desglose_direccion">
+                                        <ul class="list-unstyled">
+                                            <li><b>Región: </b>{{pedido?.direccionenvio_pedido}}</li>
+                                            <li><b>Ciudad: </b>{{pedido?.direccionenvio_pedido}}</li>
+                                            <li><b>Comuna: </b></li>
+                                            <li><b>Dirección: </b>{{pedido?.direccionenvio_pedido}}</li>
+                                            <li><b>Nota:</b>
+                                                <p>{{pedido?.numero_pedido}}</p>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <div class="card">
+                <div class="card-content">
+                    <div class="card-header  row mb-0 pb-1">
+                        <h5 class="m-0"><i class="bx bxs-cube font-medium-5"></i> PRODUCTOS
+                            <strong>{{PedidoDetalle.length}}</strong></h5>
+
+                    </div>
+                    <hr class="m-0 p-0">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="tabla_productos_pedido" class="table text-center w-100">
+                                <thead>
+                                    <tr>
+                                        <th>IMAGEN</th>
+                                        <th>PRODUCTO</th>
+                                        <th>SKU</th>
+                                        <th>CANTIDAD</th>
+                                        <th>PRECIO UNITARIO</th>
+                                        <th>TOTAL</th>
+                                        <!-- <th>ACCIONES</th> -->
+                                
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of PedidoDetalle">
+                                        <td> <img src="{{item.imagen_producto}}" class="w-25" alt=""> </td>
+                                        <td>{{item.glosa_producto}}</td>
+                                        <td>{{item.codigo_producto}}</td>
+                                        <td>{{item.cantidad_pedido_detalle}}</td>
+                                        <td>{{item.precioventa_producto}}</td>
+                                        <td>{{item.valortotal_pedido_detalle}}</td>
+                                    </tr>
+
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right mb-2">
+                    <button type="button" routerLink="/Pedidos"class="btn btn-outline-secondary mr-1 btn_history_back">
+                        <i style="vertical-align: text-bottom;" class="bx bx-left-arrow-alt "></i> Volver</button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</section>

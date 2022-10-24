@@ -1,0 +1,300 @@
+<!-- ============================================================== -->
+<!-- Container fluid  -->
+<!-- ============================================================== -->
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h2 class="text-themecolor">PEDIDOS</h2>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <!-- row -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <form action="" [formGroup]="ProductoBuscar" autocomplete="nope">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <h5 class="m-t-30">Filtro Pedido</h5>
+                                    <input name="producto" type="text" placeholder="Filtrar pedidos"
+                                        class="form-control" formControlName="filtrar_pedido">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <h5 class="m-t-30">Estado</h5>
+                                <select class="selectpicker" title="Seleccionar Estado" multiple data-style="form-control btn-secondary" formControlName="estado_pedido">
+                                    <option *ngFor="let item of estado_pedido" value="{{item.id_estado_pedido}}">{{item.glosa_estado_pedido}}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <h5 class="m-t-30">Estado del pago</h5>
+                                <select class="selectpicker" title="Seleccionar Estado Pago" multiple data-style="form-control btn-secondary" formControlName="estado_pago">
+                                    <ng-container *ngFor="let item of estado_pago">
+                                        <option value="{{item.id_estado_pago}}">{{item.glosa_estado_pago}}</option>
+                                    </ng-container>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <h5 class="m-t-30">Estado de la prepararación</h5>
+                                <select class="selectpicker" title="Seleccionar Estado Preparación" multiple data-style="form-control btn-secondary" formControlName="estado_preparacion">
+                                    <option *ngFor="let item of estado_preparacion" value="{{item.id_estado_preparacion}}">{{item.glosa_estado_preparacion}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 mt-1">
+                                <div class="col-md-12 d-flex justify-content-end">
+                                    <div class="row m-0">
+                                        <button (click)="buscar()" class="btn btn-primary btn-buscar">Buscar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- <input [(colorPicker)]="color"  class="form-control" [style.background]="color"/> -->
+
+                    <ul class="nav nav-pills m-t-30 m-b-30">
+                        <li class=" nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab"
+                                aria-expanded="false">Activos</a> </li>
+                        <li class="nav-item"> <a href="#navpills-2" class="nav-link" data-toggle="tab"
+                                aria-expanded="false">Deshabilitado</a> </li>
+                    </ul>
+                    <div class="tab-content br-n pn">
+                        <div id="navpills-1" class="tab-pane active">
+                            <div class="row">
+                                <!-- ANGULAR SERVER SIDE -->
+                                <div class="table-responsive">
+                                    <table datatable [dtOptions]="dtOptions[0]" [dtTrigger]="reload_producto"
+                                        class="row-border hover " width="100%">
+                                        <thead>
+                                            <tr style="vertical-align: middle;text-align: center;"
+                                                class="text-uppercase">
+                                                <th class="text-center">PEDIDO</th>
+                                                <th class="text-center">FECHA</th>
+                                                <th class="text-center">CLIENTE</th>
+                                                <th class="text-center">TOTAL</th>
+                                                <th class="text-center">ESTADO</th>
+                                                <th class="text-center">ESTADO PAGO</th>
+                                                <th class="text-center">ESTADO PREPARACION</th>
+                                                <th class="text-center">ARTICULOS</th>
+                                                <th class="text-center">FORMA ENTREGA</th>
+                                                <th class="text-center">ACCIONES</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let e of listarProducto;">
+                                                <tr style="vertical-align: middle;text-align: center;">
+                                                    <td> <a routerLink="/Detalle-Pedido/{{e.id_pedido}}">{{e.numero_pedido}}</a>  </td>
+                                                    <td>{{e.fechacreacion_pedido | date:'dd/MM/yy HH:mm a'}}</td>
+                                                    <td>{{e.nombre_cliente}} {{e.apellidopaterno_cliente}}
+                                                        {{e.apellidomaterno_cliente}} </td>
+                                                    <td>{{e.valortotal_pedido | currency: 'S/': 'symbol': '': 'en-PE'}}
+                                                    </td>
+                                                    <td>{{e.glosa_estado_pedido}}</td>
+                                                    <td>{{e.glosa_estado_pago}}</td>
+                                                    <td>{{e.glosa_estado_preparacion}}</td>
+                                                    <td>{{e.cantidad}}</td>
+                                                    <td>{{e.retiroentienda_pedido}}</td>
+                                                    <td>
+                                                        <div class="button-group">
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                (click)="AbrirModalGestionarStock(e)"
+                                                                class="btn btn-sm btn-success btn-circle"
+                                                                tooltip="Detalle Pedido" placement="top"
+                                                                [showDelay]="100"><i class="icon-grid"></i>
+                                                            </button>
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-danger btn-circle"
+                                                                (click)="GestionActivoDesactivadoProducto('DESHABILITAR',e.id_pedido)"
+                                                                tooltip="Anular Pedido" placement="top"
+                                                                [showDelay]="100"><i class="fa fa-times"></i> </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                        <tbody *ngIf="listarProducto.length == 0">
+                                            <tr>
+                                                <td colspan="10" class="no-data-available">No data!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div id="navpills-2" class="tab-pane">
+                            <div class="row">
+                                <!-- ANGULAR SERVER SIDE -->
+                                <div class="table-responsive">
+                                    <table datatable [dtOptions]="dtOptions[1]"
+                                        [dtTrigger]="reload_producto_deshabilitado" class="row-border hover "
+                                        width="100%">
+                                        <thead>
+                                            <tr style="vertical-align: middle;text-align: center;"
+                                                class="text-uppercase">
+                                                <th class="text-center">ACCION</th>
+                                                <th class="text-center">PRODUCTO</th>
+                                                <th class="text-center">STOCK</th>
+                                                <th class="text-center">PRECIO VENTA</th>
+                                                <th class="text-center">CODIGO(SKU)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let e of listarProductoDeshabilitado;">
+                                                <tr style="vertical-align: middle;text-align: center;">
+                                                    <td>
+                                                        <div class="button-group">
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-info btn-circle"
+                                                                routerLink="/Editar-Producto/{{e.id_producto}}"
+                                                                tooltip="Editar Producto" placement="top"
+                                                                [showDelay]="100"><i class="fa fa-edit"></i> </button>
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-success btn-circle"
+                                                                (click)="AbrirModalGestionarStock(e)"
+                                                                tooltip="Gestionar Stock" placement="top"
+                                                                [showDelay]="100"><i class="fa fa-archive"></i>
+                                                            </button>
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-success btn-circle"
+                                                                (click)="GestionActivoDesactivadoProducto('ACTIVAR',e.id_producto)"
+                                                                tooltip="Activar Producto" placement="top"
+                                                                [showDelay]="100"><i class="fa fa-check"></i> </button>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{e.glosa_producto}}</td>
+                                                    <ng-container *ngIf="e.stock_producto>0; else elseTemplate">
+                                                        <td><span class="label label-info">{{e.stock_producto}}</span>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-template #elseTemplate>
+                                                        <td><span class="label label-danger">{{e.stock_producto}}</span>
+                                                        </td>
+                                                    </ng-template>
+                                                    <td>{{e.precioventa_producto}}</td>
+                                                    <td>{{e.codigo_producto}}</td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                        <tbody *ngIf="listarProducto.length == 0">
+                                            <tr>
+                                                <td colspan="4" class="no-data-available">No hay información!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- row -->
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Container fluid  -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center"><strong>GESTIONAR STOCK</strong></h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close" data-original-title=""
+                    title=""><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body" *ngIf="this.Producto">
+                <form [formGroup]="GestionarStock" autocomplete="nope" enctype="multipart/form-data">
+                    <div class="row container" style="align-items: center;">
+                        <img style=" width: 80px; " class="img-fluid" src="../../../assets/assets/images/producto.png"
+                            alt="producto">
+                        <ul style="margin:0px; list-style:none;">
+                            <li id="label-glosa"><strong> Nombre:</strong> {{this.Producto.glosa_producto}}</li>
+                            <li id="label-cantidad"><strong>Cantidad:</strong> {{this.Producto.stock_producto}}</li>
+                        </ul>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="accion_gestionar">Acción <strong class="text-danger">(*)</strong></label>
+                                <select (change)="CambioMovimientos($event.target)" formControlName="accion"
+                                    [class.is-invalid]="GestionarStock.controls['accion']|isInvalid"
+                                    class="form-control" name="accion_gestionar">
+                                    <option value="">Seleccionar Opción</option>
+                                    <option value="1">Añadir</option>
+                                    <option value="2">Quitar</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="cantidad_gestionar">Cantidad <span class="text-danger">(*)</span></label>
+                                <input [disabled]="true" (keyup)="Cantidades($event.target)" name="cantidad_gestionar"
+                                    formControlName="cantidad"
+                                    [class.is-invalid]="GestionarStock.controls['cantidad']|isInvalid" type="number"
+                                    placeholder="ingresar una cantidad" class="form-control" #cantidad>
+                            </div>
+                        </div>
+                        <div class="col-md-4" id="show_precio_compra">
+                            <div class="form-group">
+                                <label for="precio_compra">Precio de compra</label>
+                                <input type="number" formControlName="precio_compra"
+                                    [class.is-invalid]="GestionarStock.controls['precio_compra']|isInvalid"
+                                    placeholder="ingrese precio de compra" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class="form-group ">
+                                <label for="stock_gestionar">Stock final </label>
+                                <input type="text" placeholder="Stock final" class="form-control"
+                                    formControlName="stock_final"
+                                    [class.is-invalid]="GestionarStock.controls['stock_final']|isInvalid" readonly
+                                    value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row atributo_seleccionado_construir">
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <h6 for="name" class="control-label">Comentario</h6>
+                                <textarea name="comentario_gestionar_stock" class="form-control"
+                                    formControlName="comentario" rows="3" placeholder=""></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal" data-original-title=""
+                    title="">SALIR</button>
+                <button (click)="GestionarStockProducto()" #GuardarAtibuto class="btn btn-primary" type="button">
+                    GUARDAR STOCK</button>
+            </div>
+        </div>
+
+    </div>
+</div>

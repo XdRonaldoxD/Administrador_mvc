@@ -1,0 +1,162 @@
+<div class="container-fluid">
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor">MARCAS</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row MT-1">
+                        <div class="col-md-12 d-flex justify-content-end">
+                            <div class="row m-0">
+                                <button (click)="AbrirModal()" class="btn btn-success btn-reset">NUEVO MARCA <i
+                                        class="mdi mdi-checkbox-multiple-blank-outline"></i> </button>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="nav nav-pills m-t-30 m-b-30">
+                        <li class=" nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab"
+                                aria-expanded="false">Activos</a> </li>
+                        <li class="nav-item"> <a href="#navpills-2" class="nav-link" data-toggle="tab"
+                                aria-expanded="false">Deshabilitado</a> </li>
+                    </ul>
+                    <div class="tab-content br-n pn">
+                        <div id="navpills-1" class="tab-pane active">
+                            <div class="row">
+                                <!-- ANGULAR SERVER SIDE -->
+                                <div class="table-responsive">
+                                    <table datatable [dtOptions]="dtOptions[0]" [dtTrigger]="reload_producto"
+                                        class="row-border hover " width="100%">
+                                        <thead>
+                                            <tr style="vertical-align: middle;text-align: center;"
+                                                class="text-uppercase">
+                                                <th class="text-center">ACCION</th>
+                                                <th class="text-center">NOMBRE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let e of listarProducto;">
+                                                <tr style="vertical-align: middle;text-align: center;">
+                                                    <td>
+                                                        <div class="button-group">
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-info btn-circle"
+                                                                tooltip="Editar Marca" placement="top"
+                                                                [showDelay]="100">
+                                                                <i class="fa  fa-edit "></i> </button>
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-danger btn-circle"
+                                                                tooltip="Deshabilitar Marca" placement="top"
+                                                                [showDelay]="100"><i class="fa fa-times"></i> </button>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{e.glosa_marca}}</td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                        <tbody *ngIf="listarProducto.length <= 0">
+                                            <tr>
+                                                <td colspan="2" class="no-data-available">No hay información!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div id="navpills-2" class="tab-pane">
+                            <div class="row">
+                                <!-- ANGULAR SERVER SIDE -->
+                                <div class="table-responsive">
+                                    <table datatable [dtOptions]="dtOptions[1]"
+                                        [dtTrigger]="reload_producto_deshabilitado" class="row-border hover "
+                                        width="100%">
+                                        <thead>
+                                            <tr style="vertical-align: middle;text-align: center;"
+                                                class="text-uppercase">
+                                                <th class="text-center">ACCION</th>
+                                                <th class="text-center">NOMBRE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let e of listarProductoDeshabilitado;">
+                                                <tr style="vertical-align: middle;text-align: center;">
+                                                    <td>
+                                                        <div class="button-group">
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-smbtn-info btn-circle"><i
+                                                                    tooltip="Editar Marca" placement="top"
+                                                                    [showDelay]="100" class="fa  fa-edit "></i> </button>
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-success btn-circle"><i
+                                                                    tooltip="Activar Marca" placement="top"
+                                                                    [showDelay]="100" class="fa fa-check"></i> </button>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{e.glosa_marca}}</td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                        <tbody *ngIf="listarProductoDeshabilitado.length == 0">
+                                            <tr>
+                                                <td colspan="2" class="no-data-available">No hay información!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" [innerHTML]="texto_cabezera"></h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close" data-original-title=""
+                    title=""><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="marcarForm" autocomplete="nope" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <h6 for="name" class="col-sm-12 control-label">Nombre<span
+                                        class="text-danger">(*)</span></h6>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" id="glosa_marca"
+                                        placeholder="Ingrese un nombre" formControlName="glosa_marca"
+                                        [class.is-invalid]="marcarForm.controls['glosa_marca']|isInvalid">
+                                    <div class="text-danger">
+                                        <div *ngIf="marcarForm.controls['glosa_marca']|hasError:'required'">
+                                            Marca Vacia
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal" data-original-title=""
+                    title="">Salir</button>
+                <button (click)="GuardarActualizarCategoria()" #GuardarAtibuto class="btn btn-primary" type="button">
+                    GUARDAR MARCA</button>
+            </div>
+        </div>
+
+    </div>
+</div>

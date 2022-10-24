@@ -1,0 +1,607 @@
+<!-- ============================================================== -->
+<!-- Container fluid  -->
+<!-- ============================================================== -->
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor">ACTUALIZAR PRODUCTO</h3>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <!-- row -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-12" style="z-index:0;">
+                        <div class="card">
+                            <div class="card-body p-b-0">
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs customtab2" role="tablist">
+                                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home7"
+                                            role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span
+                                                class="hidden-xs-down">INFORMACIÓN</span></a> </li>
+                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile7"
+                                            role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
+                                                class="hidden-xs-down">PRECIO-STOCK</span></a> </li>
+                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages7"
+                                            role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span
+                                                class="hidden-xs-down">IMAGENES</span></a> </li>
+                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages8"
+                                            role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span
+                                                class="hidden-xs-down">COLOR DE ROPA</span></a> </li>
+                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages9"
+                                            role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span
+                                                class="hidden-xs-down">ESPECIFICACIONES</span></a> </li>
+                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages10"
+                                            role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span
+                                                class="hidden-xs-down">PRODUCTO RELACIONADOS</span></a> </li>
+                                </ul>
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    <div class="tab-pane active mt-4" id="home7" role="tabpanel">
+                                        <form [formGroup]="informacionForm" autocomplete="nope"
+                                            enctype="multipart/form-data">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="firstName1">SKU<STRONg
+                                                                class="text-danger">(*)</STRONg></label>
+                                                        <input type="text" class="form-control" id="codigo_producto"
+                                                            formControlName="codigo_producto"
+                                                            placeholder="Codigo del Producto"
+                                                            [class.is-invalid]="informacionForm.controls['codigo_producto']|isInvalid">
+                                                        <div class="text-danger">
+                                                            <div
+                                                                *ngIf="informacionForm.controls['codigo_producto']|hasError:'required'">
+                                                                SKU Vacio
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="lastName1">Codigo Barra</label>
+                                                        <input type="text" class="form-control" id="codigo_barra"
+                                                            name="codigo_barra">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="emailAddress1">Nombre</label>
+                                                        <input type="email" class="form-control"
+                                                            formControlName="glosa_producto" id="emailAddress1">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="location1">Descripción Extendida</label>
+                                                        <textarea formControlName="descripcion_extendida"
+                                                            class="form-control descripcion_extendida" rows="5"
+                                                            placeholder="Descripción de la categoría"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="phoneNumber1">Descripción Corta</label>
+                                                        <textarea formControlName="descripcion_corta"
+                                                            class="form-control descripcion_corta" rows="5"
+                                                            placeholder="Descripción de la categoría"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="date1">Tipo Inventario<strong
+                                                                class="text-danger">(*)</strong></label>
+                                                        <select (change)="listarCategorias($event.target)"
+                                                            formControlName="tipo_inventario"
+                                                            [class.is-invalid]="informacionForm.controls['tipo_inventario']|isInvalid"
+                                                            class="form-control">
+                                                            <option value="">Seleccionar Inventario</option>
+                                                            <option *ngFor="let item of tipo_inventario"
+                                                                value="{{item.id_tipo_inventario}}">
+                                                                {{item.glosa_tipo_inventario}}</option>
+                                                        </select>
+                                                        <div class="text-danger">
+                                                            <div
+                                                                *ngIf="informacionForm.controls['tipo_inventario']|hasError:'required'">
+                                                                Seleccionar Inventario.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" style="margin-top: 2.3rem;">
+                                                    <div class="form-group">
+                                                        <label class="inline custom-control custom-checkbox block">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                formControlName="visible_tienda"> <span
+                                                                class="custom-control-indicator"></span> <span
+                                                                class="custom-control-description ml-0">Visible en
+                                                                Tienda</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="date1">Categoria</label>
+                                                        <div id="t-crear-categoria">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="date1">Atributo</label>
+                                                        <div id="atributo-producto">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div id="button_right" class="col-sm-12 col-md-12">
+                                                    <button type="button" style="padding-left: 9px;"
+                                                        routerLink="/Producto" class="btn btn-outline-secondary mx-3"
+                                                        id="btn-close-crud"><i style="vertical-align: text-bottom;"
+                                                            class="bx bx-left-arrow-alt"></i> Volver</button>
+                                                    <button (click)="GuardarProductoCompleto()" type="button"
+                                                        class="btn btn-success" id="btn-save" value="create-product"><i
+                                                            style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                        Guardar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                    <div class="tab-pane  p-20" id="profile7" role="tabpanel">
+                                        <form [formGroup]="PrecioStockForm" autocomplete="nope"
+                                            enctype="multipart/form-data">
+                                            <div class="row mt-4">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="jobTitle1">Precio Venta <strong
+                                                                class="text-danger">(*)</strong></label>
+                                                        <input type="number" class="form-control" id="jobTitle1"
+                                                            formControlName="precio_venta" placeholder="Precio Venta"
+                                                            [class.is-invalid]="PrecioStockForm.controls['precio_venta']|isInvalid">
+                                                        <div class="text-danger">
+                                                            <div
+                                                                *ngIf="PrecioStockForm.controls['precio_venta']|hasError:'required'">
+                                                                Precio Venta Vacio.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="videoUrl1">Stock <strong
+                                                                class="text-danger">(*)</strong></label>
+                                                        <input type="number" class="form-control"
+                                                            formControlName="stock" placeholder="Stock del Producto"
+                                                            [class.is-invalid]="PrecioStockForm.controls['stock']|isInvalid">
+                                                        <div class="text-danger">
+                                                            <div
+                                                                *ngIf="PrecioStockForm.controls['stock']|hasError:'required'">
+                                                                Stock Producto Vacio.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="videoUrl1">Precio Costo </label>
+                                                        <input type="number" class="form-control"
+                                                            formControlName="precio_costo"
+                                                            placeholder="Precio de costo del Producto">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row" style="justify-content: center;"
+                                                *ngIf="checked_atributo.length>0">
+                                                <div class="col-8">
+                                                    <table class="table color-bordered-table muted-bordered-table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="2" class="text-center">
+                                                                    <h3 class="text-white">Stock Del Atributo</h3>
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th class="text-center">Atributo Seleccionado</th>
+                                                                <th class="text-center">Stock</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let item of checked_atributo">
+                                                                <td>{{item.glosa_atributo}}</td>
+                                                                <td><input type="number" [value]="item.cantidad"
+                                                                        class="form-control text-center"
+                                                                        (keyup)="GuardarCantidadAtributo($event.target,item.id_atributo)">
+                                                                </td>
+                                                            </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div id="button_right" class="col-sm-12 col-md-12">
+                                                    <button type="button" style="padding-left: 9px;"
+                                                        routerLink="/Producto" class="btn btn-outline-secondary mx-3"
+                                                        id="btn-close-crud"><i style="vertical-align: text-bottom;"
+                                                            class="bx bx-left-arrow-alt"></i> Volver</button>
+                                                    <button (click)="GuardarProductoCompleto()" type="button"
+                                                        class="btn btn-success" id="btn-save" value="create-product"><i
+                                                            style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                        Guardar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="tab-pane p-20" id="messages7" role="tabpanel">
+                                        <div class="row mt-4">
+                                            <div
+                                                class="col-md-6  d-flex justify-content-end align-items-center text-right">
+                                                <label class="h6 m-0" for="">Añadir una nueva imagen para este
+                                                    producto</label>
+                                            </div>
+                                            <div class="col-md-6 d-flex justify-content-start align-items-center">
+                                                <div class="col-md-6 pl-0">
+                                                    <button (click)="levantarmodalimagenes()" class="btn btn-primary"
+                                                        id="btn-aniadir-imagen"><i class="mdi mdi-folder-open"></i>
+                                                        Añadir archivos</button>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 mt-1">
+                                                <div class="card">
+                                                    <div class="card-body agregar_imagen_edit">
+                                                        <table class="table table-responsive color-bordered-table muted-bordered-table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="align-middle" style="width: 10%;">Titulo</th>
+                                                                    <th class="align-middle" style="width: 15%;">Imagen</th>
+                                                                    <th class="align-middle" style="width: 10%;">Posición </th>
+                                                                    <th class="align-middle" style="width: 10%;">Portada</th>
+                                                                    <th class="align-middle" style="width: 5%;">Acciones</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let item of this.imagenes_producto;let indice=index">
+                                                                    <td class="align-middle">{{item.nombre_imagen}}</td>
+                                                                    <td class="align-middle">
+                                                                        <div class="card">
+                                                                            <div class="card-body">
+                                                                                <span
+                                                                                    class="mytooltip tooltip-effect-1">
+                                                                                    <img src="{{item.imagen}}"
+                                                                                        class="tooltip-item" alt="user"
+                                                                                        width="100" />
+
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="align-middle"><input type='text'
+                                                                            class="form-control form-control-sm posicion"
+                                                                            value={{item.orden_imagen}}> </td>
+                                                                    <td class="align-middle"> <label
+                                                                            class="inline custom-control custom-checkbox block">
+                                                                            <ng-container
+                                                                                *ngIf="item.portada; else elseTemplate">
+                                                                                <input type="checkbox"
+                                                                                    (click)="ActivarPortada(indice,$event)"
+                                                                                    name="agregar_imagen_edit"
+                                                                                    class="custom-control-input agregar_imagen_edit"
+                                                                                    checked>
+                                                                            </ng-container>
+                                                                            <ng-template #elseTemplate>
+                                                                                <input type="checkbox"
+                                                                                    (click)="ActivarPortada(indice,$event)"
+                                                                                    name="agregar_imagen_edit"
+                                                                                    class="custom-control-input agregar_imagen_edit">
+                                                                            </ng-template>
+                                                                            <span
+                                                                                class="custom-control-indicator"></span>
+                                                                            <span
+                                                                                class="custom-control-description ml-0"></span>
+                                                                        </label>
+                                                                    </td>
+                                                                    <td class="align-middle">
+                                                                        <button type="button"
+                                                                            (click)="EliminarImagen(indice)"
+                                                                            class="btn btn-danger eliminar_imagen"
+                                                                            data-toggle="tooltip"
+                                                                            data-original-title="Eliminar"><i
+                                                                                class="fa fa-times-rectangle"></i></button>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div id="button_right" class="col-sm-12 col-md-12">
+                                                <button type="button" style="padding-left: 9px;" routerLink="/Producto"
+                                                    class="btn btn-outline-secondary mx-3" id="btn-close-crud"><i
+                                                        style="vertical-align: text-bottom;"
+                                                        class="bx bx-left-arrow-alt"></i> Volver</button>
+                                                <button (click)="GuardarProductoCompleto()" type="button"
+                                                    class="btn btn-success" id="btn-save" value="create-product"><i
+                                                        style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                    Guardar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane p-20" id="messages8" role="tabpanel">
+                                        <div class="row mt-4">
+                                            <div class="col-12 text-right">
+                                                <button (click)="AgregarColor()" type="button"
+                                                    class="btn btn-secondary">Agregar Color</button>
+                                            </div>
+                                            <div class="row col-12">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="">Seleccionar Color</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="">Nombre del Color</label>
+                                                </div>
+                                                <div class="col-md-2 text-center">
+                                                    <label for="">Eliminar</label>
+                                                </div>
+                                            </div>
+                                            <form id="color_ropas" name="color_ropas" class="col-12 color_agregar">
+                                                <!-- <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <input type="color"  class="form-control color" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <input input="text" class="form-control nombrecolor" />
+                                                    </div>
+                                                    <div class="col-md-2 text-center" >
+                                                        <i class="mdi mdi-delete-circle EliminarColumnas"
+                                                            style="font-size:2rem;color: red;cursor:pointer;"></i>
+                                                    </div>
+                                                </div> -->
+                                            </form>
+
+                                        </div>
+                                        <div class="row">
+                                            <div id="button_right" class="col-sm-12 col-md-12">
+                                                <button type="button" style="padding-left: 9px;" routerLink="/Producto"
+                                                    class="btn btn-outline-secondary mx-3" id="btn-close-crud"><i
+                                                        style="vertical-align: text-bottom;"
+                                                        class="bx bx-left-arrow-alt"></i> Volver</button>
+                                                <button (click)="GuardarProductoCompleto()" type="button"
+                                                    class="btn btn-success" id="btn-save" value="create-product"><i
+                                                        style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                    Guardar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane p-20" id="messages9" role="tabpanel">
+                                        <div class="row mt-4">
+                                            <div
+                                                class="col-md-6  d-flex justify-content-end align-items-center text-right">
+                                                <label class="h6 m-0" for="">Añadir una especificación para este
+                                                    producto</label>
+                                            </div>
+                                            <div class="col-md-6 d-flex justify-content-start align-items-center">
+                                                <div class="col-md-6 pl-0">
+                                                    <button (click)="AgregarInputtabla()" class="btn btn-primary"
+                                                        id="btn-aniadir-imagen"><i class="mdi mdi-folder-open"></i>
+                                                        Añadir linea</button>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 mt-1">
+                                                <div class="card">
+                                                    <div class="card-body ">
+                                                        <table id="tabla_especificaciones"
+                                                            class="tablesaw table-bordered table-hover table"
+                                                            data-tablesaw-mode="swipe">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col" data-tablesaw-sortable-col
+                                                                        data-tablesaw-priority="persist">Nombre</th>
+                                                                    <th scope="col" data-tablesaw-sortable-col
+                                                                        data-tablesaw-priority="1">Descripción</th>
+                                                                    <th scope="col" data-tablesaw-sortable-col
+                                                                        data-tablesaw-priority="2">Acción</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbody">
+                                                                <!-- <tr>
+                                                                    <td> <input class="form-control" readonly
+                                                                            type="text" value="Material principal">
+                                                                    </td>
+                                                                    <td><input class="form-control" readonly type="text"
+                                                                            value="Algodón"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><input class="form-control"  type="text"
+                                                                            value="Pack/piezas"></td>
+                                                                    <td><input class="form-control"  type="text"
+                                                                            value="2 piezas"></td>
+                                                                </tr> -->
+
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div id="button_right" class="col-sm-12 col-md-12">
+                                                <button type="button" style="padding-left: 9px;" routerLink="/Producto"
+                                                    class="btn btn-outline-secondary mx-3" id="btn-close-crud"><i
+                                                        style="vertical-align: text-bottom;"
+                                                        class="bx bx-left-arrow-alt"></i> Volver</button>
+                                                <button (click)="GuardarProductoCompleto()" type="button"
+                                                    class="btn btn-success" id="btn-save" value="create-product"><i
+                                                        style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                    Guardar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane p-20" id="messages10" role="tabpanel">
+                                        <div class="row mt-4">
+                                            <div class="col-md-3">
+                                                <label class="h6 m-0" for="">Nombre del Producto</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <ng-select (change)="BuscarProductoRelaciondo($event)"
+                                                    [clearable]="false" #producto_proveedor="ngModel"
+                                                    name="producto_proveedor" [(ngModel)]="producto_relacionado"
+                                                    [required]="false">
+                                                    <ng-option value="" hidden>Seleccione el Producto</ng-option>
+                                                    <ng-option *ngFor="let item of listaProductosRelacionado"
+                                                        [value]="item.id_producto" glosa="{{item.path_producto_imagen}}"
+                                                        path="{{item.glosa_producto}}">
+                                                        {{item.glosa_producto}}</ng-option>
+                                                </ng-select>
+                                            </div>
+
+                                            <div class="w-100 mt-1">
+                                                <div class="card">
+                                                    <div class="card-body table-responsive">
+                                                        <table class="tablesaw table-bordered table-hover table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="text-center">NOMBRE</th>
+                                                                    <th class="text-center">IMÁGEN</th>
+                                                                    <th class="text-center">ACCIÓN</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbody">
+                                                                <tr *ngFor="let e of listarProductoRelacionados;">
+                                                                    <td>
+                                                                        <div class="card">
+                                                                            <div class="card-body">
+                                                                                <span
+                                                                                    class="mytooltip tooltip-effect-1">
+                                                                                    <img src="{{e.path_producto_imagen}}"
+                                                                                        class="tooltip-item" alt="user"
+                                                                                        width="100" />
+                                                                                    <span
+                                                                                        class="tooltip-content clearfix text-center">
+                                                                                        <img src="{{e.path_producto_imagen}}"
+                                                                                            alt="euclid" /><span
+                                                                                            class="tooltip-text"></span>
+                                                                                    </span>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>{{e.glosa_producto}}</td>
+                                                                    <td><button type="button"
+                                                                            (click)="RecuperarProductoRelacionado(e)"
+                                                                            class="btn btn-danger eliminar_imagen"
+                                                                            id_imagen="0" data-toggle="tooltip"
+                                                                            data-original-title="Eliminar"><i
+                                                                                class="fa fa-times-rectangle"></i></button>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div id="button_right" class="col-sm-12 col-md-12">
+                                                <button type="button" style="padding-left: 9px;" routerLink="/Producto"
+                                                    class="btn btn-outline-secondary mx-3" id="btn-close-crud"><i
+                                                        style="vertical-align: text-bottom;"
+                                                        class="bx bx-left-arrow-alt"></i> Volver</button>
+                                                <button (click)="GuardarProductoCompleto()" type="button"
+                                                    class="btn btn-success" id="btn-save" value="create-product"><i
+                                                        style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                    Guardar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" data-backdrop="static" id="modal-imagenes" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="perfilCrudModalEditar">Nueva Imagen</h4>
+                                </div>
+                                <div class="modal-body body-create">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row mb-3">
+                                                <input type="text" class="form-control" name="nombre_imagen"
+                                                    id="nombre_imagen" placeholder="Ingrese el nombre">
+                                            </div>
+                                            <div class="row">
+                                                <input type="file" id="input-file-now" class="dropify"
+                                                    accept="image/png,image/jpeg" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" style="padding-left: 9px;" data-dismiss="modal"
+                                        class="btn btn-outline-danger" id="btn-close"><i
+                                            style="vertical-align: text-bottom;" class="bx bx-x-circle"></i> Cancelar
+                                    </button>
+                                    <button (click)="GuardarImagenes()" type="button" class="btn btn-success"
+                                        id="btn-guardar-imagen" value="Editar"><i style="vertical-align: text-bottom;"
+                                            class="bx bx-save"></i> Guardar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- row -->
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Container fluid  -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- Dashboard Ecommerce Starts -->

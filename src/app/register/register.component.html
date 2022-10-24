@@ -1,0 +1,84 @@
+<section id="wrapper">
+    <div class="login-register" style="background-image:url(assets/assets/images/background/login-register.jpg);">
+        <div class="login-box card">
+            <div class="card-body">
+                <form class="form-horizontal form-material" [formGroup]="registrarForm" autocomplete="nope">
+                    <h3 class="box-title m-b-20">Registrarse</h3>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <input class="form-control" type="text" formControlName="nombre"
+                                [class.is-invalid]="registrarForm.controls['nombre']|isInvalid" placeholder="Nombre">
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="registrarForm.controls['nombre']|hasError:'required'">
+                                Nombre Vacia
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <input class="form-control" type="text" formControlName="apellido_paterno"
+                                [class.is-invalid]="registrarForm.controls['apellido_paterno']|isInvalid"
+                                placeholder="Apellido Paterno">
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="registrarForm.controls['apellido_paterno']|hasError:'required'">
+                                Apellido Paterno
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <input class="form-control" type="text" formControlName="apellido_materno"
+                                [class.is-invalid]="registrarForm.controls['apellido_materno']|isInvalid"
+                                placeholder="Apellido Materno">
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="registrarForm.controls['apellido_materno']|hasError:'required'">
+                                Apellido Materno
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class="col-xs-12">
+                            <input class="form-control" type="text" formControlName="email"
+                            [class.is-invalid]="registrarForm.controls['email']|isInvalid" placeholder="Email">
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="registrarForm.controls['email']|hasError:'required'">
+                                Correo Vacia
+                            </div>
+                            <div *ngIf="registrarForm.controls['email']|hasError:'email'">
+                                Correo Incorrecto
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class="col-xs-12">
+                            <input class="form-control" type="password" formControlName="password"
+                            [class.is-invalid]="registrarForm.controls['password']|isInvalid" placeholder="Contraseña">
+                        </div>
+                        <div class="text-danger">
+                            <div *ngIf="registrarForm.controls['password']|hasError:'required'">
+                                Contraseña Vacia
+                            </div>
+                         
+                        </div>
+                    </div>
+                    <div class="form-group text-center p-b-20">
+                        <div class="col-xs-12">
+                            <button (click)="RegistrarSession()"
+                                class="btn btn-info btn-lg btn-block btn-rounded text-uppercase waves-effect waves-light"
+                                type="submit">REGISTRAR</button>
+                        </div>
+                    </div>
+                    <div class="form-group m-b-0">
+                        <div class="col-sm-12 text-center">
+                            <a routerLink="/IniciarSession" class="text-info m-l-5"><b>Iniciar Sessión</b></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

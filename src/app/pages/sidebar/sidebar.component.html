@@ -1,0 +1,48 @@
+<aside class="left-sidebar">
+    <!-- Sidebar scroll-->
+    <div class="scroll-sidebar">
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav">
+            <ul id="sidebarnav">
+                <li class="user-profile">
+                    <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><img
+                            src="assets/assets/images/users/profile.png" alt="user" /><span
+                            class="hide-menu">{{identificacion.nombre}} </span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li routerLink="/Perfil"><a href="javascript:void()">Mi Perfil </a></li>
+                    </ul>
+                </li>
+                <li class="nav-devider"></li>
+                <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
+                            class="mdi mdi-gauge"></i><span class="hide-menu">INVENTARIOS<span
+                                class="label label-rouded label-themecolor pull-right">4</span></span></a>
+                    <ul aria-expanded="false" class="collapse" #EventoClick>
+                        <li><a (click)="SELECCION($event.target)" routerLink="/Marca" href="javascript:void()">MARCAS</a>
+                        </li>
+                        <li><a (click)="SELECCION($event.target)" routerLink="/Categoria"
+                                href="javascript:void()">CATEGORIAS</a></li>
+                        <li><a (click)="SELECCION($event.target)" routerLink="/Producto"
+                                href="javascript:void()">PRODUCTOS</a></li>
+                        <li><a (click)="SELECCION($event.target)" routerLink="/Atributo"
+                                href="javascript:void()">ATRIBUTOS</a></li>
+                    </ul>
+                </li>
+                <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
+                            class="mdi mdi-bullseye"></i><span class="hide-menu">PEDIDOS</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li><a (click)="SELECCION($event.target)" routerLink="/Pedidos">PEDIDOS</a></li>
+                    </ul>
+                </li>
+                <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
+                            class="mdi mdi-bullseye"></i><span class="hide-menu">REPORTE</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li><a href="javascript:void()">Calendar</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </nav>
+        <!-- End Sidebar navigation -->
+    </div>
+    <!-- End Sidebar scroll-->
+</aside>

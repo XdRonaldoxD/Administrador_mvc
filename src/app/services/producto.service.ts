@@ -17,7 +17,7 @@ export class ProductoService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post("http://localhost/MVC_NEURO/?controller=NuevoProducto&action=ListaProductosRelacionado", formData, { headers: headers })
+    return this.httpcliente.post("http://localhost/MVC_CRM/?controller=NuevoProducto&action=ListaProductosRelacionado", formData, { headers: headers })
   }
   TraerProductosID(id_producto: any, token: any): Observable<any> {
     let Params = new HttpParams();
@@ -26,7 +26,7 @@ export class ProductoService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.get("http://localhost/MVC_NEURO/?controller=Producto&action=TraerDatosProductos", { headers: headers, params: Params })
+    return this.httpcliente.get("http://localhost/MVC_CRM/?controller=Producto&action=TraerDatosProductos", { headers: headers, params: Params })
   }
 
   // TraerProductosID(id_producto: any, token: any): Observable<any> {
@@ -36,7 +36,7 @@ export class ProductoService {
   //   const headers = new HttpHeaders({
   //     Authorization: token
   //   });
-  //   return this.httpcliente.post("http://localhost/MVC_NEURO/?controller=Producto&action=TraerDatosProductos", formData, { headers: headers })
+  //   return this.httpcliente.post("http://localhost/MVC_CRM/?controller=Producto&action=TraerDatosProductos", formData, { headers: headers })
   // }
 
   GuardarProductoActualizar(token: any, valorescategoria: any, informacionForm: any, PrecioStockForm: any, imagenes_producto: any, colores: any, especificaciones: any, producto_relacion: any, atributo_seleccionado: any): Observable<any> {
@@ -52,7 +52,7 @@ export class ProductoService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post("http://localhost/MVC_NEURO/?controller=NuevoProducto&action=GuardarProductoActualizar", formData, { headers: headers })
+    return this.httpcliente.post("http://localhost/MVC_CRM/?controller=NuevoProducto&action=GuardarProductoActualizar", formData, { headers: headers })
   }
 
   GestionarStockProducto(token: any, GestionarStock: any): Observable<any> {
@@ -61,7 +61,7 @@ export class ProductoService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post("http://localhost/MVC_NEURO/?controller=Producto&action=GestionarStockProducto", formData, { headers: headers })
+    return this.httpcliente.post("http://localhost/MVC_CRM/?controller=Producto&action=GestionarStockProducto", formData, { headers: headers })
   }
   GestionActivoDesactivadoProducto(token: any, accion: any, id_producto: any) {
     const formData = new FormData();
@@ -70,7 +70,7 @@ export class ProductoService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post("http://localhost/MVC_NEURO/?controller=Producto&action=GestionActivoDesactivadoProducto", formData, { headers: headers })
+    return this.httpcliente.post("http://localhost/MVC_CRM/?controller=Producto&action=GestionActivoDesactivadoProducto", formData, { headers: headers })
   }
 
 
@@ -86,7 +86,7 @@ export class ProductoService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.get("http://localhost/MVC_NEURO/?controller=Producto&action=VerificarSku", { headers: headers, params: Params })
+    return this.httpcliente.get("http://localhost/MVC_CRM/?controller=Producto&action=VerificarSku", { headers: headers, params: Params })
   }
 
 }

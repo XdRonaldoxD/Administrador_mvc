@@ -128,7 +128,7 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_NEURO/?controller=Categoria&action=ListaCategoria",
+          "http://localhost/MVC_CRM/?controller=Categoria&action=ListaCategoria",
           dataTablesParameters, { headers: headers }
         ).pipe(takeUntil(this.unsubscribe$))
           .subscribe((resp) => {
@@ -173,7 +173,7 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_NEURO/?controller=Categoria&action=ListaCategoriaDeshabilitado",
+          "http://localhost/MVC_CRM/?controller=Categoria&action=ListaCategoriaDeshabilitado",
           dataTablesParameters, { headers: headers }
         ).pipe(takeUntil(this.unsubscribe$))
           .subscribe((resp) => {

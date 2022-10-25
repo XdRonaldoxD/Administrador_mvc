@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AtributoService {
-  linkApi = 'http://localhost/MVC_neuro/?';
+  linkApi = 'http://localhost/MVC_CRM/?';
   constructor(
     private httpcliente: HttpClient
   ) { }
@@ -14,7 +14,7 @@ export class AtributoService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.get("http://localhost/MVC_NEURO/?controller=Atributo&action=CargarAtributo",{headers:headers})
+    return this.httpcliente.get("http://localhost/MVC_CRM/?controller=Atributo&action=CargarAtributo",{headers:headers})
   }
 
   GestionarAtributo(token:any,formulario:any,atributo_padre:any): Observable<any> {
@@ -28,7 +28,7 @@ export class AtributoService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post("http://localhost/MVC_NEURO/?controller=Atributo&action=GestionarAtributo", formData,{headers:headers})
+    return this.httpcliente.post("http://localhost/MVC_CRM/?controller=Atributo&action=GestionarAtributo", formData,{headers:headers})
   }
 
   TraerCategoria(token:any,id_atributo:any): Observable<any> {
@@ -37,7 +37,7 @@ export class AtributoService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post("http://localhost/MVC_NEURO/?controller=Atributo&action=TraerCategoria", formData,{headers:headers})
+    return this.httpcliente.post("http://localhost/MVC_CRM/?controller=Atributo&action=TraerCategoria", formData,{headers:headers})
   }
 
   Habilitar_Deshabilitar_Categoria(token:any,id_atributo:any,accion:string): Observable<any> {
@@ -47,7 +47,7 @@ export class AtributoService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post("http://localhost/MVC_NEURO/?controller=Atributo&action=Habilitar_Deshabilitar_Categoria", formData,{headers:headers})
+    return this.httpcliente.post("http://localhost/MVC_CRM/?controller=Atributo&action=Habilitar_Deshabilitar_Categoria", formData,{headers:headers})
   }
 
 

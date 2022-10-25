@@ -92,7 +92,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_NEURO/?controller=Marca&action=ListarMarca",
+          "http://localhost/MVC_CRM/?controller=Marca&action=ListarMarca",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProducto = resp;
@@ -133,7 +133,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_NEURO/?controller=Marca&action=ListarMarcaDesactivados",
+          "http://localhost/MVC_CRM/?controller=Marca&action=ListarMarcaDesactivados",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProductoDeshabilitado = resp;

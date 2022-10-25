@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CategoriaService {
-  linkApi = 'http://localhost/MVC_neuro/?';
+  linkApi = 'http://localhost/MVC_CRM/?';
   constructor(
     private httpcliente: HttpClient
   ) { }
@@ -16,7 +16,7 @@ export class CategoriaService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post("http://localhost/MVC_NEURO/?controller=Categoria&action=TraerTipoInventario",null,{headers:headers})
+    return this.httpcliente.post("http://localhost/MVC_CRM/?controller=Categoria&action=TraerTipoInventario",null,{headers:headers})
   }
   CargarCategoria(token:any,id_tipo_inventario:any): Observable<any> {
     const formData = new FormData();
@@ -24,7 +24,7 @@ export class CategoriaService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post("http://localhost/MVC_NEURO/?controller=Categoria&action=CargarCategoria", formData,{headers:headers})
+    return this.httpcliente.post("http://localhost/MVC_CRM/?controller=Categoria&action=CargarCategoria", formData,{headers:headers})
   }
 
   GestionarCategoria(token:any,formulario:any,categoria_padre:any,imagen:any): Observable<any> {
@@ -40,7 +40,7 @@ export class CategoriaService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post("http://localhost/MVC_NEURO/?controller=Categoria&action=GestionarCategoria", formData,{headers:headers})
+    return this.httpcliente.post("http://localhost/MVC_CRM/?controller=Categoria&action=GestionarCategoria", formData,{headers:headers})
   }
 
   TraerCategoria(token:any,id_categoria:any): Observable<any> {
@@ -49,7 +49,7 @@ export class CategoriaService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post("http://localhost/MVC_NEURO/?controller=Categoria&action=TraerCategoria", formData,{headers:headers})
+    return this.httpcliente.post("http://localhost/MVC_CRM/?controller=Categoria&action=TraerCategoria", formData,{headers:headers})
   }
 
   Habilitar_Deshabilitar_Categoria(token:any,id_categoria:any,accion:string): Observable<any> {
@@ -59,7 +59,7 @@ export class CategoriaService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post("http://localhost/MVC_NEURO/?controller=Categoria&action=Habilitar_Deshabilitar_Categoria", formData,{headers:headers})
+    return this.httpcliente.post("http://localhost/MVC_CRM/?controller=Categoria&action=Habilitar_Deshabilitar_Categoria", formData,{headers:headers})
   }
 
 

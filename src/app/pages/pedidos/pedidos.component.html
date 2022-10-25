@@ -108,7 +108,7 @@
                                                     <td>
                                                         <div class="button-group">
                                                             <button type="button" style="width: 20px;height: 20px;"
-                                                                (click)="AbrirModalGestionarStock(e)"
+                                                                routerLink="/Detalle-Pedido/{{e.id_pedido}}"
                                                                 class="btn btn-sm btn-success btn-circle"
                                                                 tooltip="Detalle Pedido" placement="top"
                                                                 [showDelay]="100"><i class="icon-grid"></i>
@@ -209,92 +209,3 @@
 </div>
 <!-- ============================================================== -->
 <!-- End Container fluid  -->
-<!-- ============================================================== -->
-<!-- ============================================================== -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-center"><strong>GESTIONAR STOCK</strong></h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close" data-original-title=""
-                    title=""><span aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body" *ngIf="this.Producto">
-                <form [formGroup]="GestionarStock" autocomplete="nope" enctype="multipart/form-data">
-                    <div class="row container" style="align-items: center;">
-                        <img style=" width: 80px; " class="img-fluid" src="../../../assets/assets/images/producto.png"
-                            alt="producto">
-                        <ul style="margin:0px; list-style:none;">
-                            <li id="label-glosa"><strong> Nombre:</strong> {{this.Producto.glosa_producto}}</li>
-                            <li id="label-cantidad"><strong>Cantidad:</strong> {{this.Producto.stock_producto}}</li>
-                        </ul>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="accion_gestionar">Acción <strong class="text-danger">(*)</strong></label>
-                                <select (change)="CambioMovimientos($event.target)" formControlName="accion"
-                                    [class.is-invalid]="GestionarStock.controls['accion']|isInvalid"
-                                    class="form-control" name="accion_gestionar">
-                                    <option value="">Seleccionar Opción</option>
-                                    <option value="1">Añadir</option>
-                                    <option value="2">Quitar</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="cantidad_gestionar">Cantidad <span class="text-danger">(*)</span></label>
-                                <input [disabled]="true" (keyup)="Cantidades($event.target)" name="cantidad_gestionar"
-                                    formControlName="cantidad"
-                                    [class.is-invalid]="GestionarStock.controls['cantidad']|isInvalid" type="number"
-                                    placeholder="ingresar una cantidad" class="form-control" #cantidad>
-                            </div>
-                        </div>
-                        <div class="col-md-4" id="show_precio_compra">
-                            <div class="form-group">
-                                <label for="precio_compra">Precio de compra</label>
-                                <input type="number" formControlName="precio_compra"
-                                    [class.is-invalid]="GestionarStock.controls['precio_compra']|isInvalid"
-                                    placeholder="ingrese precio de compra" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-md-4 ">
-                            <div class="form-group ">
-                                <label for="stock_gestionar">Stock final </label>
-                                <input type="text" placeholder="Stock final" class="form-control"
-                                    formControlName="stock_final"
-                                    [class.is-invalid]="GestionarStock.controls['stock_final']|isInvalid" readonly
-                                    value="">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row atributo_seleccionado_construir">
-
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <h6 for="name" class="control-label">Comentario</h6>
-                                <textarea name="comentario_gestionar_stock" class="form-control"
-                                    formControlName="comentario" rows="3" placeholder=""></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal" data-original-title=""
-                    title="">SALIR</button>
-                <button (click)="GestionarStockProducto()" #GuardarAtibuto class="btn btn-primary" type="button">
-                    GUARDAR STOCK</button>
-            </div>
-        </div>
-
-    </div>
-</div>

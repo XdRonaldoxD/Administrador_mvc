@@ -15,7 +15,7 @@ export class PedidoService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.get("http://localhost/MVC_NEURO/?controller=Pedido&action=FiltrarEstadosPedidos", { headers: headers })
+    return this.httpcliente.get("http://localhost/MVC_CRM/?controller=Pedido&action=FiltrarEstadosPedidos", { headers: headers })
   }
   TraerPedido(id_pedido: any, token: any): Observable<any> {
     let Params = new HttpParams();
@@ -23,6 +23,6 @@ export class PedidoService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.get("http://localhost/MVC_NEURO/?controller=Pedido&action=TraerPedido", { headers: headers , params: Params })
+    return this.httpcliente.get("http://localhost/MVC_CRM/?controller=Pedido&action=TraerPedido", { headers: headers , params: Params })
   }
 }

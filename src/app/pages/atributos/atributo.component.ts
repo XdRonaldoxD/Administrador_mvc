@@ -117,7 +117,7 @@ export class AtributoComponent implements OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_NEURO/?controller=Atributo&action=ListaAtributo",
+          "http://localhost/MVC_CRM/?controller=Atributo&action=ListaAtributo",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProducto = resp.data;
@@ -161,7 +161,7 @@ export class AtributoComponent implements OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_NEURO/?controller=Atributo&action=ListaAtributoDeshabilitado",
+          "http://localhost/MVC_CRM/?controller=Atributo&action=ListaAtributoDeshabilitado",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProductoDeshabilitado = resp.data;

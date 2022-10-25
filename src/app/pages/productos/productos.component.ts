@@ -143,7 +143,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
 
 
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_NEURO/?controller=Producto&action=ListaProducto",
+          "http://localhost/MVC_CRM/?controller=Producto&action=ListaProducto",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProducto = resp.data;
@@ -210,7 +210,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
           dataTablesParameters.categoria_padres = checked;
         }
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_NEURO/?controller=Producto&action=ListaProductoDeshabilitado",
+          "http://localhost/MVC_CRM/?controller=Producto&action=ListaProductoDeshabilitado",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProductoDeshabilitado = resp.data;

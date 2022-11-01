@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CategoriaService } from '../../services/categoria.service';
 import { LoginService } from '../../services/login.service';
-import { finalize } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { ProductoService } from '../../services/producto.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AtributoService } from '../../services/atributo.service';
@@ -17,7 +17,7 @@ declare var Swal: any;
   templateUrl: './editar-producto.component.html',
   styleUrls: ['./editar-producto.component.css']
 })
-export class EditarProductoComponent implements OnInit {
+export class EditarProductoComponent implements OnInit, OnDestroy {
   token: any;
   tipo_inventario?: any = [];
   imagenes_producto?: any = [];
@@ -32,6 +32,9 @@ export class EditarProductoComponent implements OnInit {
   descripcion_corta: any;
   checked_atributo: Atributo_seleccionado[] = [];
   checked_categoria: any = [];
+  color: any;
+  Unsuscribe: any = new Subject();
+
   constructor(
     private servicio_categoria: CategoriaService,
     private servicio_login: LoginService,
@@ -60,6 +63,17 @@ export class EditarProductoComponent implements OnInit {
     });
     this.token = this.servicio_login.getToken();
     this.listarAtributo();
+
+  }
+
+  ngOnDestroy(): void {
+    this.Unsuscribe.unsubscribe();
+
+
+  }
+  ngOnInit(): void {
+    this.descripcion_corta=$('.descripcion_extendida').wysihtml5().data('wysihtml5').editor;
+    this.descripcion_extendida=$('.descripcion_corta').wysihtml5().data('wysihtml5').editor;
     this.route.params.subscribe((parametro) => {
       // let producto_oferta: any = null;
       // this.route.queryParamMap.subscribe((params) => {
@@ -99,7 +113,7 @@ export class EditarProductoComponent implements OnInit {
 
         // this.construirtabla();
 
-      })).subscribe({
+      }), takeUntil(this.Unsuscribe)).subscribe({
         next: (res) => {
           if (res.visibleonline_producto === 1) {
             res.visibleonline_producto = true;
@@ -110,8 +124,13 @@ export class EditarProductoComponent implements OnInit {
           this.informacionForm.get('codigo_producto')?.setValue(res.codigo_producto);
           this.informacionForm.get('tipo_inventario')?.setValue(res.id_tipo_inventario);
           this.informacionForm.get('visible_tienda')?.setValue(res.visibleonline_producto);
+
           this.informacionForm.get('descripcion_corta')?.setValue(res.detalle_producto);
           this.informacionForm.get('descripcion_extendida')?.setValue(res.detallelargo_producto);
+
+          this.descripcion_corta.setValue(res.detalle_producto);
+          this.descripcion_extendida.setValue(res.detallelargo_producto);
+
           this.informacionForm.get('glosa_producto')?.setValue(res.glosa_producto);
           this.PrecioStockForm.get('precio_venta')?.setValue(res.precioventa_producto);
           this.PrecioStockForm.get('stock')?.setValue(res.stock_producto);
@@ -136,7 +155,7 @@ export class EditarProductoComponent implements OnInit {
             $(".color_agregar").append(color);
           });
           let html_body = '';
-          res.arreglo_especificacion.forEach((element: any,i:any) => {
+          res.arreglo_especificacion.forEach((element: any, i: any) => {
             html_body += `<tr>
             <td> <input  class="form-control nombre"  type="text" value="${element.glosa_especificaciones_producto}"></td>
             <td><input class="form-control descripcion"  type="text" value="${element.respuesta_especificaciones_producto}"></td>
@@ -174,13 +193,7 @@ export class EditarProductoComponent implements OnInit {
       });
       // this.producto_serv;
     });
-  }
-  color: any;
-  ngOnInit(): void {
 
-
-    this.descripcion_extendida = $('.descripcion_extendida').wysihtml5().data('wysihtml5').editor;
-    this.descripcion_corta = $('.descripcion_corta').wysihtml5().data('wysihtml5').editor;
 
     $(function () {
       $('[data-toggle="tooltip"]').tooltip()
@@ -201,7 +214,7 @@ export class EditarProductoComponent implements OnInit {
       }
     )
 
-  
+
     $(document).on("keyup", ".posicion", (elemento: any) => {
       this.imagenes_producto[$(elemento.target).attr("id_posicion")].orden_imagen = $(elemento.target).val();
     })
@@ -360,8 +373,7 @@ export class EditarProductoComponent implements OnInit {
   }
 
   listarAtributo() {
-    this.servicio_atributo.CargarAtributo(this.token).pipe(finalize(() => {
-    })).subscribe(
+    this.servicio_atributo.CargarAtributo(this.token).pipe(takeUntil(this.Unsuscribe)).subscribe(
       {
         next: (arreglo) => {
           var html = "";
@@ -458,7 +470,7 @@ export class EditarProductoComponent implements OnInit {
     }
     $("#nombre_imagen").val('');
     $(".dropify-clear").click();
-  
+
 
   }
 
@@ -533,7 +545,7 @@ export class EditarProductoComponent implements OnInit {
     $(document).trigger("enhance.tablesaw");
   }
 
-  ActivarPortada(indice: any,elemento:any) {
+  ActivarPortada(indice: any, elemento: any) {
     if ($(elemento.target).is(':checked')) {
       $(".agregar_imagen_edit").prop("disabled", true);
       $(elemento.target).prop("disabled", false);
@@ -543,7 +555,7 @@ export class EditarProductoComponent implements OnInit {
       $(".agregar_imagen_edit").prop("disabled", false);
     }
   }
-  EliminarImagen(indice: any){
+  EliminarImagen(indice: any) {
     this.imagenes_producto = this.imagenes_producto.filter((item: any, indices: any) => {
       if (indices != indice)
         return item;
@@ -600,10 +612,12 @@ export class EditarProductoComponent implements OnInit {
       }
       this.producto_relacionado = '';
 
-    })).subscribe(
+    }),takeUntil(this.Unsuscribe)).subscribe(
       {
         next: resp => {
+       
           this.listarProductoRelacionados.push(resp)
+     
         },
         error: error => {
           console.log(error);
@@ -710,6 +724,8 @@ export class EditarProductoComponent implements OnInit {
         return;
       }
     };
+   
+   
     this.informacionForm.get('descripcion_corta')!.setValue(this.descripcion_corta.getValue());
     this.informacionForm.get('descripcion_extendida')!.setValue(this.descripcion_extendida.getValue());
     this.producto_serv.GuardarProductoActualizar(this.token, valorescategoria, this.informacionForm.value, this.PrecioStockForm.value, this.imagenes_producto, coloresHexadecimal, especificaciones, this.listarProductoRelacionados, this.checked_atributo).

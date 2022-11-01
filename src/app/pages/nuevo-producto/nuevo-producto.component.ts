@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { CategoriaService } from '../../services/categoria.service';
 import { LoginService } from '../../services/login.service';
-import { finalize } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { ProductoService } from '../../services/producto.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AtributoService } from '../../services/atributo.service';
@@ -16,7 +16,7 @@ declare var Swal: any;
   templateUrl: './nuevo-producto.component.html',
   styleUrls: ['./nuevo-producto.component.css']
 })
-export class NuevoProductoComponent implements OnInit {
+export class NuevoProductoComponent implements OnInit, OnDestroy {
   @ViewChild('codigo_producto') codigo_producto?: ElementRef;
   token: any;
   tipo_inventario?: any = [];
@@ -34,6 +34,8 @@ export class NuevoProductoComponent implements OnInit {
   checked_categoria: any = [];
   contador_texto: any;
   verificador_sku: boolean = false;
+  Unsuscribe: any = new Subject();
+  color: any;
   constructor(
     private servicio_categoria: CategoriaService,
     private servicio_login: LoginService,
@@ -42,9 +44,12 @@ export class NuevoProductoComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
 
-
   ) { }
-  color: any;
+
+  ngOnDestroy(): void {
+    this.Unsuscribe.unsubscribe();
+  }
+
   ngOnInit(): void {
     this.descripcion_extendida = $('.descripcion_extendida').wysihtml5().data('wysihtml5').editor;
     this.descripcion_corta = $('.descripcion_corta').wysihtml5().data('wysihtml5').editor;
@@ -181,7 +186,7 @@ export class NuevoProductoComponent implements OnInit {
         $(elemento.target).addClass('is-invalid');
       }
     })
-    this.producto_serv.ListaProductosRelacionado(this.token, this.producto_relacionado).subscribe({
+    this.producto_serv.ListaProductosRelacionado(this.token, this.producto_relacionado).pipe(takeUntil(this.Unsuscribe)).subscribe({
       next: resp => {
         this.listaProductosRelacionado = resp;
       },
@@ -226,11 +231,7 @@ export class NuevoProductoComponent implements OnInit {
       } else {
         this.producto_serv.removeItemFromArr(this.checked_atributo, elemento.target.value)
       }
-      // $(".selector-atributo").prop("checked", false);
-      // $("input[name='atributo_padre']").prop("checked", false);
-      // this.checked_atributo.forEach((element: any) => {
-      //   $(`#${element.id_atributo}`).prop('checked', true);
-      // });
+      
     })
 
     $(document).on("click", "input[name='categoria_padre']", (elemento: any) => {
@@ -240,11 +241,7 @@ export class NuevoProductoComponent implements OnInit {
       } else {
         this.producto_serv.removeItemFromArr(this.checked_categoria, elemento.target.value)
       }
-      // $(".selector-categoria").prop("checked", false);
-      // $("input[name='categoria_padre']").prop("checked", false);
-      // this.checked_categoria.forEach((element: any) => {
-      //   $(`#${element}`).prop('checked', true);
-      // });
+     
     })
 
 
@@ -332,8 +329,7 @@ export class NuevoProductoComponent implements OnInit {
   }
 
   listarAtributo() {
-    this.servicio_atributo.CargarAtributo(this.token).pipe(finalize(() => {
-    })).subscribe(
+    this.servicio_atributo.CargarAtributo(this.token).pipe(takeUntil(this.Unsuscribe)).subscribe(
       {
         next: (arreglo) => {
           var html = "";

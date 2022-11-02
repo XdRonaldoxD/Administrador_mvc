@@ -34,10 +34,12 @@
                     </ul>
                 </li>
                 <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
-                            class="mdi mdi-bullseye"></i><span class="hide-menu">REPORTE</span></a>
+                            class="mdi mdi-bullseye"></i><span class="hide-menu">CHAT</span></a>
                     <ul aria-expanded="false" class="collapse">
-                        <li><a href="javascript:void()">Calendar</a></li>
+                        <li><a (click)="SELECCION($event.target)" routerLink="/chatBox"
+                            href="javascript:void()">CHAT CLIENTE</a></li>
                     </ul>
+                    
                 </li>
 
             </ul>

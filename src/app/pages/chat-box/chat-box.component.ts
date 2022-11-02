@@ -34,7 +34,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
     const channel = pusher.subscribe('ChatboxWoocommerce');
     channel.bind('ChatboxOkaDatoClienteEvent', (element: any) => {
       let linea = 'Desconectado';
-      if (element.estado_linea_log_chat) {
+      if (element.estado_log_chat) {
         linea = 'linea';
       }
       this.agregar_mensaje?.nativeElement.insertAdjacentHTML('beforeend', `<li id=${element.id_log_chat}  (click)>
@@ -170,7 +170,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
       resp.forEach((element: any) => {
         let linea = 'Desconectado';
         let clase = 'text-warning';
-        if (element.estado_linea_log_chat) {
+        if (element.estado_log_chat) {
           linea = 'linea';
           clase = 'text-success';
         }
@@ -255,7 +255,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
       this.ObtenerConversacion.forEach((element: any) => {
         let linea = 'Desconectado';
         let clase = 'text-warning';
-        if (element.estado_linea_log_chat) {
+        if (element.estado_log_chat) {
           linea = 'linea';
           clase = 'text-success';
         }

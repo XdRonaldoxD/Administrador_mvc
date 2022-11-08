@@ -202,7 +202,7 @@
                     <div class="card-body">
                         <div class="row">
                             <!-- Column -->
-                            <div class="col-lg-3 col-md-6">
+                            <div class="col-lg-4 col-md-6">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex flex-row">
@@ -218,24 +218,9 @@
                                 </div>
                             </div>
                             <!-- Column -->
+                     
                             <!-- Column -->
-                            <div class="col-lg-3 col-md-6">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="d-flex flex-row">
-                                            <div class="round align-self-center round-info"><i
-                                                    class="mdi mdi-message-text"></i></div>
-                                            <div class="m-l-10 align-self-center">
-                                                <h3 class="m-b-0">2690</h3>
-                                                <h5 class="text-muted m-b-0">Users</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Column -->
-                            <!-- Column -->
-                            <div class="col-lg-3 col-md-6">
+                            <div class="col-lg-4 col-md-6">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex flex-row">
@@ -252,7 +237,7 @@
                             </div>
                             <!-- Column -->
                             <!-- Column -->
-                            <div class="col-lg-3 col-md-6">
+                            <div class="col-lg-4 col-md-6">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex flex-row">
@@ -275,7 +260,7 @@
     </div>
 
     <div class="row">
-        <div class=" col-sm-12 col-12 col-md-12 col-lg-12 col-xl-6">
+        <div class=" col-sm-12 col-12 col-md-12 col-lg-12 col-xl-7">
             <div class="card">
                 <div class="card-content mt-2">
                     <div class="card-body">
@@ -334,7 +319,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6 p-0">
-                                        <button class="btn btn-primary ">ACTUALIZAR ESTADO PREPARACION</button>
+                                        <button class="btn btn-primary ">ACTUALIZAR ESTADO PREPARACIÓN</button>
                                     </div>
                                 </div>
                             </div>
@@ -403,7 +388,7 @@
 
         </div>
 
-        <div class="col-md-12 col-lg-12 col-xl-6">
+        <div class="col-md-12 col-lg-12 col-xl-5">
             <div class="card">
                 <div class="card-content">
                     <div class="card-body">
@@ -501,11 +486,11 @@
                             <table id="tabla_productos_pedido" class="table text-center w-100">
                                 <thead>
                                     <tr>
-                                        <th>IMAGEN</th>
+                                        <th style="width: 25%;text-align: center;">IMAGEN</th>
                                         <th>PRODUCTO</th>
                                         <th>SKU</th>
                                         <th>CANTIDAD</th>
-                                        <th>PRECIO UNITARIO</th>
+                                        <th class="text-center">PRECIO UNITARIO</th>
                                         <th>TOTAL</th>
                                         <!-- <th>ACCIONES</th> -->
                                 
@@ -513,11 +498,11 @@
                                 <tbody>
                                     <tr *ngFor="let item of PedidoDetalle">
                                         <td> <img src="{{item.imagen_producto}}" class="w-25" alt=""> </td>
-                                        <td>{{item.glosa_producto}}</td>
-                                        <td>{{item.codigo_producto}}</td>
+                                        <td class="text-left">{{item.glosa_producto}}</td>
+                                        <td class="text-left">{{item.codigo_producto}}</td>
                                         <td>{{item.cantidad_pedido_detalle}}</td>
-                                        <td>{{item.precioventa_producto}}</td>
-                                        <td>{{item.valortotal_pedido_detalle}}</td>
+                                        <td>S/{{item.precioventa_producto}}</td>
+                                        <td>S/{{item.valortotal_pedido_detalle}}</td>
                                     </tr>
 
                                     

@@ -79,6 +79,7 @@
                                         <thead>
                                             <tr style="vertical-align: middle;text-align: center;"
                                                 class="text-uppercase">
+                                                <th class="text-center">ACCIONES</th>
                                                 <th class="text-center">PEDIDO</th>
                                                 <th class="text-center">FECHA</th>
                                                 <th class="text-center">CLIENTE</th>
@@ -88,23 +89,12 @@
                                                 <th class="text-center">ESTADO PREPARACION</th>
                                                 <th class="text-center">ARTICULOS</th>
                                                 <th class="text-center">FORMA ENTREGA</th>
-                                                <th class="text-center">ACCIONES</th>
+                                             
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <ng-container *ngFor="let e of listarProducto;">
                                                 <tr style="vertical-align: middle;text-align: center;">
-                                                    <td> <a routerLink="/Detalle-Pedido/{{e.id_pedido}}">{{e.numero_pedido}}</a>  </td>
-                                                    <td>{{e.fechacreacion_pedido | date:'dd/MM/yy HH:mm a'}}</td>
-                                                    <td>{{e.nombre_cliente}} {{e.apellidopaterno_cliente}}
-                                                        {{e.apellidomaterno_cliente}} </td>
-                                                    <td>{{e.valortotal_pedido | currency: 'S/': 'symbol': '': 'en-PE'}}
-                                                    </td>
-                                                    <td>{{e.glosa_estado_pedido}}</td>
-                                                    <td>{{e.glosa_estado_pago}}</td>
-                                                    <td>{{e.glosa_estado_preparacion}}</td>
-                                                    <td>{{e.cantidad}}</td>
-                                                    <td>{{e.retiroentienda_pedido}}</td>
                                                     <td>
                                                         <div class="button-group">
                                                             <button type="button" style="width: 20px;height: 20px;"
@@ -120,6 +110,18 @@
                                                                 [showDelay]="100"><i class="fa fa-times"></i> </button>
                                                         </div>
                                                     </td>
+                                                    <td> <a routerLink="/Detalle-Pedido/{{e.id_pedido}}">{{e.numero_pedido}}</a>  </td>
+                                                    <td>{{e.fechacreacion_pedido | date:'dd/MM/yy HH:mm a'}}</td>
+                                                    <td>{{e.nombre_cliente}} {{e.apellidopaterno_cliente}}
+                                                        {{e.apellidomaterno_cliente}} </td>
+                                                    <td>{{e.valortotal_pedido | currency: 'S/': 'symbol': '': 'en-PE'}}
+                                                    </td>
+                                                    <td>{{e.glosa_estado_pedido}}</td>
+                                                    <td>{{e.glosa_estado_pago}}</td>
+                                                    <td>{{e.glosa_estado_preparacion}}</td>
+                                                    <td>{{e.cantidad}}</td>
+                                                    <td>{{e.retiroentienda_pedido}}</td>
+                                                 
                                                 </tr>
                                             </ng-container>
                                         </tbody>

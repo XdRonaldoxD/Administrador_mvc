@@ -29,11 +29,13 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
   dtOptions: DataTables.Settings[] = [];
   reload_producto: any = new Subject();
   reload_producto_deshabilitado: any = new Subject();
+  reload_producto_historial: any = new Subject();
   //Identificacion del usuario
   identity: any;
   token: any;
   listarProducto: any = [];
   listarProductoDeshabilitado: any = [];
+  listarProductoHistorial: any = [];
   ProductoBuscar!: FormGroup;
   GestionarStock!: FormGroup;
   tipo_inventario?: any = [];
@@ -56,17 +58,19 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
     });
     this.GestionarStock = this.fb.group({
       accion: ['', [Validators.required]],
-      precio_compra: [''],
+      precio_compra: [null],
       cantidad: ['', [Validators.required]],
       stock_final: [''],
       comentario: [''],
       id_usuario: [this.usuario.sub],
+      id_producto:[null]
     });
-
+    this.token = this.servicio_login.getToken();
+    //INICIALIZAMOS LA TABLA HISTORIAL
+    this.ProductosHistorial(null);
+    //
   }
   ngOnInit(): void {
-
-    this.token = this.servicio_login.getToken();
     this.ProductoHabilitados();
     this.ProductosDeshabilitados();
     $(function () {
@@ -95,10 +99,13 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
     // Do not forget to unsubscribe the  (Datatable)
     this.reload_producto.unsubscribe();
     this.reload_producto_deshabilitado.unsubscribe();
+    this.reload_producto_historial.unsubscribe();
   }
   ngAfterViewInit(): void {
     this.reload_producto.next();
     this.reload_producto_deshabilitado.next();
+    this.reload_producto_historial.next();
+
   }
   //FIN
   buscar() {
@@ -241,6 +248,58 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
     };
   }
 
+  ProductosHistorial(id_producto:any) {
+    let headers = new HttpHeaders()
+      .set('Authorization', this.token);
+    this.dtOptions[2] = {
+      pagingType: "full_numbers",
+      pageLength: 10,
+      serverSide: true,
+      processing: true,
+      responsive: true,
+      destroy: true,
+      order: [],
+      // scrollX:true,
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",
+      },
+      ajax: (dataTablesParameters: any, callback) => {
+        dataTablesParameters.id_producto = id_producto;
+        this.http.post<DataTablesResponse>(
+          "http://localhost/MVC_CRM/?controller=Producto&action=ProductoHistorial",
+          dataTablesParameters, { headers: headers }
+        ).subscribe((resp) => {
+          this.listarProductoHistorial = resp.data;
+          callback({
+            recordsTotal: resp.recordsTotal,
+            recordsFiltered: resp.recordsFiltered,
+            data: [],
+          });
+        });
+      },
+      columns: [
+        {
+          width: "10%"
+        },
+        {
+          width: "15%"
+        },
+        {
+          width: "5%"
+        },
+        {
+          width: "30%"
+        },
+        {
+          width: "20%"
+        },
+        {
+          width: "20%"
+        }
+      ],
+    };
+  }
+
   listarCategorias(valor_inventario: any) {
     this.servicio_categoria.CargarCategoria(this.token, valor_inventario.value).pipe(finalize(() => {
     })).subscribe(
@@ -299,7 +358,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
 
   AbrirModalGestionarStock(datos_producto: any) {
     this.Producto = datos_producto;
-    console.log(this.Producto);
+    this.GestionarStock.get('id_producto')!.setValue(datos_producto.id_producto)
     $('#exampleModalCenter').modal('show');
 
   }
@@ -410,6 +469,12 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
       }
     })
   
+  }
+
+  HistorialProducto(id_producto:number){
+    this.reload_producto_historial.next();
+    this.ProductosHistorial(id_producto);
+    $('#exampleHistorialProducto').modal('show');
   }
 
 }

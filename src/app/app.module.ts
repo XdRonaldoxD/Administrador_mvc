@@ -21,7 +21,7 @@ import { RegisterComponent } from './register/register.component';
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent,
+    RegisterComponent
   ],
   exports: [
     HeaderComponent,

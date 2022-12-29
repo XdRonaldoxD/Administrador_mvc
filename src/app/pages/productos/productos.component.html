@@ -121,11 +121,17 @@
                                                                 tooltip="Gestionar Stock" placement="top"
                                                                 [showDelay]="100"><i class="fa fa-archive"></i>
                                                             </button>
+                                                            <br>
                                                             <button type="button" style="width: 20px;height: 20px;"
                                                                 class="btn btn-sm btn-danger btn-circle"
                                                                 (click)="GestionActivoDesactivadoProducto('DESHABILITAR',e.id_producto)"
                                                                 tooltip="Deshabilitar Producto" placement="top"
                                                                 [showDelay]="100"><i class="fa fa-times"></i> </button>
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-secondary btn-circle"
+                                                                (click)="HistorialProducto(e.id_producto)"
+                                                                tooltip="Historial Producto" placement="top"
+                                                                [showDelay]="100"><i class="fa fa-file-text-o" aria-hidden="true"></i> </button>
                                                         </div>
                                                     </td>
                                                     <td>{{e.glosa_producto}}</td>
@@ -177,7 +183,7 @@
                                                 <tr style="vertical-align: middle;text-align: center;">
                                                     <td>
                                                         <div class="button-group">
-                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                            <!-- <button type="button" style="width: 20px;height: 20px;"
                                                                 class="btn btn-sm btn-info btn-circle"
                                                                 routerLink="/Editar-Producto/{{e.id_producto}}"
                                                                 tooltip="Editar Producto" placement="top"
@@ -187,7 +193,7 @@
                                                                 (click)="AbrirModalGestionarStock(e)"
                                                                 tooltip="Gestionar Stock" placement="top"
                                                                 [showDelay]="100"><i class="fa fa-archive"></i>
-                                                            </button>
+                                                            </button> -->
                                                             <button type="button" style="width: 20px;height: 20px;"
                                                                 class="btn btn-sm btn-success btn-circle"
                                                                 (click)="GestionActivoDesactivadoProducto('ACTIVAR',e.id_producto)"
@@ -257,8 +263,8 @@
                             <div class="form-group">
                                 <label for="accion_gestionar">Acción <strong class="text-danger">(*)</strong></label>
                                 <select (change)="CambioMovimientos($event.target)" formControlName="accion"
-                                    [class.is-invalid]="GestionarStock.controls['accion']|isInvalid" 
-                                    class="form-control" name="accion_gestionar" >
+                                    [class.is-invalid]="GestionarStock.controls['accion']|isInvalid"
+                                    class="form-control" name="accion_gestionar">
                                     <option value="">Seleccionar Opción</option>
                                     <option value="1">Añadir</option>
                                     <option value="2">Quitar</option>
@@ -290,7 +296,7 @@
                                 <input type="text" placeholder="Stock final" class="form-control"
                                     formControlName="stock_final"
                                     [class.is-invalid]="GestionarStock.controls['stock_final']|isInvalid" readonly
-                                    value="" >
+                                    value="">
                             </div>
                         </div>
                     </div>
@@ -314,6 +320,61 @@
                     title="">SALIR</button>
                 <button (click)="GestionarStockProducto()" #GuardarAtibuto class="btn btn-primary" type="button">
                     GUARDAR STOCK</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleHistorialProducto" tabindex="-1" role="dialog" aria-labelledby="exampleHistorialProducto" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 1000px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center"><strong>HISTORIAL PRODUCTO</strong></h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close" data-original-title=""
+                    title=""><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table datatable [dtOptions]="dtOptions[2]" [dtTrigger]="reload_producto_historial" class="row-border hover "
+                        width="100%">
+                        <thead>
+                            <tr style="vertical-align: middle;text-align: center;" class="text-uppercase">
+                                <th class="text-center">ACCION</th>
+                                <th class="text-center">FECHA</th>
+                                <th class="text-center">CANTIDAD</th>
+                                <th class="text-center">RESPONSABLE</th>
+                                <th class="text-center">TIPO DOCUMENTO</th>
+                                <th class="text-center">COMENTARIO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let e of listarProductoHistorial;">
+                                <tr style="vertical-align: middle;text-align: center;">
+                                    <td>{{e.glosa_tipo_movimiento}}</td>
+                                    <td>{{e.fecha_producto_historial}}</td>
+                                    <td>{{e.cantidadrmovimiento_producto_historial}}</td>
+                                    <td>{{e.nombre_staff}}</td>
+                                    <td>{{e.glosa_tipo_documento}}</td>
+                                    <td>{{e.comentario_producto_historial}}</td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                        <tbody *ngIf="listarProductoHistorial.length == 0">
+                            <tr>
+                                <td colspan="3" class="no-data-available">No data!</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal" data-original-title=""
+                    title="">SALIR</button>
+
             </div>
         </div>
 

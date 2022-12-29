@@ -13,6 +13,7 @@ import { PedidosComponent } from './pedidos/pedidos.component';
 import { PedidoDetalleComponent } from './pedido-detalle/pedido-detalle.component';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
 import { PedidoresolverService } from '../resolver/Pedidoresolver.service';
+import { MigrarproductoComponent } from './migrarproducto/migrarproducto.component';
 
 
 const pagesRoutes: Routes = [
@@ -34,6 +35,7 @@ const pagesRoutes: Routes = [
         resolve: { pedidodetalle: PedidoresolverService }
       },
       { path: 'chatBox', component: ChatBoxComponent, canActivate: [AuthGuard] },
+      { path: 'Importar-Inventario', component: MigrarproductoComponent, canActivate: [AuthGuard] },
 
       { path: '', redirectTo: '/IniciarSession', pathMatch: 'full' },
     ]

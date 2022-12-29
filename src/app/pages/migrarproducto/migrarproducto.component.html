@@ -1,0 +1,132 @@
+<!-- Page Wrapper -->
+
+<div class="content container-fluid">
+
+    <!-- Website Analytics Starts-->
+    <div class="col-md-12 col-sm-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h1 class="text-bold-600" style="text-align:left;">EXCEL PRODUCTOS</h1>
+            </div>
+            <div class="card-content">
+                <form #enviarProducto="ngForm" (ngSubmit)="EnviarProducto(enviarProducto)"
+                    enctype="multipart/form-data">
+                    <div class="card-body">
+                        <h2 class="text-center">Archivo para producto(.xls)</h2>
+                        <div class="row justify-content-center">
+                            <h6 class="mt-1"> <i class="bx bx-notepad"></i>Actualizar Producto </h6>
+                            <label class="switch">
+                                <input type="checkbox" (change)="DetectarTipoAccion($event)" name="actualizar_producto"
+                                    id="actualizar_producto" class="actualizar_producto">
+                                <span class="slider round">
+                                    <p>Si</p>
+                                    <p>No</p>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="row justify-content-center d-none" #mensaje>
+                            <p class="text-danger mostrar_texto ">Solo actualiza el producto no creará</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 row justify-content-center">
+                                <fieldset class="form-group">
+                                    <input type="file" [(ngModel)]="texto" (change)="seleccioneExcel($event.target)"
+                                        name="archivo" class="form-control" accept=".xlsx, .xls, .csv"
+                                        [required]="true">
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-12 col-md-12 text-center">
+                                <div class="row">
+                                    <div class="col-md-4 col-12">
+                                        <button type="submit" id="btn-save" class="btn  btn-success"><i
+                                                class="fe fe-link-external"></i> Cargar Producto</button>
+                                    </div>
+                                    <div class="col-md-4 col-12">
+                                        <button (click)="ExportarProducto()" type="button" id="btn-save"
+                                            class="btn  btn-success"><i class="fe fe-export"></i> Exportar
+                                            Producto</button>
+                                    </div>
+                                    <div class="col-md-4 col-12">
+                                        <a href="http://localhost/MVC_APIVENTA/ExcelProducto/CargaProductoNotaVenta.xlsx"
+                                            target="_blank" class="cursor-pointer btn  btn-primary"> <i
+                                                class="fe fe-import"></i>Descargar Plantilla</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+
+
+<!-- /Main Wrapper -->
+
+
+<div class="modal fade" id="modal_datos" tabindex="-1" role="dialog" aria-labelledby="modal_datos"
+    data-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center texto_principal">Datos No Registrados</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12 p-0 existe_producto d-none">
+                    <!-- <h2 class="modal-title text-start">Producto registrados en el sistema</h2> -->
+                    <strong class="motivo_excel">Verificar el comentario del excel.</strong>
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table   table-bordered center-text-table" style="width:100%">
+                                <thead>
+                                    <th>Fila</th>
+                                    <th>Columna</th>
+                                    <th>Nombre Producto</th>
+                                    <th>Codigo Producto</th>
+                                    <th>Comentario</th>
+                                </thead>
+                                <tbody class="producto_sin_registro">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 p-0 validarColumnas d-none">
+                    <div>
+                        <table class="table   table-bordered center-text-table" style="width:100%">
+                            <thead>
+                                <!-- <th>Numero</th> -->
+                                <th>Fila</th>
+                                <th>Columna</th>
+                                <th>Motivo</th>
+                            </thead>
+                            <tbody class="ValidarExcel">
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div id="button_right" class="col-sm-12 col-md-12">
+                    <button type="button" style="padding-left: 9px;" data-dismiss="modal"
+                        class="btn btn-outline-secondary" id="btn-close-crud"><i style="vertical-align: text-bottom;"
+                            class="bx bx-left-arrow-alt"></i> Volver</button>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

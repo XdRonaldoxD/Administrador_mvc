@@ -260,7 +260,7 @@
     </div>
 
     <div class="row">
-        <div class=" col-sm-12 col-12 col-md-12 col-lg-12 col-xl-7">
+        <div class=" col-sm-12 col-12 col-md-12 col-lg-12 col-xl-8">
             <div class="card">
                 <div class="card-content mt-2">
                     <div class="card-body">
@@ -281,9 +281,7 @@
 
                         <div class="tab-content">
                             <div class="tab-pane active" id="estado" aria-labelledby="estado-tab" role="tabpanel">
-
-                                <div id="alert-cambio-estado"
-                                    class="d-none alert bg-rgba-success alert-dismissible mb-2" role="alert">
+                                <div id="alert-cambio-estado"  class="d-none alert bg-rgba-success alert-dismissible mb-2" role="alert">
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">×</span>
                                     </button>
@@ -301,25 +299,22 @@
                                     <div class="col-md-6">
                                         <select class="form-control" [(ngModel)]="estado_pedido">
                                             <option value="">Seleccionar Estado</option>
-                                            <option *ngFor="let item of EstadoPedido" value="{{item.id_estado_pedido}}">
-                                                {{item.glosa_estado_pedido}}</option>
+                                            <option *ngFor="let item of EstadoPedido" value="{{item.id_estado_pedido}}"> {{item.glosa_estado_pedido}}</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6 p-0">
-                                        <button class="btn btn-primary">ACTUALIZAR ESTADO</button>
+                                        <button type="button" (click)="ActualizarPedidoEstados('ESTADO',estado_pedido)" class="btn btn-primary">ACTUALIZAR ESTADO</button>
                                     </div>
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-md-6">
                                         <select class="form-control" [(ngModel)]="estado_preparacion">
                                             <option value="">Seleccionar Preparación</option>
-                                            <option *ngFor="let item of EstadoPreparacion"
-                                                value="{{item.id_estado_preparacion}}">{{item.glosa_estado_preparacion}}
-                                            </option>
+                                            <option *ngFor="let item of EstadoPreparacion" value="{{item.id_estado_preparacion}}">{{item.glosa_estado_preparacion}}</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6 p-0">
-                                        <button class="btn btn-primary ">ACTUALIZAR ESTADO PREPARACIÓN</button>
+                                        <button type="button" (click)="ActualizarPedidoEstados('PREPARACION',estado_preparacion)" class="btn btn-primary ">ACTUALIZAR ESTADO PREPARACIÓN</button>
                                     </div>
                                 </div>
                             </div>
@@ -388,7 +383,7 @@
 
         </div>
 
-        <div class="col-md-12 col-lg-12 col-xl-5">
+        <div class="col-md-12 col-lg-12 col-xl-4">
             <div class="card">
                 <div class="card-content">
                     <div class="card-body">
@@ -396,39 +391,21 @@
                         <h5 class="m-0"><i class="bx bxs-user"></i> CLIENTE N° {{pedido?.numero_pedido}}</h5>
 
                         <div class="row">
-                            <div class="col-xl-6">
+                            <div class="col-xl-12">
                                 <div class="dato-cliente mt-2 p-1 bg-opacity-themecolor">
                                     <label for="" class="d-block">DNI: <span>{{pedido?.dni_cliente}}</span></label>
                                     <label for="" class="d-block mt-1">Teléfono:
                                         <span>{{pedido?.telefono_cliente}}</span></label>
                                     <label for="" class="d-block mt-1">Email: <a
                                             href="javascript:void(0)">{{pedido?.e_mail_cliente}}</a></label>
-                                    <label for="" class="d-block mt-1">Cuenta registrada:
+                                    <label for="" class="d-block mt-1">Fecha Cuenta registrada:
                                         <span>{{pedido?.fechacreacion_pedido | date:'dd/MM/yyyy' }}</span></label>
                                     <label for="" class="d-block mt-1">Pedidos pagados: <span>0</span></label>
                                     <label for="" class="d-block mt-1">Total gastados desde su registro:
                                         <span>0</span></label>
                                 </div>
                             </div>
-                            <div class="col-xl-6">
-                                <div class="nota-privada mt-2">
-                                    <div class="cabecera-nota-privada ">
-                                        <h6 class="m-0"><i class="bx bxs-lock"></i>Nota Privada</h6>
-                                    </div>
-                                    <hr class="m-0 p-0">
-                                    <div class="cuerpo-nota-privada p-1">
-                                        <div class="form-group">
-                                            <textarea id="nota-pedido" class="form-control" name="" id="" cols="30"
-                                                rows="10"></textarea>
-                                        </div>
-                                        <div class="text-right">
-                                            <button class="btn btn-outline-secondary btn-guardar-nota ">
-                                                <i style="vertical-align: text-bottom;" class="bx bx-save"></i>
-                                                Guardar</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        
                         </div>
 
 
@@ -498,11 +475,18 @@
                                 <tbody>
                                     <tr *ngFor="let item of PedidoDetalle">
                                         <td> <img src="{{item.imagen_producto}}" class="w-25" alt=""> </td>
-                                        <td class="text-left">{{item.glosa_producto}}</td>
+                                        <td class="text-left">
+                                            <div>{{item.glosa_producto}}</div> 
+                                            <div class="col-md-12" *ngFor="let data of item.pedido_detalle_atributo_producto">
+                                                    <strong> <strong>Color</strong> : {{data.nombre_color_detalle_atributo_producto}}</strong>  <strong class="px-2">|</strong>
+                                                    <strong><strong>Talla</strong> : {{data.glosa_atributo}}</strong> <strong class="px-2">|</strong>
+                                                    <strong><strong>Cantidad </strong> : {{data.cantidad_pedido_detalle_atributo_producto}}</strong>
+                                            </div>
+                                        </td>
                                         <td class="text-left">{{item.codigo_producto}}</td>
                                         <td>{{item.cantidad_pedido_detalle}}</td>
-                                        <td>S/{{item.precioventa_producto}}</td>
-                                        <td>S/{{item.valortotal_pedido_detalle}}</td>
+                                        <td>{{item.precioventa_producto  | currency: 'S/': 'symbol': '': 'en-PE'}}</td>
+                                        <td>{{item.valortotal_pedido_detalle  | currency: 'S/': 'symbol': '': 'en-PE'}}</td>
                                     </tr>
 
                                     

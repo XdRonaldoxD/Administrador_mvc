@@ -24,6 +24,7 @@ import { EditarProductoComponent } from './editar-producto/editar-producto.compo
 import { PedidosComponent } from './pedidos/pedidos.component';
 import { PedidoDetalleComponent } from './pedido-detalle/pedido-detalle.component';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
+import { MigrarproductoComponent } from './migrarproducto/migrarproducto.component';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -42,6 +43,7 @@ import { ChatBoxComponent } from './chat-box/chat-box.component';
     EditarProductoComponent,
     PedidosComponent,
     PedidoDetalleComponent,
+    MigrarproductoComponent,
     ChatBoxComponent //Nota importar pages para que funciona route-oulet
   ],
   exports: [

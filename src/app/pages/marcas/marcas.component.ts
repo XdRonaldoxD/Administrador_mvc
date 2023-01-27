@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
-import { Subject, finalize } from 'rxjs';
+import { Subject, finalize, takeUntil } from 'rxjs';
 import { LoginService } from '../../services/login.service';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { MarcaService } from '../../services/marca.service';
@@ -32,6 +32,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
   listarProductoDeshabilitado: any = [];
   marcarForm!: FormGroup;
   texto_cabezera: any;
+  Unsuscribe: any = new Subject();
 
   constructor(private http: HttpClient,
     private servicio_marca: MarcaService,
@@ -60,7 +61,9 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
   //SOLO LLAMAR LA FUNCION => this.reload_producto.next();
   ngOnDestroy(): void {
     // Do not forget to unsubscribe the  (Datatable)
+    
     this.reload_producto.unsubscribe();
+    this.Unsuscribe.unsubscribe();
     this.reload_producto_deshabilitado.unsubscribe();
   }
   ngAfterViewInit(): void {
@@ -68,11 +71,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
     this.reload_producto_deshabilitado.next();
   }
   //FIN
-  provando() {
-    // this.reload_producto.next();
-    this.reload_producto_deshabilitado.next();
 
-  }
 
   ProductoHabilitados() {
     let headers = new HttpHeaders()
@@ -175,7 +174,9 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
       checked.push(($(elemento).attr("value")));
     });
     // Utilizamos console.log para ver comprobar que en realidad contiene algo el arreglo
-    this.servicio_marca.GestionarMarca(this.token, this.marcarForm.value).pipe(finalize(() => {
+    this.servicio_marca.GestionarMarca(this.token, this.marcarForm.value).pipe(
+      takeUntil(this.Unsuscribe)
+      ,finalize(() => {
       this.reload_producto.next();
       $('#exampleModalCenter').modal('hide');
     })).subscribe({
@@ -195,6 +196,39 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
 
       }
     })
+  }
+
+  EstadoMarca(estado:any,id_marca:any){
+    this.servicio_marca.Habilitar_Deshabilitar_Marca(this.token,id_marca,estado).pipe(takeUntil(this.Unsuscribe)).subscribe({
+      next:resp=>{
+        Swal.fire({
+          toast: true,
+          position: 'top',
+          icon: 'success',
+          title: `Marca ${resp} con exito`,
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 5000
+        })
+      },error:error=>{
+        Swal.fire({
+          toast: true,
+          position: 'top',
+          icon: 'error',
+          title: `Marca ${error}`,
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 5000
+        })
+      }
+    });
+  }
+  EditarMarca(item:any){
+    this.marcarForm.get('accion')!.setValue('ACTUALIZAR');
+    this.marcarForm.get('id_marca')!.setValue(item.id_marca);
+    this.marcarForm.get('glosa_marca')!.setValue(item.glosa_marca);
+    this.texto_cabezera = 'Editar Marca';
+    $('#exampleModalCenter').modal('show');
   }
 
 }

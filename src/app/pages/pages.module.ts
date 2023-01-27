@@ -25,6 +25,9 @@ import { PedidosComponent } from './pedidos/pedidos.component';
 import { PedidoDetalleComponent } from './pedido-detalle/pedido-detalle.component';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
 import { MigrarproductoComponent } from './migrarproducto/migrarproducto.component';
+import { NotaVentaComponent } from './nota-venta/nota-venta.component';
+import { CajaComponent } from './caja/caja.component';
+import { VentasComponent } from './ventas/ventas.component';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -44,7 +47,10 @@ import { MigrarproductoComponent } from './migrarproducto/migrarproducto.compone
     PedidosComponent,
     PedidoDetalleComponent,
     MigrarproductoComponent,
-    ChatBoxComponent //Nota importar pages para que funciona route-oulet
+    ChatBoxComponent,
+    NotaVentaComponent,//Nota DECLARAR pages para que funciona route-oulet
+    CajaComponent, 
+    VentasComponent 
   ],
   exports: [
     IsInvalidPipe,

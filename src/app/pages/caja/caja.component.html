@@ -1,0 +1,367 @@
+<!-- ============================================================== -->
+<!-- Container fluid  -->
+<!-- ============================================================== -->
+<div class="container-fluid">
+
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h2 class="text-themecolor">Caja</h2>
+        </div>
+    </div>
+
+    <div class="row " [ngClass]="{'d-none': lista_resumen_caja}">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <form action="" [formGroup]="FiltroCajaBuscar" autocomplete="nope">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h5 class="m-t-30">Fecha Desde <strong class="text-danger">(*)</strong> </h5>
+                                    <input type="date" placeholder="Filtrar fecha" class="form-control"
+                                        formControlName="fechacreacion_caja_inicio">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h5 class="m-t-30">Fecha Hasta<strong class="text-danger">(*)</strong></h5>
+                                    <input type="date" placeholder="Filtrar fecha" class="form-control"
+                                        formControlName="fechacreacion_caja_fin">
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-1">
+                                <div class="col-md-12 d-flex justify-content-end">
+                                    <div class="row mr-2">
+                                        <button (click)="CrearNuevaCaja()" class="btn btn-success">Nueva Caja</button>
+                                    </div>
+                                    <div class="row m-0">
+                                        <button (click)="buscar()" class="btn btn-primary btn-buscar">Buscar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- <input [(colorPicker)]="color"  class="form-control" [style.background]="color"/> -->
+
+                    <ul class="nav nav-pills m-t-30 m-b-30">
+                        <li class=" nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab"
+                                aria-expanded="false">Activos</a> </li>
+                        <li class="nav-item"> <a href="#navpills-2" class="nav-link" data-toggle="tab"
+                                aria-expanded="false">Historicos</a> </li>
+                    </ul>
+                    <div class="tab-content br-n pn">
+                        <div id="navpills-1" class="tab-pane active">
+                            <div class="row">
+                                <!-- ANGULAR SERVER SIDE -->
+                                <div class="table-responsive">
+                                    <table datatable [dtOptions]="dtOptions[0]" [dtTrigger]="reload_producto"
+                                        class="row-border hover " width="100%">
+                                        <thead>
+                                            <tr style="vertical-align: middle;text-align: center;"
+                                                class="text-uppercase">
+                                                <th class="text-center">N°Caja</th>
+                                                <th class="text-center">USUARIO</th>
+                                                <th class="text-center">FECHA</th>
+                                                <th class="text-center">ESTADO</th>
+                                                <th class="text-center">ACCION</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let e of ListarCajaHabilitados;">
+                                                <tr style="vertical-align: middle;text-align: center;">
+                                                    <td>{{e.id_caja}}</td>
+                                                    <td>{{e.nombre_staff}} {{e.apellidopaterno_staff}}
+                                                        {{e.apellidomaterno_staff}}</td>
+                                                    <td>{{e.fechacreacion_caja | date:'dd/MM/yy'}}</td>
+                                                    <td> <ng-container
+                                                            *ngIf="e.estado_caja==1">
+                                                            Abierto - {{e.fechacreacion_caja | date:'HH:mm a'}}
+                                                        </ng-container>
+                                                    </td>
+                                                    <td>
+                                                        <div class="button-group">
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-info btn-circle"
+                                                                (click)="TraerDetalleCaja(e.id_caja)"
+                                                                tooltip="Detalle Caja" placement="top"
+                                                                [showDelay]="100"><i class="mdi mdi-animation"></i>
+                                                            </button>
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-danger btn-circle"
+                                                                tooltip="Cerrar Caja" placement="top"
+                                                                (click)="CerrarCaja(e.id_caja)" [showDelay]="100"><i
+                                                                    class="mdi mdi-power"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                        <tbody *ngIf="ListarCajaHabilitados.length == 0">
+                                            <tr>
+                                                <td colspan="5" class="no-data-available">No data!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div id="navpills-2" class="tab-pane">
+                            <div class="row">
+                                <!-- ANGULAR SERVER SIDE -->
+                                <div class="table-responsive">
+                                    <table datatable [dtOptions]="dtOptions[1]"
+                                        [dtTrigger]="reload_producto_deshabilitado" class="row-border hover "
+                                        width="100%">
+                                        <thead>
+                                            <tr style="vertical-align: middle;text-align: center;"
+                                                class="text-uppercase">
+                                                <th class="text-center">N°Caja</th>
+                                                <th class="text-center">USUARIO</th>
+                                                <th class="text-center">FECHA</th>
+                                                <th class="text-center">ESTADO</th>
+                                                <th class="text-center">ACCION</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let e of ListarCajaHabilitadosDeshabilitado;">
+                                                <tr style="vertical-align: middle;text-align: center;">
+                                                    <td>{{e.id_caja}}</td>
+                                                    <td>{{e.nombre_staff}} {{e.apellidopaterno_staff}}
+                                                        {{e.apellidomaterno_staff}}</td>
+                                                    <td>{{e.fechacreacion_caja | date:'dd/MM/yy'}}</td>
+                                                    <td>
+                                                        <ng-container *ngIf="e.estado_caja==0">
+                                                            Cerrado - {{e.fechacierre_caja | date:'HH:mm a'}}
+                                                        </ng-container>
+                                                    </td>
+                                                    <td>
+                                                        <div class="button-group">
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-info btn-circle"
+                                                                (click)="TraerDetalleCaja(e.id_caja)"
+                                                                tooltip="Detalle Caja" placement="top"
+                                                                [showDelay]="100"><i class="mdi mdi-animation"></i>
+                                                            </button>
+                                                           
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                        <tbody *ngIf="ListarCajaHabilitadosDeshabilitado.length == 0">
+                                            <tr>
+                                                <td colspan="5" class="no-data-available">No hay información!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row d-none " [ngClass]="{'d-none': detalle_resumen_caja}">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="cord-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="section-div section-div--hr">
+                                <div class="pagos-content" *ngIf="Respuesta_detalle">
+                                    <div style="padding-right: 5px;">
+                                        <div class="d-flex justify-content-between px-1"
+                                            style="color: #FF1720 !important;">
+                                            <p class="m-0">Resumen de caja</p>
+                                            <p class="m-0">{{Respuesta_detalle.total_caja | currency: 'S/': 'symbol':
+                                                '': 'en-PE'}}</p>
+                                        </div>
+                                        <hr style="height: 1px; background-color: #FF1720 !important;">
+                                        <ul id="pago-list-caja">
+                                            <li *ngFor="let item of Respuesta_detalle.data_no_efectivo">
+                                                <div class="item-list-pago"><a (click)="MostrarDocumento(item)"
+                                                        class="seleccionarTipoPago">
+                                                        <p>{{item.glosa_pago}} ({{item.cantidad}})</p>
+                                                    </a>
+                                                    <p>+ {{item.valor_pago | currency: 'S/': 'symbol': '': 'en-PE'}}</p>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="item-list-pago"><a class="seleccionarTipoPago">
+                                                        <p>Total Efectivo </p>
+                                                    </a>
+                                                    <p>+ {{Respuesta_detalle.total_efectivo | currency: 'S/': 'symbol':
+                                                        '': 'en-PE'}}</p>
+                                                </div>
+                                            </li>
+                                            <div class="sub-totales">
+                                                <ul>
+                                                    <li>
+                                                        <div class="item-list-pago">
+                                                            <p>Saldo de Apertura </p>
+                                                            <p>+ {{Respuesta_detalle.montoinicial_caja | currency: 'S/':
+                                                                'symbol': '': 'en-PE'}}</p>
+                                                        </div>
+                                                    </li>
+                                                    <li *ngFor="let item of Respuesta_detalle.data_efectivo">
+                                                        <div class="item-list-pago"><a (click)="MostrarDocumento(item)"
+                                                                class="seleccionarTipoPago">
+                                                                <p>{{item.glosa_pago}} ({{item.cantidad}})</p>
+                                                            </a>
+                                                            <p>
+                                                                <ng-container
+                                                                    *ngIf="item.documento=='INGRESO'; else elseTemplate_efectivo">
+                                                                    + {{item.valor_pago | currency: 'S/': 'symbol': '':
+                                                                    'en-PE'}}
+                                                                </ng-container>
+                                                                <ng-template #elseTemplate_efectivo>
+                                                                    - {{item.valor_pago | currency: 'S/': 'symbol':
+                                                                    '':'en-PE'}}
+                                                                </ng-template>
+                                                            </p>
+                                                        </div>
+                                                    </li>
+
+
+
+                                                </ul>
+                                            </div>
+                                        </ul>
+
+                                    </div>
+                                </div>
+                                <div class="btn-content">
+                                    <button class="btn btn-primary" (click)="Volver()"><i class="bx bx-arrow-back"></i>
+                                        Volver</button>
+                                    <button type="button" class="btn btn-success mx-2" id="btn-print"
+                                        value="create-product" (click)="ImprimirCaja()"><i class="bx bx-printer"></i>
+                                        Imprimir</button>
+                                    <button class="btn btn-danger" (click)="CerrarCaja(null)" id="cerrar_caja">Cerrar
+                                        caja</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="section-div">
+                                <div class="d-flex">
+                                    <i class="bx bx-file" style="margin-right: 5px;"></i>
+                                    <p>Documentos</p>
+                                </div>
+                                <div id="section-items" *ngIf="mostrar_documento">
+                                    <ng-container *ngFor="let item of mostrar_documento.data">
+                                        <div class="doc-item-section">
+                                            <div>
+                                                <ng-container *ngIf="item.id_nota_venta">
+                                                    <p> NOTA VENTA ELECTRÓNICA N° {{item.numero_nota_venta}}</p>
+                                                </ng-container>
+                                                <ng-container *ngIf="item.id_boleta">
+                                                    <p> BOLETA VENTA ELECTRÓNICA N° {{item.numero_boleta}}</p>
+                                                </ng-container>
+                                                <ng-container *ngIf="item.id_factura">
+                                                    <p> FACTURA VENTA ELECTRÓNICA N° {{item.numero_factura}}</p>
+                                                </ng-container>
+                                                <ng-container
+                                                    *ngIf="mostrar_documento.tipo_documento=='INGRESO'; else elseTemplate_documento">
+                                                    <p>{{item.valor_ingreso | currency: 'S/': 'symbol':'':'en-PE'}} </p>
+                                                </ng-container>
+                                                <ng-template #elseTemplate_documento>
+                                                    <p>{{item.valor_egreso | currency: 'S/': 'symbol':'':'en-PE'}} </p>
+                                                </ng-template>
+                                            </div>
+                                            <button class="btn btn_imprimir_documento" (click)="VisualizarPdf(item)">
+                                                <i class="mdi mdi-printer"></i>
+                                            </button>
+                                        </div>
+                                        <hr>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- row -->
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Container fluid  -->
+
+
+<div class="modal fade" id="nuevaCajaModal" aria-hidden="true" tabindex="-1" role="dialog" data-backdrop="static"
+    aria-labelledby="nuevaCajaModal">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Nueva Caja</h4>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="CajaNueva" autocomplete="nope">
+                    <div class="form-group row">
+                        <label for="monto_apertura" class="col-sm-12 control-label">Monto Apertura</label>
+                        <div class="col-sm-12">
+                            <input type="number" [class.is-invalid]="CajaNueva.controls['montoinicial_caja']|isInvalid"
+                                formControlName="montoinicial_caja" class="form-control">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" style="padding-left: 9px;" data-dismiss="modal" aria-label="Close"
+                    class="btn btn-outline-secondary" id="btn-close-crud"><i style="vertical-align: text-bottom;"
+                        class="bx bx-left-arrow-alt"></i> Volver</button>
+                <button type="button" (click)="GuardarCaja()" class="btn btn-success" id="btn-save"
+                    value="create-product"><i style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                    Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true" style="display: none;" id="ajax-mostrar-pdf">
+    <div class="modal-dialog modal-lg" style="width:55%;">
+        <div class="modal-content">
+            <div class="modal-header pb-0">
+                <h1 class="text-bold-600" style="text-align:left;">COMPROBANTE</h1>
+            </div>
+            <div class="modal-body pt-2 pb-0">
+                <ul class="nav nav-tabs customtab2" role="tablist">
+                    <li class="nav-item"> <a class="nav-link imprimirBoletaAfecta" data-toggle="tab" href="#cuenta"
+                            role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span
+                                class="hidden-xs-down">A4</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link imprimirTicket active" data-toggle="tab" href="#ticket"
+                            role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
+                                class="hidden-xs-down">TICKET</span></a> </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane imprimirBoletaAfectaContent" id="cuenta" aria-labelledby="cuenta-tab"
+                        role="tabpanel">
+                        <div class="container px-0" id="viewjs_negocio">
+
+                        </div>
+
+                    </div>
+                    <div class="tab-pane imprimirTicketcontent" id="ticket" aria-labelledby="ticket-tab"
+                        role="tabpanel">
+                        <div class="container px-0" id="viewjs2_negocio">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" (click)="LimpiarModalNegocio()"
+                    class="btn btn-danger waves-effect text-left">Salir</button>
+            </div>
+        </div>
+    </div>
+</div>

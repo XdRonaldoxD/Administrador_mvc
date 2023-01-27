@@ -95,7 +95,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
           "http://localhost/MVC_CRM/?controller=Marca&action=ListarMarca",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
-          this.listarProducto = resp;
+          this.listarProducto = resp.data;
           callback({
             recordsTotal: resp.recordsTotal,
             recordsFiltered: resp.recordsFiltered,
@@ -136,7 +136,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
           "http://localhost/MVC_CRM/?controller=Marca&action=ListarMarcaDesactivados",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
-          this.listarProductoDeshabilitado = resp;
+          this.listarProductoDeshabilitado = resp.data;
           callback({
             recordsTotal: resp.recordsTotal,
             recordsFiltered: resp.recordsFiltered,

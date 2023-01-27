@@ -43,6 +43,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
   Producto: any;
   tipo_movimiento: any = null;
   usuario: any = null;
+  id_producto:any=null;
   constructor(private http: HttpClient,
     private servicio_login: LoginService,
     private fb: FormBuilder,
@@ -67,7 +68,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
     });
     this.token = this.servicio_login.getToken();
     //INICIALIZAMOS LA TABLA HISTORIAL
-    this.ProductosHistorial(null);
+    this.ProductosHistorial();
     //
   }
   ngOnInit(): void {
@@ -248,7 +249,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
     };
   }
 
-  ProductosHistorial(id_producto:any) {
+  ProductosHistorial() {
     let headers = new HttpHeaders()
       .set('Authorization', this.token);
     this.dtOptions[2] = {
@@ -264,7 +265,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",
       },
       ajax: (dataTablesParameters: any, callback) => {
-        dataTablesParameters.id_producto = id_producto;
+        dataTablesParameters.id_producto = this.id_producto;
         this.http.post<DataTablesResponse>(
           "http://localhost/MVC_CRM/?controller=Producto&action=ProductoHistorial",
           dataTablesParameters, { headers: headers }
@@ -471,9 +472,9 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
   
   }
 
-  HistorialProducto(id_producto:number){
+  HistorialProducto(id_producto:any){
+    this.id_producto=id_producto;
     this.reload_producto_historial.next();
-    this.ProductosHistorial(id_producto);
     $('#exampleHistorialProducto').modal('show');
   }
 

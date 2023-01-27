@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 import { MigracionexcelService } from 'src/app/services/migracionexcel.service';
+import Swal from 'sweetalert2';
 declare var $: any;
-declare var Swal: any;
 @Component({
   selector: 'app-migrarproducto',
   templateUrl: './migrarproducto.component.html',
@@ -179,9 +179,14 @@ export class MigrarproductoComponent implements OnInit {
   }
 
   seleccioneExcel(imagen: any) {
-    if (imagen.files[0].type.indexOf("xlsx") < 0) {
+    let archivos = this.extencionDeArchivo(imagen.files[0].name);
+    let validando_excel = true;
+    if (archivos === 'xlsx' || archivos === 'xlsm' || archivos === 'xlsb' || archivos === 'xltx') {
+      validando_excel = false;
+    }
+    if (validando_excel) {
       Swal.fire(
-        "Sólo imágenes",
+        "Sólo Excel",
         "El Archivo seleccionado no es un excel.",
         "error"
       );
@@ -193,5 +198,9 @@ export class MigrarproductoComponent implements OnInit {
     let reader = new FileReader();
     let urlImagentemp = reader.readAsDataURL(imagen);
     reader.onloadend = () => (this.imgTemporal = reader.result as string);
+  }
+
+  extencionDeArchivo(filename: any) {
+    return filename.split('.').pop();
   }
 }

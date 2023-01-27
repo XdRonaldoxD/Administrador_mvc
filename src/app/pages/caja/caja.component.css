@@ -1,0 +1,85 @@
+::ng-deep table.dataTable td.dataTables_empty {
+    display: none;
+}
+
+.item-list-pago {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: .1px rgb(208, 208, 208) dotted;
+}
+
+.item-list-pago p {
+    background: #fff;
+    margin-bottom: -1px;
+}
+
+.seleccionarTipoPago {
+    cursor: pointer;
+}
+
+.btn-content {
+    display: flex;
+    justify-content: end;
+}
+
+.section-div {
+    position: relative;
+    height: calc(100vh - 300px);
+    padding: 20px;
+    box-shadow: 5px 3px 18px 0 rgb(25 42 70 / 13%);
+}
+
+.section-div--hr {
+    padding-bottom: 80px;
+}
+
+.section-div p {
+    font-weight: bold;
+}
+
+.section-div--hr hr {
+    margin-top: 3px;
+}
+
+.pagos-content {
+    height: 100%;
+    overflow-y: auto;
+    padding-bottom: 10px;
+}
+
+#section-items {
+    height: calc(100% - 44.5px) !important;
+    overflow-y: auto !important;
+}
+
+.doc-item-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.doc-item-section p {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.doc-item-section p:last-child {
+    font-weight: 400;
+}
+
+.doc-item-section i {
+    font-size: 20px;
+}
+
+.btn_imprimir_documento {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    padding: 5px;
+    border: #DFE3E7 solid .5px;
+    transition: .1s;
+}
+
+.btn_imprimir_documento:hover {
+    background-color: #DFE3E7;
+}

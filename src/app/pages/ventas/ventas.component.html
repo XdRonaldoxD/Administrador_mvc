@@ -1,0 +1,322 @@
+<!-- ============================================================== -->
+<!-- Container fluid  -->
+<!-- ============================================================== -->
+<div class="container-fluid">
+
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h2 class="text-themecolor">Ventas</h2>
+        </div>
+    </div>
+
+    <div class="row " [ngClass]="{'d-none': lista_resumen_caja}">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <form action="" [formGroup]="FiltroCajaBuscar" autocomplete="nope">
+                        <div class="row">
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5 class="m-t-30">Medio Llegada</h5>
+                                    <select class="form-control" formControlName="pos_negocio">
+                                        <option value="">Seleccionar Medio LLegada</option>
+                                        <option value="0">Ventas Pos</option>
+                                        <option value="1">Venta Online</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5 class="m-t-30">Fecha Desde <strong class="text-danger">(*)</strong> </h5>
+                                    <input type="date" placeholder="Filtrar fecha" class="form-control"
+                                        formControlName="fechacreacion_negocio_inicio">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5 class="m-t-30">Fecha Hasta<strong class="text-danger">(*)</strong></h5>
+                                    <input type="date" placeholder="Filtrar fecha" class="form-control"
+                                        formControlName="fechacreacion_negocio_fin">
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-1">
+                                <div class="col-md-12 d-flex justify-content-end">
+
+                                    <div class="row m-0">
+                                        <button (click)="buscar()" class="btn btn-primary btn-buscar">Buscar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- <input [(colorPicker)]="color"  class="form-control" [style.background]="color"/> -->
+
+
+                    <div class="tab-content br-n pn">
+
+                        <div class="row">
+                            <!-- ANGULAR SERVER SIDE -->
+                            <div class="table-responsive">
+                                <table datatable [dtOptions]="dtOptions[0]" [dtTrigger]="reload_producto"
+                                    class="row-border hover " width="100%">
+                                    <thead>
+                                        <tr style="vertical-align: middle;text-align: center;" class="text-uppercase">
+                                            <th class="text-center">N° DOCUMENTO</th>
+                                            <th class="text-center">TIPO DE DOCUMENTO</th>
+                                            <th class="text-center">VENDEDOR</th>
+                                            <th class="text-center">CLIENTE</th>
+                                            <th class="text-center">FECHA</th>
+                                            <th class="text-center">TOTAL</th>
+                                            <th class="text-center">ACCION</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <ng-container *ngFor="let e of ListarCajaHabilitados;">
+                                            <tr style="vertical-align: middle;text-align: center;" *ngIf="e.id_boleta">
+                                                <td>{{e.numero_boleta}}</td>
+                                                <td>{{"BOLETA"}}</td>
+                                                <td>{{e.nombre_staff_boleta}} {{e.apellidopaterno_staff_boleta}}
+                                                    {{e.apellidomaterno_staff_boleta}}</td>
+                                                <td>{{e.nombre_cliente}} {{e.apellidopaterno_cliente}}
+                                                    {{e.apellidomaterno_cliente}}</td>
+                                                <td>{{e.fechacreacion_negocio | date:'dd/MM/yy'}}
+                                                    <br>{{e.fechacreacion_negocio | date:'HH:mm a'}} </td>
+                                                <td>{{e.valor_boleta | currency: 'S/': 'symbol': '': 'en-PE'}} </td>
+                                                <td>
+                                                    <div class="button-group">
+                                                        <button type="button" style="width: 20px;height: 20px;"
+                                                            class="btn btn-sm btn-default btn-circle"
+                                                            (click)="MostrarDetalleProducto(e.id_negocio_global)" tooltip="Ver Detalle"
+                                                            placement="top" [showDelay]="50" [hideDelay]="50"><i
+                                                                class="fa fa-file-text"></i>
+                                                        </button>
+                                                        <button type="button" style="width: 20px;height: 20px;"
+                                                            class="btn btn-sm btn-info btn-circle"
+                                                            (click)="VisualizarPdf(e)" tooltip="Ver Documento"
+                                                            placement="top" [showDelay]="50" [hideDelay]="50"><i
+                                                                class="fa fa-search"></i>
+                                                        </button>
+                                                        <button type="button" style="width: 20px;height: 20px;"
+                                                            class="btn btn-sm btn-success btn-circle"
+                                                            tooltip="Ver Pagos" placement="top" (click)="VerPagos(e.id_negocio_global)"
+                                                            [showDelay]="50" [hideDelay]="50"><i
+                                                                class="fa fa-money"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr style="vertical-align: middle;text-align: center;" *ngIf="e.id_factura">
+                                                <td>{{e.numero_factura}}</td>
+                                                <td>{{"FACTURA"}}</td>
+                                                <td>{{e.nombre_staff_factura}} {{e.apellidopaterno_staff_factura}}
+                                                    {{e.apellidomaterno_staff_factura}}</td>
+                                                <td>{{e.nombre_cliente}} {{e.apellidopaterno_cliente}}
+                                                    {{e.apellidomaterno_cliente}}</td>
+                                                <td>{{e.fechacreacion_negocio | date:'dd/MM/yy'}}
+                                                    <br>{{e.fechacreacion_negocio | date:'HH:mm a'}} </td>
+                                                <td>{{e.total_factura | currency: 'S/': 'symbol': '': 'en-PE'}} </td>
+                                                <td>
+                                                    <div class="button-group">
+                                                        <button type="button" style="width: 20px;height: 20px;"
+                                                            class="btn btn-sm btn-default btn-circle"
+                                                            (click)="MostrarDetalleProducto(e)" tooltip="Ver Detalle"
+                                                            placement="top" [showDelay]="50" [hideDelay]="50"><i
+                                                                class="fa fa-file-text"></i>
+                                                        </button>
+                                                        <button type="button" style="width: 20px;height: 20px;"
+                                                            class="btn btn-sm btn-info btn-circle"
+                                                            (click)="VisualizarPdf(e)" tooltip="Ver Documento"
+                                                            placement="top" [showDelay]="50" [hideDelay]="50"><i
+                                                                class="fa fa-search"></i>
+                                                        </button>
+                                                        <button type="button" style="width: 20px;height: 20px;"
+                                                            class="btn btn-sm btn-success btn-circle"
+                                                            tooltip="Ver Pagos" placement="top" (click)="VerPagos(e.id_negocio_global)"
+                                                            [showDelay]="50" [hideDelay]="50"><i
+                                                                class="fa fa-money"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr style="vertical-align: middle;text-align: center;"
+                                                *ngIf="e.id_nota_venta">
+                                                <td>{{e.numero_nota_venta}}</td>
+                                                <td>{{"NOTA VENTA"}}</td>
+                                                <td>{{e.nombre_staff_nota_venta}} {{e.apellidopaterno_staff_nota_venta}}
+                                                    {{e.apellidomaterno_staff_nota_venta}}</td>
+                                                <td>{{e.nombre_cliente}} {{e.apellidopaterno_cliente}}
+                                                    {{e.apellidomaterno_cliente}}</td>
+                                                <td>{{e.fechacreacion_negocio | date:'dd/MM/yy'}}
+                                                    <br>{{e.fechacreacion_negocio | date:'HH:mm a'}} </td>
+                                                <td>{{e.valor_nota_venta | currency: 'S/': 'symbol': '': 'en-PE'}} </td>
+                                                <td>
+                                                    <div class="button-group">
+                                                        <button type="button" style="width: 20px;height: 20px;"
+                                                            class="btn btn-sm btn-default btn-circle"
+                                                            (click)="MostrarDetalleProducto(e)" tooltip="Ver Detalle"
+                                                            placement="top" [showDelay]="50" [hideDelay]="50"><i
+                                                                class="fa fa-file-text"></i>
+                                                        </button>
+                                                        <button type="button" style="width: 20px;height: 20px;"
+                                                            class="btn btn-sm btn-info btn-circle"
+                                                            (click)="VisualizarPdf(e)" tooltip="Ver Documento"
+                                                            placement="top" [showDelay]="50" [hideDelay]="50"><i
+                                                                class="fa fa-search"></i>
+                                                        </button>
+                                                        <button type="button" style="width: 20px;height: 20px;"
+                                                            class="btn btn-sm btn-success btn-circle"
+                                                            tooltip="Ver Pagos" placement="top" (click)="VerPagos(e.id_negocio_global)"
+                                                            [showDelay]="50" [hideDelay]="50"><i
+                                                                class="fa fa-money"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                    </tbody>
+                                    <tbody *ngIf="ListarCajaHabilitados.length == 0">
+                                        <tr>
+                                            <td colspan="5" class="no-data-available">No data!</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- row -->
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Container fluid  -->
+
+
+<div class="modal fade" id="nuevaCajaModal" aria-hidden="true" tabindex="-1" role="dialog" data-backdrop="static"
+    aria-labelledby="nuevaCajaModal">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Pagos</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width:25%;">MÉTODO DE PAGO</th>
+                                <th style="width:20%;">DESTINO</th>
+                                <th style="width:20%;">MONTO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of MetodosPagos">
+                                <td>{{item.glosa_medio_pago}}</td>
+                                <td>N°{{item.id_caja}}-{{item.nombre_staff}} {{item.apellidopaterno_staff}} {{item.apellidomaterno_staff}}</td>
+                                <td>{{item.valor_ingreso | currency: 'S/': 'symbol': '': 'en-PE'}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" style="padding-left: 9px;" data-dismiss="modal" aria-label="Close"
+                    class="btn btn-outline-secondary" id="btn-close-crud"><i style="vertical-align: text-bottom;"
+                        class="bx bx-left-arrow-alt"></i> Volver</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="detalle_ventas_producto" aria-hidden="true" tabindex="-1" role="dialog" data-backdrop="static"aria-labelledby="detalle_ventas_producto">
+    <div class="modal-dialog modal-dialog-centered modal-lg ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">DETALLE VENTA DE PRODUCTO(S)</h3>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width:20%;">SKU</th>
+                                <th style="width:20%;">PRODUCTO</th>
+                                <th style="width:20%;">PRECIO</th>
+                                <th style="width:20%;">CANTIDAD</th>
+                                <th style="width:20%;">SUBTOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of DetalleVentasProductos">
+                                <td>{{item.codigo_producto}}</td>
+                                <td>{{item.glosa_producto}}</td>
+                                <td>{{item.precioventa_producto | currency: 'S/': 'symbol': '': 'en-PE'}}</td>
+                                <td>{{item.cantidad_negocio_detalle}}</td>
+                                <td>{{item.total_negocio_detalle | currency: 'S/': 'symbol': '': 'en-PE'}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" style="padding-left: 9px;" data-dismiss="modal" aria-label="Close"
+                    class="btn btn-outline-secondary" id="btn-close-crud"><i style="vertical-align: text-bottom;"
+                        class="bx bx-left-arrow-alt"></i> Volver</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true" style="display: none;" id="ajax-mostrar-pdf">
+    <div class="modal-dialog modal-lg" style="width:55%;">
+        <div class="modal-content">
+            <div class="modal-header pb-0">
+                <h1 class="text-bold-600" style="text-align:left;">COMPROBANTE</h1>
+            </div>
+            <div class="modal-body pt-2 pb-0">
+                <ul class="nav nav-tabs customtab2" role="tablist">
+                    <li class="nav-item"> <a class="nav-link imprimirBoletaAfecta" data-toggle="tab" href="#cuenta"
+                            role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span
+                                class="hidden-xs-down">A4</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link imprimirTicket active" data-toggle="tab" href="#ticket"
+                            role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
+                                class="hidden-xs-down">TICKET</span></a> </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane imprimirBoletaAfectaContent" id="cuenta" aria-labelledby="cuenta-tab"
+                        role="tabpanel">
+                        <div class="container px-0" id="viewjs_negocio">
+
+                        </div>
+
+                    </div>
+                    <div class="tab-pane imprimirTicketcontent" id="ticket" aria-labelledby="ticket-tab"
+                        role="tabpanel">
+                        <div class="container px-0" id="viewjs2_negocio">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" (click)="LimpiarModalNegocio()"
+                    class="btn btn-danger waves-effect text-left">Salir</button>
+            </div>
+        </div>
+    </div>
+</div>

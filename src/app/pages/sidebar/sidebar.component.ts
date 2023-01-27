@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { LoginService } from '../../services/login.service';
 
-declare var Swal: any;
+declare var $: any;
 
 @Component({
   selector: 'app-sidebar',
@@ -28,6 +28,7 @@ export class SidebarComponent implements OnInit {
     for (let i = 0; i < this.EventoClick?.nativeElement.children.length; i++) {
       this.EventoClick?.nativeElement.children[i].firstElementChild.classList.remove('active');
     }
+    $(".desactivar").removeClass('active');
     $evento.classList.add('active');
   }
 

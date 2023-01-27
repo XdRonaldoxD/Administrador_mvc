@@ -14,6 +14,9 @@ import { PedidoDetalleComponent } from './pedido-detalle/pedido-detalle.componen
 import { ChatBoxComponent } from './chat-box/chat-box.component';
 import { PedidoresolverService } from '../resolver/Pedidoresolver.service';
 import { MigrarproductoComponent } from './migrarproducto/migrarproducto.component';
+import { NotaVentaComponent } from './nota-venta/nota-venta.component';
+import { CajaComponent } from './caja/caja.component';
+import { VentasComponent } from './ventas/ventas.component';
 
 
 const pagesRoutes: Routes = [
@@ -36,6 +39,9 @@ const pagesRoutes: Routes = [
       },
       { path: 'chatBox', component: ChatBoxComponent, canActivate: [AuthGuard] },
       { path: 'Importar-Inventario', component: MigrarproductoComponent, canActivate: [AuthGuard] },
+      { path: 'Nota-Venta', component: NotaVentaComponent, canActivate: [AuthGuard] },
+      { path: 'Caja', component: CajaComponent, canActivate: [AuthGuard] },
+      { path: 'Ventas', component: VentasComponent, canActivate: [AuthGuard] },
 
       { path: '', redirectTo: '/IniciarSession', pathMatch: 'full' },
     ]

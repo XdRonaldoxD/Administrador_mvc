@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Subject, takeUntil } from 'rxjs';
 import { DataTablesResponse } from 'src/app/interface/Datatable';
 import { Totales, Totales_pagados } from 'src/app/interface/Datos';
@@ -59,7 +60,8 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     private servicio_login: LoginService,
     private nota_venta: NotaVenta,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private toast: ToastrService
   ) {
     this.token = this.servicio_login.getToken();
     this.identificacion = this.servicio_login.getIdentity();
@@ -414,6 +416,12 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   EnviarPagoVenta() {
+    if (this.ProductoSeleccionados.length == 0) {
+      alert("aca");
+      
+      this.toast.success(`No hay productos!`,'Verificar');
+      return;
+    }
     this.search_input_pago?.nativeElement.focus();
     this.borrador_nota_venta = true;
     this.metodos_pago_nota_venta = false;
@@ -712,6 +720,24 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ConfirmarPagoNotaVenta() {
+
+    if (this.ProductoSeleccionados.length == 0) {
+      
+      this.toast.error(`No hay productos`, undefined, {
+        timeOut: 3000,
+
+      });
+      return;
+    }
+    if (this.ListaMetodosPago.length == 0) {
+      this.toast.error(`No hay medios de pagos`, undefined, {
+        timeOut: 3000,
+     
+      });
+      return;
+    }
+
+
     this.informacionForm.get('cliente')?.setValue($("#nombre_cliente").val());
     let datos = {
       informacionForm: this.informacionForm.value,

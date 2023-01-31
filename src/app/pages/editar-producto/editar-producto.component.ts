@@ -33,6 +33,8 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
   checked_atributo: Atributo_seleccionado[] = [];
   checked_categoria: any = [];
   color: any;
+  contador_texto: any;
+  verificador_sku: boolean = false;
   Unsuscribe: any = new Subject();
 
   constructor(
@@ -767,6 +769,22 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
       }
     });
     console.log(this.checked_atributo);
+  }
+
+  VerificarSku(event: any) {
+    let codigo = event.target.value;
+    clearTimeout(this.contador_texto); // <--- The solution is here
+    this.contador_texto = setTimeout(() => {
+      this.producto_serv.VerificarSku(this.token, codigo,this.informacionForm.value.id_producto).subscribe(res => {
+        event.target.classList.add('is-valid');
+        event.target.classList.remove('is-invalid');
+        this.verificador_sku = false;
+      }, error => {
+        event.target.classList.add('is-invalid');
+        event.target.classList.remove('is-valid');
+        this.verificador_sku = true;
+      });
+    }, 700);
   }
 
 

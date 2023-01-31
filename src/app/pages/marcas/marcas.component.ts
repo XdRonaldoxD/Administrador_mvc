@@ -5,6 +5,7 @@ import { Subject, finalize, takeUntil } from 'rxjs';
 import { LoginService } from '../../services/login.service';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { MarcaService } from '../../services/marca.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 declare var $: any;
@@ -38,6 +39,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
     private servicio_marca: MarcaService,
     private fb: FormBuilder,
     private servicio_login: LoginService,
+    private toastr: ToastrService
 
   ) {
     this.marcarForm = this.fb.group({
@@ -181,15 +183,11 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
       $('#exampleModalCenter').modal('hide');
     })).subscribe({
       next: (res) => {
-        Swal.fire({
-          toast: true,
-          position: 'top',
-          icon: 'success',
-          title: `Marca ${res} con exito`,
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 5000
-        })
+        this.toastr.success(`Marca ${res} con exito`,undefined ,{
+          timeOut: 3000,
+          positionClass: 'toast-top-right',
+      });
+    
 
       },
       error: (error) => {

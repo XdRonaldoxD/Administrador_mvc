@@ -28,6 +28,7 @@ import { MigrarproductoComponent } from './migrarproducto/migrarproducto.compone
 import { NotaVentaComponent } from './nota-venta/nota-venta.component';
 import { CajaComponent } from './caja/caja.component';
 import { VentasComponent } from './ventas/ventas.component';
+import { ToastrModule } from 'ngx-toastr';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -67,7 +68,8 @@ import { VentasComponent } from './ventas/ventas.component';
     DataTablesModule,
     ColorPickerModule,
     NgSelectModule,
-    TooltipModule 
+    TooltipModule,
+    ToastrModule.forRoot()  
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })

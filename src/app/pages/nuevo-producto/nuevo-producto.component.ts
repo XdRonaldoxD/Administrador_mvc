@@ -208,7 +208,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
       visible_tienda: [false],
       descripcion_corta: [],
       descripcion_extendida: [],
-      glosa_producto: []
+      glosa_producto: ['',[Validators.required]]
 
     });
     this.PrecioStockForm = this.fb.group({

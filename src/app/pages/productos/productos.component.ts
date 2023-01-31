@@ -384,6 +384,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
           timerProgressBar: true,
           timer: 5000
         })
+        this.reload_producto.next();
       },
       error: (error) => {
 

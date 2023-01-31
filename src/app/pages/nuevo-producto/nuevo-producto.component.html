@@ -53,8 +53,7 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="firstName1">SKU<STRONg
-                                                                class="text-danger">(*)</STRONg></label>
+                                                        <label for="firstName1">SKU<strong class="text-danger">(*)</strong></label>
                                                         <input type="text" class="form-control" #codigo_producto 
                                                             (keyup)="VerificarSku($event)"
                                                             formControlName="codigo_producto"
@@ -64,6 +63,10 @@
                                                             <div
                                                                 *ngIf="informacionForm.controls['codigo_producto']|hasError:'required'">
                                                                 SKU Vacio
+                                                            </div>
+                                                            <div
+                                                                *ngIf="verificador_sku">
+                                                                Existe SKU 
                                                             </div>
                                                         </div>
                                                     </div>
@@ -79,9 +82,15 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="emailAddress1">Nombre</label>
-                                                        <input type="email" class="form-control"
-                                                            formControlName="glosa_producto" id="emailAddress1">
+                                                        <label for="emailAddress1">Nombre <strong class="text-danger">(*)</strong></label>
+                                                        <input type="email" class="form-control"formControlName="glosa_producto" placeholder="Nombre del producto"
+                                                        [class.is-invalid]="informacionForm.controls['glosa_producto']|isInvalid">
+                                                            <div class="text-danger">
+                                                                <div
+                                                                    *ngIf="informacionForm.controls['glosa_producto']|hasError:'required'">
+                                                                    Nombre producto Vacio
+                                                                </div>
+                                                            </div>
                                                     </div>
                                                 </div>
 

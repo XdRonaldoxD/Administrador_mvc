@@ -56,9 +56,9 @@
                                                     <div class="form-group">
                                                         <label for="firstName1">SKU<STRONg
                                                                 class="text-danger">(*)</STRONg></label>
-                                                        <input type="text" class="form-control" id="codigo_producto"
-                                                            formControlName="codigo_producto"
-                                                            placeholder="Codigo del Producto"
+                                                        <input type="text" class="form-control" 
+                                                            (keyup)="VerificarSku($event)"
+                                                            formControlName="codigo_producto" placeholder="Codigo del Producto"
                                                             [class.is-invalid]="informacionForm.controls['codigo_producto']|isInvalid">
                                                         <div class="text-danger">
                                                             <div

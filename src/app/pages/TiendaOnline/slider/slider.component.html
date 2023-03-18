@@ -1,0 +1,212 @@
+<div class="container-fluid">
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor">SLIDER</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row MT-1">
+                        <div class="col-md-12 d-flex justify-content-end">
+                            <div class="row m-0">
+                                <button (click)="AbrirModal()" class="btn btn-success btn-reset">NUEVO SLIDER <i
+                                        class="mdi mdi-checkbox-multiple-blank-outline"></i> </button>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="nav nav-pills m-t-30 m-b-30">
+                        <li class=" nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab"
+                                aria-expanded="false">Activos</a> </li>
+                        <li class="nav-item"> <a href="#navpills-2" class="nav-link" data-toggle="tab"
+                                aria-expanded="false">Deshabilitado</a> </li>
+                    </ul>
+                    <div class="tab-content br-n pn">
+                        <div id="navpills-1" class="tab-pane active">
+                            <div class="row">
+                                <!-- ANGULAR SERVER SIDE -->
+                                <div class="table-responsive">
+                                    <table datatable [dtOptions]="dtOptions[0]" [dtTrigger]="reload_producto"
+                                        class="row-border hover " width="100%">
+                                        <thead>
+                                            <tr style="vertical-align: middle;text-align: center;"
+                                                class="text-uppercase">
+                                                <th class="text-center">ACCION</th>
+                                                <th class="text-center">NOMBRE</th>
+                                                <th class="text-center">IMAGEN MOBILE</th>
+                                                <th class="text-center">IMAGEN ESCRITORIO</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let e of listarProducto;">
+                                                <tr style="vertical-align: middle;text-align: center;">
+                                                    <td>
+                                                        <div class="button-group">
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-info btn-circle"
+                                                                tooltip="Editar Slider" placement="top" [showDelay]="50"
+                                                                [hideDelay]="50" (click)="EditarSlider(e)">
+                                                                <i class="fa  fa-edit "></i> </button>
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-danger btn-circle"
+                                                                tooltip="Deshabilitar Slider" placement="top"
+                                                                (click)="EstadoSlider('DESHABILITAR',e.id_slider)"
+                                                                [showDelay]="50" [hideDelay]="50">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{e.nombre_slider}}</td>
+                                                    <td><img src="{{api_url}}/archivo/imagen_slider/{{e.pathmobile_slider}}"
+                                                            class="w-50" alt="">
+                                                    </td>
+                                                    <td><img src="{{api_url}}/archivo/imagen_slider/{{e.pathescritorio_slider}}"
+                                                            class="w-50" alt="">
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                        <tbody *ngIf="listarProducto.length <= 0">
+                                            <tr>
+                                                <td colspan="2" class="no-data-available">No hay información!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div id="navpills-2" class="tab-pane">
+                            <div class="row">
+                                <!-- ANGULAR SERVER SIDE -->
+                                <div class="table-responsive">
+                                    <table datatable [dtOptions]="dtOptions[1]"
+                                        [dtTrigger]="reload_producto_deshabilitado" class="row-border hover "
+                                        width="100%">
+                                        <thead>
+                                            <tr style="vertical-align: middle;text-align: center;"
+                                                class="text-uppercase">
+                                                <th class="text-center">ACCION</th>
+                                                <th class="text-center">NOMBRE</th>
+                                                <th class="text-center">IMAGEN MOBILE</th>
+                                                <th class="text-center">IMAGEN ESCRITORIO</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let e of listarProductoDeshabilitado;">
+                                                <tr style="vertical-align: middle;text-align: center;">
+                                                    <td>
+                                                        <div class="button-group">
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-success btn-circle"
+                                                                tooltip="Acticar Slider" placement="top"
+                                                                (click)="EstadoSlider('ACTIVAR',e.id_slider)"
+                                                                [showDelay]="50" [hideDelay]="50">
+                                                                <i class="fa fa-check"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{e.nombre_slider}}</td>
+                                                    <td><img src="{{api_url}}/archivo/imagen_slider/{{e.pathmobile_slider}}"
+                                                            class="w-50" alt="">
+                                                    </td>
+                                                    <td><img src="{{api_url}}/archivo/imagen_slider/{{e.pathescritorio_slider}}"
+                                                            class="w-50" alt="">
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                        <tbody *ngIf="listarProductoDeshabilitado.length == 0">
+                                            <tr>
+                                                <td colspan="2" class="no-data-available">No hay información!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="exampleModalCenter" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenter" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" [innerHTML]="texto_cabezera"></h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close" data-original-title=""
+                    title=""><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="sliderForm" autocomplete="nope" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group ">
+                                <h6 for="name" class="col-sm-12 control-label">Titulo<span
+                                        class="text-danger">(*)</span></h6>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" placeholder="Ingrese un titulo"
+                                        formControlName="titulo_slider"
+                                        [class.is-invalid]="sliderForm.controls['titulo_slider']|isInvalid">
+                                    <div class="text-danger">
+                                        <div *ngIf="sliderForm.controls['titulo_slider']|hasError:'required'">
+                                            Titulo Vacia
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group ">
+                                <h6 for="name" class="col-sm-12 control-label">Categoria<span
+                                        class="text-danger">(*)</span></h6>
+                                <div class="col-sm-12">
+                                    <select id="id_categoria" formControlName="id_categoria"
+                                        class="select2 form-control">
+                                    </select>
+                                    <div class="text-danger">
+                                        <div *ngIf="sliderForm.controls['id_categoria']|hasError:'required'">
+                                            Seleccionar Categoria
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group col-12">
+                                <h4 class="card-title">Subir Imagen Tamaño Escritorio <strong>(1110x440)</strong><span
+                                        class="text-danger">(*)</span></h4>
+                                <input #foto type="file" formControlName="file_escritorio" id="file_escritorio"
+                                    data-default-file="" accept="image/png,image/jpeg" class="dropify" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group col-12">
+                                <h4 class="card-title">Subir Imagen Tamaño Mobile <strong>(510x395)</strong><span
+                                        class="text-danger">(*)</span></h4>
+                                <input #foto_mobile type="file" formControlName="file_mobile" id="file_mobile"
+                                    data-default-file="" accept="image/png,image/jpeg" class="dropify" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal" data-original-title=""
+                    title="">Salir</button>
+                <button (click)="GuardarActualizarCategoria()" #GuardarAtibuto class="btn btn-primary" type="button">
+                    GUARDAR MARCA</button>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { finalize, Subject, takeUntil } from 'rxjs';
 import { DataTablesResponse } from 'src/app/interface/Datatable';
 import { Caja } from 'src/app/services/caja.service';
@@ -49,10 +50,12 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
   detalle_resumen_caja: boolean = true;
   Respuesta_detalle: any = false;
   mostrar_documento: any = false;
+  Correo_pdf: string = '';
+  Correo_ticket: string = '';
   constructor(private http: HttpClient,
     private servicio_login: LoginService,
     private fb: FormBuilder,
-    private servicio_categoria: CategoriaService,
+    private toast: ToastrService,
     private servicio_producto: ProductoService,
     private servicio_pedido: PedidoService,
     private servicio_caja: Caja
@@ -352,6 +355,26 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
     this.detalle_resumen_caja = true;
   }
   ImprimirCaja() {
+    Swal.fire({
+      title: 'Comprobante',
+      html: 'Generando Comprobante...',
+      text: 'Generando Comprobante...',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      onOpen: () => {
+        Swal.showLoading();
+        var htmlticket = `<embed src="${environment.api_url}?controller=Caja&action=TraerDetalleCaja&id_caja=${this.id_caja}&Formato=TICKET&Authorization=${this.token}" frameborder="0" width="100%" height="400px">`;
+        $("#viewjs2_negocio").html(htmlticket);
+        var htmlpdf = `<embed src="${environment.api_url}?controller=Caja&action=TraerDetalleCaja&id_caja=${this.id_caja}&Formato=DOCUMENTO&Authorization=${this.token}" frameborder="0" width="100%" height="400px">`;
+        $("#viewjs_negocio").html(htmlpdf);
+        $(".imprimirTicket").addClass('active');
+        $(".imprimirTicketcontent").addClass('active');
+        setTimeout(() => {
+          $('#ajax-mostrar-pdf').modal('show');
+          Swal.close();
+        }, 1500);
+      },
+    });
 
   }
 
@@ -388,6 +411,60 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
         })
       }
     })
+  }
+
+  EnviarDocumento(formato: string) {
+    if (formato === "TICKET") {
+      if (this.Correo_ticket === '') {
+        this.toast.error(`Llenar el campo email`, 'Error', {
+          timeOut: 2000,
+          positionClass: 'toast-top-right',
+        });
+        return;
+      }
+    } else {
+      if (this.Correo_pdf === '') {
+        this.toast.error(`Llenar el campo email`, 'Error', {
+          timeOut: 2000,
+          positionClass: 'toast-top-right',
+        });
+        return;
+      }
+    }
+    let datos = {
+      formato: formato,
+      Correo_pdf: this.Correo_pdf,
+      Correo_ticket: this.Correo_ticket,
+      id_caja:this.id_caja
+    }
+    Swal.fire({
+      title: 'Espere',
+      html: 'Enviando email del Cliente...',
+      text: 'Enviando email del Cliente...',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      onOpen: () => {
+        Swal.showLoading();
+        this.servicio_caja.EnviarCorreoElectronico(this.token, datos).pipe(takeUntil(this.Unsuscribe)).subscribe({
+          next: resp => {
+            this.toast.success(`Enviando correctamente `, 'Email', {
+              timeOut: 2000,
+              positionClass: 'toast-top-right',
+            });
+            Swal.close();
+          },
+          error: erro => {
+            this.toast.error(`Ubo un error al enviar el correo`, 'Error', {
+              timeOut: 2000,
+              positionClass: 'toast-top-right',
+            });
+            Swal.close();
+          }
+        })
+
+      },
+    });
+
   }
 
 }

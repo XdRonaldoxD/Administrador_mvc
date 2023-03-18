@@ -2,11 +2,13 @@ import { DatePipe } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { finalize, Subject, takeUntil } from 'rxjs';
 import { DataTablesResponse } from 'src/app/interface/Datatable';
 import { Caja } from 'src/app/services/caja.service';
 import { CategoriaService } from 'src/app/services/categoria.service';
 import { LoginService } from 'src/app/services/login.service';
+import { NotaVenta } from 'src/app/services/notaventa.service';
 import { PedidoService } from 'src/app/services/pedido.service';
 import { ProductoService } from 'src/app/services/producto.service';
 import { environment } from 'src/environments/environment';
@@ -50,11 +52,18 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
   mostrar_documento: any = false;
   MetodosPagos:any=[];
   DetalleVentasProductos:any=[];
+  Correo_pdf: string = '';
+  Correo_ticket: string = '';
+  url_pdf: string = '';
+  url_ticket: string = '';
+  documento:string='';
   constructor(
     private http: HttpClient,
     private servicio_login: LoginService,
     private fb: FormBuilder,
-    private servicio_caja: Caja
+    private servicio_caja: Caja,
+    private nota_venta: NotaVenta,
+    private toast: ToastrService
   ) {
     this.usuario = servicio_login.getIdentity();
     this.FiltroCajaBuscar = this.fb.group({
@@ -207,22 +216,31 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
       onOpen: () => {
         Swal.showLoading();
         if (item.id_nota_venta) {
+          this.documento="NOTA VENTA";
           var htmlticket = `<embed src="${item.ruta_archivo}/NOTA_VENTAVENTA/${item.urlticket_nota_venta}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs2_negocio").html(htmlticket);
           var htmlpdf = `<embed src="${item.ruta_archivo}/NOTA_VENTAVENTA/${item.urlpdf_nota_venta}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs_negocio").html(htmlpdf);
+          this.url_pdf=`${item.ruta_archivo}/NOTA_VENTAVENTA/${item.urlpdf_nota_venta}`;
+          this.url_ticket=`${item.ruta_archivo}/NOTA_VENTAVENTA/${item.urlticket_nota_venta}`;
         }
         if (item.id_boleta) {
+          this.documento="BOLETA";
           var htmlticket = `<embed src="${item.ruta_archivo}/BOLETAVENTA/${item.path_ticket_boleta}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs2_negocio").html(htmlticket);
           var htmlpdf = `<embed src="${item.ruta_archivo}/BOLETAVENTA/${item.path_boleta}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs_negocio").html(htmlpdf);
+          this.url_pdf=`${item.ruta_archivo}/BOLETAVENTA/${item.path_boleta}`;
+          this.url_ticket=`${item.ruta_archivo}/BOLETAVENTA/${item.path_ticket_boleta}`;
         }
         if (item.id_factura) {
+          this.documento="FACTURA";
           var htmlticket = `<embed src="${item.ruta_archivo}/FACTURAVENTA/${item.path_ticket_factura}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs2_negocio").html(htmlticket);
           var htmlpdf = `<embed src="${item.ruta_archivo}/FACTURAVENTA/${item.path_documento}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs_negocio").html(htmlpdf);
+          this.url_pdf=`${item.ruta_archivo}/FACTURAVENTA/${item.path_documento}`;
+          this.url_ticket=`${item.ruta_archivo}/FACTURAVENTA/${item.path_ticket_factura}`;
         }
         $(".imprimirTicket").addClass('active');
         $(".imprimirTicketcontent").addClass('active');
@@ -230,6 +248,63 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
           $('#ajax-mostrar-pdf').modal('show');
           Swal.close();
         }, 1500);
+      },
+    });
+
+  }
+
+
+  EnviarDocumento(formato: string) {
+    if (formato === "TICKET") {
+      if (this.Correo_ticket === '') {
+        this.toast.error(`Llenar el campo email`, 'Error', {
+          timeOut: 2000,
+          positionClass: 'toast-top-right',
+        });
+        return;
+      }
+    } else {
+      if (this.Correo_pdf === '') {
+        this.toast.error(`Llenar el campo email`, 'Error', {
+          timeOut: 2000,
+          positionClass: 'toast-top-right',
+        });
+        return;
+      }
+    }
+    let datos = {
+      formato: formato,
+      Correo_pdf: this.Correo_pdf,
+      Correo_ticket: this.Correo_ticket,
+      url_pdf: this.url_pdf,
+      url_ticket: this.url_ticket,
+      tipo_documento: this.documento
+    }
+    Swal.fire({
+      title: 'Espere',
+      html: 'Enviando email del Cliente...',
+      text: 'Enviando email del Cliente...',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      onOpen: () => {
+        Swal.showLoading();
+        this.nota_venta.EnviarCorreloElectronicoEmail(datos).pipe(takeUntil(this.Unsuscribe)).subscribe({
+          next: resp => {
+            this.toast.success(`Enviando correctamente `, 'Email', {
+              timeOut: 2000,
+              positionClass: 'toast-top-right',
+            });
+            Swal.close();
+          },
+          error: erro => {
+            this.toast.error(`Ubo un error al enviar el correo`, 'Error', {
+              timeOut: 2000,
+              positionClass: 'toast-top-right',
+            });
+            Swal.close();
+          }
+        })
+
       },
     });
 

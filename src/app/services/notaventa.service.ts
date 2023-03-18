@@ -2,76 +2,109 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { LoginService } from './login.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotaVenta {
-
+  protected token: any;
   constructor(
-    private httpcliente: HttpClient
-  ) { }
+    private httpcliente: HttpClient,
+    private servicio_login: LoginService
+  ) {
+    this.token = this.servicio_login.getToken();
+   }
 
-  ListaMediosPagos(token: any): Observable<any> {
-
+  ListaMediosPagos(): Observable<any> {
     const headers = new HttpHeaders({
-      Authorization: token
+      Authorization: this.token
     });
     return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=ListaMediosPagos", { headers: headers })
   }
-  TraerDepartamento(token:string):Observable<any>{
-    
+  TraerDepartamento():Observable<any>{
     const headers = new HttpHeaders({
-      Authorization: token
+      Authorization: this.token
     });
     return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=TraerDepartamento", { headers: headers })
   }
 
-  AsignarCliente(token:string):Observable<any>{
+  AsignarCliente():Observable<any>{
     const headers = new HttpHeaders({
-      Authorization: token
+      Authorization: this.token
     });
     return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=AsignarClienteGenerico", { headers: headers })
   }
-  TraerProvincia(token:string,id_departamento:any):Observable<any>{
+
+  EnviarCorreloElectronicoEmail(datos:any):Observable<any>{
+    const headers = new HttpHeaders({
+      Authorization: this.token
+    });
+    return this.httpcliente.post(environment.api_url+"?controller=NotaVenta&action=EnviarCorreloElectronicoEmail",datos,{ headers: headers })
+  }
+
+  BuscarDepartamento(departamento:any):Observable<any>{
+    let Params = new HttpParams();
+    Params = Params.append('departamento', departamento);
+    const headers = new HttpHeaders({
+      Authorization: this.token
+    });
+    return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=BuscarDepartamento", { headers: headers , params: Params })
+  }
+  BuscarProvincia(provincia:any):Observable<any>{
+    let Params = new HttpParams();
+    Params = Params.append('provincia', provincia);
+    const headers = new HttpHeaders({
+      Authorization: this.token
+    });
+    return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=BuscarProvincia", { headers: headers , params: Params })
+  }
+  BuscarDistrito(distrito:any):Observable<any>{
+    let Params = new HttpParams();
+    Params = Params.append('distrito', distrito);
+    const headers = new HttpHeaders({
+      Authorization: this.token
+    });
+    return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=BuscarDistrito", { headers: headers , params: Params })
+  }
+  TraerProvincia(id_departamento:any):Observable<any>{
     let Params = new HttpParams();
     Params = Params.append('id_departamento', id_departamento);
     const headers = new HttpHeaders({
-      Authorization: token
+      Authorization: this.token
     });
     return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=TraerProvincia", { headers: headers , params: Params })
   }
-  TraerDistrito(token:string,id_provincia:any):Observable<any>{
+  TraerDistrito(id_provincia:any):Observable<any>{
     let Params = new HttpParams();
     Params = Params.append('id_provincia', id_provincia);
     const headers = new HttpHeaders({
-      Authorization: token
+      Authorization: this.token
     });
     return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=TraerDistrito", { headers: headers , params: Params })
   }
 
-  GuardarCliente(token:string,informacion_cliente:any):Observable<any>{
+  GuardarCliente(informacion_cliente:any):Observable<any>{
     const formData = new FormData();
     formData.append('informacion_cliente', JSON.stringify(informacion_cliente));
     const headers = new HttpHeaders({
-      Authorization: token
+      Authorization: this.token
     });
     return this.httpcliente.post(environment.api_url+"?controller=NotaVenta&action=GuardarCliente", formData, { headers: headers })
   }
 
-  GenerarNegocio(token:string,datos:any):Observable<any>{
- 
+  GenerarNegocio(datos:any):Observable<any>{
     const headers = new HttpHeaders({
-      Authorization: token
+      Authorization: this.token
     });
     return this.httpcliente.post(environment.api_url+"?controller=Negocio&action=GenerarNegocio", datos, { headers: headers })
   }
 
-  VerificarCajaAbierta(token:string,id_usuario:any):Observable<any>{
+  VerificarCajaAbierta(id_usuario:any):Observable<any>{
     let Params = new HttpParams();
     Params = Params.append('id_usuario', id_usuario);
     const headers = new HttpHeaders({
-      Authorization: token
+      Authorization: this.token
     });
     return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=VerificarCajaAbierta", { headers: headers ,params:Params })
   }

@@ -205,14 +205,14 @@
 
 <div class="modal fade" id="nuevaCajaModal" aria-hidden="true" tabindex="-1" role="dialog" data-backdrop="static"
     aria-labelledby="nuevaCajaModal">
-    <div class="modal-dialog modal-dialog-centered ">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Pagos</h4>
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th style="width:25%;">MÉTODO DE PAGO</th>
@@ -223,7 +223,7 @@
                         <tbody>
                             <tr *ngFor="let item of MetodosPagos">
                                 <td>{{item.glosa_medio_pago}}</td>
-                                <td>N°{{item.id_caja}}-{{item.nombre_staff}} {{item.apellidopaterno_staff}} {{item.apellidomaterno_staff}}</td>
+                                <td>N°Caja {{item.id_caja}}-{{item.nombre_staff}} {{item.apellidopaterno_staff}} {{item.apellidomaterno_staff}}</td>
                                 <td>{{item.valor_ingreso | currency: 'S/': 'symbol': '': 'en-PE'}} </td>
                             </tr>
                         </tbody>
@@ -298,17 +298,42 @@
                             role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
                                 class="hidden-xs-down">TICKET</span></a> </li>
                 </ul>
-                <div class="tab-content">
+                <div class="tab-content p-3">
                     <div class="tab-pane imprimirBoletaAfectaContent" id="cuenta" aria-labelledby="cuenta-tab"
                         role="tabpanel">
                         <div class="container px-0" id="viewjs_negocio">
 
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <strong >Enviar Correo Electrónico</strong>
+                                    <div class="input-group">
+                                        <input type="email" [(ngModel)]="Correo_pdf" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+                                        <div class="input-group-addon btn btn-inverse" (click)="EnviarDocumento('PDF')"
+                                        tooltip="Enviar"
+                                        placement="top" [showDelay]="50" [hideDelay]="50"><i class="ti-email"></i></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
                     <div class="tab-pane imprimirTicketcontent" id="ticket" aria-labelledby="ticket-tab"
                         role="tabpanel">
                         <div class="container px-0" id="viewjs2_negocio">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <strong >Enviar Correo Electrónico</strong>
+                                    <div class="input-group">
+                                        <input type="email" [(ngModel)]="Correo_ticket" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+                                        <div class="input-group-addon btn btn-inverse" (click)="EnviarDocumento('TICKET')"
+                                        tooltip="Enviar"  placement="top" [showDelay]="50" [hideDelay]="50"><i class="ti-email"></i></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -20,6 +20,7 @@ declare var document: any;
 export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('search_input_producto') search_input_producto: ElementRef | undefined;
   @ViewChild('search_input_pago') search_input_pago: ElementRef | undefined;
+  @ViewChild('ruc_cliente_formulario') ruc_cliente_formulario: ElementRef | undefined;
 
   borrador_nota_venta: boolean = false;
   metodos_pago_nota_venta: boolean = true;
@@ -40,6 +41,10 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
   provincias: any = [];
   distritos: any = [];
   id_caja: any = null;
+  id_departamento: any = ''
+  id_provincia: any = '';
+  id_distrito: any = '';
+  id_negocio: any = null;
   Totales: Totales = {
     subtotal: 0,
     igv: 0,
@@ -55,6 +60,11 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
   ruc_cliente: boolean = false;
   dni_cliente: boolean = true;
   BuscarDocumentoLoading: boolean = false;
+  Correo_pdf: string = '';
+  Correo_ticket: string = '';
+  url_pdf: string = '';
+  url_ticket: string = '';
+  busquedafactura: boolean = false;
   constructor(
     private http: HttpClient,
     private servicio_login: LoginService,
@@ -104,9 +114,10 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
         dataType: "json",
         headers: { 'Authorization': this.token },
         delay: 200,
-        data: function (params: any) {
+        data: (params: any) => {
           return {
-            search: params.term, //params send to companies controller
+            search: params.term,
+            factura: this.busquedafactura
           };
         },
         processResults: function (data: any) {
@@ -127,12 +138,23 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         inputTooShort: function (args: any) {
           return "Por favor ingrese 3 o más caracteres";
+        },
+        noResults: function () {
+          return "No se encontraron resultados";
         }
       },
       placeholder: "Busque un cliente/ Ruc del cliente",
       minimumInputLength: 3
     });
 
+    $('#nombre_cliente').on('select2:open', (e: any) => {
+      var campoBusqueda = $('.select2-search__field');
+      campoBusqueda.on('input', (e: any) => {
+        let valor = e.target.value;
+        this.informacionFormCliente.get('ruc_cliente')?.setValue(valor)
+        this.informacionFormCliente.get('dni_cliente')?.setValue(valor)
+      });
+    });
     this.AsignarCliente();
   }
 
@@ -141,7 +163,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     this.search_input_producto?.nativeElement.focus();
     this.reload_producto.next();
 
-    this.nota_venta.VerificarCajaAbierta(this.token, this.identificacion.sub).pipe(takeUntil(this.unsubscribe$)).subscribe({
+    this.nota_venta.VerificarCajaAbierta(this.identificacion.sub).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: resp => {
         if (resp === false) {
           Swal.fire({
@@ -218,7 +240,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   Mostrar_Medio_Pago() {
-    this.nota_venta.ListaMediosPagos(this.token).pipe(takeUntil(this.unsubscribe$)).subscribe({
+    this.nota_venta.ListaMediosPagos().pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: resp => {
         this.MedioPago = resp;
       },
@@ -417,9 +439,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   EnviarPagoVenta() {
     if (this.ProductoSeleccionados.length == 0) {
-      alert("aca");
-      
-      this.toast.success(`No hay productos!`,'Verificar');
+      this.toast.error(`No hay productos!`, 'Verificar');
       return;
     }
     this.search_input_pago?.nativeElement.focus();
@@ -440,10 +460,14 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ClienteNuevo() {
-    this.nota_venta.TraerDepartamento(this.token).pipe(takeUntil(this.unsubscribe$)).subscribe({
+    this.nota_venta.TraerDepartamento().pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: resp => {
         this.departamentos = resp;
         $("#ajax-cliente-modal").modal('show');
+        setTimeout(() => {
+          this.ruc_cliente_formulario?.nativeElement.focus();
+        }, 200);
+
       }, error: error => {
         this.departamentos = [];
         Swal.fire({
@@ -459,7 +483,13 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   AsignarCliente() {
-    this.nota_venta.AsignarCliente(this.token).pipe(takeUntil(this.unsubscribe$)).subscribe({
+    if (this.busquedafactura) {
+      this.toast.warning(`No se puede asignar un cliente cuando es una factura.`, 'Cliente', {
+        timeOut: 3000,
+      });
+      return;
+    }
+    this.nota_venta.AsignarCliente().pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: resp => {
         $("#nombre_cliente").html(`<option value='${resp.id_cliente}'>${resp.nombre_cliente} (${resp.dni_cliente})</option>`)
       },
@@ -477,7 +507,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   SeleccionarDepartamento() {
-    this.nota_venta.TraerProvincia(this.token, this.informacionFormCliente.value.departamento).pipe(takeUntil(this.unsubscribe$)).subscribe({
+    this.nota_venta.TraerProvincia(this.informacionFormCliente.value.departamento).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: resp => {
         this.provincias = resp;
       }, error: error => {
@@ -496,7 +526,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
   SeleccionarProvincia() {
-    this.nota_venta.TraerDistrito(this.token, this.informacionFormCliente.value.provincia).pipe(takeUntil(this.unsubscribe$)).subscribe({
+    this.nota_venta.TraerDistrito(this.informacionFormCliente.value.provincia).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: resp => {
         this.distritos = resp;
       }, error: error => {
@@ -556,6 +586,41 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
               this.informacionFormCliente.get('estado')?.setValue(resp.estado);
               this.informacionFormCliente.get('condicion')?.setValue(resp.condicion);
               this.informacionFormCliente.get('direccion_cliente')?.setValue(resp.direccion);
+
+              if (resp.departamento) {
+                this.BuscarDepartamento(resp.departamento)
+                this.BuscarProvincia(resp.provincia)
+                this.BuscarDistrito(resp.distrito)
+                setTimeout(() => {
+                  this.informacionFormCliente.get('departamento')?.setValue(`${this.id_departamento}`);
+                  const departamentoElement = document.getElementById('departamento');
+                  if (departamentoElement) {
+                    departamentoElement.dispatchEvent(new Event('change'));
+                  }
+                  this.informacionFormCliente.get('provincia')?.setValue(`${this.id_provincia}`);
+                  const provincia = document.getElementById('provincia');
+                  if (provincia) {
+                    provincia.dispatchEvent(new Event('change'));
+                  }
+                  this.informacionFormCliente.get('distrito')?.setValue(`${this.id_distrito}`);
+                }, 1000);
+              } else {
+                this.informacionFormCliente.get('departamento')?.setValue(``);
+                this.informacionFormCliente.get('provincia')?.setValue(``);
+                this.informacionFormCliente.get('distrito')?.setValue(``);
+
+                const departamentoElement = document.getElementById('departamento');
+                if (departamentoElement) {
+                  departamentoElement.dispatchEvent(new Event('change'));
+                }
+                const provincia = document.getElementById('provincia');
+                if (provincia) {
+                  provincia.dispatchEvent(new Event('change'));
+                }
+              }
+
+
+
               Swal.fire({
                 toast: true,
                 position: 'top',
@@ -631,6 +696,53 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
   }
+  actualizarFormulario(campo: string, valor: string) {
+    const control = this.informacionFormCliente.get(campo);
+    if (control) {
+      control.setValue(valor);
+      const elemento = document.getElementById(campo);
+      if (elemento) {
+        elemento.dispatchEvent(new Event('change'));
+      }
+    }
+  }
+  BuscarDepartamento(departamento: string) {
+    this.nota_venta.BuscarDepartamento(departamento).pipe(takeUntil(this.unsubscribe$)).subscribe({
+      next: res => {
+        this.id_departamento = res
+      },
+      error: error => {
+        this.toast.error(`No hay Departamento en base`, undefined, {
+          timeOut: 3000,
+        });
+      }
+    })
+  }
+  BuscarProvincia(provincia: string) {
+    this.nota_venta.BuscarProvincia(provincia).pipe(takeUntil(this.unsubscribe$)).subscribe({
+      next: res => {
+        this.id_provincia = res
+      },
+      error: error => {
+        this.toast.error(`No hay Provincia en base`, undefined, {
+          timeOut: 3000,
+        });
+      }
+    })
+  }
+  BuscarDistrito(distrito: string) {
+    this.nota_venta.BuscarDistrito(distrito).pipe(takeUntil(this.unsubscribe$)).subscribe({
+      next: res => {
+        this.id_distrito = res
+      },
+      error: error => {
+        this.toast.error(`No hay Distrito en base`, undefined, {
+          timeOut: 3000,
+        });
+      }
+    })
+  }
+
 
   BuscarDocumento() {
     this.BuscarDocumentoLoading = true;
@@ -670,7 +782,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this.nota_venta.GuardarCliente(this.token, this.informacionFormCliente.value).pipe(takeUntil(this.unsubscribe$)).subscribe({
+    this.nota_venta.GuardarCliente(this.informacionFormCliente.value).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: resp => {
         this.informacionFormCliente.reset();
         this.informacionFormCliente.get('departamento')?.setValue('');
@@ -722,22 +834,26 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
   ConfirmarPagoNotaVenta() {
 
     if (this.ProductoSeleccionados.length == 0) {
-      
       this.toast.error(`No hay productos`, undefined, {
         timeOut: 3000,
-
       });
       return;
     }
     if (this.ListaMetodosPago.length == 0) {
       this.toast.error(`No hay medios de pagos`, undefined, {
         timeOut: 3000,
-     
+
       });
       return;
     }
 
 
+    if ($("#nombre_cliente").val() === null) {
+      this.toast.error(`No hay un cliente seleccionado`, undefined, {
+        timeOut: 3000,
+      });
+      return;
+    }
     this.informacionForm.get('cliente')?.setValue($("#nombre_cliente").val());
     let datos = {
       informacionForm: this.informacionForm.value,
@@ -755,8 +871,10 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
       showConfirmButton: false,
       onOpen: () => {
         Swal.showLoading();
-        this.nota_venta.GenerarNegocio(this.token, datos).pipe(takeUntil(this.unsubscribe$)).subscribe({
+        this.nota_venta.GenerarNegocio(datos).pipe(takeUntil(this.unsubscribe$)).subscribe({
           next: respuesta => {
+            this.url_pdf = respuesta.pdf;
+            this.url_ticket = respuesta.ticket;
             var htmlticket = `<embed src="${respuesta.ticket}" frameborder="0" width="100%" height="400px">`;
             $("#viewjs2_negocio").html(htmlticket);
             var htmlpdf = `<embed src="${respuesta.pdf}" frameborder="0" width="100%" height="400px">`;
@@ -764,11 +882,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
             $(".imprimirTicket").addClass('active');
             $(".imprimirTicketcontent").addClass('active');
             $('#ajax-mostrar-pdf').modal('show');
-            this.LimpiarInformacion();
-            this.VolverPagina();
 
-            this.informacionForm.get('tipo_documento')?.setValue('NOTA_VENTA');
-            this.informacionForm.get('vendedor')?.setValue(this.identificacion.sub);
             Swal.close();
           },
           error: error => {
@@ -813,6 +927,75 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     $(".imprimirTicketcontent").removeClass('active');
     $(".imprimirBoletaAfectaContent ").removeClass('active');
     $(".imprimirBoletaAfecta").removeClass('active');
+    this.LimpiarInformacion();
+  }
+
+  EnviarDocumento(formato: string) {
+    if (formato === "TICKET") {
+      if (this.Correo_ticket === '') {
+        this.toast.error(`Llenar el campo email`, 'Error', {
+          timeOut: 2000,
+          positionClass: 'toast-top-right',
+        });
+        return;
+      }
+    } else {
+      if (this.Correo_pdf === '') {
+        this.toast.error(`Llenar el campo email`, 'Error', {
+          timeOut: 2000,
+          positionClass: 'toast-top-right',
+        });
+        return;
+      }
+    }
+    let datos = {
+      formato: formato,
+      Correo_pdf: this.Correo_pdf,
+      Correo_ticket: this.Correo_ticket,
+      url_pdf: this.url_pdf,
+      url_ticket: this.url_ticket,
+      tipo_documento: this.informacionForm.value.tipo_documento
+    }
+    Swal.fire({
+      title: 'Espere',
+      html: 'Enviando email del Cliente...',
+      text: 'Enviando email del Cliente...',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      onOpen: () => {
+        Swal.showLoading();
+        this.nota_venta.EnviarCorreloElectronicoEmail(datos).pipe(takeUntil(this.unsubscribe$)).subscribe({
+          next: resp => {
+            this.toast.success(`Enviando correctamente `, 'Email', {
+              timeOut: 2000,
+              positionClass: 'toast-top-right',
+            });
+            Swal.close();
+          },
+          error: erro => {
+            this.toast.error(`Ubo un error al enviar el correo`, 'Error', {
+              timeOut: 2000,
+              positionClass: 'toast-top-right',
+            });
+            Swal.close();
+          }
+        })
+
+      },
+    });
+
+  }
+
+  VerficarDocumentoCliente(evento: any) {
+    switch (evento.value) {
+      case 'FACTURA':
+        $("#nombre_cliente").empty();
+        this.busquedafactura = true;
+        break;
+      default:
+        this.busquedafactura = false;
+        break;
+    }
   }
 
 }

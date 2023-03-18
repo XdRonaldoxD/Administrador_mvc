@@ -1,0 +1,374 @@
+<!-- ============================================================== -->
+<!-- Container fluid  -->
+<!-- ============================================================== -->
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor">EMPRESA</h3>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <!-- row -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-12" style="z-index:0;">
+                        <div class="card">
+                            <div class="card-body p-b-0">
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs customtab2" role="tablist">
+                                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home7"
+                                            role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span
+                                                class="hidden-xs-down">INFORMACIÓN</span></a> </li>
+                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab"
+                                            (click)="TraerCertificadoEmpresa()" href="#certificado-digital"
+                                            role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
+                                                class="hidden-xs-down">CERTIFICADO-DIGITAL</span></a> </li>
+                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#imagenes"
+                                            role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
+                                                class="hidden-xs-down">IMAGENES</span></a> </li>
+                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#herramienta-seo"
+                                            role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
+                                                class="hidden-xs-down">HERRAMIENTA-SEO</span></a> </li>
+                                </ul>
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    <div class="tab-pane active mt-4" id="home7" role="tabpanel">
+                                        <form [formGroup]="informacionForm" autocomplete="nope"
+                                            enctype="multipart/form-data">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="firstName1">RUC<strong
+                                                                class="text-danger">(*)</strong></label>
+                                                        <input type="text" class="form-control" #ruc_empresa
+                                                            formControlName="ruc_empresa"
+                                                            placeholder="Codigo del Producto"
+                                                            [class.is-invalid]="informacionForm.controls['ruc_empresa']|isInvalid">
+                                                        <div class="text-danger">
+                                                            <div
+                                                                *ngIf="informacionForm.controls['ruc_empresa']|hasError:'required'">
+                                                                RUC Vacio
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="lastName1">Nombre-Razón Social <strong
+                                                                class="text-danger">(*)</strong></label>
+                                                        <input type="text" class="form-control"
+                                                            formControlName="razon_social_empresa"
+                                                            [class.is-invalid]="informacionForm.controls['razon_social_empresa']|isInvalid">
+                                                        <div class="text-danger">
+                                                            <div
+                                                                *ngIf="informacionForm.controls['razon_social_empresa']|hasError:'required'">
+                                                                Nombre-Razón Social
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="emailAddress1">Direccion <strong
+                                                                class="text-danger">(*)</strong></label>
+                                                        <input type="email" class="form-control"
+                                                            formControlName="direccion_empresa"
+                                                            placeholder="Nombre del producto"
+                                                            [class.is-invalid]="informacionForm.controls['direccion_empresa']|isInvalid">
+                                                        <div class="text-danger">
+                                                            <div
+                                                                *ngIf="informacionForm.controls['direccion_empresa']|hasError:'required'">
+                                                                Nombre producto Vacio
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="location1">Telefono</label>
+                                                        <input type="email" class="form-control"
+                                                            formControlName="telefono_empresa"
+                                                            placeholder="Nombre del producto">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="location1">Celular</label>
+                                                        <input type="email" class="form-control"
+                                                            formControlName="celular_empresa"
+                                                            placeholder="Celular de la empresa">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="name" class="control-label">Departamento</label>
+                                                        <ng-select (change)="SeleccionarDepartamento(null)"
+                                                            id="departamento" formControlName="departamento"
+                                                            [clearable]="false">
+                                                            <ng-option value=''>Seleccione el Departamento</ng-option>
+                                                            <ng-option value="{{item.idDepartamento}}"
+                                                                *ngFor="let item of departamentos">{{item.departamento}}</ng-option>
+                                                        </ng-select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="name" class="control-label">Provincia
+                                                        </label>
+                                                        <ng-select (change)="SeleccionarProvincia(null)" id="provincia"
+                                                            formControlName="provincia" [clearable]="false">
+                                                            <ng-option value="">Seleccione el Provincia</ng-option>
+                                                            <ng-option value="{{item.idProvincia}}"
+                                                                *ngFor="let item of provincias">{{item.provincia}}</ng-option>
+                                                        </ng-select>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="name" class="control-label">Distrito</label>
+                                                        <ng-select name="distrito" formControlName="distrito"
+                                                            [clearable]="false">
+                                                            <ng-option value="">Seleccione el Distrito</ng-option>
+                                                            <ng-option value="{{item.idDistrito}}"
+                                                                *ngFor="let item of distritos">{{item.distrito}}</ng-option>
+                                                        </ng-select>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div id="button_right" class="col-sm-12 col-md-12 text-right">
+                                                        <button (click)="GuardarInformacionCompleto()" type="button"
+                                                            class="btn btn-success" id="btn-save"
+                                                            value="create-product"><i
+                                                                style="vertical-align: text-bottom;"
+                                                                class="bx bx-save"></i>
+                                                            Guardar
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="tab-pane  p-20" id="certificado-digital" role="tabpanel">
+                                        <div class="row">
+                                            <form [formGroup]="informacionForm" autocomplete="nope"
+                                                enctype="multipart/form-data">
+                                                <div class="row mt-4">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="jobTitle1">Usuario Sol </label>
+                                                            <input type="text" class="form-control" id="jobTitle1"
+                                                                formControlName="usuario_sol" placeholder="Usuario Sol">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="videoUrl1">Clave Sol </label>
+                                                            <input type="password" class="form-control"
+                                                                formControlName="clave_sol"
+                                                                placeholder="Ingresar clave sol">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="videoUrl1">Archivo<strong>.P12</strong></label>
+                                                            <input type="file" class="form-control"
+                                                                (change)="onFileSelected($event)">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="videoUrl1">Clave Del Certificado
+                                                                <strong>.P12</strong> </label>
+                                                            <input type="password" class="form-control"
+                                                                formControlName="clave_archivo"
+                                                                placeholder="Ingresar la clave del certificado">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-12 text-right">
+                                                        <button (click)="GuardarInformacionCompleto()" type="button"
+                                                            class="btn btn-success" id="btn-save"
+                                                            value="create-product"><i
+                                                                style="vertical-align: text-bottom;"
+                                                                class="bx bx-save"></i>
+                                                            Guardar
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="row">
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table color-bordered-table muted-bordered-table">
+                                                        <thead>
+                                                            <tr>
+
+                                                                <th>Nombre</th>
+                                                                <th>Fecha Inicio</th>
+                                                                <th>Estado</th>
+                                                                <th>Accion</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let item of listacertificados">
+                                                                <td>{{item.nombre_certificado_digital}}</td>
+                                                                <td>
+                                                                    <div>Inicio: {{item.fechainicio_certificado_digital |
+                                                                        date: 'yyyy-MM-dd h:mm a '}} </div>
+                                                                    <div>Termino: {{item.fechafin_certificado_digital |
+                                                                        date: 'yyyy-MM-dd h:mm a '}} </div>
+                                                                </td>
+                                                                <td>
+                                                                    <ng-container
+                                                                        *ngIf="item.fechafin_certificado_digital<fechaActual; else elseTemplate">
+                                                                        <span
+                                                                            class="label label-light-success">Activo</span>
+                                                                    </ng-container>
+                                                                    <ng-template #elseTemplate>
+                                                                        <span
+                                                                            class="label label-light-danger">Inactivo</span>
+                                                                    </ng-template>
+                                                                </td>
+                                                                <td>
+                                                                    <a (click)="DescargarCertificado(item.id_certificado_digital)"
+                                                                        tooltip="Descargar Certificado" placement="top"
+                                                                        [showDelay]="50" [hideDelay]="50"
+                                                                        class="cursor-pointer"
+                                                                        style="background-color: rgb(13, 146, 190);padding:0.4rem;border-radius: 2rem;cursor: pointer;color: white;">
+                                                                        <i style="font-size: 20px;" class="fa fa-times"
+                                                                            aria-hidden="true"></i>
+                                                                    </a>
+                                                                    <a (click)="eliminarCertificado(item.id_certificado_digital)"
+                                                                        tooltip="Eliminar Certificado" placement="top"
+                                                                        [showDelay]="50" [hideDelay]="50"
+                                                                        class="cursor-pointer"
+                                                                        style="background-color: red;padding:0.4rem;border-radius: 2rem;cursor: pointer;color: white;">
+                                                                        <i style="font-size: 20px;" class="fa fa-times"
+                                                                            aria-hidden="true"></i>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr *ngIf="listacertificados.length<=0">
+                                                                <td colspan="4" class="text-center">No hay certificado
+                                                                </td>
+                                                            </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="tab-pane  p-20" id="imagenes" role="tabpanel">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h4 class="card-title">Icono Empresa <strong>(32x32)</strong></h4>
+                                                <input type="file" id="input-file-now" class="dropify"
+                                                    accept="image/png,image/jpeg" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h4 class="card-title">Logo Empresa Horizontal
+                                                    <strong>(250x150)</strong>
+                                                </h4>
+                                                <input type="file" id="input-file-now" class="dropify"
+                                                    accept="image/png,image/jpeg" />
+                                            </div>
+                                            <div class="col-md-12">
+                                                <h4 class="card-title">Logo Empresa Vertical <strong>(160x160)</strong>
+                                                </h4>
+                                                <input type="file" id="input-file-now" class="dropify"
+                                                    accept="image/png,image/jpeg" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="herramienta-seo" aria-labelledby="profile-tab"
+                                        role="tabpanel">
+                                        <div class="card-body pb-1">
+                                            <div class="container">
+                                                <form [formGroup]="informacionForm" autocomplete="nope"
+                                                    enctype="multipart/form-data">
+                                                    <div class="row pb-2">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <h5 for="name" class=" control-label">Pixel
+                                                                    Google
+                                                                </h5>
+                                                                <label style="font-size: 1rem;" for="name"
+                                                                    class=" control-label ">
+                                                                    <strong>Nota:</strong>Desactivar el codigo fuente
+                                                                    para guardar los cambios.</label>
+                                                                <div id="pixelgoogle_empresa">
+                                                                    <textarea formControlName="pixelgoogle_empresa"
+                                                                        class="pixelgoogle_empresa"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <h5 for="name" class=" control-label mt-3"> Pixel
+                                                                    Facebook </h5>
+                                                                <label style="font-size: 1rem;" for="name"
+                                                                    class="control-label">
+                                                                    <strong>Nota:</strong>Desactivar el codigo fuente
+                                                                    para guardar los cambios.</label>
+                                                                <div id="pixelfacebook_empresa">
+                                                                    <textarea formControlName="pixelfacebook_empresa"
+                                                                        class="pixelfacebook_empresa"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-12 text-right">
+                                                        <button (click)="GuardarInformacionCompleto()" type="button"
+                                                            class="btn btn-success"><i
+                                                                style="vertical-align: text-bottom;"
+                                                                class="bx bx-save"></i> Guardar
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- row -->
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Container fluid  -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- Dashboard Ecommerce Starts -->

@@ -17,7 +17,8 @@
                             class="mdi mdi-gauge"></i><span class="hide-menu">INVENTARIOS<span
                                 class="label label-rouded label-themecolor pull-right">4</span></span></a>
                     <ul aria-expanded="false" class="collapse" #EventoClick>
-                        <li><a class="desactivar" (click)="SELECCION($event.target)" routerLink="/Marca" href="javascript:void()">MARCAS</a>
+                        <li><a class="desactivar" (click)="SELECCION($event.target)" routerLink="/Marca"
+                                href="javascript:void()">MARCAS</a>
                         </li>
                         <li><a class="desactivar" (click)="SELECCION($event.target)" routerLink="/Categoria"
                                 href="javascript:void()">CATEGORIAS</a></li>
@@ -32,39 +33,64 @@
                                 class="label label-rouded label-themecolor pull-right">1</span></span></a>
                     <ul aria-expanded="false" class="collapse" #EventoClick>
                         <li>
-                            <a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Nota-Venta" href="javascript:void()">NOTA VENTA</a>
+                            <a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Nota-Venta"
+                                href="javascript:void()">NOTA VENTA</a>
                         </li>
                         <li>
-                            <a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Ventas" href="javascript:void()">VENTAS</a>
+                            <a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Ventas"
+                                href="javascript:void()">VENTAS</a>
                         </li>
                         <li>
-                            <a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Caja" href="javascript:void()">CAJA</a>
+                            <a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Caja"
+                                href="javascript:void()">CAJA</a>
                         </li>
-                   
+
                     </ul>
                 </li>
                 <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
                             class="mdi mdi-bullseye"></i><span class="hide-menu">PEDIDOS</span></a>
                     <ul aria-expanded="false" class="collapse">
-                        <li><a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Pedidos">PEDIDOS</a></li>
+                        <li><a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Pedidos">PEDIDOS</a>
+                        </li>
                     </ul>
                 </li>
                 <li><a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
                             class="mdi mdi-gauge"></i><span class="hide-menu">REPORTE<span
                                 class="label label-rouded label-themecolor pull-right">1</span></span></a>
                     <ul aria-expanded="false" class="collapse" #EventoClick>
-                        <li><a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Importar-Inventario" href="javascript:void()">PRODUCTOS</a>
+                        <li><a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Importar-Inventario"
+                                href="javascript:void()">PRODUCTOS</a>
                         </li>
-                   
+
                     </ul>
                 </li>
                 <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
                             class="mdi mdi-bullseye"></i><span class="hide-menu">CHAT</span></a>
                     <ul aria-expanded="false" class="collapse">
                         <li><a (click)="SELECCION($event.target)" class="desactivar" routerLink="/chatBox"
-                            href="javascript:void()">CHAT CLIENTE</a></li>
+                                href="javascript:void()">CHAT CLIENTE</a></li>
                     </ul>
-                    
+
+                </li>
+                <li><a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
+                            class="mdi mdi-gauge"></i><span class="hide-menu">TIENDA EN LINEA<span
+                                class="label label-rouded label-themecolor pull-right">1</span></span></a>
+                    <ul aria-expanded="false" class="collapse" #EventoClick>
+                        <li>
+                            <a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Slider"
+                                href="javascript:void()">SLIDER</a>
+                        </li>
+                    </ul>
+                </li>
+                <li><a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
+                            class="mdi mdi-gauge"></i><span class="hide-menu">EMPRESA<span
+                                class="label label-rouded label-themecolor pull-right">1</span></span></a>
+                    <ul aria-expanded="false" class="collapse" #EventoClick>
+                        <li>
+                            <a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Empresa"
+                                href="javascript:void()">DATOS GENERALES</a>
+                        </li>
+                    </ul>
                 </li>
 
             </ul>

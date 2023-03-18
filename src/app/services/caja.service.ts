@@ -63,6 +63,15 @@ export class Caja {
     return this.httpcliente.post(environment.api_url+"?controller=Caja&action=TraerDetalleCaja", formData, { headers: headers })
   }
 
+  TraerDetalleCajaImprimir(token:string,id_caja:any){
+    let Params = new HttpParams();
+    Params = Params.append('id_caja', id_caja);
+    const headers = new HttpHeaders({
+      Authorization: token
+    });
+    return this.httpcliente.get(environment.api_url+"?controller=Caja&action=TraerDetalleCaja", { headers: headers , params:Params})
+  }
+
   MostrarDocumentos(token:string,id_caja:any,tipo_documento:any,id_medio_pago:any):Observable<any>{
     let Params = new HttpParams();
     Params = Params.append('id_caja', id_caja);
@@ -90,6 +99,13 @@ export class Caja {
       Authorization: token
     });
     return this.httpcliente.get(environment.api_url+"?controller=Venta&action=MostrarDetalleProducto", { headers: headers ,params: Params})
+  }
+
+  EnviarCorreoElectronico(token:string,datos:any):Observable<any>{
+    const headers = new HttpHeaders({
+      Authorization: token
+    });
+    return this.httpcliente.post(environment.api_url+"?controller=Caja&action=EnviarCorreoElectronico",datos ,{ headers: headers})
   }
 
   

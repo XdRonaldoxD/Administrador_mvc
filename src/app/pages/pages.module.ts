@@ -29,6 +29,11 @@ import { NotaVentaComponent } from './nota-venta/nota-venta.component';
 import { CajaComponent } from './caja/caja.component';
 import { VentasComponent } from './ventas/ventas.component';
 import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SliderComponent } from './TiendaOnline/slider/slider.component';
+import { EmpresaComponent } from './empresa/empresa.component';
+import { BannerComponent } from './TiendaOnline/banner/banner.component';
+
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -51,7 +56,7 @@ import { ToastrModule } from 'ngx-toastr';
     ChatBoxComponent,
     NotaVentaComponent,//Nota DECLARAR pages para que funciona route-oulet
     CajaComponent, 
-    VentasComponent 
+    VentasComponent, SliderComponent, EmpresaComponent, BannerComponent 
   ],
   exports: [
     IsInvalidPipe,
@@ -69,6 +74,7 @@ import { ToastrModule } from 'ngx-toastr';
     ColorPickerModule,
     NgSelectModule,
     TooltipModule,
+    BrowserAnimationsModule,
     ToastrModule.forRoot()  
   ],
   schemas: [NO_ERRORS_SCHEMA]

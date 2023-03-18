@@ -17,6 +17,8 @@ import { MigrarproductoComponent } from './migrarproducto/migrarproducto.compone
 import { NotaVentaComponent } from './nota-venta/nota-venta.component';
 import { CajaComponent } from './caja/caja.component';
 import { VentasComponent } from './ventas/ventas.component';
+import { SliderComponent } from './TiendaOnline/slider/slider.component';
+import { EmpresaComponent } from './empresa/empresa.component';
 
 
 const pagesRoutes: Routes = [
@@ -42,6 +44,10 @@ const pagesRoutes: Routes = [
       { path: 'Nota-Venta', component: NotaVentaComponent, canActivate: [AuthGuard] },
       { path: 'Caja', component: CajaComponent, canActivate: [AuthGuard] },
       { path: 'Ventas', component: VentasComponent, canActivate: [AuthGuard] },
+
+      { path: 'Slider', component: SliderComponent, canActivate: [AuthGuard] },
+      { path: 'Empresa', component: EmpresaComponent, canActivate: [AuthGuard] },
+
 
       { path: '', redirectTo: '/IniciarSession', pathMatch: 'full' },
     ]

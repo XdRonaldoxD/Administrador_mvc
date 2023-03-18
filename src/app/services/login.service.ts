@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +47,6 @@ export class LoginService {
 
 
   LoginUsuario(user: any, getToken:any = null): Observable<any> {
- 
     const formData = new FormData();
     formData.append('email', user.email);
     formData.append('password', user.password);
@@ -54,8 +54,7 @@ export class LoginService {
     formData.append('getToken',  user.getToken);
     }
     const headers = new HttpHeaders();
-
-    return this.httpcliente.post("http://localhost/MVC_CRM/?controller=Usuario&action=login", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url+"?controller=Usuario&action=login", formData, { headers: headers })
   }
 
 
@@ -65,7 +64,7 @@ export class LoginService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.get("http://localhost/MVC_CRM/?Apicontroller=Pusher&action=TraerChatLineaActivo", { headers: headers,params: Params  })
+    return this.httpcliente.get(environment.api_url+"?Apicontroller=Pusher&action=TraerChatLineaActivo", { headers: headers,params: Params  })
   }
 
   ChatboxEventAdministrador(token: any, conversacion:any,identificadorcliente_log_chat:any,id_usuario:any,mensaje_texto:any): Observable<any> {
@@ -77,7 +76,7 @@ export class LoginService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post("http://localhost/MVC_CRM/?Apicontroller=Pusher&action=ChatboxEventAdministrador", Params,{ headers: headers  })
+    return this.httpcliente.post(environment.api_url+"?Apicontroller=Pusher&action=ChatboxEventAdministrador", Params,{ headers: headers  })
   }
   DesactivarCliente(token: any,identificadorcliente_log_chat:any){
     const Params = new FormData();
@@ -85,7 +84,7 @@ export class LoginService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post("http://localhost/MVC_CRM/?Apicontroller=Pusher&action=CerrarChatBoxCliente", Params,{ headers: headers  })
+    return this.httpcliente.post(environment.api_url+"?Apicontroller=Pusher&action=CerrarChatBoxCliente", Params,{ headers: headers  })
   }
 
   
@@ -101,14 +100,14 @@ export class LoginService {
     formData.append('apellido_m_usuario', user.apellido_materno);
     formData.append('email_usuario', user.email);
     const headers = new HttpHeaders();
-    return this.httpcliente.post("http://localhost/MVC_CRM/?controller=Usuario&action=RegistrarUsuario", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url+"?controller=Usuario&action=RegistrarUsuario", formData, { headers: headers })
   }
 
   cerrarSession(id_user:any): Observable<any> {
     const formData = new FormData();
     formData.append('id_usuario', id_user);
     const headers = new HttpHeaders();
-    return this.httpcliente.post("http://localhost/MVC_CRM/?controller=Usuario&action=EliminarSesion", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url+"?controller=Usuario&action=EliminarSesion", formData, { headers: headers })
   }
 
   VerificacionUser(token:any,user_id:any,session_id:any):Observable<any>{
@@ -119,6 +118,6 @@ export class LoginService {
       Authorization: token
     });
 
-    return this.httpcliente.post("http://localhost/MVC_CRM/?controller=Usuario&action=ConsultaUsuario",formData,{headers:headers})
+    return this.httpcliente.post(environment.api_url+"?controller=Usuario&action=ConsultaUsuario",formData,{headers:headers})
   }
 }

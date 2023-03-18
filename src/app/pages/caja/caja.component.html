@@ -193,7 +193,7 @@
                                             </li>
                                             <li>
                                                 <div class="item-list-pago"><a class="seleccionarTipoPago">
-                                                        <p>Total Efectivo </p>
+                                                        <strong>Total Efectivo </strong>
                                                     </a>
                                                     <p>+ {{Respuesta_detalle.total_efectivo | currency: 'S/': 'symbol':
                                                         '': 'en-PE'}}</p>
@@ -343,17 +343,42 @@
                             role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
                                 class="hidden-xs-down">TICKET</span></a> </li>
                 </ul>
-                <div class="tab-content">
+                <div class="tab-content p-3">
                     <div class="tab-pane imprimirBoletaAfectaContent" id="cuenta" aria-labelledby="cuenta-tab"
                         role="tabpanel">
                         <div class="container px-0" id="viewjs_negocio">
 
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <strong >Enviar Correo Electrónico</strong>
+                                    <div class="input-group">
+                                        <input type="email" [(ngModel)]="Correo_pdf" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+                                        <div class="input-group-addon btn btn-inverse" (click)="EnviarDocumento('PDF')"
+                                        tooltip="Enviar"
+                                        placement="top" [showDelay]="50" [hideDelay]="50"><i class="ti-email"></i></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
                     <div class="tab-pane imprimirTicketcontent" id="ticket" aria-labelledby="ticket-tab"
                         role="tabpanel">
                         <div class="container px-0" id="viewjs2_negocio">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <strong >Enviar Correo Electrónico</strong>
+                                    <div class="input-group">
+                                        <input type="email" [(ngModel)]="Correo_ticket" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+                                        <div class="input-group-addon btn btn-inverse" (click)="EnviarDocumento('TICKET')"
+                                        tooltip="Enviar"  placement="top" [showDelay]="50" [hideDelay]="50"><i class="ti-email"></i></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

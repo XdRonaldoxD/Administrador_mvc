@@ -72,12 +72,15 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
       id_empresa_venta_online: [],
       ruc_empresa: ['', [Validators.required]],
       razon_social_empresa: ['', [Validators.required]],
+      nombre_empresa: [''],
       telefono_empresa: [''],
       celular_empresa: [''],
+      email_empresa_venta_online:['',[Validators.required]],
+      giro_empresa_venta_online:['',[Validators.required]],
       direccion_empresa: ['', [Validators.required]],
-      departamento: [''],
-      distrito: [''],
-      provincia: [''],
+      departamento: ['',[Validators.required]],
+      distrito: ['',[Validators.required]],
+      provincia: ['',[Validators.required]],
       usuario_sol: [''],
       clave_sol: [''],
       clave_archivo: [''],
@@ -134,7 +137,10 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
             clave_sol: resp.clavesol_venta_online,
             clave_archivo: resp.clavearchivo_venta_online,
             pixelgoogle_empresa: resp.pixelgoogle_empresa_venta_online,
-            pixelfacebook_empresa: resp.pixelfacebook_empresa_venta_online
+            pixelfacebook_empresa: resp.pixelfacebook_empresa_venta_online,
+            nombre_empresa:resp.nombre_empresa_venta_online,
+            email_empresa_venta_online:resp.email_empresa_venta_online,
+            giro_empresa_venta_online:resp.giro_empresa_venta_online
           });
           $('.pixelgoogle_empresa').summernote('code', resp.pixelgoogle_empresa_venta_online);
           $('.pixelfacebook_empresa').summernote('code', resp.pixelfacebook_empresa_venta_online);
@@ -227,12 +233,11 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    console.log(this.informacionForm.value);
     this.empresa.EnviarInformacionEmpresa(this.informacionForm.value, this.archivo_certificado).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: resp => {
-        this.informacionForm.get('id_empresa_venta_online')?.setValue(resp.id_empresa_venta_online);
+        this.informacionForm.get('id_empresa_venta_online')?.setValue(resp);
         if (!this.usuario.id_empresa) {
-          this.usuario.id_empresa = resp.id_empresa_venta_online;
+          this.usuario.id_empresa = resp;
           this.servicio_login.saveIdentity(this.usuario);
         }
         this.TraerCertificadoEmpresa();

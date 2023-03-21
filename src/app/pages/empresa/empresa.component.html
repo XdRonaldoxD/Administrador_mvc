@@ -65,7 +65,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="lastName1">Nombre-Razón Social <strong
+                                                        <label for="lastName1">Razón Social <strong
                                                                 class="text-danger">(*)</strong></label>
                                                         <input type="text" class="form-control"
                                                             formControlName="razon_social_empresa"
@@ -73,23 +73,64 @@
                                                         <div class="text-danger">
                                                             <div
                                                                 *ngIf="informacionForm.controls['razon_social_empresa']|hasError:'required'">
-                                                                Nombre-Razón Social
+                                                                Razón Social
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="emailAddress1">Direccion <strong
-                                                                class="text-danger">(*)</strong></label>
+                                                        <label for="emailAddress1">Direccion <strong  class="text-danger">(*)</strong></label>
                                                         <input type="email" class="form-control"
                                                             formControlName="direccion_empresa"
-                                                            placeholder="Nombre del producto"
+                                                            placeholder="Dirección de la Empresa"
                                                             [class.is-invalid]="informacionForm.controls['direccion_empresa']|isInvalid">
                                                         <div class="text-danger">
                                                             <div
                                                                 *ngIf="informacionForm.controls['direccion_empresa']|hasError:'required'">
-                                                                Nombre producto Vacio
+                                                                Dirección Vacio
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="lastName1">Nombre </label>
+                                                        <input type="text" class="form-control"
+                                                            formControlName="nombre_empresa"
+                                                            placeholder="Nombre de la empresa"
+                                                            [class.is-invalid]="informacionForm.controls['nombre_empresa']|isInvalid">
+                                                        <div class="text-danger">
+                                                            <div *ngIf="informacionForm.controls['nombre_empresa']|hasError:'required'">
+                                                                Nombre
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="lastName1">Email <strong  class="text-danger">(*)</strong></label>
+                                                        <input type="email" class="form-control"
+                                                            formControlName="email_empresa_venta_online"
+                                                            placeholder="Email de la empresa"
+                                                            [class.is-invalid]="informacionForm.controls['email_empresa_venta_online']|isInvalid">
+                                                        <div class="text-danger">
+                                                            <div *ngIf="informacionForm.controls['email_empresa_venta_online']|hasError:'required'">
+                                                                Email vacio
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="lastName1">Giro <strong  class="text-danger">(*)</strong></label>
+                                                        <input type="text" class="form-control"
+                                                            formControlName="giro_empresa_venta_online"
+                                                            placeholder="Giro de la empresa"
+                                                            [class.is-invalid]="informacionForm.controls['giro_empresa_venta_online']|isInvalid">
+                                                        <div class="text-danger">
+                                                            <div *ngIf="informacionForm.controls['giro_empresa_venta_online']|hasError:'required'">
+                                                                Grio vacio
                                                             </div>
                                                         </div>
                                                     </div>
@@ -99,7 +140,7 @@
                                                         <label for="location1">Telefono</label>
                                                         <input type="email" class="form-control"
                                                             formControlName="telefono_empresa"
-                                                            placeholder="Nombre del producto">
+                                                            placeholder="Telefono de la empresa">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
@@ -112,9 +153,10 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="name" class="control-label">Departamento</label>
-                                                        <ng-select (change)="SeleccionarDepartamento(null)"
-                                                            id="departamento" formControlName="departamento"
+                                                        <label for="name" class="control-label">Departamento <strong class="text-danger">(*)</strong></label>
+                                                            <ng-select (change)="SeleccionarDepartamento(null)" 
+                                                            [class.is-invalid]="informacionForm.controls['departamento']|isInvalid"
+                                                            formControlName="departamento"
                                                             [clearable]="false">
                                                             <ng-option value=''>Seleccione el Departamento</ng-option>
                                                             <ng-option value="{{item.idDepartamento}}"
@@ -124,9 +166,9 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="name" class="control-label">Provincia
+                                                        <label for="name" class="control-label">Provincia <strong class="text-danger">(*)</strong>
                                                         </label>
-                                                        <ng-select (change)="SeleccionarProvincia(null)" id="provincia"
+                                                        <ng-select (change)="SeleccionarProvincia(null)" 
                                                             formControlName="provincia" [clearable]="false">
                                                             <ng-option value="">Seleccione el Provincia</ng-option>
                                                             <ng-option value="{{item.idProvincia}}"
@@ -137,7 +179,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="name" class="control-label">Distrito</label>
+                                                        <label for="name" class="control-label">Distrito <strong class="text-danger">(*)</strong></label>
                                                         <ng-select name="distrito" formControlName="distrito"
                                                             [clearable]="false">
                                                             <ng-option value="">Seleccione el Distrito</ng-option>
@@ -237,7 +279,7 @@
                                                                 </td>
                                                                 <td>
                                                                     <ng-container
-                                                                        *ngIf="item.fechafin_certificado_digital<fechaActual; else elseTemplate">
+                                                                        *ngIf="item.fechafin_certificado_digital>fechaActual; else elseTemplate">
                                                                         <span
                                                                             class="label label-light-success">Activo</span>
                                                                     </ng-container>
@@ -252,7 +294,7 @@
                                                                         [showDelay]="50" [hideDelay]="50"
                                                                         class="cursor-pointer"
                                                                         style="background-color: rgb(13, 146, 190);padding:0.4rem;border-radius: 2rem;cursor: pointer;color: white;">
-                                                                        <i style="font-size: 20px;" class="fa fa-times"
+                                                                        <i style="font-size: 20px;" class="fa fa-download"
                                                                             aria-hidden="true"></i>
                                                                     </a>
                                                                     <a (click)="eliminarCertificado(item.id_certificado_digital)"

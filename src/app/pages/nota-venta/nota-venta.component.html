@@ -105,7 +105,8 @@
                                                                         'symbol': '': 'en-PE'}}</td>
                                                                     <td><a (click)="eliminarFila(i)"
                                                                             tooltip="Eliminar Producto" placement="top"
-                                                                            [showDelay]="50" [hideDelay]="50" class="cursor-pointer"
+                                                                            [showDelay]="50" [hideDelay]="50"
+                                                                            class="cursor-pointer"
                                                                             style="background-color: red;padding:0.4rem;border-radius: 2rem;cursor: pointer;color: white;">
                                                                             <i style="font-size: 20px;"
                                                                                 class="fa fa-times"
@@ -166,12 +167,19 @@
                                                                     </div>
                                                                     <div class="col-md-6  p-0 ">
                                                                         <label for="tipo_documento"
-                                                                            class="col-sm-12 control-label">Tipo De Documento</label>
+                                                                            class="col-sm-12 control-label">Tipo De
+                                                                            Documento</label>
                                                                         <div class="col-sm-12">
-                                                                            <select (change)="VerficarDocumentoCliente($event.target)" class="form-control" formControlName="tipo_documento">
-                                                                                <option value="NOTA_VENTA">Nota Venta</option>
-                                                                                <option value="BOLETA">Boleta Electrónica</option>
-                                                                                <option value="FACTURA">Factura Electrónica</option>
+                                                                            <select
+                                                                                (change)="VerficarDocumentoCliente($event.target)"
+                                                                                class="form-control"
+                                                                                formControlName="tipo_documento">
+                                                                                <option value="NOTA_VENTA">Nota Venta
+                                                                                </option>
+                                                                                <option value="BOLETA">Boleta
+                                                                                    Electrónica</option>
+                                                                                <option value="FACTURA">Factura
+                                                                                    Electrónica</option>
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -484,7 +492,8 @@
                                                         <td>{{item.monto | currency: 'S/': 'symbol': '': 'en-PE'}}</td>
                                                         <td>
                                                             <a (click)="eliminarFilaPago(i)" tooltip="Eliminar Producto"
-                                                                placement="top" [showDelay]="50" [hideDelay]="50" class="cursor-pointer"
+                                                                placement="top" [showDelay]="50" [hideDelay]="50"
+                                                                class="cursor-pointer"
                                                                 style="background-color: red;padding:0.4rem;border-radius: 2rem;cursor: pointer;color: white;">
                                                                 <i style="font-size: 20px;" class="fa fa-times"
                                                                     aria-hidden="true"></i>
@@ -542,7 +551,7 @@
                         <div class="row col-sm-12">
                             <div style="text-align: end; margin-left:30px">
                                 <div class="form-check">
-                                    <input (click)="CambioInput($event)" class="form-check-input " type="radio" 
+                                    <input (click)="CambioInput($event)" class="form-check-input " type="radio"
                                         formControlName="tipoDocumento" id="inputCLienteRut" value="RUC">
                                     <label class="form-check-label" for="inputCLienteRut">
                                         RUC
@@ -567,9 +576,11 @@
                                                 class="text-danger"> (*)</strong></label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" [class.d-none]="ruc_cliente"
+                                                [class.is-invalid]="informacionFormCliente.controls['nombre_razon_social']|isInvalid"
                                                 (keyup)="EncontrarDatos($event,'RUC')" formControlName="ruc_cliente"
                                                 placeholder="Ingrese RUC" maxlength="11" #ruc_cliente_formulario>
                                             <input type="text" class="form-control " [class.d-none]="dni_cliente"
+                                                [class.is-invalid]="informacionFormCliente.controls['nombre_razon_social']|isInvalid"
                                                 (keyup)="EncontrarDatos($event,'DNI')" formControlName="dni_cliente"
                                                 placeholder="Ingrese el Dni/Pasaporte" maxlength="8">
                                         </div>
@@ -709,7 +720,8 @@
 </div>
 
 
-<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;" id="ajax-mostrar-pdf" data-backdrop="static" >
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true" style="display: none;" id="ajax-mostrar-pdf" data-backdrop="static">
     <div class="modal-dialog modal-lg" style="width:55%;">
         <div class="modal-content">
             <div class="modal-header pb-0">
@@ -733,12 +745,13 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <strong >Enviar Correo Electrónico</strong>
+                                    <strong>Enviar Correo Electrónico</strong>
                                     <div class="input-group">
-                                        <input type="email" [(ngModel)]="Correo_pdf" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+                                        <input type="email" [(ngModel)]="Correo_pdf" class="form-control"
+                                            id="exampleInputEmail2" placeholder="Enter email">
                                         <div class="input-group-addon btn btn-inverse" (click)="EnviarDocumento('PDF')"
-                                        tooltip="Enviar"
-                                        placement="top" [showDelay]="50" [hideDelay]="50"><i class="ti-email"></i></div>
+                                            tooltip="Enviar" placement="top" [showDelay]="50" [hideDelay]="50"><i
+                                                class="ti-email"></i></div>
                                     </div>
                                 </div>
                             </div>
@@ -752,11 +765,13 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <strong >Enviar Correo Electrónico</strong>
+                                    <strong>Enviar Correo Electrónico</strong>
                                     <div class="input-group">
-                                        <input type="email" [(ngModel)]="Correo_ticket" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
-                                        <div class="input-group-addon btn btn-inverse" (click)="EnviarDocumento('TICKET')"
-                                        tooltip="Enviar"  placement="top" [showDelay]="50" [hideDelay]="50"><i class="ti-email"></i></div>
+                                        <input type="email" [(ngModel)]="Correo_ticket" class="form-control"
+                                            id="exampleInputEmail2" placeholder="Enter email">
+                                        <div class="input-group-addon btn btn-inverse"
+                                            (click)="EnviarDocumento('TICKET')" tooltip="Enviar" placement="top"
+                                            [showDelay]="50" [hideDelay]="50"><i class="ti-email"></i></div>
                                     </div>
                                 </div>
                             </div>

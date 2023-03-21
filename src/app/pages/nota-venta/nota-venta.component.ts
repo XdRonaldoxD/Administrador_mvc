@@ -8,6 +8,7 @@ import { DataTablesResponse } from 'src/app/interface/Datatable';
 import { Totales, Totales_pagados } from 'src/app/interface/Datos';
 import { LoginService } from 'src/app/services/login.service';
 import { NotaVenta } from 'src/app/services/notaventa.service';
+import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 
 declare var $: any;
@@ -75,17 +76,23 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {
     this.token = this.servicio_login.getToken();
     this.identificacion = this.servicio_login.getIdentity();
+ 
+  }
+
+  ngOnInit(): void {
+
     this.ProductoBuscar = this.fb.group({
       glosa_producto: ['']
     });
     this.informacionForm = this.fb.group({
+      id_empresa:[this.identificacion.id_empresa],
       cliente: [null],
       vendedor: [this.identificacion.sub],
       tipo_documento: ['NOTA_VENTA']
     });
 
     this.informacionFormCliente = this.fb.group({
-      tipoDocumento: ['RUC', [Validators.required]],
+      tipoDocumento: ['RUC'],
       ruc_cliente: [''],
       dni_cliente: [''],
       nombre_razon_social: ['', [Validators.required]],
@@ -101,16 +108,13 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
       condicion: [''],
       dv_cliente: [''],
     });
-  }
-
-  ngOnInit(): void {
 
     this.Mostrar_Productos();
     this.Mostrar_Medio_Pago();
     $(".select2").select2();
     $("#nombre_cliente").select2({
       ajax: {
-        url: "http://localhost/MVC_CRM/?controller=Cliente&action=FiltrarCliente", //URL for searching companies
+        url: environment.api_url+"?controller=Cliente&action=FiltrarCliente", //URL for searching companies
         dataType: "json",
         headers: { 'Authorization': this.token },
         delay: 200,
@@ -547,12 +551,18 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     this.search_input_pago?.nativeElement.focus();
   }
   CambioInput($evento: any) {
+    const rucControl:any = this.informacionFormCliente.get('ruc_cliente');
+    const dniControl:any = this.informacionFormCliente.get('dni_cliente');
     switch ($evento.target.value) {
       case 'RUC':
+        rucControl.setValidators([Validators.required]);
+        dniControl.clearValidators();
         this.ruc_cliente = false;
         this.dni_cliente = true;
         break;
       case 'DNI/PASAPORTE':
+        rucControl.clearValidators();
+        dniControl.setValidators([Validators.required]);
         this.ruc_cliente = true;
         this.dni_cliente = false;
         break;
@@ -914,6 +924,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     this.Totales.total = 0;
     this.AsignarCliente();
     this.informacionForm.get('vendedor')?.setValue(this.identificacion.sub);
+    this.informacionForm.get('id_empresa')?.setValue(this.identificacion.id_empresa);
     this.informacionForm.get('tipo_documento')?.setValue('NOTA_VENTA');
     this.VolverPagina();
   }

@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home3/siste268/admincrm.sistemasdurand.com/
+    - /bin/rsync -av /home3/siste268/repositories/Administrador_mvc/dist/AdminCarritoCompras/ $DEPLOYPATH

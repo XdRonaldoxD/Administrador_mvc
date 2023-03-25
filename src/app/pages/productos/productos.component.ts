@@ -6,6 +6,7 @@ import { finalize, Subject } from 'rxjs';
 import { LoginService } from '../../services/login.service';
 import { CategoriaService } from '../../services/categoria.service';
 import { ProductoService } from '../../services/producto.service';
+import { environment } from 'src/environments/environment';
 
 
 declare var $: any;
@@ -151,7 +152,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
 
 
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_CRM/?controller=Producto&action=ListaProducto",
+          environment.api_url+"?controller=Producto&action=ListaProducto",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProducto = resp.data;
@@ -218,7 +219,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
           dataTablesParameters.categoria_padres = checked;
         }
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_CRM/?controller=Producto&action=ListaProductoDeshabilitado",
+          environment.api_url+"?controller=Producto&action=ListaProductoDeshabilitado",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProductoDeshabilitado = resp.data;
@@ -267,7 +268,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.id_producto = this.id_producto;
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_CRM/?controller=Producto&action=ProductoHistorial",
+          environment.api_url+"?controller=Producto&action=ProductoHistorial",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProductoHistorial = resp.data;

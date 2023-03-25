@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, finalize } from 'rxjs';
 import { DataTablesResponse } from 'src/app/interface/Datatable';
 import { AtributoService } from '../../services/atributo.service';
+import { environment } from 'src/environments/environment';
 declare var $: any;
 declare var Swal: any;
 @Component({
@@ -117,7 +118,7 @@ export class AtributoComponent implements OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_CRM/?controller=Atributo&action=ListaAtributo",
+          environment.api_url+"?controller=Atributo&action=ListaAtributo",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProducto = resp.data;
@@ -161,7 +162,7 @@ export class AtributoComponent implements OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_CRM/?controller=Atributo&action=ListaAtributoDeshabilitado",
+          environment.api_url+"?controller=Atributo&action=ListaAtributoDeshabilitado",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProductoDeshabilitado = resp.data;

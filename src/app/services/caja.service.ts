@@ -16,7 +16,7 @@ export class Caja {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.get("http://localhost/MVC_CRM/?controller=NotaVenta&action=TraerDepartamento", { headers: headers })
+    return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=TraerDepartamento", { headers: headers })
   }
   TraerProvincia(token:string,id_departamento:any):Observable<any>{
     let Params = new HttpParams();
@@ -24,7 +24,7 @@ export class Caja {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.get("http://localhost/MVC_CRM/?controller=NotaVenta&action=TraerProvincia", { headers: headers , params: Params })
+    return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=TraerProvincia", { headers: headers , params: Params })
   }
   TraerDistrito(token:string,id_provincia:any):Observable<any>{
     let Params = new HttpParams();
@@ -32,7 +32,7 @@ export class Caja {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.get("http://localhost/MVC_CRM/?controller=NotaVenta&action=TraerDistrito", { headers: headers , params: Params })
+    return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=TraerDistrito", { headers: headers , params: Params })
   }
 
   GuardarCaja(token:string,informacion_caja:any):Observable<any>{

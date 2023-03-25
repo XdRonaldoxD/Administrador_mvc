@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 import { MigracionexcelService } from 'src/app/services/migracionexcel.service';
+import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 declare var $: any;
 @Component({
@@ -45,7 +46,7 @@ export class MigrarproductoComponent implements OnInit {
       showConfirmButton: false,
       onBeforeOpen: () => {
         Swal.showLoading();
-        fetch("http://localhost/MVC_CRM/?controller=ProductoExcel&action=ExportarDatos", requestOptions)
+        fetch(environment.api_url+"?controller=ProductoExcel&action=ExportarDatos", requestOptions)
           .then(response => response.blob())
           .then(blob => {
             var url = window.URL.createObjectURL(blob);

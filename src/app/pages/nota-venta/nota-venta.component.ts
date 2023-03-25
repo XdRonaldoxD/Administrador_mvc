@@ -220,7 +220,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
           dataTablesParameters.filtro_buscar = this.ProductoBuscar.value.glosa_producto;
         }
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_CRM/?controller=NotaVenta&action=ListaProductos",
+          environment.api_url+"?controller=NotaVenta&action=ListaProductos",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProducto = resp.data;

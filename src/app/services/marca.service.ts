@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MarcaService {
-  linkApi = 'http://localhost/MVC_CRM/?';
   constructor(
     private httpcliente: HttpClient
   ) { }
@@ -18,7 +18,7 @@ export class MarcaService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post("http://localhost/MVC_CRM/?controller=Marca&action=GestionarMarca", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url+"?controller=Marca&action=GestionarMarca", formData, { headers: headers })
   }
   TraerMarca(token: any, id_marca: any): Observable<any> {
     const formData = new FormData();
@@ -26,7 +26,7 @@ export class MarcaService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post("http://localhost/MVC_CRM/?controller=Marca&action=TraerMarca", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url+"?controller=Marca&action=TraerMarca", formData, { headers: headers })
   }
   Habilitar_Deshabilitar_Marca(token: any, id_marca: any, accion: string): Observable<any> {
     const formData = new FormData();
@@ -35,6 +35,6 @@ export class MarcaService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post("http://localhost/MVC_CRM/?controller=Marca&action=Habilitar_Deshabilitar_Marca", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url+"?controller=Marca&action=Habilitar_Deshabilitar_Marca", formData, { headers: headers })
   }
 }

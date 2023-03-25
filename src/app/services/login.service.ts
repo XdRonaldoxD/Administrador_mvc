@@ -8,7 +8,6 @@ import { environment } from 'src/environments/environment';
 })
 export class LoginService {
 
-  linkApi = 'http://localhost/MVC_CRM/?';
   token: any;
   UserIdentificado: any;
   constructor(

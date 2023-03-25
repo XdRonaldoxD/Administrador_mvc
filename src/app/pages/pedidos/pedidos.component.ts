@@ -6,6 +6,7 @@ import { LoginService } from '../../services/login.service';
 import { CategoriaService } from '../../services/categoria.service';
 import { ProductoService } from '../../services/producto.service';
 import { PedidoService } from '../../services/pedido.service';
+import { environment } from 'src/environments/environment';
 
 
 declare var $: any;
@@ -158,7 +159,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         }
 
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_CRM/?controller=Pedido&action=ListarPedidos",
+          environment.api_url+"?controller=Pedido&action=ListarPedidos",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProducto = resp.data;
@@ -240,7 +241,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
           dataTablesParameters.categoria_padres = checked;
         }
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_CRM/?controller=Producto&action=ListaProductoDeshabilitado",
+          environment.api_url+"?controller=Producto&action=ListaProductoDeshabilitado",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProductoDeshabilitado = resp.data;

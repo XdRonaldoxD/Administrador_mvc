@@ -6,6 +6,7 @@ import { LoginService } from '../../services/login.service';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { MarcaService } from '../../services/marca.service';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from 'src/environments/environment';
 
 
 declare var $: any;
@@ -93,7 +94,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_CRM/?controller=Marca&action=ListarMarca",
+          environment.api_url+"?controller=Marca&action=ListarMarca",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProducto = resp.data;
@@ -134,7 +135,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_CRM/?controller=Marca&action=ListarMarcaDesactivados",
+          environment.api_url+"?controller=Marca&action=ListarMarcaDesactivados",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProductoDeshabilitado = resp.data;

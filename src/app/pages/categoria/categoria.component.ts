@@ -6,6 +6,7 @@ import { LoginService } from '../../services/login.service';
 import { CategoriaService } from '../../services/categoria.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DataTablesResponse } from 'src/app/interface/Datatable';
+import { environment } from 'src/environments/environment';
 
 
 declare var $: any;
@@ -128,7 +129,7 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_CRM/?controller=Categoria&action=ListaCategoria",
+          environment.api_url+"?controller=Categoria&action=ListaCategoria",
           dataTablesParameters, { headers: headers }
         ).pipe(takeUntil(this.unsubscribe$))
           .subscribe((resp) => {
@@ -173,7 +174,7 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          "http://localhost/MVC_CRM/?controller=Categoria&action=ListaCategoriaDeshabilitado",
+          environment.api_url+"?controller=Categoria&action=ListaCategoriaDeshabilitado",
           dataTablesParameters, { headers: headers }
         ).pipe(takeUntil(this.unsubscribe$))
           .subscribe((resp) => {

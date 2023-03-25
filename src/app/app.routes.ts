@@ -9,4 +9,4 @@ const appRoutes: Routes = [
   { path: "RegistrarSession", component: RegisterComponent },
   { path: "**", component: LoginComponent },
 ];
-export const APP_ROUTES = RouterModule.forRoot(appRoutes);
+export const APP_ROUTES = RouterModule.forRoot(appRoutes, { useHash: false });

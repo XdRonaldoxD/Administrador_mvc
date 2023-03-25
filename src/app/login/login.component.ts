@@ -30,8 +30,14 @@ export class LoginComponent implements OnInit, OnDestroy {
       password: ['', [Validators.required]]
     },);
 
-    $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
+    const sign_in_btn:any = document.querySelector("#sign-in-btn");
+    const sign_up_btn:any = document.querySelector("#sign-up-btn");
+    const container:any = document.querySelector(".container-login");
+    sign_up_btn.addEventListener("click", () => {
+      container.classList.add("sign-up-mode");
+    });
+    sign_in_btn.addEventListener("click", () => {
+      container.classList.remove("sign-up-mode");
     });
 
   }
@@ -51,7 +57,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .pipe(
         //USAMOS PARA EL USO DE MEMORIA(TOMARA COMPLETADO EL  SUBCRIBE)
         takeUntil(this.unsubscribe$)
-        )
+      )
       .subscribe({
         next: (respuesta) => {
           if (!isNaN(respuesta.id_usuario)) {
@@ -91,7 +97,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   CerrandoSession() {
     // console.log(this.user.id);
     this.servicio_login.cerrarSession(this.id_usuario)
-    .pipe(takeUntil(this.unsubscribe$))
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(respo => {
         // console.log(respo);
         $('#exampleModalCenter').modal('hide');

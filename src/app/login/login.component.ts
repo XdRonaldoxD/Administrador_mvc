@@ -16,6 +16,8 @@ declare var $: any;
 export class LoginComponent implements OnInit, OnDestroy {
 
   loginForm!: FormGroup;
+  registrarForm!: FormGroup;
+
   id_usuario: any;
   private unsubscribe$ = new Subject<void>();
   constructor(
@@ -28,7 +30,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
-    },);
+    });
+
+    this.registrarForm = this.fb.group({
+      nombre: ['', [Validators.required]],
+      apellido_paterno: [''],
+      apellido_materno: [''],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]]
+    });
 
     const sign_in_btn:any = document.querySelector("#sign-in-btn");
     const sign_up_btn:any = document.querySelector("#sign-up-btn");
@@ -71,12 +81,10 @@ export class LoginComponent implements OnInit, OnDestroy {
               })
               ).subscribe({
                 next: (respuesta) => {
-                  // localStorage.setItem('UserIdentificado',JSON.stringify(respuesta))
                   this.servicio_login.saveIdentity(respuesta);
                 },
               });
           }
-          // localStorage.setItem('token', respuesta);
 
         },
         error: (error) => {
@@ -92,6 +100,42 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         }
       });
+  }
+
+  RegistrarSession(){
+    this.registrarForm.markAllAsTouched()
+    if (this.registrarForm.invalid) {
+      return;
+    }
+
+    this.servicio_login.RegistrarUsuario(this.registrarForm.value).pipe(finalize(()=>{
+      this.registrarForm.reset();
+    }))
+    .subscribe({
+      next: (respuesta) => {
+        Swal.fire({
+          toast: true,
+          position: 'top',
+          icon: 'success',
+          title: 'Usuario Creado con exito.',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 5000
+        })
+      },
+      error: (error) => {
+        Swal.fire({
+          toast: true,
+          position: 'top',
+          icon: 'error',
+          title: 'Usuario Incorrecto',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 5000
+        })
+      
+      }
+    });
   }
 
   CerrandoSession() {

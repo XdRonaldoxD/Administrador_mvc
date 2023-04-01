@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
+declare const window: Window;
 @Injectable({
   providedIn: 'root'
 })
@@ -27,46 +28,46 @@ export class LoginService {
   getToken() {
     let token = localStorage.getItem('token');
     if (token && token != 'undefined') {
-      this.token =token;
+      this.token = token;
     } else {
       this.token = null;
     }
     return this.token;
   }
-  saveIdentity(respuesta:any){
+  saveIdentity(respuesta: any) {
     localStorage.setItem('UserIdentificado', JSON.stringify(respuesta));
   }
-  savetoken(respuesta:any){
+  savetoken(respuesta: any) {
     localStorage.setItem('token', respuesta);
   }
-  deleteSession(){
+  deleteSession() {
     localStorage.removeItem("UserIdentificado");
     localStorage.removeItem("token");
   }
 
 
-  LoginUsuario(user: any, getToken:any = null): Observable<any> {
+  LoginUsuario(user: any, getToken: any = null): Observable<any> {
     const formData = new FormData();
     formData.append('email', user.email);
     formData.append('password', user.password);
     if (getToken != null) {
-    formData.append('getToken',  user.getToken);
+      formData.append('getToken', user.getToken);
     }
     const headers = new HttpHeaders();
-    return this.httpcliente.post(environment.api_url+"?controller=Usuario&action=login", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url + "?controller=Usuario&action=login", formData, { headers: headers })
   }
 
 
-  TraerChatLineaActivo(token: any, linea=false): Observable<any> {
+  TraerChatLineaActivo(token: any, linea = false): Observable<any> {
     let Params = new HttpParams();
     Params = Params.append('linea', linea);
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.get(environment.api_url+"?Apicontroller=Pusher&action=TraerChatLineaActivo", { headers: headers,params: Params  })
+    return this.httpcliente.get(environment.api_url + "?Apicontroller=Pusher&action=TraerChatLineaActivo", { headers: headers, params: Params })
   }
 
-  ChatboxEventAdministrador(token: any, conversacion:any,identificadorcliente_log_chat:any,id_usuario:any,mensaje_texto:any): Observable<any> {
+  ChatboxEventAdministrador(token: any, conversacion: any, identificadorcliente_log_chat: any, id_usuario: any, mensaje_texto: any): Observable<any> {
     const Params = new FormData();
     Params.append('conversacion', JSON.stringify(conversacion));
     Params.append('cliente_identificado', identificadorcliente_log_chat);
@@ -75,20 +76,20 @@ export class LoginService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post(environment.api_url+"?Apicontroller=Pusher&action=ChatboxEventAdministrador", Params,{ headers: headers  })
+    return this.httpcliente.post(environment.api_url + "?Apicontroller=Pusher&action=ChatboxEventAdministrador", Params, { headers: headers })
   }
-  DesactivarCliente(token: any,identificadorcliente_log_chat:any){
+  DesactivarCliente(token: any, identificadorcliente_log_chat: any) {
     const Params = new FormData();
     Params.append('cliente_identificado', identificadorcliente_log_chat);
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post(environment.api_url+"?Apicontroller=Pusher&action=CerrarChatBoxCliente", Params,{ headers: headers  })
+    return this.httpcliente.post(environment.api_url + "?Apicontroller=Pusher&action=CerrarChatBoxCliente", Params, { headers: headers })
   }
 
-  
 
-  RegistrarUsuario(user:any, getToken = null): Observable<any> {
+
+  RegistrarUsuario(user: any, getToken = null): Observable<any> {
     if (getToken != null) {
       user.getToken = 'true'
     }
@@ -99,17 +100,17 @@ export class LoginService {
     formData.append('apellido_m_usuario', user.apellido_materno);
     formData.append('email_usuario', user.email);
     const headers = new HttpHeaders();
-    return this.httpcliente.post(environment.api_url+"?controller=Usuario&action=RegistrarUsuario", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url + "?controller=Usuario&action=RegistrarUsuario", formData, { headers: headers })
   }
 
-  cerrarSession(id_user:any): Observable<any> {
+  cerrarSession(id_user: any): Observable<any> {
     const formData = new FormData();
     formData.append('id_usuario', id_user);
     const headers = new HttpHeaders();
-    return this.httpcliente.post(environment.api_url+"?controller=Usuario&action=EliminarSesion", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url + "?controller=Usuario&action=EliminarSesion", formData, { headers: headers })
   }
 
-  VerificacionUser(token:any,user_id:any,session_id:any):Observable<any>{
+  VerificacionUser(token: any, user_id: any, session_id: any): Observable<any> {
     const formData = new FormData();
     formData.append('user_id', user_id);
     formData.append('session_id', session_id);
@@ -117,6 +118,14 @@ export class LoginService {
       Authorization: token
     });
 
-    return this.httpcliente.post(environment.api_url+"?controller=Usuario&action=ConsultaUsuario",formData,{headers:headers})
+    return this.httpcliente.post(environment.api_url + "?controller=Usuario&action=ConsultaUsuario", formData, { headers: headers })
+  }
+
+  TraerIconoEmpresa(): Observable<any> {
+    const dominio = window.location.hostname;
+    const formData = new FormData();
+    formData.append('dominio', dominio);
+    const headers = new HttpHeaders();
+    return this.httpcliente.post(environment.api_url + "?controller=Usuario&action=ConsultarDominio", formData, { headers: headers })
   }
 }

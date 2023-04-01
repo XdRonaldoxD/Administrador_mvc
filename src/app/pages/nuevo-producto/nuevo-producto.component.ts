@@ -19,6 +19,7 @@ declare var Swal: any;
 export class NuevoProductoComponent implements OnInit, OnDestroy {
   @ViewChild('codigo_producto') codigo_producto?: ElementRef;
   token: any;
+  buttonDisabled: boolean = false;
   tipo_inventario?: any = [];
   imagenes_producto?: any = [];
   producto_relacionado: any = '';
@@ -55,63 +56,6 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
     this.descripcion_corta = $('.descripcion_corta').wysihtml5().data('wysihtml5').editor;
 
     this.token = this.servicio_login.getToken();
-    $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
-    });
-
-
-    var form = $(".validation-wizard").show();
-    $(".validation-wizard").steps({
-      headerTag: "h6"
-      , bodyTag: "section"
-      , transitionEffect: "fade"
-      , titleTemplate: '<span class="step">#index#</span> #title#',
-      autoFocus: true,
-      enableFinishButton: true,
-      reset: true
-      , labels: {
-        finish: "Guardar",
-        next: "Siguiente",
-        previous: "Atras",
-        loading: "Cargando ..."
-      }
-      , onStepChanging: function (event: any, currentIndex: number, newIndex: string | number) {
-        return currentIndex > newIndex || !(3 === newIndex && Number($("#age-2").val()) < 18) && (currentIndex < newIndex && (form.find(".body:eq(" + newIndex + ") label.error").remove(), form.find(".body:eq(" + newIndex + ") .error").removeClass("error")), form.validate().settings.ignore = ":disabled,:hidden", form.valid())
-      }
-      , onFinishing: function (event: any, currentIndex: any) {
-        return form.validate().settings.ignore = ":disabled", form.valid()
-      }
-      , onFinished: function (event: any, currentIndex: any) {
-        // swal("Form Submitted!", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lorem erat eleifend ex semper, lobortis purus sed.");
-        $(".validation-wizard").hide();
-      }
-    }), $(".validation-wizard").validate({
-      ignore: "input[type=hidden]"
-      , errorClass: "text-danger"
-      , successClass: "text-success"
-      , highlight: function (element: any, errorClass: any) {
-        $(element).removeClass(errorClass)
-      }
-      , unhighlight: function (element: any, errorClass: any) {
-        $(element).removeClass(errorClass)
-      }
-      , errorPlacement: function (error: { insertAfter: (arg0: any) => void; }, element: any) {
-        error.insertAfter(element)
-      }
-      , rules: {
-        email: {
-          required: true
-        }
-      },
-      messages: {
-        correo: 'Este campo es requerido',
-        email: {
-          required: 'Este campo es requerido',
-          equalTo: 'El correo no coincide'
-        },
-      }
-    })
-
     this.servicio_categoria.Inventario(this.token).pipe(finalize(() => {
       $("#t-crear-categoria").children("div").remove();
       var estructura_html = "<div><h6 for=\"name\" class=\"col-sm-12 control-label\">Categoría Padre</h6><div id=\"treeview_container\" class=\"hummingbird-treeview t-view-editar\" style=\"height: auto; display: block;\"><ul style='list-style: none;' id=\"treeview\" class=\"hummingbird-base\"></ul></div></div>";
@@ -208,7 +152,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
       visible_tienda: [false],
       descripcion_corta: [],
       descripcion_extendida: [],
-      glosa_producto: ['',[Validators.required]]
+      glosa_producto: ['', [Validators.required]]
 
     });
     this.PrecioStockForm = this.fb.group({
@@ -231,7 +175,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
       } else {
         this.producto_serv.removeItemFromArr(this.checked_atributo, elemento.target.value)
       }
-      
+
     })
 
     $(document).on("click", "input[name='categoria_padre']", (elemento: any) => {
@@ -241,7 +185,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
       } else {
         this.producto_serv.removeItemFromArr(this.checked_categoria, elemento.target.value)
       }
-     
+
     })
 
 
@@ -662,10 +606,13 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
         return;
       }
     };
+
+    this.buttonDisabled = true;
     this.informacionForm.get('descripcion_corta')!.setValue(this.descripcion_corta.getValue());
     this.informacionForm.get('descripcion_extendida')!.setValue(this.descripcion_extendida.getValue());
-    this.producto_serv.GuardarProductoActualizar(this.token, valorescategoria, this.informacionForm.value, this.PrecioStockForm.value, this.imagenes_producto, coloresHexadecimal, especificaciones, this.listarProductoRelacionados, this.checked_atributo).
-      subscribe({
+    this.producto_serv.GuardarProductoActualizar(this.token, valorescategoria, this.informacionForm.value, this.PrecioStockForm.value, this.imagenes_producto, coloresHexadecimal, especificaciones, this.listarProductoRelacionados, this.checked_atributo)
+      .pipe(takeUntil(this.Unsuscribe))
+      .subscribe({
         next: (res) => {
           Swal.fire({
             toast: true,
@@ -688,6 +635,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
             timerProgressBar: true,
             timer: 5000
           })
+          this.buttonDisabled = false;
         }
       })
   }
@@ -708,7 +656,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
     let codigo = event.target.value;
     clearTimeout(this.contador_texto); // <--- The solution is here
     this.contador_texto = setTimeout(() => {
-      this.producto_serv.VerificarSku(this.token, codigo,null).subscribe(res => {
+      this.producto_serv.VerificarSku(this.token, codigo, null).subscribe(res => {
         event.target.classList.add('is-valid');
         event.target.classList.remove('is-invalid');
         this.verificador_sku = false;

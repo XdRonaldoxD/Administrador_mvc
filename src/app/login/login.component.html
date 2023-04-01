@@ -54,10 +54,10 @@
         <div class="signin-signup">
             <form class="sign-in-form" [formGroup]="loginForm" autocomplete="nope">
                 <h2 class="title">Iniciar Sesón</h2>
-                <div class="input-field">
+                <div class="input-field"  [class.is-invalid]="loginForm.controls['email']|isInvalid">
                     <i class="fa fa-user" aria-hidden="true"></i>
                     <input type="email" formControlName="email"
-                        [class.is-invalid]="loginForm.controls['email']|isInvalid" [autocomplete]="true"
+                        [autocomplete]="true"
                         placeholder="customer@example.com" />
                 </div>
                 <div class="text-danger">
@@ -80,21 +80,43 @@
                 </div>
                 <input type="button" value="Ingresar" class="btn solid" (click)="login()" />
             </form>
-            <form action="#" class="sign-up-form">
-                <h2 class="title">Sign up</h2>
+            <form class="sign-up-form" [formGroup]="registrarForm" autocomplete="nope">
+                <h2 class="title">Registrarse</h2>
                 <div class="input-field">
                     <i class="fa fa-user"></i>
-                    <input type="text" placeholder="Username" />
+                    <input type="text" formControlName="nombre"
+                      [class.is-invalid]="registrarForm.controls['nombre']|isInvalid"
+                       placeholder="Nombre" />
+                </div>
+                <div class="text-danger">
+                    <div *ngIf="registrarForm.controls['nombre']|hasError:'required'">
+                        Nombre Vacia
+                    </div>
                 </div>
                 <div class="input-field">
                     <i class="fa fa-envelope" aria-hidden="true"></i>
-                    <input type="email" placeholder="Email" />
+                    <input type="email" formControlName="email"
+                    [class.is-invalid]="registrarForm.controls['email']|isInvalid" placeholder="Email" />
+                </div>
+                <div class="text-danger">
+                    <div *ngIf="registrarForm.controls['email']|hasError:'required'">
+                        Correo Vacia
+                    </div>
+                    <div *ngIf="registrarForm.controls['email']|hasError:'email'">
+                        Correo Incorrecto
+                    </div>
                 </div>
                 <div class="input-field">
                     <i class="fa fa-lock"></i>
-                    <input type="password" placeholder="Password" />
+                    <input  type="password" formControlName="password"
+                    [class.is-invalid]="registrarForm.controls['password']|isInvalid" placeholder="Contraseña" />
                 </div>
-                <input type="submit" class="btn" value="Sign up" />
+                <div class="text-danger">
+                    <div *ngIf="registrarForm.controls['password']|hasError:'required'">
+                        Contraseña Vacia
+                    </div>
+                </div>
+                <input type="button" class="btn" value="Registrar" (click)="RegistrarSession()" />
 
             </form>
         </div>
@@ -136,7 +158,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-12  d-flex align-self-center justify-content-center">
+                        <div class="text-center">
                             <svg class="w-25" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
                                 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512"
                                 style="enable-background:new 0 0 512 512;" xml:space="preserve">

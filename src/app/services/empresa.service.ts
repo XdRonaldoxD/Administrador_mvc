@@ -16,11 +16,20 @@ export class EmpresaService {
     this.token = this.servicio_login.getToken();
   }
 
-  EnviarInformacionEmpresa(informacionForm: any, archivo_digital: any): Observable<any> {
+  EnviarInformacionEmpresa(informacionForm: any, archivo_digital: any,imagenes:any): Observable<any> {
     const formData = new FormData();
     formData.append('informacionForm', JSON.stringify(informacionForm));
     if (archivo_digital) {
       formData.append('archivo_digital', archivo_digital, archivo_digital.name);
+    }
+    if (imagenes.icono_empresa) {
+      formData.append('icono_empresa', imagenes.icono_empresa, imagenes.icono_empresa.name);
+    }
+    if (imagenes.logo_empresa_horizonta) {
+      formData.append('logo_empresa_horizonta', imagenes.logo_empresa_horizonta, imagenes.logo_empresa_horizonta.name);
+    }
+    if (imagenes.logo_empresa_vertical) {
+      formData.append('logo_empresa_vertical', imagenes.logo_empresa_vertical, imagenes.logo_empresa_vertical.name);
     }
     const headers = new HttpHeaders({
       Authorization: this.token
@@ -49,5 +58,6 @@ export class EmpresaService {
   BuscarRuc(Ruc_factura: any): Observable<any> {
     return this.httpcliente.get(`https://dniruc.apisperu.com/api/v1/ruc/${Ruc_factura}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InNtaXRoeGQxMThAZ21haWwuY29tIn0.24c7XETuRuTQLUqSjOH7BsKM19n6kKMOtY06qeUYX40`)
   }
+  
 
 }

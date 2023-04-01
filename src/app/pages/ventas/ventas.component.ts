@@ -103,7 +103,7 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   VerPagos(id_negocio_global:any) {
-    this.servicio_caja.TraerPagos(this.token,id_negocio_global).pipe(takeUntil(this.Unsuscribe)).subscribe({
+    this.servicio_caja.TraerPagos(id_negocio_global).pipe(takeUntil(this.Unsuscribe)).subscribe({
       next:resp=>{
         this.MetodosPagos=resp;
         $("#nuevaCajaModal").modal("show");
@@ -184,7 +184,7 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
 
 
   MostrarDetalleProducto(id_negocio: any) {
-    this.servicio_caja.MostrarDetalleProducto(this.token,id_negocio).pipe(takeUntil(this.Unsuscribe)).subscribe({
+    this.servicio_caja.MostrarDetalleProducto(id_negocio).pipe(takeUntil(this.Unsuscribe)).subscribe({
       next: resp => {
         $("#detalle_ventas_producto").modal("show");
         this.DetalleVentasProductos = resp;

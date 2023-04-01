@@ -30,10 +30,10 @@
                                     <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home7"
                                             role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span
                                                 class="hidden-xs-down">INFORMACIÓN</span></a> </li>
-                                    <li class="nav-item"> <a  class="nav-link" data-toggle="tab" href="#profile7"
+                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile7"
                                             role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
                                                 class="hidden-xs-down">PRECIO-STOCK</span></a> </li>
-                                    <li class="nav-item" > <a  class="nav-link" data-toggle="tab" href="#messages7"
+                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages7"
                                             role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span
                                                 class="hidden-xs-down">IMAGENES</span></a> </li>
                                     <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages8"
@@ -49,12 +49,14 @@
                                 <!-- Tab panes -->
                                 <div class="tab-content">
                                     <div class="tab-pane active mt-4" id="home7" role="tabpanel">
-                                        <form [formGroup]="informacionForm" autocomplete="nope" enctype="multipart/form-data">
+                                        <form [formGroup]="informacionForm" autocomplete="nope"
+                                            enctype="multipart/form-data">
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="firstName1">SKU<strong class="text-danger">(*)</strong></label>
-                                                        <input type="text" class="form-control" #codigo_producto 
+                                                        <label for="firstName1">SKU<strong
+                                                                class="text-danger">(*)</strong></label>
+                                                        <input type="text" class="form-control" #codigo_producto
                                                             (keyup)="VerificarSku($event)"
                                                             formControlName="codigo_producto"
                                                             placeholder="Codigo del Producto"
@@ -64,9 +66,8 @@
                                                                 *ngIf="informacionForm.controls['codigo_producto']|hasError:'required'">
                                                                 SKU Vacio
                                                             </div>
-                                                            <div
-                                                                *ngIf="verificador_sku">
-                                                                Existe SKU 
+                                                            <div *ngIf="verificador_sku">
+                                                                Existe SKU
                                                             </div>
                                                         </div>
                                                     </div>
@@ -82,15 +83,18 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="emailAddress1">Nombre <strong class="text-danger">(*)</strong></label>
-                                                        <input type="email" class="form-control"formControlName="glosa_producto" placeholder="Nombre del producto"
-                                                        [class.is-invalid]="informacionForm.controls['glosa_producto']|isInvalid">
-                                                            <div class="text-danger">
-                                                                <div
-                                                                    *ngIf="informacionForm.controls['glosa_producto']|hasError:'required'">
-                                                                    Nombre producto Vacio
-                                                                </div>
+                                                        <label for="emailAddress1">Nombre <strong
+                                                                class="text-danger">(*)</strong></label>
+                                                        <input type="email" class="form-control"
+                                                            formControlName="glosa_producto"
+                                                            placeholder="Nombre del producto"
+                                                            [class.is-invalid]="informacionForm.controls['glosa_producto']|isInvalid">
+                                                        <div class="text-danger">
+                                                            <div
+                                                                *ngIf="informacionForm.controls['glosa_producto']|hasError:'required'">
+                                                                Nombre producto Vacio
                                                             </div>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -170,8 +174,9 @@
                                                         id="btn-close-crud"><i style="vertical-align: text-bottom;"
                                                             class="bx bx-left-arrow-alt"></i> Volver</button>
                                                     <button (click)="GuardarProductoCompleto()" type="button"
-                                                        class="btn btn-success" id="btn-save" value="create-product"><i
-                                                            style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                        [disabled]="buttonDisabled" class="btn btn-success"
+                                                        value="create-product"><i style="vertical-align: text-bottom;"
+                                                            class="bx bx-save"></i>
                                                         Guardar
                                                     </button>
                                                 </div>
@@ -222,9 +227,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row" style="justify-content: center;" *ngIf="checked_atributo.length>0">
+                                            <div class="row" style="justify-content: center;"
+                                                *ngIf="checked_atributo.length>0">
                                                 <div class="col-8">
-                                                    <table  class="table color-bordered-table muted-bordered-table">
+                                                    <table class="table color-bordered-table muted-bordered-table">
                                                         <thead>
                                                             <tr>
                                                                 <th colspan="2" class="text-center">
@@ -241,9 +247,10 @@
                                                                 <td>{{item.glosa_atributo}}</td>
                                                                 <td><input type="number" [value]="0"
                                                                         class="form-control text-center"
-                                                                        (keyup)="GuardarCantidadAtributo($event.target,item.id_atributo)"> </td>
+                                                                        (keyup)="GuardarCantidadAtributo($event.target,item.id_atributo)">
+                                                                </td>
                                                             </tr>
-                                                          
+
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -255,8 +262,9 @@
                                                         id="btn-close-crud"><i style="vertical-align: text-bottom;"
                                                             class="bx bx-left-arrow-alt"></i> Volver</button>
                                                     <button (click)="GuardarProductoCompleto()" type="button"
-                                                        class="btn btn-success" id="btn-save" value="create-product"><i
-                                                            style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                        [disabled]="buttonDisabled" class="btn btn-success"
+                                                        value="create-product"><i style="vertical-align: text-bottom;"
+                                                            class="bx bx-save"></i>
                                                         Guardar
                                                     </button>
                                                 </div>
@@ -295,8 +303,9 @@
                                                         style="vertical-align: text-bottom;"
                                                         class="bx bx-left-arrow-alt"></i> Volver</button>
                                                 <button (click)="GuardarProductoCompleto()" type="button"
-                                                    class="btn btn-success" id="btn-save" value="create-product"><i
-                                                        style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                    [disabled]="buttonDisabled" class="btn btn-success"
+                                                    value="create-product"><i style="vertical-align: text-bottom;"
+                                                        class="bx bx-save"></i>
                                                     Guardar
                                                 </button>
                                             </div>
@@ -346,8 +355,9 @@
                                                         style="vertical-align: text-bottom;"
                                                         class="bx bx-left-arrow-alt"></i> Volver</button>
                                                 <button (click)="GuardarProductoCompleto()" type="button"
-                                                    class="btn btn-success" id="btn-save" value="create-product"><i
-                                                        style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                    [disabled]="buttonDisabled" class="btn btn-success"
+                                                    value="create-product"><i style="vertical-align: text-bottom;"
+                                                        class="bx bx-save"></i>
                                                     Guardar
                                                 </button>
                                             </div>
@@ -411,8 +421,9 @@
                                                         style="vertical-align: text-bottom;"
                                                         class="bx bx-left-arrow-alt"></i> Volver</button>
                                                 <button (click)="GuardarProductoCompleto()" type="button"
-                                                    class="btn btn-success" id="btn-save" value="create-product"><i
-                                                        style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                    [disabled]="buttonDisabled" class="btn btn-success"
+                                                    value="create-product"><i style="vertical-align: text-bottom;"
+                                                        class="bx bx-save"></i>
                                                     Guardar
                                                 </button>
                                             </div>
@@ -493,8 +504,9 @@
                                                         style="vertical-align: text-bottom;"
                                                         class="bx bx-left-arrow-alt"></i> Volver</button>
                                                 <button (click)="GuardarProductoCompleto()" type="button"
-                                                    class="btn btn-success" id="btn-save" value="create-product"><i
-                                                        style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                    [disabled]="buttonDisabled" class="btn btn-success"
+                                                    value="create-product"><i style="vertical-align: text-bottom;"
+                                                        class="bx bx-save"></i>
                                                     Guardar
                                                 </button>
                                             </div>

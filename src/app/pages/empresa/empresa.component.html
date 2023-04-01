@@ -324,21 +324,31 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <h4 class="card-title">Icono Empresa <strong>(32x32)</strong></h4>
-                                                <input type="file" id="input-file-now" class="dropify"
+                                                <input #icono_empresa type="file" id="icono_empresa" class="dropify"
                                                     accept="image/png,image/jpeg" />
                                             </div>
                                             <div class="col-md-6">
                                                 <h4 class="card-title">Logo Empresa Horizontal
                                                     <strong>(250x150)</strong>
                                                 </h4>
-                                                <input type="file" id="input-file-now" class="dropify"
+                                                <input #logo_empresa_horizonta type="file" id="logo_empresa_horizonta" class="dropify"
                                                     accept="image/png,image/jpeg" />
                                             </div>
                                             <div class="col-md-12">
-                                                <h4 class="card-title">Logo Empresa Vertical <strong>(160x160)</strong>
-                                                </h4>
-                                                <input type="file" id="input-file-now" class="dropify"
+                                                <h4 class="card-title">Logo Empresa Vertical <strong>(160x160)</strong></h4>
+                                                <input  #logo_empresa_vertical type="file" id="logo_empresa_vertical" class="dropify"
                                                     accept="image/png,image/jpeg" />
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-sm-12 col-md-12 text-right">
+                                                <button (click)="GuardarInformacionCompleto()" type="button"
+                                                    class="btn btn-success" id="btn-save"
+                                                    value="create-product"><i
+                                                        style="vertical-align: text-bottom;"
+                                                        class="bx bx-save"></i>
+                                                    Guardar
+                                                </button>
                                             </div>
                                         </div>
                                     </div>

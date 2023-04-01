@@ -19,6 +19,7 @@ declare var Swal: any;
 })
 export class EditarProductoComponent implements OnInit, OnDestroy {
   token: any;
+  buttonDisabled: boolean = false;
   tipo_inventario?: any = [];
   imagenes_producto?: any = [];
   producto_relacionado: any = '';
@@ -74,8 +75,8 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
 
   }
   ngOnInit(): void {
-    this.descripcion_corta=$('.descripcion_extendida').wysihtml5().data('wysihtml5').editor;
-    this.descripcion_extendida=$('.descripcion_corta').wysihtml5().data('wysihtml5').editor;
+    this.descripcion_corta = $('.descripcion_extendida').wysihtml5().data('wysihtml5').editor;
+    this.descripcion_extendida = $('.descripcion_corta').wysihtml5().data('wysihtml5').editor;
     this.route.params.subscribe((parametro) => {
       // let producto_oferta: any = null;
       // this.route.queryParamMap.subscribe((params) => {
@@ -614,12 +615,12 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
       }
       this.producto_relacionado = '';
 
-    }),takeUntil(this.Unsuscribe)).subscribe(
+    }), takeUntil(this.Unsuscribe)).subscribe(
       {
         next: resp => {
-       
+
           this.listarProductoRelacionados.push(resp)
-     
+
         },
         error: error => {
           console.log(error);
@@ -698,21 +699,19 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
       return;
     }
 
-    //CATEGORIAS SELECCIONADOS
+    //CATEGORIAS SELECCIONADOS----------------------------
     let valorescategoria: any = [];
     $("input[name=categoria_padre]:checked").each(function (index: any, check: any) {
       valorescategoria.push(check.value);
     });
-    //
+    //---------------------------------------------------
 
-    //VERIFICAMOS SI TIENES ATRIBUTO SELECCIONADO
+    //VERIFICAMOS SI TIENES ATRIBUTO SELECCIONADO------------
     if (this.checked_atributo.length > 0) {
       let cantidad = 0;
       this.checked_atributo.forEach((element: any) => {
         cantidad += element.cantidad;
       });
-      console.log(cantidad);
-      console.log(this.PrecioStockForm.value.stock);
       if (cantidad > this.PrecioStockForm.value.stock) {
         Swal.fire({
           toast: true,
@@ -726,8 +725,8 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
         return;
       }
     };
-   
-   
+
+    this.buttonDisabled = true;
     this.informacionForm.get('descripcion_corta')!.setValue(this.descripcion_corta.getValue());
     this.informacionForm.get('descripcion_extendida')!.setValue(this.descripcion_extendida.getValue());
     this.producto_serv.GuardarProductoActualizar(this.token, valorescategoria, this.informacionForm.value, this.PrecioStockForm.value, this.imagenes_producto, coloresHexadecimal, especificaciones, this.listarProductoRelacionados, this.checked_atributo).
@@ -754,6 +753,8 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
             timerProgressBar: true,
             timer: 5000
           })
+          this.buttonDisabled = true;
+
         }
       })
   }
@@ -775,7 +776,7 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
     let codigo = event.target.value;
     clearTimeout(this.contador_texto); // <--- The solution is here
     this.contador_texto = setTimeout(() => {
-      this.producto_serv.VerificarSku(this.token, codigo,this.informacionForm.value.id_producto).subscribe(res => {
+      this.producto_serv.VerificarSku(this.token, codigo, this.informacionForm.value.id_producto).subscribe(res => {
         event.target.classList.add('is-valid');
         event.target.classList.remove('is-invalid');
         this.verificador_sku = false;

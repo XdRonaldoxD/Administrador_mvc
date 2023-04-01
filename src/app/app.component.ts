@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
+import { LoginService } from './services/login.service';
+import { Subject, takeUntil } from 'rxjs';
 
 
 declare var $: any;
@@ -13,10 +15,27 @@ export class AppComponent implements OnInit {
   screen: any;
   value: any;
   href: any;
+  Unsuscribe: any = new Subject();
 
-  constructor() { }
+  constructor(
+    private elementRef: ElementRef,
+    private Login: LoginService,
+  ) { }
 
   ngOnInit(): void {
+    this.Login.TraerIconoEmpresa().pipe(takeUntil(this.Unsuscribe)).subscribe({
+      next: resp => {
+        //INICIALIZAMOS EL ICONO
+        const linkElement: any = document.querySelector('link[rel="icon"]');
+        linkElement.setAttribute('href', resp);
+        //-----------------------------
+      }, error: error => {
+
+      }
+    })
+
+
+
     $(() => {
       "use strict";
       $(function () {

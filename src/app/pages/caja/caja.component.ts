@@ -117,10 +117,19 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   CrearNuevaCaja() {
-    $("#nuevaCajaModal").modal("show");
+    this.servicio_caja.VerificarCajaAbierta(this.usuario.sub).pipe(takeUntil(this.Unsuscribe)).subscribe({
+      next: resp => {
+        $("#nuevaCajaModal").modal("show");
+      }, error: error => {
+        this.toast.error(`Debe cerrar su caja abierta`, undefined, {
+          timeOut: 3000,
+        });
+      }
+    })
+ 
   }
   GuardarCaja() {
-    this.servicio_caja.GuardarCaja(this.token, this.CajaNueva.value).pipe(takeUntil(this.Unsuscribe)).subscribe({
+    this.servicio_caja.GuardarCaja(this.CajaNueva.value).pipe(takeUntil(this.Unsuscribe)).subscribe({
       next: resp => {
         Swal.fire({
           toast: true,
@@ -214,7 +223,7 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
 
   TraerDetalleCaja(id_caja: any) {
     this.id_caja = id_caja;
-    this.servicio_caja.TraerDetalleCaja(this.token, id_caja).pipe(takeUntil(this.Unsuscribe)).subscribe({
+    this.servicio_caja.TraerDetalleCaja(id_caja).pipe(takeUntil(this.Unsuscribe)).subscribe({
       next: resp => {
         this.lista_resumen_caja = true;
         this.detalle_resumen_caja = false;
@@ -226,7 +235,7 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   MostrarDocumento(item: any) {
-    this.servicio_caja.MostrarDocumentos(this.token, this.id_caja, item.documento, item.id_medio_pago).pipe(takeUntil(this.Unsuscribe)).subscribe({
+    this.servicio_caja.MostrarDocumentos(this.id_caja, item.documento, item.id_medio_pago).pipe(takeUntil(this.Unsuscribe)).subscribe({
       next: resp => {
         this.mostrar_documento = resp;
       }, error: error => {
@@ -385,7 +394,7 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
     } else {
       caja = this.id_caja;
     }
-    this.servicio_caja.CerrarCaja(this.token, caja).pipe(takeUntil(this.Unsuscribe)).subscribe({
+    this.servicio_caja.CerrarCaja(caja).pipe(takeUntil(this.Unsuscribe)).subscribe({
       next: resp => {
         Swal.fire({
           toast: true,
@@ -435,7 +444,7 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
       formato: formato,
       Correo_pdf: this.Correo_pdf,
       Correo_ticket: this.Correo_ticket,
-      id_caja:this.id_caja
+      id_caja: this.id_caja
     }
     Swal.fire({
       title: 'Espere',
@@ -445,7 +454,7 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
       showConfirmButton: false,
       onOpen: () => {
         Swal.showLoading();
-        this.servicio_caja.EnviarCorreoElectronico(this.token, datos).pipe(takeUntil(this.Unsuscribe)).subscribe({
+        this.servicio_caja.EnviarCorreoElectronico(datos).pipe(takeUntil(this.Unsuscribe)).subscribe({
           next: resp => {
             this.toast.success(`Enviando correctamente `, 'Email', {
               timeOut: 2000,

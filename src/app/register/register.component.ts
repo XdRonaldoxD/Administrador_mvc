@@ -23,7 +23,7 @@ export class RegisterComponent implements OnInit {
       apellido_materno: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
-    },);
+    });
   }
 
   RegistrarSession(){

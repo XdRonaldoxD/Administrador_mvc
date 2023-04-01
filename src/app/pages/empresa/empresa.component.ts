@@ -8,6 +8,7 @@ import { NotaVenta } from 'src/app/services/notaventa.service';
 import { LoginService } from 'src/app/services/login.service';
 
 import Swal from 'sweetalert2';
+import { HelpersService } from 'src/app/services/helpers.service';
 
 
 declare var $: any;
@@ -18,6 +19,11 @@ declare var $: any;
 })
 export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('ruc_empresa') ruc_empresa?: ElementRef;
+  @ViewChild("icono_empresa") icono_empresa?: ElementRef;
+  @ViewChild("logo_empresa_horizonta") logo_empresa_horizonta?: ElementRef;
+  @ViewChild("logo_empresa_vertical") logo_empresa_vertical?: ElementRef;
+
+
   token: any;
   fechaActual:any = new Date();
 
@@ -41,7 +47,8 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
     private fb: FormBuilder,
     private nota_venta: NotaVenta,
     private empresa: EmpresaService,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private Helper:HelpersService
   ) {
     let mes=this.fechaActual.getMonth()+1;
     if (mes<10) {
@@ -87,7 +94,14 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
       pixelgoogle_empresa: [''],
       pixelfacebook_empresa: ['']
     });
-
+    $('.dropify').dropify({
+      messages: {
+        default: 'Arrastre y suelte un archivo aquí o haga clic en',
+        replace: 'Arrastre y suelte un archivo o haga clic para reemplazar',
+        remove: 'Eliminar',
+        error: 'Lo siento, el archivo es demasiado grande.'
+      }
+    });
   }
 
   TraerCertificadoEmpresa(){
@@ -109,8 +123,8 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.initializeSummernoteEditor('pixelgoogle_empresa');
-    this.initializeSummernoteEditor('pixelfacebook_empresa');
+    this.Helper.initializeSummernoteEditor('pixelgoogle_empresa');
+    this.Helper.initializeSummernoteEditor('pixelfacebook_empresa');
     $('.pixelgoogle_empresa').summernote('code', '');
     $('.pixelfacebook_empresa').summernote('code', '');
 
@@ -144,6 +158,9 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
           });
           $('.pixelgoogle_empresa').summernote('code', resp.pixelgoogle_empresa_venta_online);
           $('.pixelfacebook_empresa').summernote('code', resp.pixelfacebook_empresa_venta_online);
+          this.Helper.resetPreview('icono_empresa',resp.urlicono_empresa_venta_online,resp.public_idicono_empresa_venta_online);
+          this.Helper.resetPreview('logo_empresa_horizonta', resp.urllogohorizontal_empresa_venta_online,resp.public_idlogohorizontal_empresa_venta_online);
+          this.Helper.resetPreview('logo_empresa_vertical',resp.urllogovertical_empresa_venta_online ,resp.public_idlogovertical_empresa_venta_online);
         }
 
       },
@@ -153,36 +170,10 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
     })
     //  // Llenar los datos del formulario
 
-    $('.dropify').dropify({
-      messages: {
-        default: 'Arrastre y suelte un archivo aquí o haga clic en',
-        replace: 'Arrastre y suelte un archivo o haga clic para reemplazar',
-        remove: 'Eliminar',
-        error: 'Lo siento, el archivo es demasiado grande.'
-      }
-    });
+
   }
 
-  initializeSummernoteEditor(id: any): void {
-    $(`.${id}`).summernote({
-      toolbar: [
-        ['style', ['style']],
-        ['font', ['bold', 'italic', 'underline', 'clear']],
-        ['fontname', ['fontname']],
-        ['color', ['color']],
-        ['para', ['ul', 'ol', 'paragraph']],
-        ['codeview', ['codeview']],
-        ['fullscreen', ['fullscreen']]
-      ],
-      height: 150,
-      lang: "es-ES",
-      callbacks: {
-        onInit: function () {
-          $(`#${id} div.note-editor button.btn-codeview`).click();
-        }
-      }
-    });
-  }
+
 
   TraerDepartamento() {
     this.nota_venta.TraerDepartamento().pipe(takeUntil(this.unsubscribe$)).subscribe({
@@ -233,7 +224,25 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    this.empresa.EnviarInformacionEmpresa(this.informacionForm.value, this.archivo_certificado).pipe(takeUntil(this.unsubscribe$)).subscribe({
+    let icono_empresa = null;
+    let logo_empresa_horizonta = null;
+    let logo_empresa_vertical = null;
+    if (this.icono_empresa?.nativeElement.files.length>0) {
+      icono_empresa=this.icono_empresa?.nativeElement.files[0];
+    }
+    if (this.logo_empresa_horizonta?.nativeElement.files.length>0) {
+      logo_empresa_horizonta=this.logo_empresa_horizonta?.nativeElement.files[0];
+    }
+    if (this.logo_empresa_vertical?.nativeElement.files.length>0) {
+      logo_empresa_vertical=this.logo_empresa_vertical?.nativeElement.files[0];
+    }
+    let imagenes={
+      icono_empresa:icono_empresa,
+      logo_empresa_horizonta:logo_empresa_horizonta,
+      logo_empresa_vertical:logo_empresa_vertical
+    }
+
+    this.empresa.EnviarInformacionEmpresa(this.informacionForm.value, this.archivo_certificado,imagenes).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: resp => {
         this.informacionForm.get('id_empresa_venta_online')?.setValue(resp);
         if (!this.usuario.id_empresa) {

@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { finalize, Subject, takeUntil } from 'rxjs';
 import { DataTablesResponse } from 'src/app/interface/Datatable';
 import { CategoriaService } from 'src/app/services/categoria.service';
+import { HelpersService } from 'src/app/services/helpers.service';
 import { LoginService } from 'src/app/services/login.service';
 import { MarcaService } from 'src/app/services/marca.service';
 import { SliderService } from 'src/app/services/slider.service';
@@ -38,7 +39,8 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
     private slider: SliderService,
     private fb: FormBuilder,
     private servicio_login: LoginService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private Helper:HelpersService
 
   ) {
     this.sliderForm = this.fb.group({
@@ -64,43 +66,7 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
     this.SliderHabilitados();
     this.SliderDeshabilitados();
     $(".select2").select2();
-    $("#id_categoria").select2({
-      dropdownParent: $("#exampleModalCenter"),
-      width: "100%",
-      ajax: {
-        url: environment.api_url + "?controller=Categoria&action=FiltrarCategoria", //URL for searching companies
-        dataType: "json",
-        headers: { 'Authorization': this.token },
-        delay: 200,
-        data: function (params: any) {
-          return {
-            search: params.term, //params send to companies controller
-          };
-        },
-        processResults: function (data: any) {
-          return {
-            results: $.map(data, function (item: any) {
-              return {
-                text: item.glosa_categoria,
-                id: item.id_categoria
-              }
-            })
-          };
-        },
-        cache: true
-      },
-      language: {
-        searching: function () {
-          return "Buscando...";
-        },
-        inputTooShort: function (args: any) {
-          return "Por favor ingrese 3 o más caracteres";
-        }
-      },
-      placeholder: "Busque una categoria",
-      minimumInputLength: 3
-    });
-
+ 
 
 
   }
@@ -184,6 +150,43 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
     this.sliderForm.get('accion')!.setValue('CREAR');
     $("#t-crear-categoria").html('');
     this.texto_cabezera = 'Nuevo slider';
+    $("#id_categoria").select2({
+      dropdownParent: $("#exampleModalCenter"),
+      width: "100%",
+      ajax: {
+        url: environment.api_url + "?controller=Categoria&action=FiltrarCategoria", //URL for searching companies
+        dataType: "json",
+        headers: { 'Authorization': this.token },
+        delay: 200,
+        data: function (params: any) {
+          return {
+            search: params.term, //params send to companies controller
+          };
+        },
+        processResults: function (data: any) {
+          return {
+            results: $.map(data, function (item: any) {
+              return {
+                text: item.glosa_categoria,
+                id: item.id_categoria
+              }
+            })
+          };
+        },
+        cache: true
+      },
+      language: {
+        searching: function () {
+          return "Buscando...";
+        },
+        inputTooShort: function (args: any) {
+          return "Por favor ingrese 3 o más caracteres";
+        }
+      },
+      placeholder: "Busque una categoria",
+      minimumInputLength: 3
+    });
+
     $('#exampleModalCenter').modal('show');
 
   }
@@ -287,31 +290,58 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
 
   }
   EditarSlider(item: any) {
+    //MOTIVO CUANDO HABRO UN MODAL DESDE OTRO MODULO SE QUEDA PEGADO Y PARA INICIALIZARLO ME TOMA DE ESTA MANERA
+    $("#id_categoria").select2({
+      dropdownParent: $("#exampleModalCenter"),
+      width: "100%",
+      ajax: {
+        url: environment.api_url + "?controller=Categoria&action=FiltrarCategoria", //URL for searching companies
+        dataType: "json",
+        headers: { 'Authorization': this.token },
+        delay: 200,
+        data: function (params: any) {
+          return {
+            search: params.term, //params send to companies controller
+          };
+        },
+        processResults: function (data: any) {
+          return {
+            results: $.map(data, function (item: any) {
+              return {
+                text: item.glosa_categoria,
+                id: item.id_categoria
+              }
+            })
+          };
+        },
+        cache: true
+      },
+      language: {
+        searching: function () {
+          return "Buscando...";
+        },
+        inputTooShort: function (args: any) {
+          return "Por favor ingrese 3 o más caracteres";
+        }
+      },
+      placeholder: "Busque una categoria",
+      minimumInputLength: 3
+    });
+    //---------------------------------------------------------
+
+
     this.sliderForm.get('id_slider')!.setValue(item.id_slider);
     this.sliderForm.get('accion')!.setValue('ACTUALIZAR');
     this.sliderForm.get('id_categoria')!.setValue(item.id_categoria);
     this.sliderForm.get('titulo_slider')!.setValue(item.nombre_slider);
-    this.resetPreview('file_escritorio', environment.api_url + '/archivo/imagen_slider/' + item.pathescritorio_slider, item.pathescritorio_slider);
-    this.resetPreview('file_mobile', environment.api_url + '/archivo/imagen_slider/' + item.pathmobile_slider, item.pathmobile_slider);
+    this.Helper.resetPreview('file_escritorio', environment.api_url + '/archivo/imagen_slider/' + item.pathescritorio_slider, item.pathescritorio_slider);
+    this.Helper.resetPreview('file_mobile', environment.api_url + '/archivo/imagen_slider/' + item.pathmobile_slider, item.pathmobile_slider);
     let html = `<option value=${item.id_categoria}>${item.glosa_categoria}</option>`;
     $("#id_categoria").html(html);
     this.texto_cabezera = 'Editar Slider';
     $('#exampleModalCenter').modal('show');
   }
 
-  resetPreview(name: string, src: string, fname = '') {
-    let input = $('#' + name);
-    let wrapper = input.closest('.dropify-wrapper');
-    let preview = wrapper.find('.dropify-preview');
-    let filename = wrapper.find('.dropify-filename-inner');
-    let render = wrapper.find('.dropify-render').html('');
-
-    input.val('').attr('title', fname);
-    wrapper.removeClass('has-error').addClass('has-preview');
-    filename.html(fname);
-
-    render.append($('<img />').attr('src', src).css('max-height', input.data('height') || ''));
-    preview.fadeIn();
-  }
+  
 
 }

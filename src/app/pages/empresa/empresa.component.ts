@@ -10,7 +10,7 @@ import { LoginService } from 'src/app/services/login.service';
 import Swal from 'sweetalert2';
 import { HelpersService } from 'src/app/services/helpers.service';
 
-
+declare const window: Window;
 declare var $: any;
 @Component({
   selector: 'app-empresa',
@@ -25,7 +25,7 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   token: any;
-  fechaActual:any = new Date();
+  fechaActual: any = new Date();
 
   glosa_global_producto: any;
   path_global_producto: any;
@@ -48,25 +48,25 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
     private nota_venta: NotaVenta,
     private empresa: EmpresaService,
     private toast: ToastrService,
-    private Helper:HelpersService
+    private Helper: HelpersService
   ) {
-    let mes=this.fechaActual.getMonth()+1;
-    if (mes<10) {
-      mes=`0${mes}`;
+    let mes = this.fechaActual.getMonth() + 1;
+    if (mes < 10) {
+      mes = `0${mes}`;
     }
-    let dia=this.fechaActual.getDate();
-    if (dia<10) {
-      dia=`0${dia}`;
-    }
-
-    let segundo=this.fechaActual.getSeconds();
-    if (segundo<10) {
-      segundo=`0${segundo}`;
+    let dia = this.fechaActual.getDate();
+    if (dia < 10) {
+      dia = `0${dia}`;
     }
 
-    this.fechaActual= this.fechaActual.getFullYear()+'-'+mes+'-'+dia+' '+this.fechaActual.getHours()+':'+this.fechaActual.getMinutes()+':'+segundo;
+    let segundo = this.fechaActual.getSeconds();
+    if (segundo < 10) {
+      segundo = `0${segundo}`;
+    }
 
-   }
+    this.fechaActual = this.fechaActual.getFullYear() + '-' + mes + '-' + dia + ' ' + this.fechaActual.getHours() + ':' + this.fechaActual.getMinutes() + ':' + segundo;
+
+  }
 
   ngOnDestroy(): void {
     this.unsubscribe$.unsubscribe();
@@ -82,17 +82,20 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
       nombre_empresa: [''],
       telefono_empresa: [''],
       celular_empresa: [''],
-      email_empresa_venta_online:['',[Validators.required]],
-      giro_empresa_venta_online:['',[Validators.required]],
+      email_empresa_venta_online: ['', [Validators.required]],
+      giro_empresa_venta_online: ['', [Validators.required]],
       direccion_empresa: ['', [Validators.required]],
-      departamento: ['',[Validators.required]],
-      distrito: ['',[Validators.required]],
-      provincia: ['',[Validators.required]],
+      departamento: ['', [Validators.required]],
+      distrito: ['', [Validators.required]],
+      provincia: ['', [Validators.required]],
       usuario_sol: [''],
       clave_sol: [''],
       clave_archivo: [''],
       pixelgoogle_empresa: [''],
-      pixelfacebook_empresa: ['']
+      pixelfacebook_empresa: [''],
+      dominio: [window.location.hostname],
+      serie_factura: [''],
+      serie_boleta: [''],
     });
     $('.dropify').dropify({
       messages: {
@@ -104,21 +107,28 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  TraerCertificadoEmpresa(){
+  SerieFactura(event:any):any {
+    console.log(event.target.value);
+    let texto=event.target.value;
+    
+     "F"+event.target.value;
+  }
+
+  TraerCertificadoEmpresa() {
     this.empresa.TraerCertificadoEmpresa(this.informacionForm.value.id_empresa_venta_online).pipe(takeUntil(this.unsubscribe$)).subscribe({
-      next:resp=>{
-        this.listacertificados=resp;
+      next: resp => {
+        this.listacertificados = resp;
       },
-      error:error=>{
+      error: error => {
 
       }
     })
-    
-  }
-  DescargarCertificado(id_certificado_digital:number) : void{
 
   }
-  eliminarCertificado(id_certificado_digital:number) : void{
+  DescargarCertificado(id_certificado_digital: number): void {
+
+  }
+  eliminarCertificado(id_certificado_digital: number): void {
 
   }
 
@@ -152,15 +162,15 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
             clave_archivo: resp.clavearchivo_venta_online,
             pixelgoogle_empresa: resp.pixelgoogle_empresa_venta_online,
             pixelfacebook_empresa: resp.pixelfacebook_empresa_venta_online,
-            nombre_empresa:resp.nombre_empresa_venta_online,
-            email_empresa_venta_online:resp.email_empresa_venta_online,
-            giro_empresa_venta_online:resp.giro_empresa_venta_online
+            nombre_empresa: resp.nombre_empresa_venta_online,
+            email_empresa_venta_online: resp.email_empresa_venta_online,
+            giro_empresa_venta_online: resp.giro_empresa_venta_online
           });
           $('.pixelgoogle_empresa').summernote('code', resp.pixelgoogle_empresa_venta_online);
           $('.pixelfacebook_empresa').summernote('code', resp.pixelfacebook_empresa_venta_online);
-          this.Helper.resetPreview('icono_empresa',resp.urlicono_empresa_venta_online,resp.public_idicono_empresa_venta_online);
-          this.Helper.resetPreview('logo_empresa_horizonta', resp.urllogohorizontal_empresa_venta_online,resp.public_idlogohorizontal_empresa_venta_online);
-          this.Helper.resetPreview('logo_empresa_vertical',resp.urllogovertical_empresa_venta_online ,resp.public_idlogovertical_empresa_venta_online);
+          this.Helper.resetPreview('icono_empresa', resp.urlicono_empresa_venta_online, resp.public_idicono_empresa_venta_online);
+          this.Helper.resetPreview('logo_empresa_horizonta', resp.urllogohorizontal_empresa_venta_online, resp.public_idlogohorizontal_empresa_venta_online);
+          this.Helper.resetPreview('logo_empresa_vertical', resp.urllogovertical_empresa_venta_online, resp.public_idlogovertical_empresa_venta_online);
         }
 
       },
@@ -227,22 +237,22 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
     let icono_empresa = null;
     let logo_empresa_horizonta = null;
     let logo_empresa_vertical = null;
-    if (this.icono_empresa?.nativeElement.files.length>0) {
-      icono_empresa=this.icono_empresa?.nativeElement.files[0];
+    if (this.icono_empresa?.nativeElement.files.length > 0) {
+      icono_empresa = this.icono_empresa?.nativeElement.files[0];
     }
-    if (this.logo_empresa_horizonta?.nativeElement.files.length>0) {
-      logo_empresa_horizonta=this.logo_empresa_horizonta?.nativeElement.files[0];
+    if (this.logo_empresa_horizonta?.nativeElement.files.length > 0) {
+      logo_empresa_horizonta = this.logo_empresa_horizonta?.nativeElement.files[0];
     }
-    if (this.logo_empresa_vertical?.nativeElement.files.length>0) {
-      logo_empresa_vertical=this.logo_empresa_vertical?.nativeElement.files[0];
+    if (this.logo_empresa_vertical?.nativeElement.files.length > 0) {
+      logo_empresa_vertical = this.logo_empresa_vertical?.nativeElement.files[0];
     }
-    let imagenes={
-      icono_empresa:icono_empresa,
-      logo_empresa_horizonta:logo_empresa_horizonta,
-      logo_empresa_vertical:logo_empresa_vertical
+    let imagenes = {
+      icono_empresa: icono_empresa,
+      logo_empresa_horizonta: logo_empresa_horizonta,
+      logo_empresa_vertical: logo_empresa_vertical
     }
 
-    this.empresa.EnviarInformacionEmpresa(this.informacionForm.value, this.archivo_certificado,imagenes).pipe(takeUntil(this.unsubscribe$)).subscribe({
+    this.empresa.EnviarInformacionEmpresa(this.informacionForm.value, this.archivo_certificado, imagenes).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: resp => {
         this.informacionForm.get('id_empresa_venta_online')?.setValue(resp);
         if (!this.usuario.id_empresa) {

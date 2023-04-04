@@ -244,16 +244,15 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="videoUrl1">Serie Factura </label>
-                                                            <input type="text" class="form-control" (keyup)="SerieFactura($event)"
+                                                            <input type="text" class="form-control" [maxlength]="4" (keyup)="FormarSerie($event,'FACTURA')"
                                                                 formControlName="serie_factura" placeholder="ingrese la serie">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="videoUrl1">Serie Boleta</label>
-                                                            <input type="text" class="form-control"
-                                                                formControlName="serie_boleta"
-                                                                placeholder="ingrese la serie">
+                                                            <input type="text" class="form-control" [maxlength]="4" (keyup)="FormarSerie($event,'BOLETA')"
+                                                                formControlName="serie_boleta"  placeholder="ingrese la serie">
                                                         </div>
                                                     </div>
                                                 </div>

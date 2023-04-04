@@ -20,7 +20,6 @@ export class AtributoComponent implements OnInit {
   dtOptions: DataTables.Settings[] = [];
   reload_producto: any = new Subject();
   reload_producto_deshabilitado: any = new Subject();
-  //Identificacion del usuario
   identity: any;
   token: any;
   listarProducto: any = [];

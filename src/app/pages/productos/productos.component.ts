@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DataTableDirective } from 'angular-datatables';
 import { finalize, Subject } from 'rxjs';
 import { LoginService } from '../../services/login.service';
 import { CategoriaService } from '../../services/categoria.service';

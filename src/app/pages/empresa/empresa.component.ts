@@ -107,11 +107,31 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  SerieFactura(event:any):any {
-    console.log(event.target.value);
-    let texto=event.target.value;
-    
-     "F"+event.target.value;
+  FormarSerie(event: any, tipo: string): any {
+    const inputValue: string = event.target.value;
+    // Limitar la cantidad de palabras a 4
+    const words: string[] = inputValue.trim().split(/\s+/);
+    const limitedWords: string[] = words.slice(0, 4);
+    if (tipo === "FACTURA") {
+      // Asegurarse de que la primera letra sea 'F'
+      const firstWord: string = limitedWords[0].toUpperCase();
+      const firstLetter: string = firstWord.charAt(0);
+      const isF: boolean = firstLetter === 'F';
+
+      // Actualizar el valor del control de formulario
+      const updatedValue: string = isF ? limitedWords.join(' ') : 'F';
+      this.informacionForm.controls['serie_factura'].setValue(updatedValue);
+    }
+    if (tipo === "BOLETA") {
+      // Asegurarse de que la primera letra sea 'F'
+      const firstWord: string = limitedWords[0].toUpperCase();
+      const firstLetter: string = firstWord.charAt(0);
+      const isF: boolean = firstLetter === 'B';
+
+      // Actualizar el valor del control de formulario
+      const updatedValue: string = isF ? limitedWords.join(' ') : 'B';
+      this.informacionForm.controls['serie_boleta'].setValue(updatedValue);
+    }
   }
 
   TraerCertificadoEmpresa() {

@@ -1,6 +1,4 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { finalize } from 'rxjs';
 import { LoginService } from '../../services/login.service';
 
 declare var $: any;
@@ -15,8 +13,7 @@ export class SidebarComponent implements OnInit {
   @ViewChild("EventoClick") EventoClick: ElementRef | undefined;
   identificacion?: any = []
   constructor(
-    private servicio_login: LoginService,
-    private router: Router
+    private servicio_login: LoginService
 
   ) {
     this.identificacion = this.servicio_login.getIdentity();

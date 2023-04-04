@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
-
 declare var $: any;
 declare var jQuery: any;
-
-
 @Component({
   selector: 'app-pages',
   templateUrl: './pages.component.html',
@@ -14,7 +10,6 @@ export class PagesComponent implements OnInit {
   screen: any;
   value: any;
   href: any;
-
   constructor() { }
 
   ngOnInit(): void {

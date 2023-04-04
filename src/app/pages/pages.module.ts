@@ -33,6 +33,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SliderComponent } from './TiendaOnline/slider/slider.component';
 import { EmpresaComponent } from './empresa/empresa.component';
 import { BannerComponent } from './TiendaOnline/banner/banner.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { BannerComponent } from './TiendaOnline/banner/banner.component';
     NgSelectModule,
     TooltipModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     ToastrModule.forRoot()  
   ],
   schemas: [NO_ERRORS_SCHEMA]

@@ -5,11 +5,7 @@ h3{
     color: white;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+
   
   body,
   input {
@@ -141,7 +137,7 @@ h3{
     border-color: #b33200;
   }
   
-  .btn {
+  .btn-login {
     width: 150px;
     background-color: #ff5e00;
     border: none;
@@ -156,7 +152,7 @@ h3{
     transition: 0.5s;
   }
   
-  .btn:hover {
+  .btn-login:hover {
     background-color: #b33200;
   }
   .panels-container {

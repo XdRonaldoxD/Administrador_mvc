@@ -34,6 +34,7 @@ import { SliderComponent } from './TiendaOnline/slider/slider.component';
 import { EmpresaComponent } from './empresa/empresa.component';
 import { BannerComponent } from './TiendaOnline/banner/banner.component';
 import { HttpClientModule } from '@angular/common/http';
+import { DatosPersonalesComponent } from './datos-personales/datos-personales.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,7 @@ import { HttpClientModule } from '@angular/common/http';
     ChatBoxComponent,
     NotaVentaComponent,//Nota DECLARAR pages para que funciona route-oulet
     CajaComponent, 
-    VentasComponent, SliderComponent, EmpresaComponent, BannerComponent 
+    VentasComponent, SliderComponent, EmpresaComponent, BannerComponent, DatosPersonalesComponent 
   ],
   exports: [
     IsInvalidPipe,

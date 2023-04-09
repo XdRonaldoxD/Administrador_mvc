@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { finalize, takeUntil, Subject } from 'rxjs';
 import { LoginService } from '../../services/login.service';
@@ -14,6 +14,7 @@ declare var Pusher: any;
 })
 export class HeaderComponent implements OnInit ,OnDestroy {
   @ViewChild('agregar_mensaje') agregar_mensaje?: ElementRef;
+  @Input('empresa') empresa:any;
   identificacion?: any = []
   construirMensaje: string = '';
   notficarChat: string = '';

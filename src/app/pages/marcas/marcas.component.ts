@@ -34,8 +34,9 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
   listarProductoDeshabilitado: any = [];
   marcarForm!: FormGroup;
   texto_cabezera: any;
+  BotonGuardarMarca: boolean = false;
   Unsuscribe: any = new Subject();
-
+  CantidadGuardar: number = 0;
   constructor(private http: HttpClient,
     private servicio_marca: MarcaService,
     private fb: FormBuilder,
@@ -64,7 +65,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
   //SOLO LLAMAR LA FUNCION => this.reload_producto.next();
   ngOnDestroy(): void {
     // Do not forget to unsubscribe the  (Datatable)
-    
+
     this.reload_producto.unsubscribe();
     this.Unsuscribe.unsubscribe();
     this.reload_producto_deshabilitado.unsubscribe();
@@ -94,7 +95,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          environment.api_url+"?controller=Marca&action=ListarMarca",
+          environment.api_url + "?controller=Marca&action=ListarMarca",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProducto = resp.data;
@@ -135,7 +136,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          environment.api_url+"?controller=Marca&action=ListarMarcaDesactivados",
+          environment.api_url + "?controller=Marca&action=ListarMarcaDesactivados",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProductoDeshabilitado = resp.data;
@@ -166,40 +167,43 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   GuardarActualizarCategoria() {
+    this.CantidadGuardar++;
     this.marcarForm.markAllAsTouched()
     if (this.marcarForm.invalid) {
       return;
     }
+
     var checked: any = [];
     //Recorremos todos los input checkbox con name = Colores y que se encuentren "checked"
     $("input[name='categoria_padre']:checked").each((i: any, elemento: any) => {
       //Mediante la función push agregamos al arreglo los values de los checkbox
       checked.push(($(elemento).attr("value")));
     });
-    // Utilizamos console.log para ver comprobar que en realidad contiene algo el arreglo
-    this.servicio_marca.GestionarMarca(this.token, this.marcarForm.value).pipe(
-      takeUntil(this.Unsuscribe)
-      ,finalize(() => {
-      this.reload_producto.next();
-      $('#exampleModalCenter').modal('hide');
-    })).subscribe({
-      next: (res) => {
-        this.toastr.success(`Marca ${res} con exito`,undefined ,{
-          timeOut: 3000,
-          positionClass: 'toast-top-right',
-      });
-    
+    if (this.CantidadGuardar === 1) {
+      this.servicio_marca.GestionarMarca(this.token, this.marcarForm.value).pipe(
+        takeUntil(this.Unsuscribe)
+        , finalize(() => {
+          this.CantidadGuardar=0;
+          this.reload_producto.next();
+          $('#exampleModalCenter').modal('hide');
+        })).subscribe({
+          next: (res) => {
+            this.toastr.success(`Marca ${res} con exito`, undefined, {
+              timeOut: 3000,
+              positionClass: 'toast-top-right',
+            });
+          },
+          error: (error) => {
 
-      },
-      error: (error) => {
+          }
+        })
+    }
 
-      }
-    })
   }
 
-  EstadoMarca(estado:any,id_marca:any){
-    this.servicio_marca.Habilitar_Deshabilitar_Marca(this.token,id_marca,estado).pipe(takeUntil(this.Unsuscribe)).subscribe({
-      next:resp=>{
+  EstadoMarca(estado: any, id_marca: any) {
+    this.servicio_marca.Habilitar_Deshabilitar_Marca(this.token, id_marca, estado).pipe(takeUntil(this.Unsuscribe)).subscribe({
+      next: resp => {
         Swal.fire({
           toast: true,
           position: 'top',
@@ -209,7 +213,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
           timerProgressBar: true,
           timer: 5000
         })
-      },error:error=>{
+      }, error: error => {
         Swal.fire({
           toast: true,
           position: 'top',
@@ -222,7 +226,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
       }
     });
   }
-  EditarMarca(item:any){
+  EditarMarca(item: any) {
     this.marcarForm.get('accion')!.setValue('ACTUALIZAR');
     this.marcarForm.get('id_marca')!.setValue(item.id_marca);
     this.marcarForm.get('glosa_marca')!.setValue(item.glosa_marca);

@@ -5,9 +5,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { APP_ROUTES } from './app.routes';
 import { LoginComponent } from './login/login.component';
-import { IsInvalidPipe } from './pages/pipes/is-invalid.pipe';
-import { CommonModule } from '@angular/common';
-import { HasErrorPipe } from './pages/pipes/has-error.pipe';
 import { HttpClientModule } from '@angular/common/http';
 import { PagesModule } from './pages/pages.module';
 import { HeaderComponent } from './pages/header/header.component';
@@ -32,7 +29,6 @@ import { RegisterComponent } from './register/register.component';
     HttpClientModule,
     BrowserModule,
     FormsModule,
-    // CommonModule,
     APP_ROUTES,
     ReactiveFormsModule
     

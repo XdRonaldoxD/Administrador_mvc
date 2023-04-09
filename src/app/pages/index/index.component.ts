@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-index',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class IndexComponent implements OnInit {
 
-  constructor() { }
+  identificacion: any ;
+  constructor(
+    private servicio_login: LoginService,
+  ) { 
+    this.identificacion = this.servicio_login.getIdentity();
+  }
 
   ngOnInit(): void {
+    
   }
 
 }

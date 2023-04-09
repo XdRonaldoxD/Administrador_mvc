@@ -1,4 +1,4 @@
-::ng-deep table.dataTable td.dataTables_empty {
+table.dataTable td.dataTables_empty {
   display: none;
 }
 .content-tabla {

@@ -14,10 +14,10 @@
                 </b>
                 <!--End Logo icon -->
                 <!-- Logo text --><span>
-                 <!-- dark Logo text -->
-                 <img src="assets/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
-                 <!-- Light Logo text -->    
-                 <img src="assets/assets/images/logo-light-text.png" class="light-logo" alt="homepage" /></span> </a>
+                    <!-- dark Logo text -->
+                    <img src="assets/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+                    <!-- Light Logo text -->
+                    <img src="assets/assets/images/logo-light-text.png" class="light-logo" alt="homepage" /></span> </a>
         </div>
         <!-- ============================================================== -->
         <!-- End Logo -->
@@ -28,8 +28,10 @@
             <!-- ============================================================== -->
             <ul class="navbar-nav mr-auto">
                 <!-- This is  -->
-                <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up waves-effect waves-dark" href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
-                <li class="nav-item"> <a class="nav-link sidebartoggler hidden-sm-down waves-effect waves-dark" href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
+                <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up waves-effect waves-dark"
+                        href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
+                <li class="nav-item"> <a class="nav-link sidebartoggler hidden-sm-down waves-effect waves-dark"
+                        href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
                 <li class="nav-item hidden-sm-down"></li>
             </ul>
             <!-- ============================================================== -->
@@ -37,15 +39,16 @@
             <!-- ============================================================== -->
             <ul class="navbar-nav my-lg-0">
                 <!-- ============================================================== -->
-              
-               
+
+
                 <!-- ============================================================== -->
                 <!-- ============================================================== -->
                 <!-- Messages -->
                 <!-- ============================================================== -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" id="2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-email"></i>
-                        <div class="notify" [innerHtml]="notficarChat">  </div>
+                    <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" id="2" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-email"></i>
+                        <div class="notify" [innerHtml]="notficarChat"> </div>
                     </a>
                     <div class="dropdown-menu mailbox dropdown-menu-right animated bounceInDown" aria-labelledby="2">
                         <ul>
@@ -54,11 +57,12 @@
                             </li>
                             <li>
                                 <div #agregar_mensaje class="message-center" [innerHTML]="construirMensaje">
-                                   
+
                                 </div>
                             </li>
                             <li>
-                                <a class="nav-link text-center" href="javascript:void(0);"> <strong>See all e-Mails</strong> <i class="fa fa-angle-right"></i> </a>
+                                <a class="nav-link text-center" href="javascript:void(0);"> <strong>See all
+                                        e-Mails</strong> <i class="fa fa-angle-right"></i> </a>
                             </li>
                         </ul>
                     </div>
@@ -70,28 +74,42 @@
                 <!-- Language -->
                 <!-- ============================================================== -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="flag-icon flag-icon-us"></i></a>
-                    <div class="dropdown-menu dropdown-menu-right animated bounceInDown"> <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-in"></i> India</a> <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-fr"></i> French</a> <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-cn"></i> China</a>                                <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-de"></i> Dutch</a> </div>
+                    <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false"> 
+                        <em class="flag-icon flag-icon-pe"></em></a>
+                    <div class="dropdown-menu dropdown-menu-right animated bounceInDown d-none">
+                        <a class="dropdown-item" href="#">
+                            <em class="flag-icon flag-icon-in"></em> India</a> <a class="dropdown-item" href="#">
+                            <em class="flag-icon flag-icon-fr"></em> French</a> <a class="dropdown-item" href="#">
+                            <em class="flag-icon flag-icon-cn"></em> China</a> <a class="dropdown-item" href="#">
+                            <em class="flag-icon flag-icon-de"></em> Dutch</a>
+                    </div>
                 </li>
                 <!-- ============================================================== -->
                 <!-- Profile -->
                 <!-- ============================================================== -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="assets/assets/images/users/1.jpg" alt="user" class="profile-pic" /></a>
+                    <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false"><img src="assets/assets/images/users/1.jpg"
+                            alt="user" class="profile-pic" /></a>
                     <div class="dropdown-menu dropdown-menu-right animated flipInY">
                         <ul class="dropdown-user">
                             <li>
                                 <div class="dw-user-box">
                                     <div class="u-img"><img src="assets/assets/images/users/1.jpg" alt="user"></div>
                                     <div class="u-text">
-                                        <h4>{{identificacion.nombre}} {{identificacion.apellido_paterno}} {{identificacion.apellido_materno}}</h4>
-                                        <p class="text-muted">{{identificacion.email}}</p><a href="pages-profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a></div>
+                                        <h4>{{identificacion.nombre}} {{identificacion.apellido_paterno}}
+                                            {{identificacion.apellido_materno}}</h4>
+                                        <p class="text-muted">{{identificacion.email}}</p>
+                                    </div>
                                 </div>
                             </li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="#"><i class="ti-user"></i> Mi Datos Personales</a></li>
+                            <li><a routerLink="/Datos-Personales/{{identificacion.sub}}"><i class="ti-user"></i> Mi
+                                    Datos Personales</a></li>
                             <li role="separator" class="divider"></li>
-                            <li (click)="cerrarSession()"><a><i class="fa fa-power-off"></i> Salir</a></li>
+                            <li style="cursor:pointer;" (click)="cerrarSession()"><a><i class="fa fa-power-off"></i>
+                                    Salir</a></li>
                         </ul>
                     </div>
                 </li>

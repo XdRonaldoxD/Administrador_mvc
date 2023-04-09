@@ -1,0 +1,194 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-12" style="z-index:0;">
+                        <div class="card">
+                            <div class="card-body p-b-0">
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs customtab2" role="tablist">
+                                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home7"
+                                            role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span
+                                                class="hidden-xs-down">DATOS MEDICO</span></a> </li>
+                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile7"
+                                            role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
+                                                class="hidden-xs-down">CAMBIAR CONTRASEÑA</span></a> </li>
+                                </ul>
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    <div class="tab-pane active mt-4" id="home7" role="tabpanel">
+                                        <form [formGroup]="InformacionStaff" autocomplete="nope"
+                                            enctype="multipart/form-data">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="emailAddress1">Nombre <strong
+                                                                class="text-danger">(*)</strong></label>
+                                                        <input type="text" class="form-control"
+                                                            formControlName="nombre_staff"
+                                                            placeholder="Nombre del medico"
+                                                            [class.is-invalid]="InformacionStaff.controls['nombre_staff']|isInvalid">
+                                                        <div class="text-danger">
+                                                            <div
+                                                                *ngIf="InformacionStaff.controls['nombre_staff']|hasError:'required'">
+                                                                Nombre Vacio
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="emailAddress1">Apellido Paterno <strong
+                                                                class="text-danger">(*)</strong></label>
+                                                        <input type="text" class="form-control"
+                                                            formControlName="apellidopaterno_staff"
+                                                            placeholder="Apellido Paterno"
+                                                            [class.is-invalid]="InformacionStaff.controls['apellidopaterno_staff']|isInvalid">
+                                                        <div class="text-danger">
+                                                            <div
+                                                                *ngIf="InformacionStaff.controls['apellidopaterno_staff']|hasError:'required'">
+                                                                Apellido Paterno Vacio
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="emailAddress1">Apellido Materno <strong
+                                                                class="text-danger">(*)</strong></label>
+                                                        <input type="text" class="form-control"
+                                                            formControlName="apellidomaterno_staff"
+                                                            placeholder="Apellido Materno"
+                                                            [class.is-invalid]="InformacionStaff.controls['apellidomaterno_staff']|isInvalid">
+                                                        <div class="text-danger">
+                                                            <div
+                                                                *ngIf="InformacionStaff.controls['apellidomaterno_staff']|hasError:'required'">
+                                                                Apellido Materno Vacio
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="firstName1">Email <strong class="text-danger">(*)</strong></label>
+                                                        <input type="email" class="form-control" #e_mail_staff
+                                                            (keyup)="VerificarEmailStaff($event)"
+                                                            formControlName="e_mail_staff" placeholder="Email staff"
+                                                            [class.is-invalid]="InformacionStaff.controls['e_mail_staff']|isInvalid">
+                                                        <div class="text-danger">
+                                                            <div *ngIf="InformacionStaff.controls['e_mail_staff']|hasError:'required'">
+                                                                SKU Vacio
+                                                            </div>
+                                                            <div *ngIf="verificador_email">
+                                                                Existe SKU
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="emailAddress1">Telefono </label>
+                                                        <input type="text" class="form-control"
+                                                            formControlName="telefono_staff" placeholder="Telefono">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="emailAddress1">Celular</label>
+                                                        <input type="text" class="form-control"
+                                                            formControlName="celular_staff" placeholder="Celular">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="sexo_staff">Sexo </label>
+                                                        <select formControlName="sexo_staff" class="form-control">
+                                                            <option value="">Seleccionar</option>
+                                                            <option value="M">Masculino</option>
+                                                            <option value="F">Femenino</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="id_perfil">Perfil <strong class="text-danger">(*)</strong></label>
+                                                        <select formControlName="id_perfil" class="form-control"
+                                                            [class.is-invalid]="InformacionStaff.controls['id_perfil']|isInvalid">
+                                                            <option value="">Seleccionar</option>
+                                                            <option value="{{item.id_perfil}}"
+                                                                *ngFor="let item of Perfil">{{item.glosa_perfil}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+
+                                        </form>
+
+                                    </div>
+                                    <div class="tab-pane  p-20" id="profile7" role="tabpanel">
+                                        <form [formGroup]="InformacionStaff" autocomplete="nope"
+                                            enctype="multipart/form-data">
+                                            <div class="row mt-4">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="clue">Contraseña </label>
+                                                        <input type="password" class="form-control"
+                                                            formControlName="newPassword" placeholder="Contraseña">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group m-0">
+                                                        <label for="jobTitle1">Repertir Contraseña </label>
+                                                        <input type="password" class="form-control"
+                                                            formControlName="confirmPassword"
+                                                            placeholder="Repetir Contraseña"
+                                                            [class.is-invalid]="InformacionStaff.controls['confirmPassword']|hasError:'mustMatch'">
+                                                    </div>
+                                                    <div class="text-danger">
+                                                        <div *ngIf="InformacionStaff.controls['confirmPassword']|hasError:'mustMatch'">
+                                                            Las contraseñas no coinciden
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
+                                    </div>
+
+                                    <div class="row text-right">
+                                        <div class="col-sm-12 col-md-12">
+                                            <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
+                                                <button type="button" style="padding-left: 9px;" routerLink="/Producto"
+                                                    class="btn btn-outline-secondary mx-3" id="btn-close-crud"><i
+                                                        style="vertical-align: text-bottom;"
+                                                        class="bx bx-left-arrow-alt"></i> Volver</button>
+                                                <button (click)="GuardarCompleto()" type="button"
+                                                    class="btn btn-success" value="create-product"><i
+                                                        style="vertical-align: text-bottom;" class="fa fa-save"></i>
+                                                    Guardar
+                                                </button>
+                                            </ng-container>
+                                            <ng-template #elseTemplate>
+                                                <button type="button" class="btn btn-success" value="create-product"><i
+                                                        class="fa fa-spin fa-circle-o-notch"></i>
+                                                    Guardando
+                                                </button>
+                                            </ng-template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

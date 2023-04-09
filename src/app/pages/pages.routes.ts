@@ -19,6 +19,8 @@ import { CajaComponent } from './caja/caja.component';
 import { VentasComponent } from './ventas/ventas.component';
 import { SliderComponent } from './TiendaOnline/slider/slider.component';
 import { EmpresaComponent } from './empresa/empresa.component';
+import { DatosPersonalesComponent } from './datos-personales/datos-personales.component';
+import { DatosPersonalesresolverService } from '../resolver/DatosPersonalesresolver.service';
 
 
 const pagesRoutes: Routes = [
@@ -38,6 +40,13 @@ const pagesRoutes: Routes = [
       {
         path: 'Detalle-Pedido/:id_pedido', component: PedidoDetalleComponent, canActivate: [AuthGuard],
         resolve: { pedidodetalle: PedidoresolverService }
+      },
+      {
+        path: 'Datos-Personales/:id_usuario', component: DatosPersonalesComponent, canActivate: [AuthGuard],
+        resolve: { datopersonal: DatosPersonalesresolverService }
+      },
+      {
+        path: 'Datos-Personales', component: DatosPersonalesComponent, canActivate: [AuthGuard]
       },
       { path: 'chatBox', component: ChatBoxComponent, canActivate: [AuthGuard] },
       { path: 'Importar-Inventario', component: MigrarproductoComponent, canActivate: [AuthGuard] },

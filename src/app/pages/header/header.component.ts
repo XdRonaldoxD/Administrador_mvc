@@ -29,21 +29,21 @@ export class HeaderComponent implements OnInit ,OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    // Pusher.logToConsole = false;
-    // const pusher = new Pusher('0900f1535d671035b532', {
-    //   cluster: 'us2'
-    // });
-    // const channel = pusher.subscribe('ChatboxWoocommerce');
-    // channel.bind('ChatboxOkaDatoClienteEvent', (element: any) => {
-    //   // this.agregar_mensaje?.nativeElement.insertAdjacentHTML('beforeend', `<a href="/#/chatBox">
-    //   // <div class="user-img"> <img src="assets/assets/images/users/1.jpg" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div>
-    //   // <div class="mail-contnet">
-    //   //     <h5>${element.nombre_log_chat}</h5><span class="mail-desc">${element.email_log_chat}</span><span class="time">${this.pipe.transform(element.fechacreacion_log_chat, 'shortDate')}</span> </div>
-    //   // </a>`);
-    //   // this.cantidad_mensajes++;
-    // this.TraerChatLineaActivo();
+    Pusher.logToConsole = false;
+    const pusher = new Pusher('0900f1535d671035b532', {
+      cluster: 'us2'
+    });
+    const channel = pusher.subscribe('ChatboxWoocommerce');
+    channel.bind('ChatboxOkaDatoClienteEvent', (element: any) => {
+      // this.agregar_mensaje?.nativeElement.insertAdjacentHTML('beforeend', `<a href="/#/chatBox">
+      // <div class="user-img"> <img src="assets/assets/images/users/1.jpg" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div>
+      // <div class="mail-contnet">
+      //     <h5>${element.nombre_log_chat}</h5><span class="mail-desc">${element.email_log_chat}</span><span class="time">${this.pipe.transform(element.fechacreacion_log_chat, 'shortDate')}</span> </div>
+      // </a>`);
+      // this.cantidad_mensajes++;
+    this.TraerChatLineaActivo();
 
-    // });
+    });
 
     this.token = this.servicio_login.getToken();
     this.identificacion = this.servicio_login.getIdentity();

@@ -14,7 +14,6 @@ import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 
 declare var $: any;
-declare var document: any;
 @Component({
   selector: 'app-caja',
   templateUrl: './caja.component.html',

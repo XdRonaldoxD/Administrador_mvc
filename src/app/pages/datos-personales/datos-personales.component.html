@@ -9,10 +9,10 @@
                                 <!-- Nav tabs -->
                                 <ul class="nav nav-tabs customtab2" role="tablist">
                                     <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home7"
-                                            role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span
+                                            role="tab"><span class="hidden-sm-up"><em class="mdi mdi-account-circle"></em></span> <span
                                                 class="hidden-xs-down">DATOS MEDICO</span></a> </li>
                                     <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile7"
-                                            role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
+                                            role="tab"><span class="hidden-sm-up"><em class="mdi mdi-account-key"></em></span> <span
                                                 class="hidden-xs-down">CAMBIAR CONTRASEÑA</span></a> </li>
                                 </ul>
                                 <!-- Tab panes -->
@@ -164,18 +164,18 @@
                                         <div class="col-sm-12 col-md-12">
                                             <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
                                                 <button type="button" style="padding-left: 9px;" routerLink="/Producto"
-                                                    class="btn btn-outline-secondary mx-3" id="btn-close-crud"><i
+                                                    class="btn btn-outline-secondary mx-3" id="btn-close-crud"><em
                                                         style="vertical-align: text-bottom;"
-                                                        class="bx bx-left-arrow-alt"></i> Volver</button>
+                                                        class="bx bx-left-arrow-alt"></em> Volver</button>
                                                 <button (click)="GuardarCompleto()" type="button"
-                                                    class="btn btn-success" value="create-product"><i
-                                                        style="vertical-align: text-bottom;" class="fa fa-save"></i>
+                                                    class="btn btn-success" value="create-product"><em
+                                                        style="vertical-align: text-bottom;" class="fa fa-save"></em>
                                                     Guardar
                                                 </button>
                                             </ng-container>
                                             <ng-template #elseTemplate>
-                                                <button type="button" class="btn btn-success" value="create-product"><i
-                                                        class="fa fa-spin fa-circle-o-notch"></i>
+                                                <button type="button" class="btn btn-success" value="create-product"><em
+                                                        class="fa fa-spin fa-circle-o-notch"></em>
                                                     Guardando
                                                 </button>
                                             </ng-template>

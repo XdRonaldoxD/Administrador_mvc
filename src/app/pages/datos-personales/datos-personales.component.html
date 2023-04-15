@@ -161,7 +161,7 @@
                                     </div>
 
                                     <div class="row text-right">
-                                        <div class="col-sm-12 col-md-12">
+                                        <div class="col-md-12  text-right">
                                             <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
                                                 <button type="button" style="padding-left: 9px;" routerLink="/Producto"
                                                     class="btn btn-outline-secondary mx-3" id="btn-close-crud"><em
@@ -176,7 +176,7 @@
                                             <ng-template #elseTemplate>
                                                 <button type="button" class="btn btn-success" value="create-product"><em
                                                         class="fa fa-spin fa-circle-o-notch"></em>
-                                                    Guardando
+                                                    Guardando...
                                                 </button>
                                             </ng-template>
                                         </div>

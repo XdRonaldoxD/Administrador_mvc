@@ -167,20 +167,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div id="button_right" class="col-sm-12 col-md-12">
-                                                    <button type="button" style="padding-left: 9px;"
-                                                        routerLink="/Producto" class="btn btn-outline-secondary mx-3"
-                                                        id="btn-close-crud"><i style="vertical-align: text-bottom;"
-                                                            class="bx bx-left-arrow-alt"></i> Volver</button>
-                                                    <button (click)="GuardarProductoCompleto()" type="button"
-                                                        [disabled]="buttonDisabled" class="btn btn-success"
-                                                        value="create-product"><i style="vertical-align: text-bottom;"
-                                                            class="bx bx-save"></i>
-                                                        Guardar
-                                                    </button>
-                                                </div>
-                                            </div>
+
                                         </form>
 
                                     </div>
@@ -255,20 +242,7 @@
                                                     </table>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div id="button_right" class="col-sm-12 col-md-12">
-                                                    <button type="button" style="padding-left: 9px;"
-                                                        routerLink="/Producto" class="btn btn-outline-secondary mx-3"
-                                                        id="btn-close-crud"><i style="vertical-align: text-bottom;"
-                                                            class="bx bx-left-arrow-alt"></i> Volver</button>
-                                                    <button (click)="GuardarProductoCompleto()" type="button"
-                                                        [disabled]="buttonDisabled" class="btn btn-success"
-                                                        value="create-product"><i style="vertical-align: text-bottom;"
-                                                            class="bx bx-save"></i>
-                                                        Guardar
-                                                    </button>
-                                                </div>
-                                            </div>
+
                                         </form>
                                     </div>
                                     <div class="tab-pane p-20" id="messages7" role="tabpanel">
@@ -296,20 +270,7 @@
                                             </div>
 
                                         </div>
-                                        <div class="row">
-                                            <div id="button_right" class="col-sm-12 col-md-12">
-                                                <button type="button" style="padding-left: 9px;" routerLink="/Producto"
-                                                    class="btn btn-outline-secondary mx-3" id="btn-close-crud"><i
-                                                        style="vertical-align: text-bottom;"
-                                                        class="bx bx-left-arrow-alt"></i> Volver</button>
-                                                <button (click)="GuardarProductoCompleto()" type="button"
-                                                    [disabled]="buttonDisabled" class="btn btn-success"
-                                                    value="create-product"><i style="vertical-align: text-bottom;"
-                                                        class="bx bx-save"></i>
-                                                    Guardar
-                                                </button>
-                                            </div>
-                                        </div>
+
                                     </div>
                                     <div class="tab-pane p-20" id="messages8" role="tabpanel">
                                         <div class="row mt-4">
@@ -348,20 +309,7 @@
                                             </form>
 
                                         </div>
-                                        <div class="row">
-                                            <div id="button_right" class="col-sm-12 col-md-12">
-                                                <button type="button" style="padding-left: 9px;" routerLink="/Producto"
-                                                    class="btn btn-outline-secondary mx-3" id="btn-close-crud"><i
-                                                        style="vertical-align: text-bottom;"
-                                                        class="bx bx-left-arrow-alt"></i> Volver</button>
-                                                <button (click)="GuardarProductoCompleto()" type="button"
-                                                    [disabled]="buttonDisabled" class="btn btn-success"
-                                                    value="create-product"><i style="vertical-align: text-bottom;"
-                                                        class="bx bx-save"></i>
-                                                    Guardar
-                                                </button>
-                                            </div>
-                                        </div>
+
                                     </div>
                                     <div class="tab-pane p-20" id="messages9" role="tabpanel">
                                         <div class="row mt-4">
@@ -414,20 +362,7 @@
                                             </div>
 
                                         </div>
-                                        <div class="row">
-                                            <div id="button_right" class="col-sm-12 col-md-12">
-                                                <button type="button" style="padding-left: 9px;" routerLink="/Producto"
-                                                    class="btn btn-outline-secondary mx-3" id="btn-close-crud"><i
-                                                        style="vertical-align: text-bottom;"
-                                                        class="bx bx-left-arrow-alt"></i> Volver</button>
-                                                <button (click)="GuardarProductoCompleto()" type="button"
-                                                    [disabled]="buttonDisabled" class="btn btn-success"
-                                                    value="create-product"><i style="vertical-align: text-bottom;"
-                                                        class="bx bx-save"></i>
-                                                    Guardar
-                                                </button>
-                                            </div>
-                                        </div>
+
                                     </div>
 
                                     <div class="tab-pane p-20" id="messages10" role="tabpanel">
@@ -497,24 +432,34 @@
                                             </div>
 
                                         </div>
-                                        <div class="row">
-                                            <div id="button_right" class="col-sm-12 col-md-12">
-                                                <button type="button" style="padding-left: 9px;" routerLink="/Producto"
-                                                    class="btn btn-outline-secondary mx-3" id="btn-close-crud"><i
-                                                        style="vertical-align: text-bottom;"
-                                                        class="bx bx-left-arrow-alt"></i> Volver</button>
-                                                <button (click)="GuardarProductoCompleto()" type="button"
-                                                    [disabled]="buttonDisabled" class="btn btn-success"
-                                                    value="create-product"><i style="vertical-align: text-bottom;"
-                                                        class="bx bx-save"></i>
-                                                    Guardar
-                                                </button>
-                                            </div>
-                                        </div>
+
                                     </div>
 
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12 text-right">
+                                    <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
+                                        <button type="button" style="padding-left: 9px;" routerLink="/Producto"
+                                            class="btn btn-outline-secondary mx-3" id="btn-close-crud"><i
+                                                style="vertical-align: text-bottom;" class="bx bx-left-arrow-alt"></i>
+                                            Volver</button>
+                                        <button (click)="GuardarProductoCompleto()" type="button" class="btn btn-success"
+                                            value="create-product"><i style="vertical-align: text-bottom;"
+                                                class="bx bx-save"></i>
+                                            Guardar
+                                        </button>
+                                    </ng-container>
+                                    <ng-template #elseTemplate>
+                                        <button type="button" class="btn btn-success" value="create-product"><em
+                                                class="fa fa-spin fa-circle-o-notch"></em>
+                                            Guardando...
+                                        </button>
+                                    </ng-template>
+                                </div>
+                              
+                            </div>
+
                         </div>
                     </div>
 

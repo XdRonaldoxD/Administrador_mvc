@@ -19,7 +19,7 @@ declare var Swal: any;
 export class NuevoProductoComponent implements OnInit, OnDestroy {
   @ViewChild('codigo_producto') codigo_producto?: ElementRef;
   token: any;
-  buttonDisabled: boolean = false;
+
   tipo_inventario?: any = [];
   imagenes_producto?: any = [];
   producto_relacionado: any = '';
@@ -37,6 +37,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
   verificador_sku: boolean = false;
   Unsuscribe: any = new Subject();
   color: any;
+  GuardarInformacion: boolean = false;
   constructor(
     private servicio_categoria: CategoriaService,
     private servicio_login: LoginService,
@@ -607,11 +608,14 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
       }
     };
 
-    this.buttonDisabled = true;
+    this.GuardarInformacion = true;
     this.informacionForm.get('descripcion_corta')!.setValue(this.descripcion_corta.getValue());
     this.informacionForm.get('descripcion_extendida')!.setValue(this.descripcion_extendida.getValue());
     this.producto_serv.GuardarProductoActualizar(this.token, valorescategoria, this.informacionForm.value, this.PrecioStockForm.value, this.imagenes_producto, coloresHexadecimal, especificaciones, this.listarProductoRelacionados, this.checked_atributo)
-      .pipe(takeUntil(this.Unsuscribe))
+      .pipe(takeUntil(this.Unsuscribe),
+        finalize(() => {
+          this.GuardarInformacion = false;
+        }))
       .subscribe({
         next: (res) => {
           Swal.fire({
@@ -635,7 +639,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
             timerProgressBar: true,
             timer: 5000
           })
-          this.buttonDisabled = false;
+
         }
       })
   }

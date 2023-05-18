@@ -47,7 +47,6 @@ export class PedidoDetalleComponent implements OnInit, OnDestroy {
   @HostListener('window:load')
   onLoad() {
     // $("#toggle_btn").trigger('click');
-    alert("aca");
     $('.navbar-brand span').hide();
     window.addEventListener("load", (event) => {
       console.log("page is fully loaded");

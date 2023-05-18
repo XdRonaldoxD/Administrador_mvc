@@ -31,7 +31,7 @@ export class MigrarproductoComponent implements OnInit {
 
 
   ExportarProducto() {
-    var myHeaders = new Headers();
+    const myHeaders = new Headers();
     myHeaders.append("Authorization", this.token);
     var requestOptions: any = {
       method: 'GET',
@@ -60,11 +60,45 @@ export class MigrarproductoComponent implements OnInit {
             Swal.close();
           })
           .catch(error => console.log('error', error));
-
-
       },
     });
   }
+
+  ExportarPlantillaProducto() {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", this.token);
+    var requestOptions: any = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+    Swal.fire({
+      title: 'Productos',
+      html: 'Exportando el excel ...',
+      text: 'Exportando el excel ...',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      onBeforeOpen: () => {
+        Swal.showLoading();
+        fetch(environment.api_url+"?controller=ProductoExcel&action=ExportarPlantilla", requestOptions)
+          .then(response => response.blob())
+          .then(blob => {
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = `Plantilla_Producto.xlsx`;
+            document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+            a.click();
+            a.remove();
+            Swal.close();
+          })
+          .catch(error => console.log('error', error));
+      },
+    });
+  }
+
+
+  
 
   DetectarTipoAccion(e: any) {
     if (e.currentTarget.checked) {

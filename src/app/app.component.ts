@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { LoginService } from './services/login.service';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -91,4 +91,19 @@ export class AppComponent implements OnInit {
     });
 
   }
+
+
+  // @HostListener('window:beforeunload', ['$event'])
+  // beforeUnloadHandler(event: any) {
+  //   event.preventDefault();
+  //   event.returnValue = '';
+  //   localStorage.removeItem("UserIdentificado");
+  // }
+  
+  // @HostListener('visibilitychange', ['$event'])
+  // visibilityChangeHandler(event: any) {
+  //   if (document.visibilityState === 'hidden') {
+  //     localStorage.removeItem("UserIdentificado");
+  //   }
+  // }
 }

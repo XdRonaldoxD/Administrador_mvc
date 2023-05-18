@@ -18,7 +18,7 @@ export class MarcaService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post(environment.api_url+"?controller=Marca&action=GestionarMarca", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url+"?controller=Marca&action=gestionarMarca", formData, { headers: headers })
   }
   TraerMarca(token: any, id_marca: any): Observable<any> {
     const formData = new FormData();
@@ -26,7 +26,7 @@ export class MarcaService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post(environment.api_url+"?controller=Marca&action=TraerMarca", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url+"?controller=Marca&action=traerMarca", formData, { headers: headers })
   }
   Habilitar_Deshabilitar_Marca(token: any, id_marca: any, accion: string): Observable<any> {
     const formData = new FormData();

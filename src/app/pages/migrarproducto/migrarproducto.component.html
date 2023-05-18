@@ -19,8 +19,8 @@
                                 <input type="checkbox" (change)="DetectarTipoAccion($event)" name="actualizar_producto"
                                     id="actualizar_producto" class="actualizar_producto">
                                 <span class="slider round">
-                                    <p>Si</p>
-                                    <p>No</p>
+                                    <p>NO</p>
+                                    <p>SI</p>
                                 </span>
                             </label>
                         </div>
@@ -47,9 +47,8 @@
                                             Producto</button>
                                     </div>
                                     <div class="col-md-4 col-12">
-                                        <a href="http://localhost/MVC_APIVENTA/ExcelProducto/CargaProductoNotaVenta.xlsx"
-                                            target="_blank" class="cursor-pointer btn  btn-primary"> <i
-                                                class="fe fe-import"></i>Descargar Plantilla</a>
+                                        <button type="button" (click)="ExportarPlantillaProducto()" class="cursor-pointer btn  btn-primary">
+                                             <i class="fe fe-import"></i>Descargar Plantilla</button>
                                     </div>
 
                                 </div>

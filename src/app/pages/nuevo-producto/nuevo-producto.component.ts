@@ -33,6 +33,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
   descripcion_corta: any;
   checked_atributo: Atributo_seleccionado[] = [];
   checked_categoria: any = [];
+  tipo_afectacion: any = [];
   contador_texto: any;
   verificador_sku: boolean = false;
   Unsuscribe: any = new Subject();
@@ -61,16 +62,26 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
       $("#t-crear-categoria").children("div").remove();
       var estructura_html = "<div><h6 for=\"name\" class=\"col-sm-12 control-label\">Categoría Padre</h6><div id=\"treeview_container\" class=\"hummingbird-treeview t-view-editar\" style=\"height: auto; display: block;\"><ul style='list-style: none;' id=\"treeview\" class=\"hummingbird-base\"></ul></div></div>";
       $("#t-crear-categoria").html(estructura_html);
-    })).subscribe(
+    }), takeUntil(this.Unsuscribe)).subscribe(
       {
         next: (res) => {
           this.tipo_inventario = res;
-
         }, error: (error) => {
 
         }
       }
     )
+
+    this.producto_serv.TraerAfectacion().pipe(takeUntil(this.Unsuscribe)).subscribe(
+      {
+        next: (res) => {
+          this.tipo_afectacion = res;
+        }, error: (error) => {
+
+        }
+      }
+    )
+
     $(document).on("click", "input[name='agregar_imagen']", (elemento: any) => {
       let cantidad = 0;
       $("input[name='agregar_imagen']:checked").each((i: any, elemento: any) => {
@@ -150,9 +161,11 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
     this.informacionForm = this.fb.group({
       codigo_producto: ['', [Validators.required]],
       tipo_inventario: ['', [Validators.required]],
+      id_tipo_afectacion: ['', [Validators.required]],
       visible_tienda: [false],
       descripcion_corta: [],
       descripcion_extendida: [],
+      id_marca:[],
       glosa_producto: ['', [Validators.required]]
 
     });
@@ -192,10 +205,10 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
 
 
 
+
+
+
   }
-
-
-
 
 
   AgregarColor() {

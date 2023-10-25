@@ -121,7 +121,7 @@ export class MigrarproductoComponent implements OnInit {
         onOpen: () => {
           Swal.showLoading();
           this._MigrarInformacion
-            .EnviarArchivoProducto(this.token, this.archivos, this.accion_cargar, this.identity.sub)
+            .EnviarArchivoProducto(this.archivos, this.accion_cargar, this.identity.sub)
             .subscribe({
               next: (data): any => {
                 if (data.respuesta === "Error columna") {
@@ -214,6 +214,19 @@ export class MigrarproductoComponent implements OnInit {
   }
 
   seleccioneExcel(imagen: any) {
+    if (!imagen.files[0]) {
+      Swal.fire(
+        "Error",
+        "No se ha seleccionado ningún archivo.",
+        "error"
+      );
+      Swal.fire(
+        "Sólo Excel",
+        "No se ha seleccionado ningún archivo.",
+        "error"
+      );
+      return;
+    }
     let archivos = this.extencionDeArchivo(imagen.files[0].name);
     let validando_excel = true;
     if (archivos === 'xlsx' || archivos === 'xlsm' || archivos === 'xlsb' || archivos === 'xltx') {
@@ -231,8 +244,10 @@ export class MigrarproductoComponent implements OnInit {
 
     this.archivos = imagen.files[0];
     let reader = new FileReader();
-    let urlImagentemp = reader.readAsDataURL(imagen);
-    reader.onloadend = () => (this.imgTemporal = reader.result as string);
+    reader.onloadend = () => {
+      this.imgTemporal = reader.result as string;
+    };
+    reader.readAsDataURL(this.archivos); 
   }
 
   extencionDeArchivo(filename: any) {

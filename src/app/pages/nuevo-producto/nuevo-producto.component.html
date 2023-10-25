@@ -52,7 +52,7 @@
                                         <form [formGroup]="informacionForm" autocomplete="nope"
                                             enctype="multipart/form-data">
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-6">
                                                     <div class="form-group">
                                                         <label for="firstName1">SKU<strong
                                                                 class="text-danger">(*)</strong></label>
@@ -72,22 +72,19 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-6">
                                                     <div class="form-group">
-                                                        <label for="lastName1">Codigo Barra</label>
-                                                        <input type="text" class="form-control" id="codigo_barra"
-                                                            name="codigo_barra">
+                                                        <label for="codigo_barra_producto">Codigo Barra</label>
+                                                        <input type="text" class="form-control" formControlName="codigo_barra_producto" placeholder="Codigo barra del producto">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-6">
                                                     <div class="form-group">
                                                         <label for="emailAddress1">Nombre <strong
                                                                 class="text-danger">(*)</strong></label>
-                                                        <input type="email" class="form-control"
-                                                            formControlName="glosa_producto"
-                                                            placeholder="Nombre del producto"
+                                                        <input type="email" class="form-control" formControlName="glosa_producto" placeholder="Nombre del producto"
                                                             [class.is-invalid]="informacionForm.controls['glosa_producto']|isInvalid">
                                                         <div class="text-danger">
                                                             <div
@@ -97,8 +94,33 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                <div class="col-md-12">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="date1">Tipo Afectación<strong class="text-danger">(*)</strong></label>
+                                                        <select  formControlName="id_tipo_afectacion"
+                                                            [class.is-invalid]="informacionForm.controls['id_tipo_afectacion']|isInvalid"
+                                                            class="form-control">
+                                                            <option value="">Seleccionar Afectación</option>
+                                                            <option value="{{item.id_tipo_afectacion}}" *ngFor="let item of tipo_afectacion">{{item.descripcion}}</option>
+                                                        </select>
+                                                        <div class="text-danger">
+                                                            <div
+                                                                *ngIf="informacionForm.controls['id_tipo_afectacion']|hasError:'required'">
+                                                                Seleccionar Afectación.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label for="id_marca">Marca</label>
+                                                        <select  formControlName="id_marca" class="form-control select2">
+                                                            <option value="">Seleccionar Afectación</option>
+                                                            <option value="{{item.id_tipo_afectacion}}" *ngFor="let item of tipo_afectacion">{{item.descripcion}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="location1">Descripción Extendida</label>
                                                         <textarea formControlName="descripcion_extendida"
@@ -108,7 +130,7 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-12">
+                                                <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="phoneNumber1">Descripción Corta</label>
                                                         <textarea formControlName="descripcion_corta"
@@ -137,6 +159,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
                                                 <div class="col-md-6" style="margin-top: 2.3rem;">
                                                     <div class="form-group">
                                                         <label class="inline custom-control custom-checkbox block">

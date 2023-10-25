@@ -65,6 +65,9 @@ export class PagesComponent implements OnInit {
         }), $('a[data-action="close"]').on("click", () => {
           $(this).closest(".card").removeClass().slideUp("fast");
         });
+        // setTimeout(() => {
+        //   $(".sidebartoggler ").click()
+        // },);
     });
 
   }

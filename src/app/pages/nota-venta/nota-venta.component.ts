@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subject, takeUntil } from 'rxjs';
+import { separarNombresApellidos } from 'src/app/functions/validators/helper';
 import { DataTablesResponse } from 'src/app/interface/Datatable';
 import { Totales, Totales_pagados } from 'src/app/interface/Datos';
 import { LoginService } from 'src/app/services/login.service';
@@ -260,6 +261,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   EnviarProducto(datos: any) {
     let existeProducto = false;
+    const tasaIVA = 18;
     this.ProductoSeleccionados.forEach((element: any) => {
       if (element.id_producto == datos.id_producto) {
         if ((parseInt(element.cantidad_seleccionado) + 1) > element.stock_producto) {
@@ -352,7 +354,6 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
       })
       e.target.value = this.ProductoSeleccionados[indice].stock_producto;
       this.ProductoSeleccionados[indice].cantidad_seleccionado = this.ProductoSeleccionados[indice].stock_producto;
-      return;
     } else {
       this.ProductoSeleccionados[indice].cantidad_seleccionado = cantidad;
       e.target.value = cantidad;
@@ -412,16 +413,25 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   CacularTotales() {
     let total = 0;
+    let totalexonerado = 0;
     let igv = 0;
     let subtotal = 0;
     this.ProductoSeleccionados.forEach((element: any) => {
-      total += element.precio_venta_producto;
+      if (element.id_tipo_afectacion==1) {
+        total += element.precio_venta_producto;
+      }else{
+        totalexonerado += element.precio_venta_producto;
+      }
+ 
     });
-    subtotal = total / (1 + 0.18);
-    igv = total - subtotal;
+    if (total>0) {
+      subtotal = total / (1 + 0.18);
+      igv = total - subtotal;
+    }
+    subtotal+=totalexonerado;
     this.Totales.igv = igv.toFixed(2);
     this.Totales.subtotal = subtotal.toFixed(2);
-    this.Totales.total = total.toFixed(2);
+    this.Totales.total = total + totalexonerado;
     this.Totales_pagados.total_pagar = this.Totales.total;
     if (this.Totales_pagados.total_pagado >= this.Totales_pagados.total_pagar) {
       this.MontoPagarCliente = 0;
@@ -591,8 +601,11 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
                 timer: 3000,
               });
             } else {
+              const datapersonal=separarNombresApellidos(resp.razonSocial);
               this.informacionFormCliente.get('ruc_cliente')?.setValue(resp.ruc);
-              this.informacionFormCliente.get('nombre_razon_social')?.setValue(resp.razonSocial);
+              this.informacionFormCliente.get('nombre_razon_social')?.setValue(datapersonal.nombres);
+              this.informacionFormCliente.get('apellido_paterno')?.setValue(datapersonal.apellidoPaterno);
+              this.informacionFormCliente.get('apellido_materno')?.setValue(datapersonal.apellidoMaterno);
               this.informacionFormCliente.get('estado')?.setValue(resp.estado);
               this.informacionFormCliente.get('condicion')?.setValue(resp.condicion);
               this.informacionFormCliente.get('direccion_cliente')?.setValue(resp.direccion);
@@ -628,9 +641,6 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
                   provincia.dispatchEvent(new Event('change'));
                 }
               }
-
-
-
               Swal.fire({
                 toast: true,
                 position: 'top',
@@ -892,20 +902,13 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
             $(".imprimirTicket").addClass('active');
             $(".imprimirTicketcontent").addClass('active');
             $('#ajax-mostrar-pdf').modal('show');
-
             Swal.close();
           },
           error: error => {
-            Swal.fire({
-              toast: true,
-              position: 'top',
-              icon: 'error',
-              title: `Error al emitir el documento.`,
-              showConfirmButton: false,
-              timerProgressBar: true,
-              timer: 5000
-            })
             Swal.close();
+            this.toast.error(`Verificar Stock Producto`, undefined, {
+              timeOut: 3000,
+            });
           }
         })
       },
@@ -922,6 +925,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     this.Totales.igv = 0;
     this.Totales.subtotal = 0;
     this.Totales.total = 0;
+    this.busquedafactura=false;
     this.AsignarCliente();
     this.informacionForm.get('vendedor')?.setValue(this.identificacion.sub);
     this.informacionForm.get('id_empresa')?.setValue(this.identificacion.id_empresa);

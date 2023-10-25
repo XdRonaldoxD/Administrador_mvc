@@ -18,11 +18,11 @@
                                                         <table class="table table-bordered table-hover">
                                                             <thead>
                                                                 <tr>
-                                                                    <th>CANTIDAD</th>
-                                                                    <th>PRODUCTO</th>
-                                                                    <th>DESC.%</th>
-                                                                    <th>PRECIO</th>
-                                                                    <th>ACCIÓN</th>
+                                                                    <th class="text-center" >CANTIDAD</th>
+                                                                    <th class="text-center" >PRODUCTO</th>
+                                                                    <th class="text-center" >IMP.</th>
+                                                                    <th class="text-center" >PRECIO</th>
+                                                                    <th class="text-center" >ACCIÓN</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody *ngIf="ProductoSeleccionados.length>0">
@@ -33,7 +33,7 @@
                                                                             class="stepper stepper--style-1 js-spinner">
                                                                             <input type="number" min="0" max="100"
                                                                                 step="1"
-                                                                                (keyup)="CantidadEscrito($event,i)"
+                                                                                (blur)="CantidadEscrito($event,i)"
                                                                                 [value]="item.cantidad_seleccionado"
                                                                                 class="stepper__input total_detalle_general_anterior">
                                                                             <div class="stepper__controls">
@@ -83,21 +83,7 @@
                                                                     <td>
                                                                         <div>
                                                                             <select disabled class="form-control d1200">
-                                                                                <option selected="" value="">(0%) Sin
-                                                                                    Descuento</option>
-                                                                                <option valor="5" value="3">(5%)
-                                                                                    Descuento 5%</option>
-                                                                                <option valor="10" value="4">(10%)
-                                                                                    Descuento 10%</option>
-                                                                                <option valor="15" value="5">(15%)
-                                                                                    Descuento 15%</option>
-                                                                                <option valor="16" value="9">(16%)
-                                                                                    Descuento 16%</option>
-                                                                                <option valor="17" value="8">(17%)
-                                                                                    Descuento 17%</option>
-                                                                                <option valor="18" value="7">(18%)
-                                                                                    Descuento 18% </option>
-
+                                                                                <option selected="" value="{{item.id_tipo_afectacion}}">{{item.descripcion}}</option>
                                                                             </select>
                                                                         </div>
                                                                     </td>

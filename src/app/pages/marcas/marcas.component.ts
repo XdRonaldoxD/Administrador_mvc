@@ -54,21 +54,13 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
     this.token = this.servicio_login.getToken();
     this.ProductoHabilitados();
     this.ProductosDeshabilitados();
-    $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
-    });
-
-
-
   }
   //NOTA PARA EL FUNCIONAMIENTO DEL RELOAD APLICAR EN EL TYPYSCRYP Y HTML EL reload_producto
   //SOLO LLAMAR LA FUNCION => this.reload_producto.next();
   ngOnDestroy(): void {
     // Do not forget to unsubscribe the  (Datatable)
-
-    this.reload_producto.unsubscribe();
-    this.Unsuscribe.unsubscribe();
-    this.reload_producto_deshabilitado.unsubscribe();
+    this.Unsuscribe.next();
+    this.Unsuscribe.complete();
   }
   ngAfterViewInit(): void {
     this.reload_producto.next();
@@ -87,7 +79,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
       processing: true,
       responsive: true,
       destroy: true,
-
+      ordering: false,
       // scrollX:true,
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",
@@ -129,6 +121,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
       responsive: true,
       destroy: true,
       order: [],
+      ordering: false,
       // scrollX:true,
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",
@@ -161,7 +154,6 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
   AbrirModal() {
     this.marcarForm.reset();
     this.marcarForm.get('accion')!.setValue('CREAR');
-    $("#t-crear-categoria").html('');
     this.texto_cabezera = 'Nuevo Marca';
     $('#exampleModalCenter').modal('show');
   }
@@ -202,7 +194,10 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   EstadoMarca(estado: any, id_marca: any) {
-    this.servicio_marca.Habilitar_Deshabilitar_Marca(this.token, id_marca, estado).pipe(takeUntil(this.Unsuscribe)).subscribe({
+    this.servicio_marca.Habilitar_Deshabilitar_Marca(this.token, id_marca, estado).pipe(takeUntil(this.Unsuscribe),finalize(()=>{
+      this.reload_producto.next();
+      this.reload_producto_deshabilitado.next();
+    })).subscribe({
       next: resp => {
         Swal.fire({
           toast: true,

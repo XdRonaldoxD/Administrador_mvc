@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
     if (token!=null) {
       let payload = JSON.parse(atob(token.split(".")[1]));
       let expirado = this.expirado(identity.expiracion);
-      // console.log("expiracion",expirado);
+      console.log("expiracion",expirado);
       if(expirado){
         this.router.navigate(["/IniciarSession"]);
         localStorage.removeItem("UserIdentificado");

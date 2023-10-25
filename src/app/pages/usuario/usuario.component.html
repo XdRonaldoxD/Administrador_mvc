@@ -1,0 +1,392 @@
+<div class="container-fluid">
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor">USUARIO</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row MT-1">
+                        <div class="col-md-12 d-flex justify-content-end">
+                            <div class="row m-0">
+                                <button (click)="AbrirModal()" class="btn btn-success btn-reset">NUEVO USUARIO <i
+                                        class="mdi mdi-checkbox-multiple-blank-outline"></i> </button>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="nav nav-pills m-t-30 m-b-30">
+                        <li class=" nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab"
+                                aria-expanded="false">Activos</a> </li>
+                        <li class="nav-item"> <a href="#navpills-2" class="nav-link" data-toggle="tab"
+                                aria-expanded="false">Deshabilitado</a> </li>
+                    </ul>
+                    <div class="tab-content br-n pn">
+                        <div id="navpills-1" class="tab-pane active">
+                            <div class="row">
+                                <!-- ANGULAR SERVER SIDE -->
+                                <div class="table-responsive">
+                                    <table summary="Slider" datatable [dtOptions]="dtOptions[0]"
+                                        [dtTrigger]="reload_producto" class="row-border hover " width="100%">
+                                        <thead>
+                                            <tr style="vertical-align: middle;text-align: center;"
+                                                class="text-uppercase">
+                                                <th class="text-center">ACCION</th>
+                                                <th class="text-center">NOMBRES COMPLETO</th>
+                                                <th class="text-center">TELEFONO</th>
+                                                <th class="text-center">E-MAIL</th>
+                                                <th class="text-center">TIPO <br> USUARIO/PERFIL </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let e of listarUsuario;">
+                                                <tr style="vertical-align: middle;text-align: center;">
+                                                    <td>
+                                                        <div class="button-group">
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-info btn-circle"
+                                                                tooltip="Editar Usuario" placement="top"
+                                                                [showDelay]="50" [hideDelay]="50"
+                                                                (click)="EditarUsuario(e)">
+                                                                <i class="fa  fa-edit "></i> </button>
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-danger btn-circle"
+                                                                tooltip="Deshabilitar Usuario" placement="top"
+                                                                (click)="EstadoUser('DESHABILITAR',e.id_usuario)"
+                                                                [showDelay]="50" [hideDelay]="50">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                            class="btn btn-sm btn-circle btn btn-dark"
+                                                            tooltip="Cambiar Contraseña" placement="top"
+                                                            (click)="OpenChangePassword(e.id_usuario)"
+                                                            [showDelay]="50" [hideDelay]="50">
+                                                            <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                                                        </button>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{e.nombre_staff}} {{e.apellidopaterno_staff}}
+                                                        {{e.apellidomaterno_staff}}</td>
+                                                    <td>
+                                                        <div>{{e.telefono_staff}}</div>
+                                                        <div>{{e.celular_staff}}</div>
+                                                    </td>
+                                                    <td>{{e.e_mail_staff}}</td>
+                                                    <td>{{e.glosa_perfil}}</td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                        <tbody *ngIf="listarUsuario.length <= 0">
+                                            <tr>
+                                                <td colspan="2" class="no-data-available">No hay información!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div id="navpills-2" class="tab-pane">
+                            <div class="row">
+                                <!-- ANGULAR SERVER SIDE -->
+                                <div class="table-responsive">
+                                    <table datatable [dtOptions]="dtOptions[1]"
+                                        [dtTrigger]="reload_producto_deshabilitado" class="row-border hover "
+                                        width="100%" summary="Tabla usuarios">
+                                        <thead>
+                                            <tr style="vertical-align: middle;text-align: center;"
+                                                class="text-uppercase">
+                                                <th class="text-center">ACCION</th>
+                                                <th class="text-center">NOMBRES COMPLETO</th>
+                                                <th class="text-center">TELEFONO/Celular</th>
+                                                <th class="text-center">E-MAIL</th>
+                                                <th class="text-center">TIPO <br> USUARIO/PERFIL </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let e of listarUsuarioDeshabilitado;">
+                                                <tr style="vertical-align: middle;text-align: center;">
+                                                    <td>
+                                                        <div class="button-group">
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-success btn-circle"
+                                                                tooltip="Activar Usuario" placement="top"
+                                                                (click)="EstadoUser('ACTIVAR',e.id_usuario)"
+                                                                [showDelay]="50" [hideDelay]="50">
+                                                                <i class="fa fa-check"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{e.nombre_staff}} {{e.apellidopaterno_staff}}
+                                                        {{e.apellidomaterno_staff}}</td>
+                                                    <td>
+                                                        <div>{{e.telefono_staff}}</div>
+                                                        <div>{{e.celular_staff}}</div>
+                                                    </td>
+                                                    <td>{{e.e_mail_staff}}</td>
+                                                    <td>{{e.glosa_perfil}}</td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                        <tbody *ngIf="listarUsuarioDeshabilitado.length == 0">
+                                            <tr>
+                                                <td colspan="2" class="no-data-available">No hay información!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="exampleModalCenter" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenter" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" [innerHTML]="texto_cabezera"></h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close" data-original-title=""
+                    title=""><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="userForm" autocomplete="nope" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <h6 for="name" class="control-label">Dni</h6>
+                                <input type="text" class="form-control" placeholder="Ingrese el numero de documento"
+                                    formControlName="dni_staff">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <h6 for="name" class="control-label">Nombre Usuario<span class="text-danger">(*)</span>
+                                </h6>
+                                <input type="text" class="form-control" placeholder="Ingrese el nombre"
+                                    formControlName="nombre_staff"
+                                    [class.is-invalid]="userForm.controls['nombre_staff']|isInvalid">
+                                <div class="text-danger">
+                                    <div *ngIf="userForm.controls['nombre_staff']|hasError:'required'">
+                                        Nombre vacio
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <h6 for="name" class="control-label">Apellido Paterno<span
+                                        class="text-danger">(*)</span></h6>
+                                <input type="text" class="form-control" placeholder="Ingrese el apellido paterno"
+                                    formControlName="apellidopaterno_staff"
+                                    [class.is-invalid]="userForm.controls['apellidopaterno_staff']|isInvalid">
+                                <div class="text-danger">
+                                    <div *ngIf="userForm.controls['apellidopaterno_staff']|hasError:'required'">
+                                        Apellido paterno vacio
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <h6 for="name" class="control-label">Apellido Materno<span
+                                        class="text-danger">(*)</span></h6>
+                                <input type="text" class="form-control" placeholder="Ingrese el nombre"
+                                    formControlName="apellidomaterno_staff"
+                                    [class.is-invalid]="userForm.controls['apellidomaterno_staff']|isInvalid">
+                                <div class="text-danger">
+                                    <div *ngIf="userForm.controls['apellidomaterno_staff']|hasError:'required'">
+                                        Apellido materno vacio
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <h6 for="name" class="control-label">E-mail<span class="text-danger">(*)</span></h6>
+                                <input type="email" class="form-control" placeholder="Ingrese el e-mail"
+                                    formControlName="e_mail_staff"
+                                    [class.is-invalid]="userForm.controls['e_mail_staff']|isInvalid">
+                                <div class="text-danger">
+                                    <span *ngIf="userForm.get('e_mail_staff')?.hasError('email')">El correo electrónico
+                                        ingresado no es válido.</span>
+                                    <span *ngIf="userForm.get('e_mail_staff')?.hasError('correoEnUso')">El correo está
+                                        en uso.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <h6 for="name" class="control-label">Teléfono</h6>
+                                <input type="number" class="form-control" placeholder="Ingrese el teléfono"
+                                    formControlName="telefono_staff">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <h6 for="name" class="control-label">Celular</h6>
+                                <input type="number" class="form-control" placeholder="Ingrese el celular"
+                                    formControlName="celular_staff" maxlength="9">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <h6 for="name" class="control-label">Sexo<span class="text-danger">(*)</span></h6>
+                                <select class="form-control select2" formControlName="sexo_staff"
+                                    [class.is-invalid]="userForm.controls['sexo_staff']|isInvalid">
+                                    <option value="">Seleccionar</option>
+                                    <option value="M">Masculino</option>
+                                    <option value="F">Femenino</option>
+                                </select>
+                                <div class="text-danger">
+                                    <div *ngIf="userForm.controls['sexo_staff']|hasError:'required'">
+                                        Seleccione el sexo
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <h6 for="name" class="control-label">Perfil<span class="text-danger">(*)</span></h6>
+                                <select class="form-control" formControlName="id_perfil"
+                                    [class.is-invalid]="userForm.controls['id_perfil']|isInvalid">
+                                    <option value="">Seleccionar Perfil</option>
+                                    <option value="{{item.id_perfil}}" *ngFor="let item of perfiles">
+                                        {{item.glosa_perfil}}</option>
+                                </select>
+                                <div class="text-danger">
+                                    <div *ngIf="userForm.controls['id_perfil']|hasError:'required'">
+                                        Seleccione el perfil
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6" *ngIf="passwordactive">
+                            <div class="form-group">
+                                <h6 for="name" class=" control-label">Contraseña<span class="text-danger">(*)</span>
+                                </h6>
+                                <input type="password" class="form-control" placeholder="Ingrese la contraseña"
+                                    formControlName="newPassword"
+                                    [class.is-invalid]="userForm.controls['newPassword']|isInvalid">
+                                <div class="text-danger">
+                                    <div *ngIf="userForm.controls['newPassword']|hasError:'required'">
+                                        Contraseña vacia
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6" *ngIf="passwordactive">
+                            <div class="form-group">
+                                <h6 for="name" class="control-label">Confirmar Contraseña<span
+                                        class="text-danger">(*)</span></h6>
+                                <input type="password" class="form-control" placeholder="Ingrese la contraseña repetida"
+                                    formControlName="confirmPassword"
+                                    [class.is-invalid]="userForm.controls['confirmPassword']|isInvalid">
+                                <div class="text-danger">
+                                    <div *ngIf="userForm.controls['confirmPassword']|hasError:'required'">
+                                        Contraseña vacia
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
+                    <button type="button" style="padding-left: 9px;" data-dismiss="modal"
+                        class="btn btn-outline-secondary mx-3">
+                        <i style="vertical-align: text-bottom;" class="bx bx-left-arrow-alt"></i>
+                        Salir</button>
+                    <button (click)="GuardarActualizaruser()" type="button" class="btn btn-success"
+                        value="create-product"><i style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                        Guardar
+                    </button>
+                </ng-container>
+                <ng-template #elseTemplate>
+                    <button type="button" class="btn btn-success" value="create-product"><em
+                            class="fa fa-spin fa-circle-o-notch"></em>
+                        Guardando...
+                    </button>
+                </ng-template>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModalPassword" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalPassword" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center">Cambiar Contraseña</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close" data-original-title=""
+                    title=""><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="password" autocomplete="nope" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <h6 for="name" class=" control-label">Contraseña<span class="text-danger">(*)</span>
+                                </h6>
+                                <input type="password" class="form-control" placeholder="Ingrese la contraseña"
+                                    formControlName="newPassword"
+                                    [class.is-invalid]="password.controls['newPassword']|isInvalid">
+                                <div class="text-danger">
+                                    <div *ngIf="password.controls['newPassword']|hasError:'required'">
+                                        Contraseña vacia
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <h6 for="name" class="control-label">Confirmar Contraseña<span
+                                        class="text-danger">(*)</span></h6>
+                                <input type="password" class="form-control" placeholder="Ingrese la contraseña repetida"
+                                    formControlName="confirmPassword"
+                                    [class.is-invalid]="password.controls['confirmPassword']|isInvalid">
+                                <div class="text-danger">
+                                    <div *ngIf="password.controls['confirmPassword']|hasError:'required'">
+                                        Contraseña vacia
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
+                    <button type="button" style="padding-left: 9px;" data-dismiss="modal"
+                        class="btn btn-outline-secondary mx-3">
+                        <i style="vertical-align: text-bottom;" class="bx bx-left-arrow-alt"></i>
+                        Salir</button>
+                    <button (click)="ActualizarPass()" type="button" class="btn btn-success"
+                        value="create-product"><i style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                        Guardar
+                    </button>
+                </ng-container>
+                <ng-template #elseTemplate>
+                    <button type="button" class="btn btn-success" value="create-product"><em
+                            class="fa fa-spin fa-circle-o-notch"></em>
+                        Guardando...
+                    </button>
+                </ng-template>
+            </div>
+        </div>
+
+    </div>
+</div>

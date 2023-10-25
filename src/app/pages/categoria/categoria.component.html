@@ -27,12 +27,10 @@
                             <div class="row m-0">
                                 <button (click)="AbrirModal()" class="btn btn-success btn-reset">NUEVA CATEGORIA <i
                                         class="mdi mdi-checkbox-multiple-blank-outline"></i> </button>
-
                             </div>
-
                         </div>
                     </div>
-                    <ul class="nav nav-pills m-t-30 m-b-30">
+                    <ul class="nav nav-pills m-t-10 m-b-10">
                         <li class=" nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab"
                                 aria-expanded="false">Activos</a> </li>
                         <li class="nav-item"> <a href="#navpills-2" class="nav-link" data-toggle="tab"
@@ -41,21 +39,22 @@
                     <div class="tab-content br-n pn">
                         <div id="navpills-1" class="tab-pane active">
                             <div class="row">
-
                                 <!-- ANGULAR SERVER SIDE -->
                                 <div class="table-responsive">
                                     <table datatable [dtOptions]="dtOptions[0]" [dtTrigger]="reload_producto"
                                         class="row-border hover " width="100%">
                                         <thead>
                                             <tr>
-                                                <th style="text-align: center;">ACCION</th>
                                                 <th style="text-align: center;">CATEGORIA</th>
                                                 <th style="text-align: center;">CATEGORIA PADRE</th>
+                                                <th style="text-align: center;">ACCION</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <ng-container *ngFor="let e of listarProducto;">
                                                 <tr style="vertical-align: middle;text-align: center;">
+                                                    <td>{{e.glosa_categoria}}</td>
+                                                    <td>{{e.atributo_padre}}</td>
                                                     <td>
                                                         <div class="button-group">
                                                             <button (click)="TraerCategoria(e.id_categoria)"
@@ -73,8 +72,6 @@
                                                             </button>
                                                         </div>
                                                     </td>
-                                                    <td>{{e.glosa_categoria}}</td>
-                                                    <td>{{e.atributo_padre}}</td>
                                                 </tr>
                                             </ng-container>
                                         </tbody>
@@ -98,14 +95,16 @@
                                         width="100%">
                                         <thead>
                                             <tr>
-                                                <th style="text-align: center;">ACCION</th>
                                                 <th style="text-align: center;">CATEGORIA</th>
                                                 <th style="text-align: center;">CATEGORIA PADRE</th>
+                                                <th style="text-align: center;">ACCION</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <ng-container *ngFor="let e of listarProductoDeshabilitado;">
                                                 <tr style="vertical-align: middle;text-align: center;">
+                                                    <td>{{e.glosa_categoria}}</td>
+                                                    <td>{{e.atributo_padre}}</td>
                                                     <td>
                                                         <div class="button-group">
                                                             <button (click)="TraerCategoria(e.id_categoria)"
@@ -122,11 +121,8 @@
                                                                 class="btn btn-sm btn-success btn-circle">
                                                                 <i class="fa fa-check"></i>
                                                             </button>
-
                                                         </div>
                                                     </td>
-                                                    <td>{{e.glosa_categoria}}</td>
-                                                    <td>{{e.atributo_padre}}</td>
                                                 </tr>
                                             </ng-container>
                                         </tbody>

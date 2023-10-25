@@ -124,7 +124,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
       processing: true,
       responsive: true,
       destroy: true,
-
+      ordering: false,
       // scrollX:true,
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",
@@ -177,7 +177,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
           width: "10%"
         },
         {
-          width: "10%"
+          width: "20%"
         }
       ],
     };
@@ -194,6 +194,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
       responsive: true,
       destroy: true,
       order: [],
+      ordering: false,
       // scrollX:true,
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",
@@ -243,7 +244,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
           width: "10%"
         },
         {
-          width: "10%"
+          width: "25%"
         }
       ],
     };
@@ -260,6 +261,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
       responsive: true,
       destroy: true,
       order: [],
+      ordering: false,
       // scrollX:true,
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",

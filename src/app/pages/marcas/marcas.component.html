@@ -17,7 +17,7 @@
                             </div>
                         </div>
                     </div>
-                    <ul class="nav nav-pills m-t-30 m-b-30">
+                    <ul class="nav nav-pills m-t-10 m-b-10">
                         <li class=" nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab"
                                 aria-expanded="false">Activos</a> </li>
                         <li class="nav-item"> <a href="#navpills-2" class="nav-link" data-toggle="tab"
@@ -33,31 +33,30 @@
                                         <thead>
                                             <tr style="vertical-align: middle;text-align: center;"
                                                 class="text-uppercase">
-                                                <th class="text-center">ACCION</th>
                                                 <th class="text-center">NOMBRE</th>
+                                                <th class="text-center">ACCION</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <ng-container *ngFor="let e of listarProducto;">
                                                 <tr style="vertical-align: middle;text-align: center;">
+                                                    <td>{{e.glosa_marca}}</td>
                                                     <td>
                                                         <div class="button-group">
                                                             <button type="button" style="width: 20px;height: 20px;"
                                                                 class="btn btn-sm btn-info btn-circle"
-                                                                tooltip="Editar Marca" placement="top"
-                                                                [showDelay]="50" [hideDelay]="50"
-                                                                (click)="EditarMarca(e)">
+                                                                tooltip="Editar Marca" placement="top" [showDelay]="15"
+                                                                [hideDelay]="15" (click)="EditarMarca(e)">
                                                                 <i class="fa  fa-edit "></i> </button>
                                                             <button type="button" style="width: 20px;height: 20px;"
                                                                 class="btn btn-sm btn-danger btn-circle"
                                                                 tooltip="Deshabilitar Marca" placement="top"
-                                                                (click)="EstadoMarca('activado',e.id_marca)"
-                                                                [showDelay]="50" [hideDelay]="50">
+                                                                (click)="EstadoMarca('desactivar',e.id_marca)"
+                                                                [showDelay]="15" [hideDelay]="15">
                                                                 <i class="fa fa-times"></i>
                                                             </button>
                                                         </div>
                                                     </td>
-                                                    <td>{{e.glosa_marca}}</td>
                                                 </tr>
                                             </ng-container>
                                         </tbody>
@@ -82,28 +81,29 @@
                                         <thead>
                                             <tr style="vertical-align: middle;text-align: center;"
                                                 class="text-uppercase">
-                                                <th class="text-center">ACCION</th>
                                                 <th class="text-center">NOMBRE</th>
+                                                <th class="text-center">ACCION</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <ng-container *ngFor="let e of listarProductoDeshabilitado;">
                                                 <tr style="vertical-align: middle;text-align: center;">
+                                                    <td>{{e.glosa_marca}}</td>
                                                     <td>
                                                         <div class="button-group">
                                                             <button type="button" style="width: 20px;height: 20px;"
-                                                                class="btn btn-smbtn-info btn-circle"><i
-                                                                    tooltip="Editar Marca" placement="top" 
-                                                                    (click)="EditarMarca(e)"
-                                                                    [showDelay]="50" [showDelay]="50" class="fa  fa-edit "></i> </button>
-                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-info btn-circle"><i
+                                                                    tooltip="Editar Marca" placement="top"
+                                                                    (click)="EditarMarca(e)" [hideDelay]="15"
+                                                                    [showDelay]="15" class="fa  fa-edit "></i> </button>
+                                                            <button (click)="EstadoMarca('activado',e.id_marca)"
+                                                                type="button" style="width: 20px;height: 20px;"
                                                                 class="btn btn-sm btn-success btn-circle"><i
                                                                     tooltip="Activar Marca" placement="top"
-                                                                    (click)="EstadoMarca('desactivar',e.id_marca)"
-                                                                    [showDelay]="50" [showDelay]="50" class="fa fa-check"></i> </button>
+                                                                    [showDelay]="15" [hideDelay]="15"
+                                                                    class="fa fa-check"></i> </button>
                                                         </div>
                                                     </td>
-                                                    <td>{{e.glosa_marca}}</td>
                                                 </tr>
                                             </ng-container>
                                         </tbody>
@@ -126,7 +126,7 @@
 
 
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter"
-    aria-hidden="true" >
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -159,7 +159,8 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal" data-original-title=""
                     title="">Salir</button>
-                <button (click)="GuardarActualizarCategoria()" id="GuardarActualizarCategoria" class="btn btn-primary" type="button">
+                <button (click)="GuardarActualizarCategoria()" id="GuardarActualizarCategoria" class="btn btn-primary"
+                    type="button">
                     GUARDAR MARCA</button>
             </div>
         </div>

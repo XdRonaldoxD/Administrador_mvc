@@ -14,7 +14,8 @@
                 </li>
                 <li class="nav-devider"></li>
                 <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
-                            class="fa fa-folder"></i><span class="hide-menu">INVENTARIOS<span class="label label-rouded label-themecolor pull-right">4</span></span></a>
+                            class="fa fa-folder"></i><span class="hide-menu">INVENTARIOS<span
+                                class="label label-rouded label-themecolor pull-right">4</span></span></a>
                     <ul aria-expanded="false" class="collapse" #EventoClick>
                         <li><a class="desactivar" (click)="SELECCION($event.target)" routerLink="/Marca"
                                 href="javascript:void()"> <i class="fa fa-tags"></i> MARCAS</a>
@@ -28,7 +29,8 @@
                     </ul>
                 </li>
                 <li><a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
-                            class="mdi mdi-cash"></i><span class="hide-menu">PAGOS<span class="label label-rouded label-themecolor pull-right">3</span></span></a>
+                            class="mdi mdi-cash"></i><span class="hide-menu">PAGOS<span
+                                class="label label-rouded label-themecolor pull-right">3</span></span></a>
                     <ul aria-expanded="false" class="collapse" #EventoClick>
                         <li>
                             <a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Nota-Venta"
@@ -42,24 +44,31 @@
                             <a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Caja"
                                 href="javascript:void()"><i class="mdi mdi-clipboard-flow"></i> CAJA</a>
                         </li>
+                        <li>
+                            <a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Baja-Comprobantes"
+                                href="javascript:void()"><i class="mdi mdi-clipboard-flow"></i> ANULAR DOCUMENTOS</a>
+                        </li>
 
                     </ul>
                 </li>
                 <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
-                            class="mdi mdi-bullseye"></i><span class="hide-menu">OTROS<span class="label label-rouded label-themecolor pull-right">3</span></span></a>
-                    <ul aria-expanded="false" class="collapse">
-                        <li><a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Pedidos">
-                            <i class="mdi mdi-book"></i> PEDIDOS</a>
-                        </li>
-                    </ul>
+                            class="mdi mdi-bullseye"></i><span class="hide-menu">OTROS<span
+                                class="label label-rouded label-themecolor pull-right">3</span></span></a>
                     <ul aria-expanded="false" class="collapse" #EventoClick>
+                        <li><a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Pedidos">
+                                <i class="mdi mdi-book"></i> PEDIDOS</a>
+                        </li>
+
                         <li><a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Importar-Inventario"
                                 href="javascript:void()"> <i class="mdi mdi-cube-send"></i> REPORTE PRODUCTOS</a>
                         </li>
-                    </ul>
-                    <ul aria-expanded="false" class="collapse">
+
+                        <li><a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Libro-Ventas"
+                                href="javascript:void()"> <i class="mdi mdi-cube-send"></i> LIBRO VENTAS</a>
+                        </li>
                         <li><a (click)="SELECCION($event.target)" class="desactivar" routerLink="/chatBox"
-                                href="javascript:void()"> <i class="mdi mdi-wechat"></i> CHAT CLIENTE</a></li>
+                                href="javascript:void()"> <i class="mdi mdi-wechat"></i> CHAT CLIENTE</a>
+                        </li>
                     </ul>
                 </li>
                 <li><a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
@@ -73,12 +82,16 @@
                     </ul>
                 </li>
                 <li><a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
-                            class="fa fa-building"></i><span class="hide-menu">EMPRESA<span
-                                class="label label-rouded label-themecolor pull-right">1</span></span></a>
+                            class="fa fa-building"></i><span class="hide-menu">D. GENERALES<span
+                                class="label label-rouded label-themecolor pull-right">2</span></span></a>
                     <ul aria-expanded="false" class="collapse" #EventoClick>
                         <li>
                             <a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Empresa"
-                                href="javascript:void()"> <i class="mdi mdi-television-guide"></i> DATOS GENERALES</a>
+                                href="javascript:void()"> <i class="mdi mdi-television-guide"></i> EMPRESA </a>
+                        </li>
+                        <li>
+                            <a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Usuario"
+                                href="javascript:void()"> <i class="fa fa-user-plus" aria-hidden="true"></i> USUARIO </a>
                         </li>
                     </ul>
                 </li>

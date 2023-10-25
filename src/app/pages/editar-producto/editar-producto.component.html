@@ -56,9 +56,10 @@
                                                     <div class="form-group">
                                                         <label for="firstName1">SKU<STRONg
                                                                 class="text-danger">(*)</STRONg></label>
-                                                        <input type="text" class="form-control" 
+                                                        <input type="text" class="form-control"
                                                             (keyup)="VerificarSku($event)"
-                                                            formControlName="codigo_producto" placeholder="Codigo del Producto"
+                                                            formControlName="codigo_producto"
+                                                            placeholder="Codigo del Producto"
                                                             [class.is-invalid]="informacionForm.controls['codigo_producto']|isInvalid">
                                                         <div class="text-danger">
                                                             <div
@@ -70,9 +71,8 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="lastName1">Codigo Barra</label>
-                                                        <input type="text" class="form-control" id="codigo_barra"
-                                                            name="codigo_barra">
+                                                        <label for="codigo_barra_producto">Codigo Barra</label>
+                                                        <input type="text" class="form-control" formControlName="codigo_barra_producto" placeholder="Codigo barra del producto" >
                                                     </div>
                                                 </div>
                                             </div>
@@ -81,7 +81,31 @@
                                                     <div class="form-group">
                                                         <label for="emailAddress1">Nombre</label>
                                                         <input type="email" class="form-control"
-                                                            formControlName="glosa_producto" id="emailAddress1">
+                                                            formControlName="glosa_producto"
+                                                            placeholder="Nombre del producto"
+                                                            [class.is-invalid]="informacionForm.controls['glosa_producto']|isInvalid">
+                                                    </div>
+                                                    <div class="text-danger">
+                                                        <div
+                                                            *ngIf="informacionForm.controls['glosa_producto']|hasError:'required'">
+                                                            Nombre producto Vacio
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="id_tipo_afectacion">Tipo Afectación<strong class="text-danger">(*)</strong></label>
+                                                        <select  formControlName="id_tipo_afectacion" [class.is-invalid]="informacionForm.controls['id_tipo_afectacion']|isInvalid"
+                                                            class="form-control">
+                                                            <option value="">Seleccionar Afectación</option>
+                                                            <option value="{{item.id_tipo_afectacion}}" *ngFor="let item of tipo_afectacion">{{item.descripcion}}</option>
+                                                        </select>
+                                                        <div class="text-danger">
+                                                            <div  *ngIf="informacionForm.controls['id_tipo_afectacion']|hasError:'required'">
+                                                                Seleccionar Afectación.
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -141,6 +165,7 @@
                                                     <div class="form-group">
                                                         <label for="date1">Categoria</label>
                                                         <div id="t-crear-categoria">
+                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -161,9 +186,9 @@
                                                         id="btn-close-crud"><i style="vertical-align: text-bottom;"
                                                             class="bx bx-left-arrow-alt"></i> Volver</button>
                                                     <button (click)="GuardarProductoCompleto()" type="button"
-                                                        [disabled]="buttonDisabled"
-                                                        class="btn btn-success"  value="create-product"><i
-                                                            style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                        [disabled]="buttonDisabled" class="btn btn-success"
+                                                        value="create-product"><i style="vertical-align: text-bottom;"
+                                                            class="bx bx-save"></i>
                                                         Guardar
                                                     </button>
                                                 </div>
@@ -249,9 +274,9 @@
                                                         id="btn-close-crud"><i style="vertical-align: text-bottom;"
                                                             class="bx bx-left-arrow-alt"></i> Volver</button>
                                                     <button (click)="GuardarProductoCompleto()" type="button"
-                                                    [disabled]="buttonDisabled"
-                                                        class="btn btn-success"  value="create-product"><i
-                                                            style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                        [disabled]="buttonDisabled" class="btn btn-success"
+                                                        value="create-product"><i style="vertical-align: text-bottom;"
+                                                            class="bx bx-save"></i>
                                                         Guardar
                                                     </button>
                                                 </div>
@@ -275,18 +300,25 @@
                                             <div class="w-100 mt-1">
                                                 <div class="card">
                                                     <div class="card-body agregar_imagen_edit">
-                                                        <table class="table table-responsive color-bordered-table muted-bordered-table">
+                                                        <table
+                                                            class="table table-responsive color-bordered-table muted-bordered-table">
                                                             <thead>
                                                                 <tr>
-                                                                    <th class="align-middle" style="width: 10%;">Titulo</th>
-                                                                    <th class="align-middle" style="width: 15%;">Imagen</th>
-                                                                    <th class="align-middle" style="width: 10%;">Posición </th>
-                                                                    <th class="align-middle" style="width: 10%;">Portada</th>
-                                                                    <th class="align-middle" style="width: 5%;">Acciones</th>
+                                                                    <th class="align-middle" style="width: 10%;">Titulo
+                                                                    </th>
+                                                                    <th class="align-middle" style="width: 15%;">Imagen
+                                                                    </th>
+                                                                    <th class="align-middle" style="width: 10%;">
+                                                                        Posición </th>
+                                                                    <th class="align-middle" style="width: 10%;">Portada
+                                                                    </th>
+                                                                    <th class="align-middle" style="width: 5%;">Acciones
+                                                                    </th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <tr *ngFor="let item of this.imagenes_producto;let indice=index">
+                                                                <tr
+                                                                    *ngFor="let item of this.imagenes_producto;let indice=index">
                                                                     <td class="align-middle">{{item.nombre_imagen}}</td>
                                                                     <td class="align-middle">
                                                                         <div class="card">
@@ -349,9 +381,9 @@
                                                         style="vertical-align: text-bottom;"
                                                         class="bx bx-left-arrow-alt"></i> Volver</button>
                                                 <button (click)="GuardarProductoCompleto()" type="button"
-                                                [disabled]="buttonDisabled"
-                                                    class="btn btn-success"  value="create-product"><i
-                                                        style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                    [disabled]="buttonDisabled" class="btn btn-success"
+                                                    value="create-product"><i style="vertical-align: text-bottom;"
+                                                        class="bx bx-save"></i>
                                                     Guardar
                                                 </button>
                                             </div>
@@ -401,9 +433,9 @@
                                                         style="vertical-align: text-bottom;"
                                                         class="bx bx-left-arrow-alt"></i> Volver</button>
                                                 <button (click)="GuardarProductoCompleto()" type="button"
-                                                [disabled]="buttonDisabled"
-                                                    class="btn btn-success"  value="create-product"><i
-                                                        style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                    [disabled]="buttonDisabled" class="btn btn-success"
+                                                    value="create-product"><i style="vertical-align: text-bottom;"
+                                                        class="bx bx-save"></i>
                                                     Guardar
                                                 </button>
                                             </div>
@@ -469,9 +501,9 @@
                                                         style="vertical-align: text-bottom;"
                                                         class="bx bx-left-arrow-alt"></i> Volver</button>
                                                 <button (click)="GuardarProductoCompleto()" type="button"
-                                                [disabled]="buttonDisabled"
-                                                    class="btn btn-success"  value="create-product"><i
-                                                        style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                    [disabled]="buttonDisabled" class="btn btn-success"
+                                                    value="create-product"><i style="vertical-align: text-bottom;"
+                                                        class="bx bx-save"></i>
                                                     Guardar
                                                 </button>
                                             </div>
@@ -550,9 +582,9 @@
                                                         style="vertical-align: text-bottom;"
                                                         class="bx bx-left-arrow-alt"></i> Volver</button>
                                                 <button (click)="GuardarProductoCompleto()" type="button"
-                                                [disabled]="buttonDisabled"
-                                                    class="btn btn-success"  value="create-product"><i
-                                                        style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                    [disabled]="buttonDisabled" class="btn btn-success"
+                                                    value="create-product"><i style="vertical-align: text-bottom;"
+                                                        class="bx bx-save"></i>
                                                     Guardar
                                                 </button>
                                             </div>

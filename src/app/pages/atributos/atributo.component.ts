@@ -128,7 +128,7 @@ export class AtributoComponent implements OnInit {
           });
         });
       },
-      order: [],
+      ordering: false,
       columns: [
         {
           width: "20%"
@@ -153,7 +153,7 @@ export class AtributoComponent implements OnInit {
       processing: true,
       responsive: true,
       destroy: true,
-      order: [],
+      ordering: false,
       // scrollX:true,
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",

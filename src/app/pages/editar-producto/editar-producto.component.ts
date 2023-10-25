@@ -33,6 +33,7 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
   descripcion_corta: any;
   checked_atributo: Atributo_seleccionado[] = [];
   checked_categoria: any = [];
+  tipo_afectacion: any = [];
   color: any;
   contador_texto: any;
   verificador_sku: boolean = false;
@@ -55,8 +56,9 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
       visible_tienda: [false],
       descripcion_corta: [],
       descripcion_extendida: [],
-      glosa_producto: []
-
+      glosa_producto: ['', [Validators.required]],
+      id_tipo_afectacion: [''],
+      codigo_barra_producto: [''],
     });
     this.PrecioStockForm = this.fb.group({
       precio_venta: ['', [Validators.required]],
@@ -66,7 +68,6 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
     });
     this.token = this.servicio_login.getToken();
     this.listarAtributo();
-
   }
 
   ngOnDestroy(): void {
@@ -113,11 +114,9 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
 
         this.listarCategorias(this.informacionForm.value.tipo_inventario, true);
         $(document).trigger("enhance.tablesaw");
-
-        // this.construirtabla();
-
       }), takeUntil(this.Unsuscribe)).subscribe({
         next: (res) => {
+          this.tipo_afectacion = res.tipoAfectacion;
           if (res.visibleonline_producto === 1) {
             res.visibleonline_producto = true;
           } else {
@@ -127,17 +126,20 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
           this.informacionForm.get('codigo_producto')?.setValue(res.codigo_producto);
           this.informacionForm.get('tipo_inventario')?.setValue(res.id_tipo_inventario);
           this.informacionForm.get('visible_tienda')?.setValue(res.visibleonline_producto);
+          this.informacionForm.get('id_tipo_afectacion')?.setValue(res.id_tipo_afectacion);
+          this.informacionForm.get('codigo_barra_producto')?.setValue(res.codigo_barra_producto);
 
           this.informacionForm.get('descripcion_corta')?.setValue(res.detalle_producto);
           this.informacionForm.get('descripcion_extendida')?.setValue(res.detallelargo_producto);
+          this.informacionForm.get('glosa_producto')?.setValue(res.glosa_producto);
 
           this.descripcion_corta.setValue(res.detalle_producto);
           this.descripcion_extendida.setValue(res.detallelargo_producto);
 
-          this.informacionForm.get('glosa_producto')?.setValue(res.glosa_producto);
           this.PrecioStockForm.get('precio_venta')?.setValue(res.precioventa_producto);
           this.PrecioStockForm.get('stock')?.setValue(res.stock_producto);
           this.PrecioStockForm.get('precio_costo')?.setValue(res.preciocosto_producto);
+
           this.checked_atributo = res.arreglo_atributo_producto;
           res.arreglo_color.forEach((element: any) => {
             let color = `
@@ -216,8 +218,6 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
         }
       }
     )
-
-
     $(document).on("keyup", ".posicion", (elemento: any) => {
       this.imagenes_producto[$(elemento.target).attr("id_posicion")].orden_imagen = $(elemento.target).val();
     })
@@ -332,7 +332,7 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
           } else {
             $.each(arreglo.categoria, (i: any, data: any) => {
               html += "<li><i class=\"fa fa-minus\"></i>";
-              html += `<label  class="inline custom-control custom-checkbox block"><input id="${data.id_categoria}_categoria" value=${data.id_categoria} name='categoria_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input selector-categoria" ><span  class="custom-control-indicator"></span><span class="custom-control-description ml-0"> ${data.glosa_categoria}</span></label>`;
+              html += `<label style="pointer-events: none;" class="inline custom-control custom-checkbox block"><input id="${data.id_categoria}_categoria" value=${data.id_categoria} name='categoria_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input selector-categoria" ><span  class="custom-control-indicator"></span><span class="custom-control-description ml-0"> ${data.glosa_categoria}</span></label>`;
               if (typeof data.subcategoria !== 'undefined') {
                 html += this.arbolSubcategoria(data.subcategoria);
               } else {
@@ -356,21 +356,25 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
   }
 
   arbolSubcategoria(subcategoria: any) {
-    var html = "";
-    html += "<ul style='display:block;list-style: none;' >";
+    var html = "<ul style='display:block;list-style: none;' >";
     if (typeof subcategoria !== 'undefined') {
       $.each(subcategoria, (i: any, data: any) => {
+        var tieneSubcategoria = typeof data.subcategoria !== 'undefined';
+        var estilo = tieneSubcategoria ? 'style="pointer-events: none;"' : ''; // Aplicar el estilo solo si tiene subcategorías
         html += `<li><i class='fa fa-minus'></i>
-        <label  class="inline custom-control custom-checkbox block"><input id="${data.id_categoria}_categoria" value=${data.id_categoria} name='categoria_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input selector-categoria" ><span  class="custom-control-indicator"></span><span class="custom-control-description ml-0"> ${data.glosa_categoria}</span></label>`;
-        if (typeof data.subcategoria !== 'undefined') {
+        <label ${estilo} class="inline custom-control custom-checkbox block">
+          <input id="${data.id_categoria}_categoria" value=${data.id_categoria} name='categoria_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input selector-categoria" ${tieneSubcategoria ? "disabled" : ""}>
+          <span class="custom-control-indicator"></span>
+          <span class="custom-control-description ml-0">${data.glosa_categoria}</span>
+        </label>`;
+        if (tieneSubcategoria) {
           html += this.arbolSubcategoria(data.subcategoria);
         } else {
-          html += "<h6  hidden class='marcador-subcategoria-hijo'>Subcategoria hijo</h6>";
+          html += "<h6 hidden class='marcador-subcategoria-hijo'>Subcategoria hijo</h6>";
         }
         html += "</li>";
-
       });
-    };
+    }
     html += "</ul>";
     return html;
   }
@@ -741,7 +745,6 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
             timerProgressBar: true,
             timer: 5000
           })
-          this.router.navigateByUrl("/Producto").then();
         },
         error: (error) => {
           Swal.fire({

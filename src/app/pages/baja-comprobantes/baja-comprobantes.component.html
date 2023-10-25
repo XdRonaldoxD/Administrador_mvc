@@ -1,0 +1,399 @@
+<div class="row">
+    <!-- Earning Swiper Starts -->
+    <div class="col-xl-12 col-md-12 col-12">
+        <div class="card" style="background-color: #f8f9fa;">
+            <div class="card-content">
+                <div class="card-body vertical-line p-0">
+                    <div class="row m-0">
+                        <div class="col-7 p-0">
+                            <div class="row m-0">
+                                <div class="col-md-12 p-0">
+                                    <div class="card m-0">
+                                        <div class="card-content" style="background-color: #f8f9fa;">
+                                            <div class="card-body p-1">
+                                                <div class="col-md-12 tabla-detalle-negocio p-0" id="tabla-detalle-negocio" style="background-color: white; overflow:auto; border-radius: 10px;width: 100%;
+                                                    height: calc(100vh - 373px);overflow:auto">
+                                                    <div class="table-responsive">
+                                                        <table summary="datos del negocio" class="table table-bordered table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>CANTIDAD</th>
+                                                                    <th>PRODUCTO</th>
+                                                                    <th>PRECIO</th>
+                                                                    <!-- <th>ACCION</th> -->
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody *ngIf="ProductoSeleccionados.length>0">
+                                                                <tr
+                                                                    *ngFor="let item of ProductoSeleccionados;let i=index">
+                                                                    <td>
+                                                                        <div
+                                                                            class="stepper stepper--style-1 js-spinner">
+                                                                            <input type="number" min="0" max="100"
+                                                                                step="1" [disabled]="true"
+                                                                                [value]="item.cantidad_negocio_detalle"
+                                                                                class="stepper__input total_detalle_general_anterior">
+                                                                            <div class="stepper__controls">
+                                                                                <button type="button" [disabled]="true"
+                                                                                    style="cursor: pointer;"
+                                                                                    spinner-button="up">+</button>
+                                                                                <button type="button" [disabled]="true"
+                                                                                    style="cursor: pointer;"
+                                                                                    spinner-button="down">−</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="d-flex justify-content-between align-items-center">
+                                                                            <div class="row p-0 m-0">
+                                                                                <div class="col-12 p-0 m-0 text-left">
+                                                                                    <h6 class="p-0 m-0">
+                                                                                        {{item.glosa_producto}}</h6>
+                                                                                </div>
+                                                                                <div class="col-12 p-0 m-0 text-left">
+                                                                                    <small>
+                                                                                        <strong>Codigo:
+                                                                                        </strong>{{item.codigo_producto}}
+                                                                                    </small>
+                                                                                </div>
+                                                                                <div class=" col-12 p-0 m-0">
+                                                                                    <ng-container
+                                                                                        *ngIf="item.stock_producto; else no_hay_stock">
+                                                                                        <div class="existe_stock">
+                                                                                            Con Stock
+                                                                                        </div>
+                                                                                    </ng-container>
+                                                                                    <ng-template #no_hay_stock>
+                                                                                        <div class="vacio_stock">
+                                                                                            Sin Stock
+                                                                                        </div>
+                                                                                    </ng-template>
+                                                                                </div>
+                                                                            </div><i class="bx bx-comment cursor-pointer mensaje_modal ml-1" style="font-size: 2rem;"></i>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>{{item.total_negocio_detalle | currency: 'S/':
+                                                                        'symbol': '': 'en-PE'}}</td>
+                                                                    <!-- <td><a (click)="eliminarFila(i)" 
+                                                                            tooltip="Eliminar Producto" placement="top"
+                                                                            [showDelay]="50" [hideDelay]="50"
+                                                                            class="cursor-pointer"
+                                                                            style="background-color: red;padding:0.4rem;border-radius: 2rem;cursor: pointer;color: white;">
+                                                                            <i style="font-size: 20px;"
+                                                                                class="fa fa-times"
+                                                                                aria-hidden="true"></i>
+                                                                        </a>
+                                                                    </td> -->
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 px-0 mt-1">
+                                                    <div class="row">
+                                                        <div class="col-5">
+                                                            <label for="vendedor_seleccionado"
+                                                                class="col-12">Vendedor</label>
+                                                            <div class="col-sm-12">
+                                                                <select class="form-control">
+                                                                    <option value="{{identificacion.id_usuario}}">{{identificacion.vendedor}}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <label for="vendedor_seleccionado" class="col-12">Comprobantes</label>
+                                                            <div class="col-sm-12">
+                                                                <select class="form-control" [ngModel]="documento">
+                                                                    <option value="NOTA CREDTIO">NOTA CREDITO</option>
+                                                                    <option value="ANULAR">ANULAR</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <div class="row mb-1">
+                                                                <div class="col-md-12">
+                                                                    <table class="tabla_totales" style="width: 100%;">
+                                                                        <tr>
+                                                                            <td class="text-left" colspan="3">
+                                                                                <strong>SUBTOTAL:</strong>
+                                                                            </td>
+                                                                            <td><strong
+                                                                                    class="Afecto_total">{{Totales.subtotal
+                                                                                    | currency: 'S/': 'symbol': '':
+                                                                                    'en-PE'}}</strong>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="text-left" colspan="3">
+                                                                                <strong>I.G.V.:</strong>
+                                                                            </td>
+                                                                            <td><strong class="iva_total">{{Totales.igv
+                                                                                    | currency: 'S/': 'symbol': '':'en-PE'}}</strong>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="text-left" valign="middle"
+                                                                                colspan="3"> <strong>TOTAL:</strong>
+                                                                            </td>
+                                                                            <td><strong
+                                                                                    class="total_detalle">{{Totales.total
+                                                                                    | currency: 'S/': 'symbol': '':
+                                                                                    'en-PE'}}</strong>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div
+                                                                    class="col-md-12  d-flex content-buttons-actions justify-content-end">
+                                                                    <button (click)="LimpiarInformacion()"
+                                                                        class="btn btn-danger mr-2">Limpiar</button>
+                                                                    <button (click)="EnviarAnular()" type="button"
+                                                                        class="btn btn-secondary ">Anular</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div [class.d-none]="borrador_nota_venta==true" class="col-5  p-0">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card m-0" style="padding: 20px; background-color: #f8f9fa;">
+                                        <div class="nota-venta">
+                                            <div class="row mb-1 mx-0">
+                                                <div class="col-md-12 d-flex justify-content-between p-0">
+                                                    <i class="fa fa-product-hunt" aria-hidden="true"></i>
+                                                    <h6 class="m-0 col-12">Buscar N° Documento</h6>
+                                                </div>
+                                                <form  [formGroup]="ProductoBuscar" autocomplete="nope" class="col-12 p-0">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" placeholder=""
+                                                            aria-label="" aria-describedby="basic-addon1"
+                                                            (keypress)="EscribirProducto($event)" #search_input_producto
+                                                            formControlName="glosa_producto">
+                                                        <button (click)="BuscarProductos()"
+                                                            class="btn btn-light-info text-info font-weight-medium"
+                                                            type="button">Buscar <i class="fa fa-search"
+                                                                aria-hidden="true"></i> </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="row mx-0">
+                                                <div class="col-12 p-0 content-tabla"
+                                                    style="overflow-y: auto; overflow-x: hidden;">
+                                                    <table id="tabla_borrador_ventas"
+                                                        aria-describedby="tabla_borrador_ventas"
+                                                        class="table table-borderless table-hover mb-0 tabla_producto_agregado"
+                                                        datatable [dtOptions]="dtOptions[0]"
+                                                        [dtTrigger]="reload_producto" style="width: 100%;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>DOCUMENTOS</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <ng-container *ngFor="let e of listarDocumentos;">
+                                                                <tr style="vertical-align: middle;text-align: center;">
+                                                                    <td>
+                                                                        <div class="text-left"
+                                                                            (click)="EnviarProducto(e)"
+                                                                            style="cursor: pointer;">
+                                                                            <ng-container
+                                                                                *ngIf="e.id_boleta else elseTemplateDocumento">
+                                                                                <div><b>Boleta Electronica N°
+                                                                                        {{e.serie_boleta+'-'+
+                                                                                        e.numero_boleta}}</b></div>
+                                                                                <div>{{e.fechacreacion_boleta |
+                                                                                    date:'dd/MM/yy'}}</div>
+                                                                                <div>{{e.nombre_cliente_boleta}}</div>
+                                                                            </ng-container>
+                                                                            <ng-template #elseTemplateDocumento>
+                                                                                <div><b>Factura Electronica N°
+                                                                                        {{e.serie_factura+'-'+
+                                                                                        e.numero_factura}}</b></div>
+                                                                                <div>{{e.fechacreacion_factura |
+                                                                                    date:'dd/MM/yy'}}</div>
+                                                                                <div>{{e.nombre_cliente_factura}}</div>
+                                                                            </ng-template>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </ng-container>
+                                                        </tbody>
+                                                        <tbody *ngIf="listarDocumentos.length == 0">
+                                                            <tr>
+                                                                <td colspan="3" class="no-data-available">No data!</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- METODOS DE PAGO -->
+                        <div [class.d-none]="metodos_pago_nota_venta==true" class="col-5"
+                            style="overflow-y: auto;overflow-x: hidden;height: calc(100vh - 150px);background-color: white;">
+                            <div class="container">
+                                <div class="row mt-2">
+                                    <div class="col-md-12">
+                                        <form [formGroup]="datosanulacion" autocomplete="nope">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4 class="text-center"> <strong> Datos de la venta</strong></h4>
+                                            </div>
+                                            <div class="col-4">
+                                                <h6 class="text-left"> <strong> Documento</strong></h6>
+                                            </div>
+                                            <div class="col-8">
+                                                <p class="text-left"> {{ datos_venta.documento }}</p>
+                                            </div>
+
+                                            <div class="col-4">
+                                                <h6 class="text-left"><strong>Atendido por</strong></h6>
+                                            </div>
+                                            <div class="col-8">
+                                                <p class="text-left">{{ datos_venta.vendedor }}</p>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <h4 class="text-center"> <strong> Forma de Pago</strong></h4>
+                                            </div>
+                                            <ng-container *ngFor="let item of datos_venta.forma_pagos">
+                                                <div class="col-md-6">
+                                                    <h6 class="text-left"><strong>{{item.glosa_medio_pago}}</strong></h6>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p class="p-0 m-0">{{item.valor_ingreso | currency: 'S/': 'symbol': '':'en-PE'}}</p>
+                                                </div>
+                                            </ng-container>
+                                            
+                                            <br> <br>
+                                            <div class="col-md-6">
+                                                <h6 class="text-left"><strong>Fecha Devolución</strong></h6>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="date" class="form-control" formControlName="fecha_devolucion">
+                                            </div>
+                                            <br>
+                                            <br>
+                                            <div class="col-md-6">
+                                                <h6 class="text-left"><strong>Tipo De Devolución</strong></h6>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <select [class.is-invalid]="datosanulacion.controls['tipo_anulacion']|isInvalid"
+                                                class="form-control" formControlName="tipo_anulacion">
+                                                    <option value="">Seleccionar</option>
+                                                    <option [value]="item.id_motivo_devolucion" *ngFor="let item of tipodevolucion">{{item.glosa_motivo_devolucion}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="comentario_pago" class="col-sm-12 control-label">Motivo de anulación</label>
+                                            <div class="col-sm-12">
+                                                <textarea formControlName="comentario" class="form-control" cols="10" rows="2"></textarea>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="d-flex justify-content-end">
+                                            <button type="button" class="btn btn-success" (click)="VolverPagina()"
+                                                value="create-product" style="padding-right: 15px;"> VOLVER
+                                            </button>
+                                            <button type="button" class="btn btn-primary ml-1"
+                                                (click)="ConfirmarAnulacion()" value="create-product"
+                                                style="padding-right: 15px;">CONFIRMAR<i
+                                                    class='bx bx-right-arrow-alt'></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true" style="display: none;" id="ajax-mostrar-pdf" data-backdrop="static">
+    <div class="modal-dialog modal-lg" style="width:55%;">
+        <div class="modal-content">
+            <div class="modal-header pb-0">
+                <h1 class="text-bold-600" style="text-align:left;">COMPROBANTE</h1>
+            </div>
+            <div class="modal-body pt-2 pb-0">
+                <ul class="nav nav-tabs customtab2" role="tablist">
+                    <li class="nav-item"> <a class="nav-link imprimirBoletaAfecta" data-toggle="tab" href="#cuenta"
+                            role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span
+                                class="hidden-xs-down">A4</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link imprimirTicket active" data-toggle="tab" href="#ticket"
+                            role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
+                                class="hidden-xs-down">TICKET</span></a> </li>
+                </ul>
+                <div class="tab-content p-3">
+                    <div class="tab-pane imprimirBoletaAfectaContent" id="cuenta" aria-labelledby="cuenta-tab"
+                        role="tabpanel">
+                        <div class="container px-0" id="viewjs_negocio">
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <strong>Enviar Correo Electrónico</strong>
+                                    <div class="input-group">
+                                        <input type="email" [(ngModel)]="Correo_pdf" class="form-control"
+                                            id="exampleInputEmail2" placeholder="Enter email">
+                                        <div class="input-group-addon btn btn-inverse" (click)="EnviarDocumento('PDF')"
+                                            tooltip="Enviar" placement="top" [showDelay]="50" [hideDelay]="50"><i
+                                                class="ti-email"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane imprimirTicketcontent" id="ticket" aria-labelledby="ticket-tab"
+                        role="tabpanel">
+                        <div class="container px-0" id="viewjs2_negocio">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <strong>Enviar Correo Electrónico</strong>
+                                    <div class="input-group">
+                                        <input type="email" [(ngModel)]="Correo_ticket" class="form-control"
+                                            id="exampleInputEmail2" placeholder="Enter email">
+                                        <div class="input-group-addon btn btn-inverse"
+                                            (click)="EnviarDocumento('TICKET')" tooltip="Enviar" placement="top"
+                                            [showDelay]="50" [hideDelay]="50"><i class="ti-email"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" (click)="LimpiarModalNegocio()"
+                    class="btn btn-danger waves-effect text-left">Salir</button>
+            </div>
+        </div>
+    </div>
+</div>

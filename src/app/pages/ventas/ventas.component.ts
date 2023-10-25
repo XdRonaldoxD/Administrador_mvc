@@ -151,7 +151,7 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
           });
         });
       },
-      order: [],
+      ordering: false,
       columns: [
         {
           width: "10%"
@@ -217,30 +217,30 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
         Swal.showLoading();
         if (item.id_nota_venta) {
           this.documento="NOTA VENTA";
-          var htmlticket = `<embed src="${item.ruta_archivo}/NOTA_VENTAVENTA/${item.urlticket_nota_venta}" frameborder="0" width="100%" height="400px">`;
+          var htmlticket = `<embed src="${item.ruta_archivo}/NOTA_VENTA/${item.urlticket_nota_venta}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs2_negocio").html(htmlticket);
-          var htmlpdf = `<embed src="${item.ruta_archivo}/NOTA_VENTAVENTA/${item.urlpdf_nota_venta}" frameborder="0" width="100%" height="400px">`;
+          var htmlpdf = `<embed src="${item.ruta_archivo}/NOTA_VENTA/${item.urlpdf_nota_venta}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs_negocio").html(htmlpdf);
-          this.url_pdf=`${item.ruta_archivo}/NOTA_VENTAVENTA/${item.urlpdf_nota_venta}`;
-          this.url_ticket=`${item.ruta_archivo}/NOTA_VENTAVENTA/${item.urlticket_nota_venta}`;
+          this.url_pdf=`${item.ruta_archivo}/NOTA_VENTA/${item.urlpdf_nota_venta}`;
+          this.url_ticket=`${item.ruta_archivo}/NOTA_VENTA/${item.urlticket_nota_venta}`;
         }
         if (item.id_boleta) {
           this.documento="BOLETA";
-          var htmlticket = `<embed src="${item.ruta_archivo}/BOLETAVENTA/${item.path_ticket_boleta}" frameborder="0" width="100%" height="400px">`;
+          var htmlticket = `<embed src="${item.ruta_archivo}/BOLETA/${item.path_ticket_boleta}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs2_negocio").html(htmlticket);
-          var htmlpdf = `<embed src="${item.ruta_archivo}/BOLETAVENTA/${item.path_boleta}" frameborder="0" width="100%" height="400px">`;
+          var htmlpdf = `<embed src="${item.ruta_archivo}/BOLETA/${item.path_boleta}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs_negocio").html(htmlpdf);
-          this.url_pdf=`${item.ruta_archivo}/BOLETAVENTA/${item.path_boleta}`;
-          this.url_ticket=`${item.ruta_archivo}/BOLETAVENTA/${item.path_ticket_boleta}`;
+          this.url_pdf=`${item.ruta_archivo}/BOLETA/${item.path_boleta}`;
+          this.url_ticket=`${item.ruta_archivo}/BOLETA/${item.path_ticket_boleta}`;
         }
         if (item.id_factura) {
           this.documento="FACTURA";
-          var htmlticket = `<embed src="${item.ruta_archivo}/FACTURAVENTA/${item.path_ticket_factura}" frameborder="0" width="100%" height="400px">`;
+          var htmlticket = `<embed src="${item.ruta_archivo}/FACTURA/${item.path_ticket_factura}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs2_negocio").html(htmlticket);
-          var htmlpdf = `<embed src="${item.ruta_archivo}/FACTURAVENTA/${item.path_documento}" frameborder="0" width="100%" height="400px">`;
+          var htmlpdf = `<embed src="${item.ruta_archivo}/FACTURA/${item.path_documento}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs_negocio").html(htmlpdf);
-          this.url_pdf=`${item.ruta_archivo}/FACTURAVENTA/${item.path_documento}`;
-          this.url_ticket=`${item.ruta_archivo}/FACTURAVENTA/${item.path_ticket_factura}`;
+          this.url_pdf=`${item.ruta_archivo}/FACTURA/${item.path_documento}`;
+          this.url_ticket=`${item.ruta_archivo}/FACTURA/${item.path_ticket_factura}`;
         }
         $(".imprimirTicket").addClass('active');
         $(".imprimirTicketcontent").addClass('active');

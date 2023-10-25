@@ -171,7 +171,7 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
       processing: true,
       responsive: true,
       destroy: true,
-
+      ordering: false,
       // scrollX:true,
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",

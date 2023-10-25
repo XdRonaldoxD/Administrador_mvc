@@ -28,7 +28,7 @@
                             <div class="row">
                                 <!-- ANGULAR SERVER SIDE -->
                                 <div class="table-responsive">
-                                    <table datatable [dtOptions]="dtOptions[0]" [dtTrigger]="reload_producto"
+                                    <table summary="Slider" datatable [dtOptions]="dtOptions[0]" [dtTrigger]="reload_producto"
                                         class="row-border hover " width="100%">
                                         <thead>
                                             <tr style="vertical-align: middle;text-align: center;"
@@ -149,8 +149,8 @@
             <div class="modal-body">
                 <form [formGroup]="sliderForm" autocomplete="nope" enctype="multipart/form-data">
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group ">
+                        <div class="col-6">
+                            <div class="form-group">
                                 <h6 for="name" class="col-sm-12 control-label">Titulo<span
                                         class="text-danger">(*)</span></h6>
                                 <div class="col-sm-12">
@@ -165,7 +165,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-6">
                             <div class="form-group">
                                 <h6 for="name" class="col-sm-12 control-label">Categoria<span
                                         class="text-danger">(*)</span></h6>
@@ -181,7 +181,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <h6 for="name" class="col-sm-12 control-label">Texto</h6>
+                                <div class="col-sm-12">
+                                    <div class="summernote">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
                             <div class="form-group col-12">
                                 <h4 class="card-title">Subir Imagen Tamaño Escritorio <strong>(1110x440)</strong><span
                                         class="text-danger">(*)</span></h4>
@@ -189,7 +198,7 @@
                                     data-default-file="" accept="image/png,image/jpeg" class="dropify" />
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-6">
                             <div class="form-group col-12">
                                 <h4 class="card-title">Subir Imagen Tamaño Mobile <strong>(510x395)</strong><span
                                         class="text-danger">(*)</span></h4>
@@ -204,7 +213,7 @@
                 <button class="btn btn-secondary" type="button" data-dismiss="modal" data-original-title=""
                     title="">Salir</button>
                 <button (click)="GuardarActualizarCategoria()" #GuardarAtibuto class="btn btn-primary" type="button">
-                    GUARDAR MARCA</button>
+                    GUARDAR SLIDER</button>
             </div>
         </div>
 

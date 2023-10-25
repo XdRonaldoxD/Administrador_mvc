@@ -2,15 +2,20 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { LoginService } from './login.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductoService {
-
+  protected token: any;
   constructor(
-    private httpcliente: HttpClient
-  ) { }
+    private httpcliente: HttpClient,
+    private servicio_login: LoginService
+
+  ) { 
+    this.token = this.servicio_login.getToken(); 
+  }
 
   ListaProductosRelacionado(token: any, id_producto: any): Observable<any> {
     const formData = new FormData();
@@ -81,4 +86,10 @@ export class ProductoService {
     return this.httpcliente.get(environment.api_url+"?controller=Producto&action=VerificarSku", { headers: headers, params: Params })
   }
 
+  TraerAfectacion(){
+    const headers = new HttpHeaders({
+      Authorization: this.token 
+    });
+    return this.httpcliente.get(environment.api_url+"?controller=Producto&action=traerAfectacion", { headers: headers })
+  }
 }

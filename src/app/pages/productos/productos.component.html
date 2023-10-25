@@ -82,7 +82,7 @@
                     </form>
                     <!-- <input [(colorPicker)]="color"  class="form-control" [style.background]="color"/> -->
 
-                    <ul class="nav nav-pills m-t-30 m-b-30">
+                    <ul class="nav nav-pills m-t-10 m-b-10">
                         <li class=" nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab"
                                 aria-expanded="false">Activos</a> </li>
                         <li class="nav-item"> <a href="#navpills-2" class="nav-link" data-toggle="tab"
@@ -98,16 +98,24 @@
                                         <thead>
                                             <tr style="vertical-align: middle;text-align: center;"
                                                 class="text-uppercase">
-                                                <th class="text-center">ACCION</th>
+                                                <th class="text-center">CODIGO(SKU)</th>
                                                 <th class="text-center">PRODUCTO</th>
                                                 <th class="text-center">STOCK</th>
-                                                <th class="text-center">PRECIO VENTA</th>
-                                                <th class="text-center">CODIGO(SKU)</th>
+                                                <th class="text-center">P. VENTA</th>
+                                                <th class="text-center">ACCION</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <ng-container *ngFor="let e of listarProducto;">
                                                 <tr style="vertical-align: middle;text-align: center;">
+                                                    <td>{{e.codigo_producto}}</td>
+                                                    <td>{{e.glosa_producto}}</td>
+                                                    <td><span
+                                                            [ngClass]="{'label-info': e.stock_producto > 0, 'label-danger': e.stock_producto <= 0}"
+                                                            class="label">{{e.stock_producto}}</span>
+                                                    </td>
+                                                    <td>{{e.precioventa_producto | currency: 'S/': 'symbol': '':
+                                                        'en-PE'}}</td>
                                                     <td>
                                                         <div class="button-group">
                                                             <button type="button" style="width: 20px;height: 20px;"
@@ -131,21 +139,10 @@
                                                                 class="btn btn-sm btn-secondary btn-circle"
                                                                 (click)="HistorialProducto(e.id_producto)"
                                                                 tooltip="Historial Producto" placement="top"
-                                                                [showDelay]="100"><i class="fa fa-file-text-o" aria-hidden="true"></i> </button>
+                                                                [showDelay]="100"><i class="fa fa-file-text-o"
+                                                                    aria-hidden="true"></i> </button>
                                                         </div>
                                                     </td>
-                                                    <td>{{e.glosa_producto}}</td>
-                                                    <ng-container *ngIf="e.stock_producto>0; else elseTemplate">
-                                                        <td><span class="label label-info">{{e.stock_producto}}</span>
-                                                        </td>
-                                                    </ng-container>
-                                                    <ng-template #elseTemplate>
-                                                        <td><span class="label label-danger">{{e.stock_producto}}</span>
-                                                        </td>
-                                                    </ng-template>
-
-                                                    <td>{{e.precioventa_producto | currency: 'S/': 'symbol': '': 'en-PE'}}</td>
-                                                    <td>{{e.codigo_producto}}</td>
                                                 </tr>
                                             </ng-container>
                                         </tbody>
@@ -326,7 +323,8 @@
 </div>
 
 
-<div class="modal fade" id="exampleHistorialProducto" tabindex="-1" role="dialog" aria-labelledby="exampleHistorialProducto" aria-hidden="true">
+<div class="modal fade" id="exampleHistorialProducto" tabindex="-1" role="dialog"
+    aria-labelledby="exampleHistorialProducto" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 1000px;">
         <div class="modal-content">
             <div class="modal-header">
@@ -336,8 +334,8 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-                    <table datatable [dtOptions]="dtOptions[2]" [dtTrigger]="reload_producto_historial" class="row-border hover "
-                        width="100%">
+                    <table datatable [dtOptions]="dtOptions[2]" [dtTrigger]="reload_producto_historial"
+                        class="row-border hover " width="100%">
                         <thead>
                             <tr style="vertical-align: middle;text-align: center;" class="text-uppercase">
                                 <th class="text-center">ACCION</th>
@@ -366,9 +364,7 @@
                             </tr>
                         </tbody>
                     </table>
-
                 </div>
-
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal" data-original-title=""

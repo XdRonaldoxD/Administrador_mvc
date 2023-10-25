@@ -21,47 +21,56 @@ import { SliderComponent } from './TiendaOnline/slider/slider.component';
 import { EmpresaComponent } from './empresa/empresa.component';
 import { DatosPersonalesComponent } from './datos-personales/datos-personales.component';
 import { DatosPersonalesresolverService } from '../resolver/DatosPersonalesresolver.service';
+import { BajaComprobantesComponent } from './baja-comprobantes/baja-comprobantes.component';
+import { LibroVentasComponent } from './libro-ventas/libro-ventas.component';
+import { LibroVentasService } from '../resolver/LibroVentasresolver.service';
+import { UsuarioComponent } from './usuario/usuario.component';
 
 
 const pagesRoutes: Routes = [
   {
     path: '',
     component: PagesComponent,
+    canActivate: [AuthGuard],
+    runGuardsAndResolvers: 'always',
     children: [
-      { path: 'inicio', component: IndexComponent, canActivate: [AuthGuard] },
-      { path: 'Nuevo-Producto', component: NuevoProductoComponent, canActivate: [AuthGuard] },
-      { path: 'Editar-Producto/:id_producto', component: EditarProductoComponent, canActivate: [AuthGuard] },
-      { path: 'Producto', component: ProductosComponent, canActivate: [AuthGuard] },
-      { path: 'Perfil', component: PerfilComponent, canActivate: [AuthGuard] },
-      { path: 'Marca', component: MarcasComponent, canActivate: [AuthGuard] },
-      { path: 'Categoria', component: CategoriaComponent, canActivate: [AuthGuard] },
-      { path: 'Atributo', component: AtributoComponent, canActivate: [AuthGuard] },
-      { path: 'Pedidos', component: PedidosComponent, canActivate: [AuthGuard] },
+      { path: 'inicio', component: IndexComponent },
+      { path: 'Nuevo-Producto', component: NuevoProductoComponent },
+      { path: 'Editar-Producto/:id_producto', component: EditarProductoComponent },
+      { path: 'Producto', component: ProductosComponent },
+      { path: 'Perfil', component: PerfilComponent },
+      { path: 'Marca', component: MarcasComponent },
+      { path: 'Categoria', component: CategoriaComponent },
+      { path: 'Atributo', component: AtributoComponent },
+      { path: 'Pedidos', component: PedidosComponent },
       {
-        path: 'Detalle-Pedido/:id_pedido', component: PedidoDetalleComponent, canActivate: [AuthGuard],
+        path: 'Detalle-Pedido/:id_pedido', component: PedidoDetalleComponent,
         resolve: { pedidodetalle: PedidoresolverService }
       },
       {
-        path: 'Datos-Personales/:id_usuario', component: DatosPersonalesComponent, canActivate: [AuthGuard],
+        path: 'Datos-Personales/:id_usuario', component: DatosPersonalesComponent,
         resolve: { datopersonal: DatosPersonalesresolverService }
       },
       {
-        path: 'Datos-Personales', component: DatosPersonalesComponent, canActivate: [AuthGuard]
+        path: 'Datos-Personales', component: DatosPersonalesComponent
       },
-      { path: 'chatBox', component: ChatBoxComponent, canActivate: [AuthGuard] },
-      { path: 'Importar-Inventario', component: MigrarproductoComponent, canActivate: [AuthGuard] },
-      { path: 'Nota-Venta', component: NotaVentaComponent, canActivate: [AuthGuard] },
-      { path: 'Caja', component: CajaComponent, canActivate: [AuthGuard] },
-      { path: 'Ventas', component: VentasComponent, canActivate: [AuthGuard] },
+      { path: 'chatBox', component: ChatBoxComponent },
+      { path: 'Importar-Inventario', component: MigrarproductoComponent },
+      { path: 'Nota-Venta', component: NotaVentaComponent },
+      { path: 'Caja', component: CajaComponent },
+      { path: 'Ventas', component: VentasComponent },
 
-      { path: 'Slider', component: SliderComponent, canActivate: [AuthGuard] },
-      { path: 'Empresa', component: EmpresaComponent, canActivate: [AuthGuard] },
+      { path: 'Slider', component: SliderComponent },
+      { path: 'Empresa', component: EmpresaComponent },
+      { path: 'Baja-Comprobantes', component: BajaComprobantesComponent },
+      { path: 'Usuario', component: UsuarioComponent },
+      {
+        path: 'Libro-Ventas', component: LibroVentasComponent,
+        resolve: { datos: LibroVentasService }
 
-
+      },
       { path: '', redirectTo: '/IniciarSession', pathMatch: 'full' },
     ]
-    // ,
-    // canActivate:[AuthGuard]
   },
   // { path: "**", component: LoginComponent },
 ];

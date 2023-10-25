@@ -35,6 +35,6 @@ export class MarcaService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post(environment.api_url+"?controller=Marca&action=Habilitar_Deshabilitar_Marca", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url+"?controller=Marca&action=actualizarestadoMarca", formData, { headers: headers })
   }
 }

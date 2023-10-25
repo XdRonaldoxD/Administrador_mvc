@@ -15,38 +15,30 @@
                 <div class="card-body">
                     <form action="" [formGroup]="FiltroCajaBuscar" autocomplete="nope">
                         <div class="row">
-
-                            <div class="col-md-4">
+                            <div class="col-3">
                                 <div class="form-group">
-                                    <h5 class="m-t-30">Medio Llegada</h5>
-                                    <select class="form-control" formControlName="pos_negocio">
+                                    <label for="pos_negocio">Medio Llegada</label>
+                                    <select class="form-control" id="pos_negocio" formControlName="pos_negocio">
                                         <option value="">Seleccionar Medio LLegada</option>
                                         <option value="0">Ventas Pos</option>
                                         <option value="1">Venta Online</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-3">
                                 <div class="form-group">
-                                    <h5 class="m-t-30">Fecha Desde <strong class="text-danger">(*)</strong> </h5>
-                                    <input type="date" placeholder="Filtrar fecha" class="form-control"
-                                        formControlName="fechacreacion_negocio_inicio">
+                                    <label for="fechacreacion_negocio_inicio">Fecha Desde <strong class="text-danger">(*)</strong></label>
+                                    <input type="date" class="form-control" id="fechacreacion_negocio_inicio" formControlName="fechacreacion_negocio_inicio">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-3">
                                 <div class="form-group">
-                                    <h5 class="m-t-30">Fecha Hasta<strong class="text-danger">(*)</strong></h5>
-                                    <input type="date" placeholder="Filtrar fecha" class="form-control"
-                                        formControlName="fechacreacion_negocio_fin">
+                                    <label for="fechacreacion_negocio_fin">Fecha Hasta<strong class="text-danger">(*)</strong></label>
+                                    <input type="date" class="form-control" id="fechacreacion_negocio_fin" formControlName="fechacreacion_negocio_fin">
                                 </div>
                             </div>
-                            <div class="col-md-12 mt-1">
-                                <div class="col-md-12 d-flex justify-content-end">
-
-                                    <div class="row m-0">
-                                        <button (click)="buscar()" class="btn btn-primary btn-buscar">Buscar</button>
-                                    </div>
-                                </div>
+                            <div class="col-3 d-flex align-items-center mt-1">
+                                <button (click)="buscar()" class="btn btn-primary btn-buscar">Buscar</button>
                             </div>
                         </div>
                     </form>
@@ -58,14 +50,13 @@
                         <div class="row">
                             <!-- ANGULAR SERVER SIDE -->
                             <div class="table-responsive">
-                                <table datatable [dtOptions]="dtOptions[0]" [dtTrigger]="reload_producto"
-                                    class="row-border hover " width="100%">
+                                <table datatable [dtOptions]="dtOptions[0]" [dtTrigger]="reload_producto" class="row-border hover " width="100%">
                                     <thead>
                                         <tr style="vertical-align: middle;text-align: center;" class="text-uppercase">
                                             <th class="text-center">N° DOCUMENTO</th>
                                             <th class="text-center">TIPO DE DOCUMENTO</th>
                                             <th class="text-center">VENDEDOR</th>
-                                            <th class="text-center">CLIENTE</th>
+                                            <th class="text-center">NOMBRE/RAZON SOCIAL</th>
                                             <th class="text-center">FECHA</th>
                                             <th class="text-center">TOTAL</th>
                                             <th class="text-center">ACCION</th>
@@ -75,7 +66,7 @@
                                         <ng-container *ngFor="let e of ListarCajaHabilitados;">
                                             <tr style="vertical-align: middle;text-align: center;" *ngIf="e.id_boleta">
                                                 <td>{{e.numero_boleta}}</td>
-                                                <td>{{"BOLETA"}}</td>
+                                                <td>{{"BOLETA ELECTRONICA"}}</td>
                                                 <td>{{e.nombre_staff_boleta}} {{e.apellidopaterno_staff_boleta}}
                                                     {{e.apellidomaterno_staff_boleta}}</td>
                                                 <td>{{e.nombre_cliente}} {{e.apellidopaterno_cliente}}
@@ -108,7 +99,7 @@
                                             </tr>
                                             <tr style="vertical-align: middle;text-align: center;" *ngIf="e.id_factura">
                                                 <td>{{e.numero_factura}}</td>
-                                                <td>{{"FACTURA"}}</td>
+                                                <td>{{"FACTURA ELECTRONICA"}}</td>
                                                 <td>{{e.nombre_staff_factura}} {{e.apellidopaterno_staff_factura}}
                                                     {{e.apellidomaterno_staff_factura}}</td>
                                                 <td>{{e.nombre_cliente}} {{e.apellidopaterno_cliente}}
@@ -139,8 +130,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr style="vertical-align: middle;text-align: center;"
-                                                *ngIf="e.id_nota_venta">
+                                            <tr style="vertical-align: middle;text-align: center;" *ngIf="e.id_nota_venta">
                                                 <td>{{e.numero_nota_venta}}</td>
                                                 <td>{{"NOTA VENTA"}}</td>
                                                 <td>{{e.nombre_staff_nota_venta}} {{e.apellidopaterno_staff_nota_venta}}

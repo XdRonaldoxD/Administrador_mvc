@@ -1,0 +1,52 @@
+<!-- Page Wrapper -->
+
+<div class="content container-fluid">
+    <!-- Website Analytics Starts-->
+    <div class="col-md-12 col-sm-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h1 class="text-bold-600" style="text-align:left;">LIBRO VENTAS</h1>
+            </div>
+            <div class="card-content">
+                <form  [formGroup]="informacionForm" autocomplete="nope" enctype="multipart/form-data">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="fecha_desde">Fecha desde <strong class="text-danger">(*)</strong></label>
+                                    <input formControlName="fecha_desde" type="date"
+                                        [class.is-invalid]="informacionForm.controls['fecha_desde']|isInvalid"
+                                     class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="fecha_hasta">Fecha Hasta <strong class="text-danger">(*)</strong></label>
+                                    <input formControlName="fecha_hasta"
+                                    [class.is-invalid]="informacionForm.controls['fecha_hasta']|isInvalid"
+                                    type="date" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="tipo_documento">Tipo Documento</label>
+                                    <select formControlName="tipo_documento" id="tipo_documento" class="form-control">
+                                        <option value="">Seleccionar Tipo Documento</option>
+                                        <option [value]="item.id_tipo_documento" *ngFor="let item of tipoDocumento">
+                                            {{item.glosa_tipo_documento}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <button (click)="exportarDocumento()" type="button" id="btn-save" class="btn  btn-success"><i
+                                        class="fe fe-export"></i>Exportar Documentos</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

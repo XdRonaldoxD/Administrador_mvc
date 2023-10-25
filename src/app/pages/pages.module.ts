@@ -35,6 +35,9 @@ import { EmpresaComponent } from './empresa/empresa.component';
 import { BannerComponent } from './TiendaOnline/banner/banner.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DatosPersonalesComponent } from './datos-personales/datos-personales.component';
+import { BajaComprobantesComponent } from './baja-comprobantes/baja-comprobantes.component';
+import { LibroVentasComponent } from './libro-ventas/libro-ventas.component';
+import { UsuarioComponent } from './usuario/usuario.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +61,14 @@ import { DatosPersonalesComponent } from './datos-personales/datos-personales.co
     ChatBoxComponent,
     NotaVentaComponent,//Nota DECLARAR pages para que funciona route-oulet
     CajaComponent, 
-    VentasComponent, SliderComponent, EmpresaComponent, BannerComponent, DatosPersonalesComponent 
+    VentasComponent,
+    SliderComponent,
+    EmpresaComponent,
+    BannerComponent,
+    DatosPersonalesComponent,
+    BajaComprobantesComponent,
+    LibroVentasComponent,
+    UsuarioComponent 
   ],
   exports: [
     IsInvalidPipe,

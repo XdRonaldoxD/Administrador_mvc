@@ -2,21 +2,26 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { LoginService } from './login.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MarcaService {
+  protected token: any;
   constructor(
-    private httpcliente: HttpClient
-  ) { }
-  GestionarMarca(token: any, formulario: any): Observable<any> {
+    private httpcliente: HttpClient,
+    private servicio_login: LoginService
+  ) {
+    this.token = this.servicio_login.getToken(); 
+   }
+  GestionarMarca(formulario: any): Observable<any> {
     const formData = new FormData();
     formData.append('id_marca', formulario.id_marca);
     formData.append('glosa_marca', formulario.glosa_marca);
     formData.append('accion', formulario.accion);
     const headers = new HttpHeaders({
-      Authorization: token
+      Authorization: this.token
     });
     return this.httpcliente.post(environment.api_url+"?controller=Marca&action=gestionarMarca", formData, { headers: headers })
   }

@@ -39,6 +39,8 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
   Unsuscribe: any = new Subject();
   color: any;
   GuardarInformacion: boolean = false;
+  isLoading:boolean = false;
+  marcas: any[] = [];
   constructor(
     private servicio_categoria: CategoriaService,
     private servicio_login: LoginService,
@@ -46,8 +48,9 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
     private servicio_atributo: AtributoService,
     private fb: FormBuilder,
     private router: Router,
-
-  ) { }
+  ) { 
+    this.token = this.servicio_login.getToken();
+  }
 
   ngOnDestroy(): void {
     this.Unsuscribe.unsubscribe();
@@ -57,7 +60,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
     this.descripcion_extendida = $('.descripcion_extendida').wysihtml5().data('wysihtml5').editor;
     this.descripcion_corta = $('.descripcion_corta').wysihtml5().data('wysihtml5').editor;
 
-    this.token = this.servicio_login.getToken();
+
     this.servicio_categoria.Inventario(this.token).pipe(finalize(() => {
       $("#t-crear-categoria").children("div").remove();
       var estructura_html = "<div><h6 for=\"name\" class=\"col-sm-12 control-label\">Categoría Padre</h6><div id=\"treeview_container\" class=\"hummingbird-treeview t-view-editar\" style=\"height: auto; display: block;\"><ul style='list-style: none;' id=\"treeview\" class=\"hummingbird-base\"></ul></div></div>";
@@ -165,9 +168,9 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
       visible_tienda: [false],
       descripcion_corta: [],
       descripcion_extendida: [],
+      codigo_barra_producto:[],
       id_marca:[],
       glosa_producto: ['', [Validators.required]]
-
     });
     this.PrecioStockForm = this.fb.group({
       precio_venta: ['', [Validators.required]],
@@ -199,15 +202,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
       } else {
         this.producto_serv.removeItemFromArr(this.checked_categoria, elemento.target.value)
       }
-
     })
-
-
-
-
-
-
-
   }
 
 
@@ -683,6 +678,24 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
         this.verificador_sku = true;
       });
     }, 700);
+  }
+
+  buscarMarca(term: string){
+    this.isLoading = true;
+    if (term.length>1) {
+      this.producto_serv.BuscarMarca(term).pipe(takeUntil(this.Unsuscribe))
+      .subscribe((data: any) => {
+        this.marcas = data.map((item: any) => item);
+        this.isLoading = false;
+      });
+    }else{
+      this.limpiarSeleccion();
+      this.isLoading = false;
+    }
+ 
+  }
+  limpiarSeleccion() {
+    this.marcas= [];
   }
 
 

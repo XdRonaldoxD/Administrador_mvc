@@ -75,7 +75,9 @@
                                                 <div class="col-6">
                                                     <div class="form-group">
                                                         <label for="codigo_barra_producto">Codigo Barra</label>
-                                                        <input type="text" class="form-control" formControlName="codigo_barra_producto" placeholder="Codigo barra del producto">
+                                                        <input type="text" class="form-control"
+                                                            formControlName="codigo_barra_producto"
+                                                            placeholder="Codigo barra del producto">
                                                     </div>
                                                 </div>
                                             </div>
@@ -84,7 +86,9 @@
                                                     <div class="form-group">
                                                         <label for="emailAddress1">Nombre <strong
                                                                 class="text-danger">(*)</strong></label>
-                                                        <input type="email" class="form-control" formControlName="glosa_producto" placeholder="Nombre del producto"
+                                                        <input type="email" class="form-control"
+                                                            formControlName="glosa_producto"
+                                                            placeholder="Nombre del producto"
                                                             [class.is-invalid]="informacionForm.controls['glosa_producto']|isInvalid">
                                                         <div class="text-danger">
                                                             <div
@@ -96,12 +100,15 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="date1">Tipo Afectación<strong class="text-danger">(*)</strong></label>
-                                                        <select  formControlName="id_tipo_afectacion"
+                                                        <label for="date1">Tipo Afectación<strong
+                                                                class="text-danger">(*)</strong></label>
+                                                        <select formControlName="id_tipo_afectacion"
                                                             [class.is-invalid]="informacionForm.controls['id_tipo_afectacion']|isInvalid"
                                                             class="form-control">
                                                             <option value="">Seleccionar Afectación</option>
-                                                            <option value="{{item.id_tipo_afectacion}}" *ngFor="let item of tipo_afectacion">{{item.descripcion}}</option>
+                                                            <option value="{{item.id_tipo_afectacion}}"
+                                                                *ngFor="let item of tipo_afectacion">
+                                                                {{item.descripcion}}</option>
                                                         </select>
                                                         <div class="text-danger">
                                                             <div
@@ -114,10 +121,15 @@
                                                 <div class="col-6">
                                                     <div class="form-group">
                                                         <label for="id_marca">Marca</label>
-                                                        <select  formControlName="id_marca" class="form-control select2">
-                                                            <option value="">Seleccionar Afectación</option>
-                                                            <option value="{{item.id_tipo_afectacion}}" *ngFor="let item of tipo_afectacion">{{item.descripcion}}</option>
-                                                        </select>
+                                                        <ng-select [searchable]="true" [items]="marcas"
+                                                            [multiple]="false" [loading]="isLoading"
+                                                            (search)="buscarMarca($event.term)"
+                                                            placeholder="Busque una marca"
+                                                            [typeToSearchText]="'Escriba para buscar...'"
+                                                            bindLabel="glosa_marca" bindValue="id_marca"
+                                                            (clear)="limpiarSeleccion()" formControlName="id_marca"
+                                                            [notFoundText]="'No se encontraron marcas'">
+                                                        </ng-select>
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
@@ -393,7 +405,7 @@
                                             <div class="col-md-3">
                                                 <label class="h6 m-0" for="">Nombre del Producto</label>
                                             </div>
-                                            <div class="col-md-8  ">
+                                            <div class="col-8">
                                                 <ng-select (change)="BuscarProductoRelaciondo($event)"
                                                     [clearable]="false" #producto_proveedor="ngModel"
                                                     name="producto_proveedor" [(ngModel)]="producto_relacionado"
@@ -467,9 +479,9 @@
                                             class="btn btn-outline-secondary mx-3" id="btn-close-crud"><i
                                                 style="vertical-align: text-bottom;" class="bx bx-left-arrow-alt"></i>
                                             Volver</button>
-                                        <button (click)="GuardarProductoCompleto()" type="button" class="btn btn-success"
-                                            value="create-product"><i style="vertical-align: text-bottom;"
-                                                class="bx bx-save"></i>
+                                        <button (click)="GuardarProductoCompleto()" type="button"
+                                            class="btn btn-success" value="create-product"><i
+                                                style="vertical-align: text-bottom;" class="bx bx-save"></i>
                                             Guardar
                                         </button>
                                     </ng-container>
@@ -480,7 +492,7 @@
                                         </button>
                                     </ng-template>
                                 </div>
-                              
+
                             </div>
 
                         </div>

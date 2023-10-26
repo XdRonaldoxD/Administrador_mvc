@@ -92,4 +92,13 @@ export class ProductoService {
     });
     return this.httpcliente.get(environment.api_url+"?controller=Producto&action=traerAfectacion", { headers: headers })
   }
+  BuscarMarca(term:string): Observable<any>{
+    let Params = new HttpParams();
+    Params = Params.append('search', term);
+    const headers = new HttpHeaders({
+      Authorization: this.token 
+    });
+    return this.httpcliente.get(environment.api_url+"?controller=NuevoProducto&action=filtrarMarca", { headers: headers , params: Params })
+
+  }
 }

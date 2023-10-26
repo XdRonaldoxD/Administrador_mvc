@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
-import { Subject, finalize, takeUntil } from 'rxjs';
+import { Observable, Subject, finalize, takeUntil } from 'rxjs';
 import { LoginService } from '../../services/login.service';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { MarcaService } from '../../services/marca.service';
@@ -34,6 +34,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
   listarProductoDeshabilitado: any = [];
   marcarForm!: FormGroup;
   texto_cabezera: any;
+  accion: string='';
   BotonGuardarMarca: boolean = false;
   Unsuscribe: any = new Subject();
   CantidadGuardar: number = 0;
@@ -152,8 +153,9 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   AbrirModal() {
-    this.marcarForm.reset();
-    this.marcarForm.get('accion')!.setValue('CREAR');
+    // this.marcarForm.reset();
+    // this.marcarForm.get('accion')!.setValue('CREAR');
+    this.accion = 'CREAR';
     this.texto_cabezera = 'Nuevo Marca';
     $('#exampleModalCenter').modal('show');
   }
@@ -165,14 +167,9 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
       return;
     }
 
-    var checked: any = [];
-    //Recorremos todos los input checkbox con name = Colores y que se encuentren "checked"
-    $("input[name='categoria_padre']:checked").each((i: any, elemento: any) => {
-      //Mediante la función push agregamos al arreglo los values de los checkbox
-      checked.push(($(elemento).attr("value")));
-    });
+
     if (this.CantidadGuardar === 1) {
-      this.servicio_marca.GestionarMarca(this.token, this.marcarForm.value).pipe(
+      this.servicio_marca.GestionarMarca(this.marcarForm.value).pipe(
         takeUntil(this.Unsuscribe)
         , finalize(() => {
           this.CantidadGuardar=0;
@@ -227,6 +224,11 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
     this.marcarForm.get('glosa_marca')!.setValue(item.glosa_marca);
     this.texto_cabezera = 'Editar Marca';
     $('#exampleModalCenter').modal('show');
+  }
+
+  manejarRespuesta(respuesta: any) {
+    console.log(respuesta);
+    this.reload_producto.next();
   }
 
 }

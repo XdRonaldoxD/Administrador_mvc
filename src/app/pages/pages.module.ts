@@ -38,6 +38,7 @@ import { DatosPersonalesComponent } from './datos-personales/datos-personales.co
 import { BajaComprobantesComponent } from './baja-comprobantes/baja-comprobantes.component';
 import { LibroVentasComponent } from './libro-ventas/libro-ventas.component';
 import { UsuarioComponent } from './usuario/usuario.component';
+import { ModalMarcaComponent } from './modals/modal-marca/modal-marca.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { UsuarioComponent } from './usuario/usuario.component';
     DatosPersonalesComponent,
     BajaComprobantesComponent,
     LibroVentasComponent,
-    UsuarioComponent 
+    UsuarioComponent,
+    ModalMarcaComponent
   ],
   exports: [
     IsInvalidPipe,

@@ -74,12 +74,11 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
 
   }
   ngOnInit(): void {
+    $("[data-dismiss='modal']").click();
     this.token = this.servicio_login.getToken();
     this.ProductoHabilitados();
     this.ProductosDeshabilitados();
-    $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
-    });
+    
 
     this.servicio_categoria.Inventario(this.token).pipe(finalize(() => {
       $("#t-crear-categoria").children("div").remove();
@@ -341,7 +340,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     if (this.GestionarStock.invalid) {
       return;
     }
-    this.servicio_producto.GestionarStockProducto(this.token, this.GestionarStock.value).pipe(finalize(() => {
+    this.servicio_producto.GestionarStockProducto(this.GestionarStock.value).pipe(finalize(() => {
       this.GestionarStock.reset();
       this.GestionarStock.get('accion')!.setValue('');
       this.GestionarStock.get('id_usuario')!.setValue(this.usuario.sub);
@@ -406,7 +405,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     }).then((result: any) => {
       if (result.isConfirmed) {
         if (accion == 'ACTIVAR') {
-          this.servicio_producto.GestionActivoDesactivadoProducto(this.token, accion, id_producto).pipe(finalize(() => {
+          this.servicio_producto.GestionActivoDesactivadoProducto(accion, id_producto).pipe(finalize(() => {
             this.reload_producto.next();
             this.reload_producto_deshabilitado.next();
           })).subscribe({
@@ -422,7 +421,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
             }
           })
         } else {
-          this.servicio_producto.GestionActivoDesactivadoProducto(this.token, accion, id_producto).pipe(finalize(() => {
+          this.servicio_producto.GestionActivoDesactivadoProducto(accion, id_producto).pipe(finalize(() => {
             this.reload_producto.next();
             this.reload_producto_deshabilitado.next();
           })).subscribe({

@@ -28,7 +28,7 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
   listarProducto: any = [];
   listarProductoDeshabilitado: any = [];
   sliderForm!: FormGroup;
-  texto_cabezera: any;
+  texto_cabezera: string='';
   Unsuscribe: any = new Subject();
   api_url: string = environment.api_url;
   environment: any;
@@ -53,6 +53,7 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
     });
   }
   ngOnInit(): void {
+    $("[data-dismiss='modal']").click();
     // Translated
     $('.dropify').dropify({
       messages: {
@@ -125,7 +126,27 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
       ordering: false,
       // scrollX:true,
       language: {
-        url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",
+        processing: "Procesando...",
+        lengthMenu: "Mostrar _MENU_ registros",
+        zeroRecords: "No se encontraron resultados",
+        emptyTable: "Ningún dato disponible en esta tabla",
+        info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+        infoFiltered: "(filtrado de un total de _MAX_ registros)",
+        infoPostFix: "",
+        search: "Buscar:",
+        url: "",
+        loadingRecords: "Cargando...",
+        paginate: {
+          first: "Primero",
+          last: "Último",
+          next: "Siguiente",
+          previous: "Anterior"
+        },
+        aria: {
+          sortAscending: "Activar para ordenar la columna de manera ascendente",
+          sortDescending: "Activar para ordenar la columna de manera descendente"
+        },
       },
       ajax: (dataTablesParameters: any, callback: any) => {
         dataTablesParameters.vigente_slider = vigente_slider;
@@ -169,7 +190,7 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
     this.sliderForm.reset();
     this.sliderForm.get('accion')!.setValue('CREAR');
     $("#t-crear-categoria").html('');
-    this.texto_cabezera = 'Nuevo slider';
+    this.texto_cabezera = 'NUEVO SLIDER';
     $("#id_categoria").select2({
       dropdownParent: $("#exampleModalCenter"),
       width: "100%",
@@ -212,7 +233,6 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   GuardarActualizarCategoria() {
-    console.log(this.sliderForm.value);
     this.sliderForm.get('id_categoria')!.setValue($("#id_categoria").val());
     this.sliderForm.markAllAsTouched()
     if (this.sliderForm.invalid) {
@@ -361,7 +381,7 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
     this.Helper.resetPreview('file_mobile', environment.api_url + '/archivo/imagen_slider/' + item.pathmobile_slider, item.pathmobile_slider);
     let html = `<option value=${item.id_categoria}>${item.glosa_categoria}</option>`;
     $("#id_categoria").html(html);
-    this.texto_cabezera = 'Editar Slider';
+    this.texto_cabezera = 'EDITAR SLIDER';
     $('#exampleModalCenter').modal('show');
   }
 

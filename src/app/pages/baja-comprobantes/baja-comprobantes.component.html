@@ -11,10 +11,12 @@
                                     <div class="card m-0">
                                         <div class="card-content" style="background-color: #f8f9fa;">
                                             <div class="card-body p-1">
-                                                <div class="col-md-12 tabla-detalle-negocio p-0" id="tabla-detalle-negocio" style="background-color: white; overflow:auto; border-radius: 10px;width: 100%;
+                                                <div class="col-md-12 tabla-detalle-negocio p-0"
+                                                    id="tabla-detalle-negocio" style="background-color: white; overflow:auto; border-radius: 10px;width: 100%;
                                                     height: calc(100vh - 373px);overflow:auto">
                                                     <div class="table-responsive">
-                                                        <table summary="datos del negocio" class="table table-bordered table-hover">
+                                                        <table summary="datos del negocio"
+                                                            class="table table-bordered table-hover">
                                                             <thead>
                                                                 <tr>
                                                                     <th>CANTIDAD</th>
@@ -44,7 +46,8 @@
                                                                         </div>
                                                                     </td>
                                                                     <td>
-                                                                        <div class="d-flex justify-content-between align-items-center">
+                                                                        <div
+                                                                            class="d-flex justify-content-between align-items-center">
                                                                             <div class="row p-0 m-0">
                                                                                 <div class="col-12 p-0 m-0 text-left">
                                                                                     <h6 class="p-0 m-0">
@@ -69,7 +72,9 @@
                                                                                         </div>
                                                                                     </ng-template>
                                                                                 </div>
-                                                                            </div><i class="bx bx-comment cursor-pointer mensaje_modal ml-1" style="font-size: 2rem;"></i>
+                                                                            </div><i
+                                                                                class="bx bx-comment cursor-pointer mensaje_modal ml-1"
+                                                                                style="font-size: 2rem;"></i>
                                                                         </div>
                                                                     </td>
                                                                     <td>{{item.total_negocio_detalle | currency: 'S/':
@@ -90,71 +95,80 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12 px-0 mt-1">
-                                                    <div class="row">
-                                                        <div class="col-5">
-                                                            <label for="vendedor_seleccionado"
-                                                                class="col-12">Vendedor</label>
-                                                            <div class="col-sm-12">
-                                                                <select class="form-control">
-                                                                    <option value="{{identificacion.id_usuario}}">{{identificacion.vendedor}}</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-4">
-                                                            <label for="vendedor_seleccionado" class="col-12">Comprobantes</label>
-                                                            <div class="col-sm-12">
-                                                                <select class="form-control" [ngModel]="documento">
-                                                                    <option value="NOTA CREDTIO">NOTA CREDITO</option>
-                                                                    <option value="ANULAR">ANULAR</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-3">
-                                                            <div class="row mb-1">
-                                                                <div class="col-md-12">
-                                                                    <table class="tabla_totales" style="width: 100%;">
-                                                                        <tr>
-                                                                            <td class="text-left" colspan="3">
-                                                                                <strong>SUBTOTAL:</strong>
-                                                                            </td>
-                                                                            <td><strong
-                                                                                    class="Afecto_total">{{Totales.subtotal
-                                                                                    | currency: 'S/': 'symbol': '':
-                                                                                    'en-PE'}}</strong>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="text-left" colspan="3">
-                                                                                <strong>I.G.V.:</strong>
-                                                                            </td>
-                                                                            <td><strong class="iva_total">{{Totales.igv
-                                                                                    | currency: 'S/': 'symbol': '':'en-PE'}}</strong>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="text-left" valign="middle"
-                                                                                colspan="3"> <strong>TOTAL:</strong>
-                                                                            </td>
-                                                                            <td><strong
-                                                                                    class="total_detalle">{{Totales.total
-                                                                                    | currency: 'S/': 'symbol': '':
-                                                                                    'en-PE'}}</strong>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
+                                                    <form [formGroup]="datosanulacion" autocomplete="nope">
+                                                        <div class="row">
+                                                            <div class="col-md-5 col-12">
+                                                                <div class="form-group">
+                                                                    <label>Vendedor</label>
+                                                                    <select class="form-control">
+                                                                        <option value="{{identificacion.id_usuario}}">
+                                                                            {{identificacion.vendedor}}</option>
+                                                                    </select>
                                                                 </div>
                                                             </div>
-                                                            <div class="row">
-                                                                <div
-                                                                    class="col-md-12  d-flex content-buttons-actions justify-content-end">
-                                                                    <button (click)="LimpiarInformacion()"
-                                                                        class="btn btn-danger mr-2">Limpiar</button>
-                                                                    <button (click)="EnviarAnular()" type="button"
-                                                                        class="btn btn-secondary ">Anular</button>
+                                                            <div class="col-12 col-md-4">
+                                                                <div class="form-group">
+                                                                    <label >Comprobantes</label>
+                                                                    <select  class="form-control" formControlName="documento">
+                                                                        <option value="NOTA CREDTIO">NOTA CREDITO</option>
+                                                                        <option value="ANULAR">ANULAR</option>
+                                                                    </select>
                                                                 </div>
                                                             </div>
+                                                            <div class="col-12 col-md-3">
+                                                                <div class="row mb-1">
+                                                                    <div class="col-md-12">
+                                                                        <table class="tabla_totales"
+                                                                            style="width: 100%;">
+                                                                            <tr>
+                                                                                <td class="text-left" colspan="3">
+                                                                                    <strong>SUBTOTAL:</strong>
+                                                                                </td>
+                                                                                <td><strong
+                                                                                        class="Afecto_total">{{Totales.subtotal
+                                                                                        | currency: 'S/': 'symbol': '':
+                                                                                        'en-PE'}}</strong>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="text-left" colspan="3">
+                                                                                    <strong>I.G.V.:</strong>
+                                                                                </td>
+                                                                                <td><strong
+                                                                                        class="iva_total">{{Totales.igv
+                                                                                        | currency: 'S/': 'symbol':
+                                                                                        '':'en-PE'}}</strong>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="text-left" valign="middle"
+                                                                                    colspan="3"> <strong>TOTAL:</strong>
+                                                                                </td>
+                                                                                <td><strong
+                                                                                        class="total_detalle">{{Totales.total
+                                                                                        | currency: 'S/': 'symbol': '':
+                                                                                        'en-PE'}}</strong>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div
+                                                                        class="col-md-12  d-flex content-buttons-actions justify-content-end">
+                                                                        <button (click)="LimpiarInformacion()"
+                                                                            class="btn btn-danger mr-2">Limpiar</button>
+                                                                        <button (click)="EnviarAnular()" type="button"
+                                                                            class="btn btn-secondary ">Anular</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 col-md-12" *ngIf="datosanulacion.value.documento=='ANULAR'">
+                                                               <h4><strong>Nota Importante:</strong></h4>
+                                                               <p>Solo puedes anular Facturas electronicas entre los 3 dias emitiado el documento durante el mes.</p>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
@@ -172,7 +186,8 @@
                                                     <i class="fa fa-product-hunt" aria-hidden="true"></i>
                                                     <h6 class="m-0 col-12">Buscar N° Documento</h6>
                                                 </div>
-                                                <form  [formGroup]="ProductoBuscar" autocomplete="nope" class="col-12 p-0">
+                                                <form [formGroup]="ProductoBuscar" autocomplete="nope"
+                                                    class="col-12 p-0">
                                                     <div class="input-group">
                                                         <input type="text" class="form-control" placeholder=""
                                                             aria-label="" aria-describedby="basic-addon1"
@@ -249,63 +264,69 @@
                                 <div class="row mt-2">
                                     <div class="col-md-12">
                                         <form [formGroup]="datosanulacion" autocomplete="nope">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <h4 class="text-center"> <strong> Datos de la venta</strong></h4>
-                                            </div>
-                                            <div class="col-4">
-                                                <h6 class="text-left"> <strong> Documento</strong></h6>
-                                            </div>
-                                            <div class="col-8">
-                                                <p class="text-left"> {{ datos_venta.documento }}</p>
-                                            </div>
-
-                                            <div class="col-4">
-                                                <h6 class="text-left"><strong>Atendido por</strong></h6>
-                                            </div>
-                                            <div class="col-8">
-                                                <p class="text-left">{{ datos_venta.vendedor }}</p>
-                                            </div>
-
-                                            <div class="col-12">
-                                                <h4 class="text-center"> <strong> Forma de Pago</strong></h4>
-                                            </div>
-                                            <ng-container *ngFor="let item of datos_venta.forma_pagos">
-                                                <div class="col-md-6">
-                                                    <h6 class="text-left"><strong>{{item.glosa_medio_pago}}</strong></h6>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <h4 class="text-center"> <strong> Datos de la venta</strong></h4>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <p class="p-0 m-0">{{item.valor_ingreso | currency: 'S/': 'symbol': '':'en-PE'}}</p>
+                                                <div class="col-4">
+                                                    <h6 class="text-left"> <strong> Documento</strong></h6>
                                                 </div>
-                                            </ng-container>
-                                            
-                                            <br> <br>
-                                            <div class="col-md-6">
-                                                <h6 class="text-left"><strong>Fecha Devolución</strong></h6>
+                                                <div class="col-8">
+                                                    <p class="text-left"> {{ datos_venta.documento }}</p>
+                                                </div>
+
+                                                <div class="col-4">
+                                                    <h6 class="text-left"><strong>Atendido por</strong></h6>
+                                                </div>
+                                                <div class="col-8">
+                                                    <p class="text-left">{{ datos_venta.vendedor }}</p>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <h4 class="text-center"> <strong> Forma de Pago</strong></h4>
+                                                </div>
+                                                <ng-container *ngFor="let item of datos_venta.forma_pagos">
+                                                    <div class="col-md-6 col-12">
+                                                        <h6 class="text-left"><strong>{{item.glosa_medio_pago}}</strong>
+                                                        </h6>
+                                                    </div>
+                                                    <div class="col-md-6 col-12">
+                                                        <p class="p-0 m-0">{{item.valor_ingreso | currency: 'S/':
+                                                            'symbol': '':'en-PE'}}</p>
+                                                    </div>
+                                                </ng-container>
+                                                <br> <br>
+                                                <div class="col-md-6 col-12">
+                                                    <h6 class="text-left"><strong>Fecha Devolución</strong></h6>
+                                                </div>
+                                                <div class="col-md-6 col-12">
+                                                    <input type="date" class="form-control"
+                                                        formControlName="fecha_devolucion">
+                                                </div>
+                                                <br>
+                                                <br>
+                                                <div class="col-md-6 col-12">
+                                                    <h6 class="text-left"><strong>Tipo De Devolución</strong></h6>
+                                                </div>
+                                                <div class="col-md-6 col-12">
+                                                    <select
+                                                        [class.is-invalid]="datosanulacion.controls['tipo_anulacion']|isInvalid"
+                                                        class="form-control" formControlName="tipo_anulacion">
+                                                        <option value="">Seleccionar</option>
+                                                        <option [value]="item.id_motivo_devolucion"
+                                                            *ngFor="let item of tipodevolucion">
+                                                            {{item.glosa_motivo_devolucion}}</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <input type="date" class="form-control" formControlName="fecha_devolucion">
+                                            <div class="form-group row">
+                                                <label for="comentario_pago" class="col-sm-12 control-label">Motivo de anulación</label>
+                                                <div class="col-sm-12">
+                                                    <textarea formControlName="comentario" class="form-control"
+                                                        cols="10" rows="2"></textarea>
+                                                </div>
                                             </div>
-                                            <br>
-                                            <br>
-                                            <div class="col-md-6">
-                                                <h6 class="text-left"><strong>Tipo De Devolución</strong></h6>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <select [class.is-invalid]="datosanulacion.controls['tipo_anulacion']|isInvalid"
-                                                class="form-control" formControlName="tipo_anulacion">
-                                                    <option value="">Seleccionar</option>
-                                                    <option [value]="item.id_motivo_devolucion" *ngFor="let item of tipodevolucion">{{item.glosa_motivo_devolucion}}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="comentario_pago" class="col-sm-12 control-label">Motivo de anulación</label>
-                                            <div class="col-sm-12">
-                                                <textarea formControlName="comentario" class="form-control" cols="10" rows="2"></textarea>
-                                            </div>
-                                        </div>
-                                    </form>
+                                        </form>
 
                                     </div>
 

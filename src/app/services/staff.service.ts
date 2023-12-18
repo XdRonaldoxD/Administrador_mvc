@@ -47,11 +47,11 @@ export class StaffService {
     return this.httpcliente.post(environment.api_url + "?controller=Staff&action=updatepass", formData, { headers: headers })
   }
 
-  mostrarPerfiles(): Observable<any> {
+  mostrarDatosUsuario(): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.get(environment.api_url+"?controller=Staff&action=mostrarPerfiles", { headers: headers})
+    return this.httpcliente.get(environment.api_url+"?controller=Staff&action=mostrarDatosUsuario", { headers: headers})
   }
 
   GestionActivoDesactivadoStaff(id_usuario: any, accion: string): Observable<any> {

@@ -4,6 +4,7 @@ import { MigracionexcelService } from 'src/app/services/migracionexcel.service';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 declare var $: any;
+
 @Component({
   selector: 'app-migrarproducto',
   templateUrl: './migrarproducto.component.html',
@@ -24,6 +25,7 @@ export class MigrarproductoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    $("[data-dismiss='modal']").click();
     this.token = this._loginServicio.getToken();
     this.identity = this._loginServicio.getIdentity();
 
@@ -44,7 +46,7 @@ export class MigrarproductoComponent implements OnInit {
       text: 'Exportando el excel ...',
       allowOutsideClick: false,
       showConfirmButton: false,
-      onBeforeOpen: () => {
+      didOpen: () => {
         Swal.showLoading();
         fetch(environment.api_url+"?controller=ProductoExcel&action=ExportarDatos", requestOptions)
           .then(response => response.blob())
@@ -52,7 +54,6 @@ export class MigrarproductoComponent implements OnInit {
             var url = window.URL.createObjectURL(blob);
             var a = document.createElement('a');
             a.href = url;
-
             a.download = `Inventario_Producto.xlsx`;
             document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
             a.click();
@@ -78,7 +79,7 @@ export class MigrarproductoComponent implements OnInit {
       text: 'Exportando el excel ...',
       allowOutsideClick: false,
       showConfirmButton: false,
-      onBeforeOpen: () => {
+      didOpen: () => {
         Swal.showLoading();
         fetch(environment.api_url+"?controller=ProductoExcel&action=ExportarPlantilla", requestOptions)
           .then(response => response.blob())
@@ -138,7 +139,6 @@ export class MigrarproductoComponent implements OnInit {
                   this.archivos = null;
                   return false;
                 }
-
                 if (data.validandoExcel.length > 0) {
                   Swal.close();
                   let html = ``;
@@ -153,27 +153,6 @@ export class MigrarproductoComponent implements OnInit {
                   $('.ValidarExcel').html(html);
                   $('.validarColumnas').removeClass('d-none');
                   $('#modal_datos').modal('show');
-                  $('.texto_principal').html('Campos Vacios del Excel.');
-                  $('.error_producto').addClass('d-none');
-                } else if (data.datosexistente.length > 0) {
-                  Swal.close();
-                  let html = ``;
-                  data.datosexistente.forEach((element: any, index: any) => {
-                    html += '<tr>';
-                    html += `<td>${element.fila}</td>`;
-                    let ColumnasDato = element.columna.split('~');
-                    ColumnasDato.forEach((element: any) => {
-                      html += `<td>${element}</td>`;
-                    });
-                    html += `<td class="text-danger">${element.comentario}</td>`;
-                    html += '</tr>';
-                  });
-                  $('.producto_sin_registro').html(html);
-                  $('.validarColumnas').addClass('d-none');
-                  $('.existe_producto').removeClass('d-none');
-
-                  $('#modal_datos').modal('show');
-                  $('.texto_principal').html('Validando Excel.');
                   $('.error_producto').addClass('d-none');
                 } else {
                   Swal.close();

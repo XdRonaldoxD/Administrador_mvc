@@ -59,6 +59,7 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
     private servicio_pedido: PedidoService,
     private servicio_caja: Caja
   ) {
+    
     this.usuario = servicio_login.getIdentity();
     this.FiltroCajaBuscar = this.fb.group({
       fechacreacion_caja_fin: [this.pipe.transform(Date.now(), 'yyyy-MM-dd'), Validators.required],
@@ -71,6 +72,7 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
 
   }
   ngOnInit(): void {
+    $("[data-dismiss='modal']").click();
     this.token = this.servicio_login.getToken();
     //HABILITADO 1
     this.ListarCaja(1);
@@ -101,6 +103,7 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
   //SOLO LLAMAR LA FUNCION => this.reload_producto.next();
   ngOnDestroy(): void {
     // Do not forget to unsubscribe the  (Datatable)
+    
     this.reload_producto.unsubscribe();
     this.reload_producto_deshabilitado.unsubscribe();
     this.Unsuscribe.unsubscribe();
@@ -272,7 +275,7 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
     }).then((result: any) => {
       if (result.isConfirmed) {
         if (accion == 'ACTIVAR') {
-          this.servicio_producto.GestionActivoDesactivadoProducto(this.token, accion, id_producto).pipe(finalize(() => {
+          this.servicio_producto.GestionActivoDesactivadoProducto(accion, id_producto).pipe(finalize(() => {
             this.reload_producto.next();
             this.reload_producto_deshabilitado.next();
           })).subscribe({
@@ -288,7 +291,7 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
             }
           })
         } else {
-          this.servicio_producto.GestionActivoDesactivadoProducto(this.token, accion, id_producto).pipe(finalize(() => {
+          this.servicio_producto.GestionActivoDesactivadoProducto(accion, id_producto).pipe(finalize(() => {
             this.reload_producto.next();
             this.reload_producto_deshabilitado.next();
           })).subscribe({
@@ -320,21 +323,21 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
       onOpen: () => {
         Swal.showLoading();
         if (item.id_nota_venta) {
-          var htmlticket = `<embed src="${item.ruta_archivo}/NOTA_VENTAVENTA/${item.urlticket_nota_venta}" frameborder="0" width="100%" height="400px">`;
+          var htmlticket = `<embed src="${item.ruta_archivo}/NOTA_VENTA/${item.urlticket_nota_venta}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs2_negocio").html(htmlticket);
-          var htmlpdf = `<embed src="${item.ruta_archivo}/NOTA_VENTAVENTA/${item.urlpdf_nota_venta}" frameborder="0" width="100%" height="400px">`;
+          var htmlpdf = `<embed src="${item.ruta_archivo}/NOTA_VENTA/${item.urlpdf_nota_venta}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs_negocio").html(htmlpdf);
         }
         if (item.id_boleta) {
-          var htmlticket = `<embed src="${item.ruta_archivo}/BOLETAVENTA/${item.path_ticket_boleta}" frameborder="0" width="100%" height="400px">`;
+          var htmlticket = `<embed src="${item.ruta_archivo}/BOLETA/${item.path_ticket_boleta}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs2_negocio").html(htmlticket);
-          var htmlpdf = `<embed src="${item.ruta_archivo}/BOLETAVENTA/${item.path_boleta}" frameborder="0" width="100%" height="400px">`;
+          var htmlpdf = `<embed src="${item.ruta_archivo}/BOLETA/${item.path_boleta}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs_negocio").html(htmlpdf);
         }
         if (item.id_factura) {
-          var htmlticket = `<embed src="${item.ruta_archivo}/FACTURAVENTA/${item.path_ticket_factura}" frameborder="0" width="100%" height="400px">`;
+          var htmlticket = `<embed src="${item.ruta_archivo}/FACTURA/${item.path_ticket_factura}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs2_negocio").html(htmlticket);
-          var htmlpdf = `<embed src="${item.ruta_archivo}/FACTURAVENTA/${item.path_documento}" frameborder="0" width="100%" height="400px">`;
+          var htmlpdf = `<embed src="${item.ruta_archivo}/FACTURA/${item.path_documento}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs_negocio").html(htmlpdf);
         }
         $(".imprimirTicket").addClass('active');

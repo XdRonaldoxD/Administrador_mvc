@@ -7,6 +7,7 @@ import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { MarcaService } from '../../services/marca.service';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
+import { ModalMarcaComponent } from '../modals/modal-marca/modal-marca.component';
 
 
 declare var $: any;
@@ -24,6 +25,8 @@ class DataTablesResponse {
   styleUrls: ['./marcas.component.css']
 })
 export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
+  @ViewChild('hijomodalmarca') hijomodalmarca: ModalMarcaComponent | any;
+
   dtOptions: DataTables.Settings[] = [];
   reload_producto: any = new Subject();
   reload_producto_deshabilitado: any = new Subject();
@@ -34,24 +37,18 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
   listarProductoDeshabilitado: any = [];
   marcarForm!: FormGroup;
   texto_cabezera: any;
-  accion: string='';
+
   BotonGuardarMarca: boolean = false;
   Unsuscribe: any = new Subject();
-  CantidadGuardar: number = 0;
+
   constructor(private http: HttpClient,
     private servicio_marca: MarcaService,
-    private fb: FormBuilder,
     private servicio_login: LoginService,
-    private toastr: ToastrService
-
   ) {
-    this.marcarForm = this.fb.group({
-      id_marca: [''],
-      glosa_marca: ['', [Validators.required]],
-      accion: ['CREAR'],
-    });
+
   }
   ngOnInit(): void {
+    $("[data-dismiss='modal']").click();
     this.token = this.servicio_login.getToken();
     this.ProductoHabilitados();
     this.ProductosDeshabilitados();
@@ -83,7 +80,27 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
       ordering: false,
       // scrollX:true,
       language: {
-        url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",
+        processing: "Procesando...",
+        lengthMenu: "Mostrar _MENU_ registros",
+        zeroRecords: "No se encontraron resultados",
+        emptyTable: "Ningún dato disponible en esta tabla",
+        info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+        infoFiltered: "(filtrado de un total de _MAX_ registros)",
+        infoPostFix: "",
+        search: "Buscar:",
+        url: "",
+        loadingRecords: "Cargando...",
+        paginate: {
+          first: "Primero",
+          last: "Último",
+          next: "Siguiente",
+          previous: "Anterior"
+        },
+        aria: {
+          sortAscending: "Activar para ordenar la columna de manera ascendente",
+          sortDescending: "Activar para ordenar la columna de manera descendente"
+        },
       },
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
@@ -153,42 +170,16 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   AbrirModal() {
-    // this.marcarForm.reset();
-    // this.marcarForm.get('accion')!.setValue('CREAR');
-    this.accion = 'CREAR';
-    this.texto_cabezera = 'Nuevo Marca';
+    let datos={
+      accion:'CREAR',
+      modulo:'MARCA'
+    }
+    this.hijomodalmarca.llamarFuncionHijoDesdePadre(datos);
+    this.texto_cabezera="CREAR MARCA";
     $('#exampleModalCenter').modal('show');
   }
 
-  GuardarActualizarCategoria() {
-    this.CantidadGuardar++;
-    this.marcarForm.markAllAsTouched()
-    if (this.marcarForm.invalid) {
-      return;
-    }
 
-
-    if (this.CantidadGuardar === 1) {
-      this.servicio_marca.GestionarMarca(this.marcarForm.value).pipe(
-        takeUntil(this.Unsuscribe)
-        , finalize(() => {
-          this.CantidadGuardar=0;
-          this.reload_producto.next();
-          $('#exampleModalCenter').modal('hide');
-        })).subscribe({
-          next: (res) => {
-            this.toastr.success(`Marca ${res} con exito`, undefined, {
-              timeOut: 3000,
-              positionClass: 'toast-top-right',
-            });
-          },
-          error: (error) => {
-
-          }
-        })
-    }
-
-  }
 
   EstadoMarca(estado: any, id_marca: any) {
     this.servicio_marca.Habilitar_Deshabilitar_Marca(this.token, id_marca, estado).pipe(takeUntil(this.Unsuscribe),finalize(()=>{
@@ -219,16 +210,21 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
     });
   }
   EditarMarca(item: any) {
-    this.marcarForm.get('accion')!.setValue('ACTUALIZAR');
-    this.marcarForm.get('id_marca')!.setValue(item.id_marca);
-    this.marcarForm.get('glosa_marca')!.setValue(item.glosa_marca);
-    this.texto_cabezera = 'Editar Marca';
+    let datos={
+      accion:'ACTUALIZAR',
+      modulo:'MARCA',
+      id_marca:item.id_marca,
+      glosa_marca:item.glosa_marca,
+    }
+    this.hijomodalmarca.llamarFuncionHijoDesdePadre(datos);
+    this.texto_cabezera = 'EDITAR MARCA';
     $('#exampleModalCenter').modal('show');
   }
 
   manejarRespuesta(respuesta: any) {
     console.log(respuesta);
     this.reload_producto.next();
+    this.reload_producto_deshabilitado.next();
   }
 
 }

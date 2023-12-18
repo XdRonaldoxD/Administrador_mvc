@@ -1,7 +1,7 @@
 <div class="container-fluid">
-    <div class="row page-titles">
+    <div class="row page-titles mb-0">
         <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">SLIDER</h3>
+            <h3 class="text-themecolor"> <strong>SLIDER</strong></h3>
         </div>
     </div>
 
@@ -12,7 +12,7 @@
                     <div class="row MT-1">
                         <div class="col-md-12 d-flex justify-content-end">
                             <div class="row m-0">
-                                <button (click)="AbrirModal()" class="btn btn-success btn-reset">NUEVO SLIDER <i
+                                <button (click)="AbrirModal()" class="btn btn-success btn-reset"> <strong> NUEVO SLIDER </strong><i
                                         class="mdi mdi-checkbox-multiple-blank-outline"></i> </button>
                             </div>
                         </div>
@@ -29,7 +29,7 @@
                                 <!-- ANGULAR SERVER SIDE -->
                                 <div class="table-responsive">
                                     <table summary="Slider" datatable [dtOptions]="dtOptions[0]" [dtTrigger]="reload_producto"
-                                        class="row-border hover " width="100%">
+                                        class="table table-striped color-table info-table" width="100%">
                                         <thead>
                                             <tr style="vertical-align: middle;text-align: center;"
                                                 class="text-uppercase">
@@ -84,7 +84,7 @@
                                 <!-- ANGULAR SERVER SIDE -->
                                 <div class="table-responsive">
                                     <table datatable [dtOptions]="dtOptions[1]"
-                                        [dtTrigger]="reload_producto_deshabilitado" class="row-border hover "
+                                        [dtTrigger]="reload_producto_deshabilitado" class="table table-striped color-table info-table"
                                         width="100%">
                                         <thead>
                                             <tr style="vertical-align: middle;text-align: center;"
@@ -142,7 +142,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">  
-                <h5 class="modal-title text-center" [innerHTML]="texto_cabezera"></h5>
+                <h5 class="modal-title text-center"><strong>{{texto_cabezera}}</strong></h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close" data-original-title=""
                     title=""><span aria-hidden="true">×</span></button>
             </div>

@@ -42,6 +42,8 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
   departamentos: any = [];
   provincias: any = [];
   distritos: any = [];
+
+  listaCliente: any[] = [];
   id_caja: any = null;
   id_departamento: any = ''
   id_provincia: any = '';
@@ -67,6 +69,8 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
   url_pdf: string = '';
   url_ticket: string = '';
   busquedafactura: boolean = false;
+  isLoading: boolean = false;
+  contador_texto: any;
   constructor(
     private http: HttpClient,
     private servicio_login: LoginService,
@@ -77,16 +81,16 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {
     this.token = this.servicio_login.getToken();
     this.identificacion = this.servicio_login.getIdentity();
- 
+
   }
 
   ngOnInit(): void {
-
+    $("[data-dismiss='modal']").click();
     this.ProductoBuscar = this.fb.group({
       glosa_producto: ['']
     });
     this.informacionForm = this.fb.group({
-      id_empresa:[this.identificacion.id_empresa],
+      id_empresa: [this.identificacion.id_empresa],
       cliente: [null],
       vendedor: [this.identificacion.sub],
       tipo_documento: ['NOTA_VENTA']
@@ -112,54 +116,6 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.Mostrar_Productos();
     this.Mostrar_Medio_Pago();
-    $(".select2").select2();
-    $("#nombre_cliente").select2({
-      ajax: {
-        url: environment.api_url+"?controller=Cliente&action=FiltrarCliente", //URL for searching companies
-        dataType: "json",
-        headers: { 'Authorization': this.token },
-        delay: 200,
-        data: (params: any) => {
-          return {
-            search: params.term,
-            factura: this.busquedafactura
-          };
-        },
-        processResults: function (data: any) {
-          return {
-            results: $.map(data, function (item: any) {
-              return {
-                text: item.nombre_cliente + ' ' + item.apellidopaterno_cliente + ' (' + item.documento + ')',
-                id: item.id_cliente
-              }
-            })
-          };
-        },
-        cache: true
-      },
-      language: {
-        searching: function () {
-          return "Buscando...";
-        },
-        inputTooShort: function (args: any) {
-          return "Por favor ingrese 3 o más caracteres";
-        },
-        noResults: function () {
-          return "No se encontraron resultados";
-        }
-      },
-      placeholder: "Busque un cliente/ Ruc del cliente",
-      minimumInputLength: 3
-    });
-
-    $('#nombre_cliente').on('select2:open', (e: any) => {
-      var campoBusqueda = $('.select2-search__field');
-      campoBusqueda.on('input', (e: any) => {
-        let valor = e.target.value;
-        this.informacionFormCliente.get('ruc_cliente')?.setValue(valor)
-        this.informacionFormCliente.get('dni_cliente')?.setValue(valor)
-      });
-    });
     this.AsignarCliente();
   }
 
@@ -198,6 +154,27 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
+  SearchCliente(term: string) {
+    this.isLoading = true;
+    if (term.length > 3) {
+      this.nota_venta.FiltrarCliente(term, this.informacionForm.value.tipo_documento).pipe(takeUntil(this.unsubscribe$))
+        .subscribe((data: any) => {
+          this.listaCliente = data.map((item: any) => ({
+            glosa_cliente: `${item.nombre_cliente} ${item.apellidopaterno_cliente ?? ''} ${item.apellidopaterno_cliente ?? ''} (${item.documento}) `,
+            id_cliente: item.id_cliente,
+          }));
+          this.isLoading = false;
+        });
+    } else {
+      this.limpiarSeleccion();
+      this.isLoading = false;
+    }
+  }
+  limpiarSeleccion() {
+    this.listaCliente = [];
+
+  }
+
   Mostrar_Productos() {
     let headers = new HttpHeaders()
       .set('Authorization', this.token);
@@ -211,17 +188,36 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
       searching: false,
       paging: false,
       destroy: true,
-
-      // scrollX:true,
       language: {
-        url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",
+        processing: "Procesando...",
+        lengthMenu: "Mostrar _MENU_ registros",
+        zeroRecords: "No se encontraron resultados",
+        emptyTable: "Ningún dato disponible en esta tabla",
+        info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+        infoFiltered: "(filtrado de un total de _MAX_ registros)",
+        infoPostFix: "",
+        search: "Buscar:",
+        url: "",
+        loadingRecords: "Cargando...",
+        paginate: {
+          first: "Primero",
+          last: "Último",
+          next: "Siguiente",
+          previous: "Anterior"
+        },
+        aria: {
+          sortAscending: "Activar para ordenar la columna de manera ascendente",
+          sortDescending: "Activar para ordenar la columna de manera descendente"
+        },
       },
       ajax: (dataTablesParameters: any, callback) => {
+        dataTablesParameters.id_bodega=this.identificacion.id_bodega;
         if (this.ProductoBuscar.value.glosa_producto) {
           dataTablesParameters.filtro_buscar = this.ProductoBuscar.value.glosa_producto;
         }
         this.http.post<DataTablesResponse>(
-          environment.api_url+"?controller=NotaVenta&action=ListaProductos",
+          environment.api_url + "?controller=NotaVenta&action=ListaProductos",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProducto = resp.data;
@@ -264,7 +260,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     const tasaIVA = 18;
     this.ProductoSeleccionados.forEach((element: any) => {
       if (element.id_producto == datos.id_producto) {
-        if ((parseInt(element.cantidad_seleccionado) + 1) > element.stock_producto) {
+        if ((parseInt(element.cantidad_seleccionado) + 1) > element.total_stock_producto_bodega) {
           Swal.fire({
             toast: true,
             position: 'top',
@@ -301,7 +297,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
   AumentarNumeroGeneral(e: any, indice: any) {
     let cantidad = e.target.parentElement.parentElement.firstElementChild.value;
     cantidad++;
-    if (cantidad > this.ProductoSeleccionados[indice].stock_producto) {
+    if (cantidad > this.ProductoSeleccionados[indice].total_stock_producto_bodega) {
       Swal.fire({
         toast: true,
         position: 'top',
@@ -311,8 +307,8 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
         timerProgressBar: true,
         timer: 5000
       })
-      e.target.parentElement.parentElement.firstElementChild.value = this.ProductoSeleccionados[indice].stock_producto;
-      this.ProductoSeleccionados[indice].cantidad_seleccionado = this.ProductoSeleccionados[indice].stock_producto;
+      e.target.parentElement.parentElement.firstElementChild.value = this.ProductoSeleccionados[indice].total_stock_producto_bodega;
+      this.ProductoSeleccionados[indice].cantidad_seleccionado = this.ProductoSeleccionados[indice].total_stock_producto_bodega;
 
       return;
     }
@@ -342,7 +338,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
       cantidad = 1;
       this.ProductoSeleccionados[indice].cantidad_seleccionado = 1;
       e.target.value = 1;
-    } else if (cantidad > this.ProductoSeleccionados[indice].stock_producto) {
+    } else if (cantidad > this.ProductoSeleccionados[indice].total_stock_producto_bodega) {
       Swal.fire({
         toast: true,
         position: 'top',
@@ -352,8 +348,8 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
         timerProgressBar: true,
         timer: 5000
       })
-      e.target.value = this.ProductoSeleccionados[indice].stock_producto;
-      this.ProductoSeleccionados[indice].cantidad_seleccionado = this.ProductoSeleccionados[indice].stock_producto;
+      e.target.value = this.ProductoSeleccionados[indice].total_stock_producto_bodega;
+      this.ProductoSeleccionados[indice].cantidad_seleccionado = this.ProductoSeleccionados[indice].total_stock_producto_bodega;
     } else {
       this.ProductoSeleccionados[indice].cantidad_seleccionado = cantidad;
       e.target.value = cantidad;
@@ -362,9 +358,10 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     this.CacularTotales();
   }
   EscribirProducto(e: any) {
-    if (e.keyCode == 13) {
+    clearTimeout(this.contador_texto); // <--- The solution is here
+    this.contador_texto = setTimeout(() => {
       this.BuscarProductos();
-    }
+    }, 500);
   }
 
   EscribirPago(e: any, accion: any) {
@@ -417,18 +414,18 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     let igv = 0;
     let subtotal = 0;
     this.ProductoSeleccionados.forEach((element: any) => {
-      if (element.id_tipo_afectacion==1) {
+      if (element.id_tipo_afectacion == 1) {
         total += element.precio_venta_producto;
-      }else{
+      } else {
         totalexonerado += element.precio_venta_producto;
       }
- 
+
     });
-    if (total>0) {
+    if (total > 0) {
       subtotal = total / (1 + 0.18);
       igv = total - subtotal;
     }
-    subtotal+=totalexonerado;
+    subtotal += totalexonerado;
     this.Totales.igv = igv.toFixed(2);
     this.Totales.subtotal = subtotal.toFixed(2);
     this.Totales.total = total + totalexonerado;
@@ -504,8 +501,12 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
     this.nota_venta.AsignarCliente().pipe(takeUntil(this.unsubscribe$)).subscribe({
-      next: resp => {
-        $("#nombre_cliente").html(`<option value='${resp.id_cliente}'>${resp.nombre_cliente} (${resp.dni_cliente})</option>`)
+      next: item => {
+        this.listaCliente = [{
+          glosa_cliente: `${item.nombre_cliente} ${item.apellidopaterno_cliente ?? ''} ${item.apellidopaterno_cliente ?? ''} (${item.dni_cliente}) `,
+          id_cliente: item.id_cliente,
+        }];
+        this.informacionForm.get('cliente')?.setValue(item.id_cliente);
       },
       error: error => {
         Swal.fire({
@@ -561,8 +562,8 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     this.search_input_pago?.nativeElement.focus();
   }
   CambioInput($evento: any) {
-    const rucControl:any = this.informacionFormCliente.get('ruc_cliente');
-    const dniControl:any = this.informacionFormCliente.get('dni_cliente');
+    const rucControl: any = this.informacionFormCliente.get('ruc_cliente');
+    const dniControl: any = this.informacionFormCliente.get('dni_cliente');
     switch ($evento.target.value) {
       case 'RUC':
         rucControl.setValidators([Validators.required]);
@@ -601,7 +602,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
                 timer: 3000,
               });
             } else {
-              const datapersonal=separarNombresApellidos(resp.razonSocial);
+              const datapersonal = separarNombresApellidos(resp.razonSocial);
               this.informacionFormCliente.get('ruc_cliente')?.setValue(resp.ruc);
               this.informacionFormCliente.get('nombre_razon_social')?.setValue(datapersonal.nombres);
               this.informacionFormCliente.get('apellido_paterno')?.setValue(datapersonal.apellidoPaterno);
@@ -817,7 +818,11 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
         } else {
           documento = `(${resp.ruc_cliente})`;
         }
-        $("#nombre_cliente").html(`<option value='${resp.id_cliente}'>${resp.nombre_cliente} ${documento}</option>`)
+        this.listaCliente = [{
+          glosa_cliente: `${resp.nombre_cliente} ${resp.apellidopaterno_cliente ?? ''} ${resp.apellidopaterno_cliente ?? ''} (${documento}) `,
+          id_cliente: resp.id_cliente,
+        }];
+        this.informacionForm.get('cliente')?.setValue(resp.id_cliente);
         Swal.fire({
           toast: true,
           position: 'top',
@@ -868,13 +873,12 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
 
-    if ($("#nombre_cliente").val() === null) {
+    if (this.informacionForm.value.cliente === null) {
       this.toast.error(`No hay un cliente seleccionado`, undefined, {
         timeOut: 3000,
       });
       return;
     }
-    this.informacionForm.get('cliente')?.setValue($("#nombre_cliente").val());
     let datos = {
       informacionForm: this.informacionForm.value,
       ProductoSeleccionados: this.ProductoSeleccionados,
@@ -925,7 +929,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     this.Totales.igv = 0;
     this.Totales.subtotal = 0;
     this.Totales.total = 0;
-    this.busquedafactura=false;
+    this.busquedafactura = false;
     this.AsignarCliente();
     this.informacionForm.get('vendedor')?.setValue(this.identificacion.sub);
     this.informacionForm.get('id_empresa')?.setValue(this.identificacion.id_empresa);
@@ -1001,14 +1005,18 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
+
+
   VerficarDocumentoCliente(evento: any) {
+    this.limpiarSeleccion();
     switch (evento.value) {
       case 'FACTURA':
-        $("#nombre_cliente").empty();
+        this.informacionForm.get('cliente')?.setValue(null);
         this.busquedafactura = true;
         break;
       default:
         this.busquedafactura = false;
+        this.AsignarCliente()
         break;
     }
   }

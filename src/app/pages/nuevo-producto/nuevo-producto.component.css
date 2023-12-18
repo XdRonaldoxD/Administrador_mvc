@@ -13,6 +13,9 @@ td {
     justify-content: start;
     margin-bottom: 15px;
 }
+.disabled{
+    pointer-events: none;
+}
 
 @media only screen and (max-width: 1600px) {
     #t-crear-categoria ,#atributo-producto{

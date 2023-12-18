@@ -17,6 +17,10 @@
                             class="fa fa-folder"></i><span class="hide-menu">INVENTARIOS<span
                                 class="label label-rouded label-themecolor pull-right">4</span></span></a>
                     <ul aria-expanded="false" class="collapse" #EventoClick>
+                        <li><a class="desactivar" (click)="SELECCION($event.target)" routerLink="/Sucursal"
+                                href="javascript:void()"><i class="mdi mdi-home-modern"></i> SUCURSAL</a>
+                        <li><a class="desactivar" (click)="SELECCION($event.target)" routerLink="/Bodega"
+                                href="javascript:void()"> <i class="mdi mdi-home"></i> BODEGAS</a>
                         <li><a class="desactivar" (click)="SELECCION($event.target)" routerLink="/Marca"
                                 href="javascript:void()"> <i class="fa fa-tags"></i> MARCAS</a>
                         </li>
@@ -34,7 +38,7 @@
                     <ul aria-expanded="false" class="collapse" #EventoClick>
                         <li>
                             <a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Nota-Venta"
-                                href="javascript:void()"> <i class="mdi mdi-square-inc-cash"></i> NOTA VENTA</a>
+                                href="javascript:void()"> <i class="mdi mdi-square-inc-cash"></i> PAGO NOTA VENTA</a>
                         </li>
                         <li>
                             <a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Ventas"
@@ -52,7 +56,7 @@
                     </ul>
                 </li>
                 <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
-                            class="mdi mdi-bullseye"></i><span class="hide-menu">OTROS<span
+                            class="mdi mdi-bullseye"></i><span class="hide-menu">REPORTE<span
                                 class="label label-rouded label-themecolor pull-right">3</span></span></a>
                     <ul aria-expanded="false" class="collapse" #EventoClick>
                         <li><a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Pedidos">
@@ -66,9 +70,7 @@
                         <li><a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Libro-Ventas"
                                 href="javascript:void()"> <i class="mdi mdi-cube-send"></i> LIBRO VENTAS</a>
                         </li>
-                        <li><a (click)="SELECCION($event.target)" class="desactivar" routerLink="/chatBox"
-                                href="javascript:void()"> <i class="mdi mdi-wechat"></i> CHAT CLIENTE</a>
-                        </li>
+
                     </ul>
                 </li>
                 <li><a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
@@ -79,10 +81,17 @@
                             <a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Slider"
                                 href="javascript:void()"> <i class="mdi mdi-web"></i> SLIDER</a>
                         </li>
+                        <li><a (click)="SELECCION($event.target)" class="desactivar" routerLink="/chatBox"
+                                href="javascript:void()"> <i class="mdi mdi-wechat"></i> CHAT CLIENTE</a>
+                        </li>
+                        <li><a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Promociones"
+                                href="javascript:void()"> <i class="mdi mdi-wechat"></i> PROMOCIONES</a>
+                        </li>
                     </ul>
                 </li>
-                <li><a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
-                            class="fa fa-building"></i><span class="hide-menu">D. GENERALES<span
+
+                <li *ngIf="identificacion.id_perfil==1"><a class="has-arrow waves-effect waves-dark" href="#"
+                        aria-expanded="false"><i class="fa fa-building"></i><span class="hide-menu">D. GENERALES<span
                                 class="label label-rouded label-themecolor pull-right">2</span></span></a>
                     <ul aria-expanded="false" class="collapse" #EventoClick>
                         <li>
@@ -91,7 +100,8 @@
                         </li>
                         <li>
                             <a (click)="SELECCION($event.target)" class="desactivar" routerLink="/Usuario"
-                                href="javascript:void()"> <i class="fa fa-user-plus" aria-hidden="true"></i> USUARIO </a>
+                                href="javascript:void()"> <i class="fa fa-user-plus" aria-hidden="true"></i> USUARIO
+                            </a>
                         </li>
                     </ul>
                 </li>

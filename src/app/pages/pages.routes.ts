@@ -25,6 +25,12 @@ import { BajaComprobantesComponent } from './baja-comprobantes/baja-comprobantes
 import { LibroVentasComponent } from './libro-ventas/libro-ventas.component';
 import { LibroVentasService } from '../resolver/LibroVentasresolver.service';
 import { UsuarioComponent } from './usuario/usuario.component';
+import { TraerProductosService } from '../resolver/TraerProductosresolver.service';
+import { BodegaComponent } from './bodega/bodega.component';
+import { SucursalComponent } from './sucursal/sucursal.component';
+import { SucursalresolverService } from '../resolver/Sucursalresolver.service';
+import { TraerDatosProductoService } from '../resolver/TraerDatosProductosresolver.service';
+import { PromocionComponent } from './TiendaOnline/promocion/promocion.component';
 
 
 const pagesRoutes: Routes = [
@@ -35,8 +41,14 @@ const pagesRoutes: Routes = [
     runGuardsAndResolvers: 'always',
     children: [
       { path: 'inicio', component: IndexComponent },
-      { path: 'Nuevo-Producto', component: NuevoProductoComponent },
-      { path: 'Editar-Producto/:id_producto', component: EditarProductoComponent },
+      {
+        path: 'Nuevo-Producto', component: NuevoProductoComponent,
+        resolve: { datos: TraerDatosProductoService }
+      },
+      {
+        path: 'Editar-Producto/:id_producto', component: EditarProductoComponent,
+        resolve: { datos: TraerProductosService }
+      },
       { path: 'Producto', component: ProductosComponent },
       { path: 'Perfil', component: PerfilComponent },
       { path: 'Marca', component: MarcasComponent },
@@ -64,6 +76,12 @@ const pagesRoutes: Routes = [
       { path: 'Empresa', component: EmpresaComponent },
       { path: 'Baja-Comprobantes', component: BajaComprobantesComponent },
       { path: 'Usuario', component: UsuarioComponent },
+      { path: 'Bodega', component: BodegaComponent },
+      { path: 'Promociones', component: PromocionComponent },
+      {
+        path: 'Sucursal', component: SucursalComponent,
+        resolve: { datos: SucursalresolverService }
+      },
       {
         path: 'Libro-Ventas', component: LibroVentasComponent,
         resolve: { datos: LibroVentasService }

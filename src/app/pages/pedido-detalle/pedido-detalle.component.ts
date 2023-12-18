@@ -40,7 +40,7 @@ export class PedidoDetalleComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-   
+    $("[data-dismiss='modal']").click();
   
   }
   //SE TERMINE DE CARGAR LA PAGINA

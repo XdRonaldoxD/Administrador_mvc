@@ -1,7 +1,7 @@
 <div class="container-fluid">
-    <div class="row page-titles">
+    <div class="row page-titles mb-0">
         <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">USUARIO</h3>
+            <h3 class="text-themecolor"><strong>USUARIO</strong></h3>
         </div>
     </div>
 
@@ -9,7 +9,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="row MT-1">
+                    <div class="row mt-1">
                         <div class="col-md-12 d-flex justify-content-end">
                             <div class="row m-0">
                                 <button (click)="AbrirModal()" class="btn btn-success btn-reset">NUEVO USUARIO <i
@@ -29,20 +29,29 @@
                                 <!-- ANGULAR SERVER SIDE -->
                                 <div class="table-responsive">
                                     <table summary="Slider" datatable [dtOptions]="dtOptions[0]"
-                                        [dtTrigger]="reload_producto" class="row-border hover " width="100%">
+                                        [dtTrigger]="reload_producto" class="table table-striped color-table info-table" width="100%">
                                         <thead>
                                             <tr style="vertical-align: middle;text-align: center;"
                                                 class="text-uppercase">
-                                                <th class="text-center">ACCION</th>
                                                 <th class="text-center">NOMBRES COMPLETO</th>
                                                 <th class="text-center">TELEFONO</th>
                                                 <th class="text-center">E-MAIL</th>
                                                 <th class="text-center">TIPO <br> USUARIO/PERFIL </th>
+                                                <th class="text-center">ACCION</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <ng-container *ngFor="let e of listarUsuario;">
                                                 <tr style="vertical-align: middle;text-align: center;">
+                                              
+                                                    <td>{{e.nombre_staff}} {{e.apellidopaterno_staff}}
+                                                        {{e.apellidomaterno_staff}}</td>
+                                                    <td>
+                                                        <div>{{e.telefono_staff}}</div>
+                                                        <div>{{e.celular_staff}}</div>
+                                                    </td>
+                                                    <td>{{e.e_mail_staff}}</td>
+                                                    <td>{{e.glosa_perfil}}</td>
                                                     <td>
                                                         <div class="button-group">
                                                             <button type="button" style="width: 20px;height: 20px;"
@@ -67,14 +76,6 @@
                                                         </button>
                                                         </div>
                                                     </td>
-                                                    <td>{{e.nombre_staff}} {{e.apellidopaterno_staff}}
-                                                        {{e.apellidomaterno_staff}}</td>
-                                                    <td>
-                                                        <div>{{e.telefono_staff}}</div>
-                                                        <div>{{e.celular_staff}}</div>
-                                                    </td>
-                                                    <td>{{e.e_mail_staff}}</td>
-                                                    <td>{{e.glosa_perfil}}</td>
                                                 </tr>
                                             </ng-container>
                                         </tbody>
@@ -94,21 +95,31 @@
                                 <!-- ANGULAR SERVER SIDE -->
                                 <div class="table-responsive">
                                     <table datatable [dtOptions]="dtOptions[1]"
-                                        [dtTrigger]="reload_producto_deshabilitado" class="row-border hover "
+                                        [dtTrigger]="reload_producto_deshabilitado" class="table table-striped color-table info-table"
                                         width="100%" summary="Tabla usuarios">
                                         <thead>
                                             <tr style="vertical-align: middle;text-align: center;"
                                                 class="text-uppercase">
-                                                <th class="text-center">ACCION</th>
+                                            
                                                 <th class="text-center">NOMBRES COMPLETO</th>
                                                 <th class="text-center">TELEFONO/Celular</th>
                                                 <th class="text-center">E-MAIL</th>
                                                 <th class="text-center">TIPO <br> USUARIO/PERFIL </th>
+                                                <th class="text-center">ACCION</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <ng-container *ngFor="let e of listarUsuarioDeshabilitado;">
                                                 <tr style="vertical-align: middle;text-align: center;">
+                                            
+                                                    <td>{{e.nombre_staff}} {{e.apellidopaterno_staff}}
+                                                        {{e.apellidomaterno_staff}}</td>
+                                                    <td>
+                                                        <div>{{e.telefono_staff}}</div>
+                                                        <div>{{e.celular_staff}}</div>
+                                                    </td>
+                                                    <td>{{e.e_mail_staff}}</td>
+                                                    <td>{{e.glosa_perfil}}</td>
                                                     <td>
                                                         <div class="button-group">
                                                             <button type="button" style="width: 20px;height: 20px;"
@@ -120,14 +131,6 @@
                                                             </button>
                                                         </div>
                                                     </td>
-                                                    <td>{{e.nombre_staff}} {{e.apellidopaterno_staff}}
-                                                        {{e.apellidomaterno_staff}}</td>
-                                                    <td>
-                                                        <div>{{e.telefono_staff}}</div>
-                                                        <div>{{e.celular_staff}}</div>
-                                                    </td>
-                                                    <td>{{e.e_mail_staff}}</td>
-                                                    <td>{{e.glosa_perfil}}</td>
                                                 </tr>
                                             </ng-container>
                                         </tbody>
@@ -154,21 +157,21 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title text-center" [innerHTML]="texto_cabezera"></h5>
+                <h5 class="modal-title text-center" > <strong>{{texto_cabezera}}</strong></h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close" data-original-title=""
                     title=""><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <form [formGroup]="userForm" autocomplete="nope" enctype="multipart/form-data">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <h6 for="name" class="control-label">Dni</h6>
                                 <input type="text" class="form-control" placeholder="Ingrese el numero de documento"
                                     formControlName="dni_staff">
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <h6 for="name" class="control-label">Nombre Usuario<span class="text-danger">(*)</span>
                                 </h6>
@@ -182,7 +185,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <h6 for="name" class="control-label">Apellido Paterno<span
                                         class="text-danger">(*)</span></h6>
@@ -196,7 +199,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <h6 for="name" class="control-label">Apellido Materno<span
                                         class="text-danger">(*)</span></h6>
@@ -210,7 +213,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <h6 for="name" class="control-label">E-mail<span class="text-danger">(*)</span></h6>
                                 <input type="email" class="form-control" placeholder="Ingrese el e-mail"
@@ -224,21 +227,21 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <h6 for="name" class="control-label">Teléfono</h6>
                                 <input type="number" class="form-control" placeholder="Ingrese el teléfono"
                                     formControlName="telefono_staff">
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <h6 for="name" class="control-label">Celular</h6>
                                 <input type="number" class="form-control" placeholder="Ingrese el celular"
                                     formControlName="celular_staff" maxlength="9">
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <h6 for="name" class="control-label">Sexo<span class="text-danger">(*)</span></h6>
                                 <select class="form-control select2" formControlName="sexo_staff"
@@ -254,7 +257,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <h6 for="name" class="control-label">Perfil<span class="text-danger">(*)</span></h6>
                                 <select class="form-control" formControlName="id_perfil"
@@ -270,7 +273,38 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6" *ngIf="passwordactive">
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <h6 for="name" class="control-label">Sucursal<span class="text-danger">(*)</span></h6>
+                                <select (change)="Seleccionar('Sucursal')" class="form-control" formControlName="id_sucursal"
+                                    [class.is-invalid]="userForm.controls['id_sucursal']|isInvalid">
+                                    <option value="">Seleccionar Sucursal</option>
+                                    <option value="{{item.id_sucursal}}" *ngFor="let item of sucursal">
+                                        {{item.glosa_sucursal}}</option>
+                                </select>
+                                <div class="text-danger">
+                                    <div *ngIf="userForm.controls['id_sucursal']|hasError:'required'">
+                                        Seleccione sucursal
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <h6 for="name" class="control-label">Bodega<span class="text-danger">(*)</span></h6>
+                                <select class="form-control" formControlName="id_bodega"
+                                    [class.is-invalid]="userForm.controls['id_bodega']|isInvalid">
+                                    <option value="">Seleccionar Bodega</option>
+                                    <option value="{{item.id_bodega}}" *ngFor="let item of bodega_filtrar">{{item.glosa_bodega}}</option>
+                                </select>
+                                <div class="text-danger">
+                                    <div *ngIf="userForm.controls['id_bodega']|hasError:'required'">
+                                        Seleccione bodega
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12" *ngIf="passwordactive">
                             <div class="form-group">
                                 <h6 for="name" class=" control-label">Contraseña<span class="text-danger">(*)</span>
                                 </h6>
@@ -284,7 +318,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6" *ngIf="passwordactive">
+                        <div class="col-md-6 col-12" *ngIf="passwordactive">
                             <div class="form-group">
                                 <h6 for="name" class="control-label">Confirmar Contraseña<span
                                         class="text-danger">(*)</span></h6>

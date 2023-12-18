@@ -1,25 +1,18 @@
-<!-- ============================================================== -->
-<!-- Container fluid  -->
-<!-- ============================================================== -->
 <div class="container-fluid">
     <!-- ============================================================== -->
     <!-- Bread crumb and right sidebar toggle -->
     <!-- ============================================================== -->
-    <div class="row page-titles">
+    <div class="row page-titles mb-0">
         <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">CATEGORIA</h3>
+            <h3 class="text-themecolor"> <strong>CATEGORIA</strong></h3>
         </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- End Bread crumb and right sidebar toggle -->
-    <!-- ============================================================== -->
-
     <!-- ============================================================== -->
     <!-- Start Page Content -->
     <!-- ============================================================== -->
     <!-- row -->
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 col-12">
             <div class="card">
                 <div class="card-body">
                     <div class="row MT-1">
@@ -42,7 +35,7 @@
                                 <!-- ANGULAR SERVER SIDE -->
                                 <div class="table-responsive">
                                     <table datatable [dtOptions]="dtOptions[0]" [dtTrigger]="reload_producto"
-                                        class="row-border hover " width="100%">
+                                        class="table table-striped color-table info-table" width="100%">
                                         <thead>
                                             <tr>
                                                 <th style="text-align: center;">CATEGORIA</th>
@@ -82,8 +75,6 @@
                                         </tbody>
                                     </table>
                                 </div>
-
-
                             </div>
                         </div>
                         <div id="navpills-2" class="tab-pane">
@@ -91,8 +82,8 @@
                                 <!-- ANGULAR SERVER SIDE -->
                                 <div class="table-responsive">
                                     <table datatable [dtOptions]="dtOptions[1]"
-                                        [dtTrigger]="reload_producto_deshabilitado" class="row-border hover "
-                                        width="100%">
+                                        [dtTrigger]="reload_producto_deshabilitado"
+                                        class="table table-striped color-table info-table" width="100%">
                                         <thead>
                                             <tr>
                                                 <th style="text-align: center;">CATEGORIA</th>
@@ -151,18 +142,18 @@
 <!-- ============================================================== -->
 
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter"
-    aria-hidden="true">
+    aria-hidden="true"  data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title text-center " [innerHTML]="titulo_texto"></h5>
+                <h5 class="modal-title text-center"> <strong> {{titulo_texto}}</strong></h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close" data-original-title=""
                     title=""><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <form [formGroup]="categoriaForm" autocomplete="nope" enctype="multipart/form-data">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <h6 for="name" class="col-sm-12 control-label">Nombre Categoría <span
                                         class="text-danger">(*)</span></h6>
@@ -178,13 +169,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-12">
                             <div class="form-group fg-inventario">
                                 <h6 for="name" class="col-sm-12 control-label">Tipo Inventario <span
                                         class="text-danger">(*)</span></h6>
                                 <div class="col-sm-12">
                                     <select (change)="listarCategorias($event.target)" class="form-control"
-                                        formControlName="id_tipo_inventario"
+                                        formControlName="id_tipo_inventario" id="id_tipo_inventario"
                                         [class.is-invalid]="categoriaForm.controls['id_tipo_inventario']|isInvalid">
                                         <option value="">Seleccionar Inventario</option>
                                         <option *ngFor="let item of tipo_inventario"
@@ -198,19 +189,36 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-6 col-12 ">
+                            <div class="form-group">
+                                <h6 for="name" class="col-sm-12 control-label">Codigo Categoría <span
+                                        class="text-danger">(*)</span></h6>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" readonly placeholder="Ingrese un nombre"
+                                        formControlName="codigo_categoria"
+                                        [class.is-invalid]="categoriaForm.controls['codigo_categoria']|isInvalid">
+                                    <div class="text-danger">
+                                        <div *ngIf="categoriaForm.controls['codigo_categoria']|hasError:'required'">
+                                            Categoría Vacia
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-12 px-5" id="t-categoria">
+                            
+                        </div>
                     </div>
-                    <div id="t-crear-categoria">
-                    </div>
-                    <br>
+
                     <div class="row">
-                        <div class="col-md-12" align="center">
+                        <div class="col-md-12 col-12" align="center">
                             <img *ngIf="!imgTemporal" src="../../../assets/assets/images/users/avatar-staff.jpg"
                                 class="img-responsive elevation-2 w-25" alt="User Image">
                             <img *ngIf="imgTemporal" [src]="imgTemporal" class="img-responsive elevation-2 w-25"
                                 alt="User Image">
-                            <input (change)="seleccioneImagen($event.target)" type="file" name="imagen"
+                            <input #fileInput (change)="seleccioneImagen($event.target)" type="file" name="imagen"
                                 [accept]="'image/*'" class="form-control-file mt-3">
-
+                            <label><strong>Tamaño Imagen 200 x 100</strong></label>
                         </div>
                     </div>
                     <div class="row d-none">
@@ -246,10 +254,20 @@
 
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal" data-original-title=""
-                    title="">Salir</button>
-                <button (click)="GuardarActualizarCategoria()" class="btn btn-primary" type="submit"
-                    data-original-title="" title="">GUARDAR CATEGORIA</button>
+                <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal" data-original-title=""
+                        title="">Salir</button>
+                    <button (click)="GuardarActualizarCategoria()" type="button" class="btn btn-success"
+                        value="create-product"><i style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                        GUARDAR CATEGORIA
+                    </button>
+                </ng-container>
+                <ng-template #elseTemplate>
+                    <button type="button" class="btn btn-success"><em class="fa fa-spin fa-circle-o-notch"></em>
+                        Guardando...
+                    </button>
+                </ng-template>
+
             </div>
         </div>
 

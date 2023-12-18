@@ -29,6 +29,7 @@ export class DatosPersonalesComponent implements OnInit {
       const staff = res.datopersonal?.Staff ?? {};
       this.Perfil = res.datopersonal?.Perfil;
       this.InformacionStaff = this.fb.group({
+        id_usuario: [staff.id_usuario],
         id_staff: [staff.id_staff || ''],
         nombre_staff: [staff.nombre_staff || '', [Validators.required]],
         apellidopaterno_staff: [staff.apellidopaterno_staff || '', [Validators.required]],
@@ -48,7 +49,7 @@ export class DatosPersonalesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    $("[data-dismiss='modal']").click();
   }
 
 

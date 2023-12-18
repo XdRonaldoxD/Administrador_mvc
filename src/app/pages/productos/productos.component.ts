@@ -1,11 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { finalize, Subject } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { LoginService } from '../../services/login.service';
 import { CategoriaService } from '../../services/categoria.service';
 import { ProductoService } from '../../services/producto.service';
 import { environment } from 'src/environments/environment';
+import { ToastrService } from 'ngx-toastr';
 
 
 declare var $: any;
@@ -30,6 +31,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
   reload_producto: any = new Subject();
   reload_producto_deshabilitado: any = new Subject();
   reload_producto_historial: any = new Subject();
+  destroy: any = new Subject();
   //Identificacion del usuario
   identity: any;
   token: any;
@@ -43,15 +45,18 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
   Producto: any;
   tipo_movimiento: any = null;
   usuario: any = null;
-  id_producto:any=null;
+  id_producto: any = null;
+  bodega: any = [];
+  url_producto_imagen: string = "../../../assets/assets/images/producto.png";
+  GuardarStock: boolean = false;
   constructor(private http: HttpClient,
     private servicio_login: LoginService,
     private fb: FormBuilder,
     private servicio_categoria: CategoriaService,
-    private servicio_producto:  ProductoService,
+    private servicio_producto: ProductoService,
+    private toastr: ToastrService
   ) {
     this.usuario = servicio_login.getIdentity();
-    console.log(this.usuario);
     this.ProductoBuscar = this.fb.group({
       glosa_producto: [null],
       sku_producto: [null],
@@ -62,9 +67,11 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
       precio_compra: [null],
       cantidad: ['', [Validators.required]],
       stock_final: [''],
+      stock_producto: [''],
       comentario: [''],
+      id_bodega: [''],
       id_usuario: [this.usuario.sub],
-      id_producto:[null]
+      id_producto: [null]
     });
     this.token = this.servicio_login.getToken();
     //INICIALIZAMOS LA TABLA HISTORIAL
@@ -72,6 +79,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
     //
   }
   ngOnInit(): void {
+    $("[data-dismiss='modal']").click();
     this.ProductoHabilitados();
     this.ProductosDeshabilitados();
     $(function () {
@@ -101,6 +109,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
     this.reload_producto.unsubscribe();
     this.reload_producto_deshabilitado.unsubscribe();
     this.reload_producto_historial.unsubscribe();
+    this.destroy.unsubscribe();
   }
   ngAfterViewInit(): void {
     this.reload_producto.next();
@@ -148,12 +157,24 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
         if (checked.length > 0) {
           dataTablesParameters.categoria_padres = checked;
         }
-
-
         this.http.post<DataTablesResponse>(
-          environment.api_url+"?controller=Producto&action=ListaProducto",
+          environment.api_url + "?controller=Producto&action=ListaProducto",
           dataTablesParameters, { headers: headers }
-        ).subscribe((resp) => {
+        ).subscribe((resp: any) => {
+          resp.data.forEach((producto: any) => {
+            if (producto.total_stock_producto_bodega) {
+              const bodegasInfo = producto.total_stock_producto_bodega.split('|');
+              // Crear arreglos para almacenar la información separada
+              producto.bodegas = [];
+              producto.stock_bodegas = [];
+              // Iterar sobre la información de cada bodega
+              bodegasInfo.forEach((info: any) => {
+                const [bodega, stock] = info.split('@');
+                producto.bodegas.push(bodega);
+                producto.stock_bodegas.push(parseInt(stock, 10)); // Convertir a entero
+              });
+            }
+          });
           this.listarProducto = resp.data;
           callback({
             recordsTotal: resp.recordsTotal,
@@ -165,19 +186,16 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
       order: [],
       columns: [
         {
-          width: "20%"
+          width: "30%"
         },
         {
-          width: "40%"
-        },
-        {
-          width: "10%"
+          width: "30%"
         },
         {
           width: "10%"
         },
         {
-          width: "20%"
+          width: "30%"
         }
       ],
     };
@@ -195,9 +213,28 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
       destroy: true,
       order: [],
       ordering: false,
-      // scrollX:true,
       language: {
-        url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",
+        processing: "Procesando...",
+        lengthMenu: "Mostrar _MENU_ registros",
+        zeroRecords: "No se encontraron resultados",
+        emptyTable: "Ningún dato disponible en esta tabla",
+        info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+        infoFiltered: "(filtrado de un total de _MAX_ registros)",
+        infoPostFix: "",
+        search: "Buscar:",
+        url: "",
+        loadingRecords: "Cargando...",
+        paginate: {
+          first: "Primero",
+          last: "Último",
+          next: "Siguiente",
+          previous: "Anterior"
+        },
+        aria: {
+          sortAscending: "Activar para ordenar la columna de manera ascendente",
+          sortDescending: "Activar para ordenar la columna de manera descendente"
+        },
       },
       ajax: (dataTablesParameters: any, callback) => {
         if (this.ProductoBuscar.value.glosa_producto) {
@@ -219,7 +256,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
           dataTablesParameters.categoria_padres = checked;
         }
         this.http.post<DataTablesResponse>(
-          environment.api_url+"?controller=Producto&action=ListaProductoDeshabilitado",
+          environment.api_url + "?controller=Producto&action=ListaProductoDeshabilitado",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProductoDeshabilitado = resp.data;
@@ -232,19 +269,16 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
       },
       columns: [
         {
-          width: "20%"
-        },
-        {
           width: "40%"
         },
         {
-          width: "10%"
+          width: "20%"
         },
         {
           width: "10%"
         },
         {
-          width: "25%"
+          width: "30%"
         }
       ],
     };
@@ -262,16 +296,36 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
       destroy: true,
       order: [],
       ordering: false,
-      // scrollX:true,
       language: {
-        url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",
+        processing: "Procesando...",
+        lengthMenu: "Mostrar _MENU_ registros",
+        zeroRecords: "No se encontraron resultados",
+        emptyTable: "Ningún dato disponible en esta tabla",
+        info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+        infoFiltered: "(filtrado de un total de _MAX_ registros)",
+        infoPostFix: "",
+        search: "Buscar:",
+        url: "",
+        loadingRecords: "Cargando...",
+        paginate: {
+          first: "Primero",
+          last: "Último",
+          next: "Siguiente",
+          previous: "Anterior"
+        },
+        aria: {
+          sortAscending: "Activar para ordenar la columna de manera ascendente",
+          sortDescending: "Activar para ordenar la columna de manera descendente"
+        },
       },
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.id_producto = this.id_producto;
         this.http.post<DataTablesResponse>(
-          environment.api_url+"?controller=Producto&action=ProductoHistorial",
+          environment.api_url + "?controller=Producto&action=ProductoHistorial",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
+
           this.listarProductoHistorial = resp.data;
           callback({
             recordsTotal: resp.recordsTotal,
@@ -362,8 +416,38 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
   AbrirModalGestionarStock(datos_producto: any) {
     this.Producto = datos_producto;
     this.GestionarStock.get('id_producto')!.setValue(datos_producto.id_producto)
-    $('#exampleModalCenter').modal('show');
-
+    this.servicio_producto.TraerBodegaStock(datos_producto.id_producto).pipe(takeUntil(this.destroy), finalize(() => {
+      $('#exampleModalCenter').modal('show');
+    })).subscribe({
+      next: (res) => {
+        this.bodega = res.stock_producto_bodega;
+        if (this.bodega.length === 1) {
+          let valor = {
+            value: this.bodega[0].id_bodega
+          };
+          this.EscogerBodega(valor);
+          this.GestionarStock.get('id_bodega')!.setValue(this.bodega[0].id_bodega)
+        }
+        if (res.producto_imagen) {
+          this.url_producto_imagen = res.producto_imagen.url_producto_imagen;
+        } else {
+          this.url_producto_imagen = "../../../assets/assets/images/producto.png";
+        }
+      },
+      error: () => {
+        this.toastr.error(`Error al traer la bodega.`, undefined, {
+          timeOut: 3000,
+          positionClass: 'toast-top-right',
+        })
+      }
+    })
+  }
+  EscogerBodega(bodega: any) {
+    let stock_bodega = this.bodega.find((item: any) => item.id_bodega == bodega.value)
+    if (stock_bodega) {
+      this.GestionarStock.get('stock_final')!.setValue(stock_bodega.total_stock_producto_bodega)
+      this.GestionarStock.get('stock_producto')!.setValue(stock_bodega.total_stock_producto_bodega)
+    }
   }
 
   GestionarStockProducto() {
@@ -371,10 +455,13 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
     if (this.GestionarStock.invalid) {
       return;
     }
-    this.servicio_producto.GestionarStockProducto(this.token, this.GestionarStock.value).pipe(finalize(() => {
+    this.GuardarStock=true;
+    this.servicio_producto.GestionarStockProducto(this.GestionarStock.value).pipe(takeUntil(this.destroy), finalize(() => {
+      $('#exampleModalCenter').modal('hide');
       this.GestionarStock.reset();
       this.GestionarStock.get('accion')!.setValue('');
       this.GestionarStock.get('id_usuario')!.setValue(this.usuario.sub);
+      this.GuardarStock=false;
     })).subscribe({
       next: (res) => {
         Swal.fire({
@@ -392,9 +479,6 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
 
       }
     })
-    this.GestionarStock.reset();
-    $('#exampleModalCenter').modal('hide');
-
   }
   CambioMovimientos(valor: any) {
     if (valor.value == 1 || valor.value == 2) {
@@ -405,26 +489,38 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
       this.cantidad.nativeElement.setAttribute("disabled", "");
       this.tipo_movimiento = null;
     }
+    this.GestionarStock.get('stock_final')!.setValue(this.GestionarStock.value.stock_producto);
   }
   Cantidades(valor: any) {
+    if (this.GestionarStock.value.accion == '') {
+      this.toastr.error(`Debe seleccionar la acción.`, 'Acción', {
+        timeOut: 3000,
+        positionClass: 'toast-top-right',
+      })
+      valor.value = '';
+      return;
+    }
+    let stock = parseInt(this.GestionarStock.value.stock_producto);
     switch (this.tipo_movimiento) {
       case "1":
-        this.GestionarStock.get('stock_final')!.setValue(parseInt(this.Producto.stock_producto) + parseInt(valor.value));
+        stock += parseInt(valor.value);
+        this.GestionarStock.get('stock_final')!.setValue(stock);
         break;
       case "2":
-        this.GestionarStock.get('stock_final')!.setValue(parseInt(this.Producto.stock_producto) - parseInt(valor.value));
+        stock -= parseInt(valor.value);
+        this.GestionarStock.get('stock_final')!.setValue(stock);
         break;
       default:
         this.GestionarStock.get('stock_final')!.setValue('');
         break;
     }
   }
-  GestionActivoDesactivadoProducto(accion: string,id_producto:number) {
+  GestionActivoDesactivadoProducto(accion: string, id_producto: number) {
     let texto;
     if (accion == 'ACTIVAR') {
-       texto="activar";
-    }else{
-       texto="deshabilitar";
+      texto = "activar";
+    } else {
+      texto = "deshabilitar";
     }
     Swal.fire({
       title: `¿Estas seguro de ${texto} producto?`,
@@ -434,10 +530,10 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Si'
-    }).then((result:any) => {
+    }).then((result: any) => {
       if (result.isConfirmed) {
         if (accion == 'ACTIVAR') {
-          this.servicio_producto.GestionActivoDesactivadoProducto(this.token, accion,id_producto).pipe(finalize(()=>{
+          this.servicio_producto.GestionActivoDesactivadoProducto(accion, id_producto).pipe(takeUntil(this.destroy), finalize(() => {
             this.reload_producto.next();
             this.reload_producto_deshabilitado.next();
           })).subscribe({
@@ -449,11 +545,11 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
               )
             },
             error: (error) => {
-    
+
             }
           })
         } else {
-          this.servicio_producto.GestionActivoDesactivadoProducto(this.token, accion,id_producto).pipe(finalize(()=>{
+          this.servicio_producto.GestionActivoDesactivadoProducto(accion, id_producto).pipe(finalize(() => {
             this.reload_producto.next();
             this.reload_producto_deshabilitado.next();
           })).subscribe({
@@ -465,18 +561,18 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
               )
             },
             error: (error) => {
-    
+
             }
           })
         }
-      
+
       }
     })
-  
+
   }
 
-  HistorialProducto(id_producto:any){
-    this.id_producto=id_producto;
+  HistorialProducto(id_producto: any) {
+    this.id_producto = id_producto;
     this.reload_producto_historial.next();
     $('#exampleHistorialProducto').modal('show');
   }

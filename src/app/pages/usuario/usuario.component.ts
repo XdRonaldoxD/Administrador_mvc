@@ -33,6 +33,10 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
   Unsuscribe: any = new Subject();
   api_url: string = environment.api_url;
   perfiles: any = [];
+  sucursal: any = [];
+  bodega: any = [];
+  bodega_filtrar: any = [];
+  
   passwordactive: boolean = true;
   GuardarInformacion: boolean = false;
 
@@ -56,7 +60,9 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
       celular_staff: [''],
       newPassword: ['', [Validators.required]],
       confirmPassword: ['', [Validators.required]],
-      sexo_staff: ['',[Validators.required]]
+      sexo_staff: ['',[Validators.required]],
+      id_sucursal: ['',[Validators.required]],
+      id_bodega: ['',[Validators.required]],
     },
       {
         validators: [
@@ -99,12 +105,15 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
+    $("[data-dismiss='modal']").click();
     this.token = this.servicio_login.getToken();
     this.SliderHabilitados();
     this.SliderDeshabilitados();
-    this.Staff.mostrarPerfiles().pipe(takeUntil(this.Unsuscribe)).subscribe({
+    this.Staff.mostrarDatosUsuario().pipe(takeUntil(this.Unsuscribe)).subscribe({
       next: resp => {
-        this.perfiles = resp;
+        this.perfiles = resp.perfiles;
+        this.sucursal = resp.sucursal;
+        this.bodega = resp.bodegas;
       }, error: error => {
         this.toastr.error(`${error}`, 'Error', {
           timeOut: 3000,
@@ -149,7 +158,6 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
       responsive: true,
       destroy: true,
       ordering: false,
-      // scrollX:true,
       language: {
         processing: "Procesando...",
         lengthMenu: "Mostrar _MENU_ registros",
@@ -194,10 +202,10 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
       order: [],
       columns: [
         {
-          width: "20%"
+          width: "30%"
         },
         {
-          width: "30%"
+          width: "20%"
         },
         {
           width: "10%"
@@ -220,6 +228,8 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
     this.userForm.get('newPassword')?.updateValueAndValidity();
     this.userForm.get('confirmPassword')?.setValidators([Validators.required]);
     this.userForm.get('confirmPassword')?.updateValueAndValidity();
+    this.userForm.get('id_sucursal')?.setValue('');
+    this.userForm.get('id_bodega')?.setValue('');
     this.passwordactive = true;
     this.texto_cabezera = 'Usuario Nuevo';
     $('#exampleModalCenter').modal('show');
@@ -270,8 +280,11 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
       apellidomaterno_staff: item.apellidomaterno_staff,
       telefono_staff: item.telefono_staff,
       celular_staff: item.celular_staff,
-      sexo_staff: item.sexo_staff
+      sexo_staff: item.sexo_staff,
+      id_sucursal: item.id_sucursal,
+      id_bodega: item.id_bodega
     });
+    this.Seleccionar('Sucursal');
     this.userForm.get('e_mail_staff')?.setValue(item.e_mail_staff);
     this.texto_cabezera = 'Editar Usuario';
     $('#exampleModalCenter').modal('show');
@@ -315,7 +328,6 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
         })
       }
     })
-
   }
 
   OpenChangePassword(id_usuario:any) {
@@ -349,6 +361,15 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
         }
       })
 
+  }
+
+  Seleccionar(tipo: string) {
+    switch (tipo) {
+      case 'Sucursal':
+        let id_sucursal = this.userForm.value.id_sucursal;
+        this.bodega_filtrar = this.bodega.filter((item: any) => item.id_sucursal == id_sucursal)
+        break;
+    }
   }
 
   

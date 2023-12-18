@@ -75,14 +75,10 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
 
   }
   ngOnInit(): void {
+    $("[data-dismiss='modal']").click();
     this.token = this.servicio_login.getToken();
     //HABILITADO 1
     this.ListarCaja();
-
-   
-
-
-
   }
   //NOTA PARA EL FUNCIONAMIENTO DEL RELOAD APLICAR EN EL TYPYSCRYP Y HTML EL reload_producto
   //SOLO LLAMAR LA FUNCION => this.reload_producto.next();
@@ -154,10 +150,7 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
       ordering: false,
       columns: [
         {
-          width: "10%"
-        },
-        {
-          width: "10%"
+          width: "20%"
         },
         {
           width: "20%"

@@ -1,23 +1,10 @@
-<!-- ============================================================== -->
-<!-- Container fluid  -->
-<!-- ============================================================== -->
 <div class="container-fluid">
-    <!-- ============================================================== -->
-    <!-- Bread crumb and right sidebar toggle -->
-    <!-- ============================================================== -->
-    <div class="row page-titles">
+    <div class="row page-titles mb-0">
         <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">EMPRESA</h3>
+            <h3 class="text-themecolor"> <strong>EMPRESA</strong></h3>
         </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- End Bread crumb and right sidebar toggle -->
-    <!-- ============================================================== -->
 
-    <!-- ============================================================== -->
-    <!-- Start Page Content -->
-    <!-- ============================================================== -->
-    <!-- row -->
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -40,6 +27,9 @@
                                     <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#herramienta-seo"
                                             role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
                                                 class="hidden-xs-down">HERRAMIENTA-SEO</span></a> </li>
+                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#venta-online"
+                                            role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
+                                                class="hidden-xs-down">VENTA ONLINE</span></a> </li>
                                 </ul>
                                 <!-- Tab panes -->
                                 <div class="tab-content">
@@ -47,7 +37,7 @@
                                         <form [formGroup]="informacionForm" autocomplete="nope"
                                             enctype="multipart/form-data">
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label for="firstName1">RUC<strong
                                                                 class="text-danger">(*)</strong></label>
@@ -63,7 +53,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label for="lastName1">Razón Social <strong
                                                                 class="text-danger">(*)</strong></label>
@@ -78,9 +68,10 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 col-12">
                                                     <div class="form-group">
-                                                        <label for="emailAddress1">Direccion <strong  class="text-danger">(*)</strong></label>
+                                                        <label for="emailAddress1">Direccion <strong
+                                                                class="text-danger">(*)</strong></label>
                                                         <input type="email" class="form-control"
                                                             formControlName="direccion_empresa"
                                                             placeholder="Dirección de la Empresa"
@@ -93,7 +84,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label for="lastName1">Nombre </label>
                                                         <input type="text" class="form-control"
@@ -101,41 +92,46 @@
                                                             placeholder="Nombre de la empresa"
                                                             [class.is-invalid]="informacionForm.controls['nombre_empresa']|isInvalid">
                                                         <div class="text-danger">
-                                                            <div *ngIf="informacionForm.controls['nombre_empresa']|hasError:'required'">
+                                                            <div
+                                                                *ngIf="informacionForm.controls['nombre_empresa']|hasError:'required'">
                                                                 Nombre
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 col-12">
                                                     <div class="form-group">
-                                                        <label for="lastName1">Email <strong  class="text-danger">(*)</strong></label>
+                                                        <label for="lastName1">Email <strong
+                                                                class="text-danger">(*)</strong></label>
                                                         <input type="email" class="form-control"
                                                             formControlName="email_empresa_venta_online"
                                                             placeholder="Email de la empresa"
                                                             [class.is-invalid]="informacionForm.controls['email_empresa_venta_online']|isInvalid">
                                                         <div class="text-danger">
-                                                            <div *ngIf="informacionForm.controls['email_empresa_venta_online']|hasError:'required'">
+                                                            <div
+                                                                *ngIf="informacionForm.controls['email_empresa_venta_online']|hasError:'required'">
                                                                 Email vacio
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 col-12">
                                                     <div class="form-group">
-                                                        <label for="lastName1">Giro <strong  class="text-danger">(*)</strong></label>
+                                                        <label for="lastName1">Giro <strong
+                                                                class="text-danger">(*)</strong></label>
                                                         <input type="text" class="form-control"
                                                             formControlName="giro_empresa_venta_online"
                                                             placeholder="Giro de la empresa"
                                                             [class.is-invalid]="informacionForm.controls['giro_empresa_venta_online']|isInvalid">
                                                         <div class="text-danger">
-                                                            <div *ngIf="informacionForm.controls['giro_empresa_venta_online']|hasError:'required'">
+                                                            <div
+                                                                *ngIf="informacionForm.controls['giro_empresa_venta_online']|hasError:'required'">
                                                                 Grio vacio
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label for="location1">Telefono</label>
                                                         <input type="email" class="form-control"
@@ -143,7 +139,7 @@
                                                             placeholder="Telefono de la empresa">
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label for="location1">Celular</label>
                                                         <input type="email" class="form-control"
@@ -151,24 +147,25 @@
                                                             placeholder="Celular de la empresa">
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 col-12">
                                                     <div class="form-group">
-                                                        <label for="name" class="control-label">Departamento <strong class="text-danger">(*)</strong></label>
-                                                            <ng-select (change)="SeleccionarDepartamento(null)" 
+                                                        <label for="name" class="control-label">Departamento <strong
+                                                                class="text-danger">(*)</strong></label>
+                                                        <ng-select (change)="SeleccionarDepartamento(null)"
                                                             [class.is-invalid]="informacionForm.controls['departamento']|isInvalid"
-                                                            formControlName="departamento"
-                                                            [clearable]="false">
+                                                            formControlName="departamento" [clearable]="false">
                                                             <ng-option value=''>Seleccione el Departamento</ng-option>
                                                             <ng-option value="{{item.idDepartamento}}"
                                                                 *ngFor="let item of departamentos">{{item.departamento}}</ng-option>
                                                         </ng-select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 col-12">
                                                     <div class="form-group">
-                                                        <label for="name" class="control-label">Provincia <strong class="text-danger">(*)</strong>
+                                                        <label for="name" class="control-label">Provincia <strong
+                                                                class="text-danger">(*)</strong>
                                                         </label>
-                                                        <ng-select (change)="SeleccionarProvincia(null)" 
+                                                        <ng-select (change)="SeleccionarProvincia(null)"
                                                             formControlName="provincia" [clearable]="false">
                                                             <ng-option value="">Seleccione el Provincia</ng-option>
                                                             <ng-option value="{{item.idProvincia}}"
@@ -177,9 +174,10 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 col-12">
                                                     <div class="form-group">
-                                                        <label for="name" class="control-label">Distrito <strong class="text-danger">(*)</strong></label>
+                                                        <label for="name" class="control-label">Distrito <strong
+                                                                class="text-danger">(*)</strong></label>
                                                         <ng-select name="distrito" formControlName="distrito"
                                                             [clearable]="false">
                                                             <ng-option value="">Seleccione el Distrito</ng-option>
@@ -192,13 +190,20 @@
 
                                                 <div class="col-md-12">
                                                     <div id="button_right" class="col-sm-12 col-md-12 text-right">
-                                                        <button (click)="GuardarInformacionCompleto()" type="button"
-                                                            class="btn btn-success" id="btn-save"
-                                                            value="create-product"><i
-                                                                style="vertical-align: text-bottom;"
-                                                                class="bx bx-save"></i>
-                                                            Guardar
-                                                        </button>
+                                                        <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
+                                                            <button (click)="GuardarInformacionCompleto()" type="button"
+                                                                class="btn btn-success" value="create-product">
+                                                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                                                Guardar
+                                                            </button>
+                                                        </ng-container>
+                                                        <ng-template #elseTemplate>
+                                                            <button type="button" class="btn btn-success"
+                                                                value="create-product"><em
+                                                                    class="fa fa-spin fa-circle-o-notch"></em>
+                                                                Guardando...
+                                                            </button>
+                                                        </ng-template>
                                                     </div>
                                                 </div>
 
@@ -210,14 +215,14 @@
                                             <form [formGroup]="informacionForm" autocomplete="nope"
                                                 enctype="multipart/form-data">
                                                 <div class="row mt-4">
-                                                    <div class="col-md-6">
+                                                    <div class="col-12 col-md-6">
                                                         <div class="form-group">
                                                             <label for="jobTitle1">Usuario Sol </label>
                                                             <input type="text" class="form-control" id="jobTitle1"
                                                                 formControlName="usuario_sol" placeholder="Usuario Sol">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-12 col-md-6">
                                                         <div class="form-group">
                                                             <label for="videoUrl1">Clave Sol </label>
                                                             <input type="password" class="form-control"
@@ -225,14 +230,14 @@
                                                                 placeholder="Ingresar clave sol">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-12 col-md-6">
                                                         <div class="form-group">
                                                             <label for="videoUrl1">Archivo<strong>.P12</strong></label>
                                                             <input type="file" class="form-control"
                                                                 (change)="onFileSelected($event)">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-12 col-md-6">
                                                         <div class="form-group">
                                                             <label for="videoUrl1">Clave Del Certificado
                                                                 <strong>.P12</strong> </label>
@@ -241,30 +246,41 @@
                                                                 placeholder="Ingresar la clave del certificado">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-12 col-md-6">
                                                         <div class="form-group">
                                                             <label for="videoUrl1">Serie Factura </label>
-                                                            <input type="text" class="form-control" [maxlength]="4" (keyup)="FormarSerie($event,'FACTURA')"
-                                                                formControlName="serie_factura" placeholder="ingrese la serie">
+                                                            <input type="text" class="form-control" [maxlength]="4"
+                                                                (keyup)="FormarSerie($event,'FACTURA')"
+                                                                formControlName="serie_factura"
+                                                                placeholder="ingrese la serie">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-12 col-md-6">
                                                         <div class="form-group">
                                                             <label for="videoUrl1">Serie Boleta</label>
-                                                            <input type="text" class="form-control" [maxlength]="4" (keyup)="FormarSerie($event,'BOLETA')"
-                                                                formControlName="serie_boleta"  placeholder="ingrese la serie">
+                                                            <input type="text" class="form-control" [maxlength]="4"
+                                                                (keyup)="FormarSerie($event,'BOLETA')"
+                                                                formControlName="serie_boleta"
+                                                                placeholder="ingrese la serie">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-12 text-right">
-                                                        <button (click)="GuardarInformacionCompleto()" type="button"
-                                                            class="btn btn-success" id="btn-save"
-                                                            value="create-product"><i
-                                                                style="vertical-align: text-bottom;"
-                                                                class="bx bx-save"></i>
-                                                            Guardar
-                                                        </button>
+                                                        <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
+                                                            <button (click)="GuardarInformacionCompleto()" type="button"
+                                                                class="btn btn-success" value="create-product">
+                                                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                                                Guardar
+                                                            </button>
+                                                        </ng-container>
+                                                        <ng-template #elseTemplate>
+                                                            <button type="button" class="btn btn-success"
+                                                                value="create-product"><em
+                                                                    class="fa fa-spin fa-circle-o-notch"></em>
+                                                                Guardando...
+                                                            </button>
+                                                        </ng-template>
                                                     </div>
                                                 </div>
                                             </form>
@@ -286,7 +302,8 @@
                                                             <tr *ngFor="let item of listacertificados">
                                                                 <td>{{item.nombre_certificado_digital}}</td>
                                                                 <td>
-                                                                    <div>Inicio: {{item.fechainicio_certificado_digital |
+                                                                    <div>Inicio: {{item.fechainicio_certificado_digital
+                                                                        |
                                                                         date: 'yyyy-MM-dd h:mm a '}} </div>
                                                                     <div>Termino: {{item.fechafin_certificado_digital |
                                                                         date: 'yyyy-MM-dd h:mm a '}} </div>
@@ -308,7 +325,8 @@
                                                                         [showDelay]="50" [hideDelay]="50"
                                                                         class="cursor-pointer"
                                                                         style="background-color: rgb(13, 146, 190);padding:0.4rem;border-radius: 2rem;cursor: pointer;color: white;">
-                                                                        <i style="font-size: 20px;" class="fa fa-download"
+                                                                        <i style="font-size: 20px;"
+                                                                            class="fa fa-download"
                                                                             aria-hidden="true"></i>
                                                                     </a>
                                                                     <a (click)="eliminarCertificado(item.id_certificado_digital)"
@@ -345,24 +363,32 @@
                                                 <h4 class="card-title">Logo Empresa Horizontal
                                                     <strong>(250x150)</strong>
                                                 </h4>
-                                                <input #logo_empresa_horizonta type="file" id="logo_empresa_horizonta" class="dropify"
-                                                    accept="image/png,image/jpeg" />
+                                                <input #logo_empresa_horizonta type="file" id="logo_empresa_horizonta"
+                                                    class="dropify" accept="image/png,image/jpeg" />
                                             </div>
                                             <div class="col-md-12">
-                                                <h4 class="card-title">Logo Empresa Vertical <strong>(160x160)</strong></h4>
-                                                <input  #logo_empresa_vertical type="file" id="logo_empresa_vertical" class="dropify"
-                                                    accept="image/png,image/jpeg" />
+                                                <h4 class="card-title">Logo Empresa Vertical <strong>(160x160)</strong>
+                                                </h4>
+                                                <input #logo_empresa_vertical type="file" id="logo_empresa_vertical"
+                                                    class="dropify" accept="image/png,image/jpeg" />
                                             </div>
                                         </div>
                                         <div class="row mt-2">
                                             <div class="col-sm-12 col-md-12 text-right">
-                                                <button (click)="GuardarInformacionCompleto()" type="button"
-                                                    class="btn btn-success" id="btn-save"
-                                                    value="create-product"><i
-                                                        style="vertical-align: text-bottom;"
-                                                        class="bx bx-save"></i>
-                                                    Guardar
-                                                </button>
+                                                <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
+                                                    <button (click)="GuardarInformacionCompleto()" type="button"
+                                                        class="btn btn-success" value="create-product">
+                                                        <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                                        Guardar
+                                                    </button>
+                                                </ng-container>
+                                                <ng-template #elseTemplate>
+                                                    <button type="button" class="btn btn-success"
+                                                        value="create-product"><em
+                                                            class="fa fa-spin fa-circle-o-notch"></em>
+                                                        Guardando...
+                                                    </button>
+                                                </ng-template>
                                             </div>
                                         </div>
                                     </div>
@@ -375,30 +401,83 @@
                                                     <div class="row pb-2">
                                                         <div class="col-md-12">
                                                             <div class="form-group">
-                                                                <h5 for="name" class=" control-label">Pixel
-                                                                    Google
-                                                                </h5>
-                                                                <label style="font-size: 1rem;" for="name"
-                                                                    class=" control-label ">
-                                                                    <strong>Nota:</strong>Desactivar el codigo fuente
-                                                                    para guardar los cambios.</label>
-                                                                <div id="pixelgoogle_empresa">
-                                                                    <textarea formControlName="pixelgoogle_empresa"
-                                                                        class="pixelgoogle_empresa"></textarea>
-                                                                </div>
+                                                                <h5 for="name" class=" control-label"> <strong>Pixel
+                                                                        Google</strong></h5>
+                                                                <textarea formControlName="pixelgoogle_empresa"
+                                                                    class="form-control" cols="30" rows="10"></textarea>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-12">
                                                             <div class="form-group">
-                                                                <h5 for="name" class=" control-label mt-3"> Pixel
-                                                                    Facebook </h5>
-                                                                <label style="font-size: 1rem;" for="name"
-                                                                    class="control-label">
-                                                                    <strong>Nota:</strong>Desactivar el codigo fuente
-                                                                    para guardar los cambios.</label>
-                                                                <div id="pixelfacebook_empresa">
-                                                                    <textarea formControlName="pixelfacebook_empresa"
-                                                                        class="pixelfacebook_empresa"></textarea>
+                                                                <h5 for="name" class=" control-label mt-3">
+                                                                    <strong>Pixel Facebook</strong> </h5>
+                                                                <textarea formControlName="pixelfacebook_empresa"
+                                                                    class="form-control" cols="30" rows="10"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-12 text-right">
+                                                        <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
+                                                            <button (click)="GuardarInformacionCompleto()" type="button"
+                                                                class="btn btn-success" value="create-product">
+                                                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                                                Guardar
+                                                            </button>
+                                                        </ng-container>
+                                                        <ng-template #elseTemplate>
+                                                            <button type="button" class="btn btn-success"
+                                                                value="create-product"><em
+                                                                    class="fa fa-spin fa-circle-o-notch"></em>
+                                                                Guardando...
+                                                            </button>
+                                                        </ng-template>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="venta-online" aria-labelledby="profile-tab"
+                                        role="tabpanel">
+                                        <div class="card-body pb-1">
+                                            <div class="container">
+                                                <form [formGroup]="informacionForm" autocomplete="nope"
+                                                    enctype="multipart/form-data">
+                                                    <div class="row pb-2">
+                                                        <div class="col-md-6 col-12">
+                                                            <div class="form-group">
+                                                                <label for="id_sucursal">Sucursal</label>
+                                                                <select (change)="Seleccionar('Sucursal')"
+                                                                    class="form-control" formControlName="id_sucursal">
+                                                                    <option value="">Seleccionar Sucursal</option>
+                                                                    <option value="{{item.id_sucursal}}"
+                                                                        *ngFor="let item of sucursal">
+                                                                        {{item.glosa_sucursal}}</option>
+                                                                </select>
+                                                                <div class="text-danger">
+                                                                    <div
+                                                                        *ngIf="informacionForm.controls['id_sucursal']|hasError:'required'">
+                                                                        Seleccione sucursal
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-12">
+                                                            <div class="form-group">
+                                                                <label for="id_bodega">Bodega</label>
+                                                                <select class="form-control"
+                                                                    formControlName="id_bodega">
+                                                                    <option value="">Seleccionar Bodega</option>
+                                                                    <option value="{{item.id_bodega}}"
+                                                                        *ngFor="let item of bodega_filtrar">
+                                                                        {{item.glosa_bodega}}</option>
+                                                                </select>
+                                                                <div class="text-danger">
+                                                                    <div
+                                                                        *ngIf="informacionForm.controls['id_bodega']|hasError:'required'">
+                                                                        Seleccione bodega
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -406,11 +485,20 @@
                                                 </form>
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-12 text-right">
-                                                        <button (click)="GuardarInformacionCompleto()" type="button"
-                                                            class="btn btn-success"><i
-                                                                style="vertical-align: text-bottom;"
-                                                                class="bx bx-save"></i> Guardar
-                                                        </button>
+                                                        <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
+                                                            <button (click)="GuardarInformacionCompleto()" type="button"
+                                                                class="btn btn-success" value="create-product">
+                                                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                                                Guardar
+                                                            </button>
+                                                        </ng-container>
+                                                        <ng-template #elseTemplate>
+                                                            <button type="button" class="btn btn-success"
+                                                                value="create-product"><em
+                                                                    class="fa fa-spin fa-circle-o-notch"></em>
+                                                                Guardando...
+                                                            </button>
+                                                        </ng-template>
                                                     </div>
                                                 </div>
                                             </div>

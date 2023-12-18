@@ -1,0 +1,357 @@
+<div class="container-fluid">
+    <div class="row page-titles mb-0">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor"><strong>SUCURSAL</strong></h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mt-1">
+                        <div class="col-md-12 d-flex justify-content-end">
+                            <div class="row m-0">
+                                <button (click)="AbrirModal()" class="btn btn-success btn-reset">NUEVO SUCURSAL <i
+                                        class="mdi mdi-checkbox-multiple-blank-outline"></i> </button>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="nav nav-pills m-t-30 m-b-30">
+                        <li class=" nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab"
+                                aria-expanded="false">Activos</a> </li>
+                        <li class="nav-item"> <a href="#navpills-2" class="nav-link" data-toggle="tab"
+                                aria-expanded="false">Deshabilitado</a> </li>
+                    </ul>
+                    <div class="tab-content br-n pn">
+                        <div id="navpills-1" class="tab-pane active">
+                            <div class="row">
+                                <!-- ANGULAR SERVER SIDE -->
+                                <div class="table-responsive">
+                                    <table summary="Slider" datatable [dtOptions]="dtOptions[0]"
+                                        [dtTrigger]="reload_producto" class="table table-striped color-table info-table"
+                                        width="100%">
+                                        <thead>
+                                            <tr style="vertical-align: middle;text-align: center;"
+                                                class="text-uppercase">
+                                                <th class="text-center">SUCURSAL</th>
+                                                <th class="text-center">LUGAR</th>
+                                                <th class="text-center">TELEFONO</th>
+                                                <th class="text-center">ACCION</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let e of listarSucursal;">
+                                                <tr style="vertical-align: middle;text-align: center;">
+                                                    <td class="text-left">
+                                                        <div>{{e.glosa_sucursal}}</div>
+                                                        <div *ngIf="e.codigo_sucursal"><strong>Codigo
+                                                                Postal:</strong>{{e.codigo_sucursal}}</div>
+                                                        <div *ngIf="e.direccion_sucursal">
+                                                            <strong>Dirección:</strong>{{e.direccion_sucursal}}
+                                                        </div>
+                                                    </td>
+                                                    <td>{{e.departamento}}, {{e.provincia}}, {{e.distrito}}</td>
+                                                    <td>{{e.telefono_sucursal}}</td>
+                                                    <td>
+                                                        <div class="button-group">
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-info btn-circle"
+                                                                tooltip="Editar Usuario" placement="top"
+                                                                [showDelay]="50" [hideDelay]="50"
+                                                                (click)="EditarSucursal(e)">
+                                                                <i class="fa  fa-edit "></i> </button>
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-danger btn-circle"
+                                                                tooltip="Deshabilitar Usuario" placement="top"
+                                                                (click)="EstadoSucursal('DESHABILITAR',e.id_sucursal)"
+                                                                [showDelay]="50" [hideDelay]="50">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                        <tbody *ngIf="listarSucursal.length <= 0">
+                                            <tr>
+                                                <td colspan="5" class="no-data-available">No hay información!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div id="navpills-2" class="tab-pane">
+                            <div class="row">
+                                <!-- ANGULAR SERVER SIDE -->
+                                <div class="table-responsive">
+                                    <table datatable [dtOptions]="dtOptions[1]"
+                                        [dtTrigger]="reload_producto_deshabilitado"
+                                        class="table table-striped color-table info-table" width="100%"
+                                        summary="Tabla usuarios">
+                                        <thead>
+                                            <tr style="vertical-align: middle;text-align: center;"
+                                                class="text-uppercase">
+                                                <th class="text-center">SUCURSAL</th>
+                                                <th class="text-center">LUGAR</th>
+                                                <th class="text-center">TELEFONO</th>
+                                                <th class="text-center">ACCION</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let e of listarSucursalDeshabilitado;">
+                                                <tr style="vertical-align: middle;text-align: center;">
+                                                    <td class="text-left">
+                                                        <div>{{e.glosa_sucursal}}</div>
+                                                        <div *ngIf="e.codigo_sucursal"><b>Codigo
+                                                                Postal:</b>{{e.codigo_sucursal}}</div>
+                                                        <div *ngIf="e.direccion_sucursal">
+                                                            <b>Dirección:</b>{{e.direccion_sucursal}}
+                                                        </div>
+                                                    </td>
+                                                    <td>{{e.departamento}}, {{e.provincia}}, {{e.distrito}}</td>
+                                                    <td>{{e.telefono_sucursal}}</td>
+                                                    <td>
+                                                        <div class="button-group">
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-info btn-circle"
+                                                                tooltip="Editar Usuario" placement="top"
+                                                                [showDelay]="50" [hideDelay]="50"
+                                                                (click)="EditarSucursal(e)">
+                                                                <i class="fa  fa-edit "></i> </button>
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-success btn-circle"
+                                                                tooltip="habilitar Usuario" placement="top"
+                                                                (click)="EstadoSucursal('ACTIVAR',e.id_sucursal)"
+                                                                [showDelay]="50" [hideDelay]="50">
+                                                                <i class="fa fa-check"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                        <tbody *ngIf="listarSucursalDeshabilitado.length == 0">
+                                            <tr>
+                                                <td colspan="5" class="no-data-available">No hay información!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="exampleModalSucursal" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalSucursal" aria-hidden="true" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center"> <strong>{{texto_cabezera_sucursal}}</strong> </h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close" data-original-title=""
+                    title=""><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="sucursalForm" autocomplete="nope" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <h6 for="name" class="control-label">Nombre <strong class="text-danger">(*)</strong>
+                                </h6>
+                                <input type="text" class="form-control" placeholder="Nombre de la sucursal"
+                                    formControlName="glosa_sucursal"
+                                    [class.is-invalid]="sucursalForm.controls['glosa_sucursal']|isInvalid">
+                                <div class="text-danger">
+                                    <div *ngIf="sucursalForm.controls['glosa_sucursal']|hasError:'required'">
+                                        Nombre vacio
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <h6 class="control-label">Codigo Postal</h6>
+                                <input type="text" class="form-control" placeholder="Ingrese el codigo postal"
+                                    formControlName="codigo_sucursal">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <label class="control-label">Departamento <strong
+                                        class="text-danger">(*)</strong></label>
+                                <ng-select (change)="Seleccionar('Departamento')"
+                                    [class.is-invalid]="sucursalForm.controls['idDepartamento']|isInvalid"
+                                    formControlName="idDepartamento" [clearable]="false">
+                                    <ng-option value="">Seleccione el Departamento</ng-option>
+                                    <ng-option [value]="item.idDepartamento"
+                                        *ngFor="let item of departamentos">{{item.departamento}}</ng-option>
+                                </ng-select>
+                                <div class="text-danger">
+                                    <div *ngIf="sucursalForm.controls['idDepartamento']|hasError:'required'">
+                                        Seleccionar Departamento
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <label class="control-label">Provincia <strong class="text-danger">(*)</strong>
+                                </label>
+                                <ng-select (change)="Seleccionar('Provincia')"
+                                    [class.is-invalid]="sucursalForm.controls['idProvincia']|isInvalid"
+                                    formControlName="idProvincia" [clearable]="false">
+                                    <ng-option value="">Seleccione la Provincia</ng-option>
+                                    <ng-option [value]="item.idProvincia"
+                                        *ngFor="let item of filtrar_provincia">{{item.provincia}}</ng-option>
+                                </ng-select>
+                                <div class="text-danger">
+                                    <div *ngIf="sucursalForm.controls['idProvincia']|hasError:'required'">
+                                        Seleccionar Provincia
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <label for="name" class="control-label">Distrito <strong
+                                        class="text-danger">(*)</strong></label>
+                                <ng-select formControlName="idDistrito"
+                                    [class.is-invalid]="sucursalForm.controls['idDistrito']|isInvalid"
+                                    [clearable]="false">
+                                    <ng-option value="">Seleccione el Distrito</ng-option>
+                                    <ng-option [value]="item.idDistrito"
+                                        *ngFor="let item of filtrar_distrito">{{item.distrito}}</ng-option>
+                                </ng-select>
+                                <div class="text-danger">
+                                    <div *ngIf="sucursalForm.controls['idDistrito']|hasError:'required'">
+                                        Seleccionar Distrito
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <h6 for="name" class="control-label">E-mail</h6>
+                                <input type="email" class="form-control" placeholder="Ingrese el e-mail"
+                                    formControlName="e_mail_sucursal">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <h6 for="name" class="control-label">Teléfono</h6>
+                                <input type="number" class="form-control" placeholder="Ingrese el teléfono"
+                                    formControlName="telefono_sucursal">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <div class="d-flex justify-content-between">
+                                    <h6 for="name" class="control-label">Bodega<strong class="text-danger">(*)</strong>
+                                    </h6> <button (click)="AbrirModalBodega()" class="btn btn-sm btn-success">Agregar Bodega</button>
+                                </div>
+                                <ng-select formControlName="id_bodega" [clearable]="false" [multiple]="true"
+                                    placeholder="Selecciona la bodega">
+                                    <ng-option [value]="item.id_bodega"
+                                        *ngFor="let item of bodegas">{{item.glosa_bodega}}</ng-option>
+                                </ng-select>
+                                <div class="text-danger">
+                                    <div *ngIf="sucursalForm.controls['id_bodega']|hasError:'required'">
+                                        Seleccione la bodega
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <h6 for="name" class="control-label">Dirección</h6>
+                                <input type="text" class="form-control" placeholder="Ingrese la dirección"
+                                    formControlName="direccion_sucursal">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-group">
+                                <h6 for="name" class="control-label">Mapa</h6>
+                                <input type="text" class="form-control" placeholder="Ingrese la dirección"
+                                    formControlName="mapa_sucursal">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Cliente Defecto Pos<strong class="text-danger">(*)</strong></label>
+                                <ng-select [searchable]="true" [items]="clientes" [multiple]="false"
+                                    [loading]="isLoading" (search)="buscarCliente($event.term)"
+                                    placeholder="Escriba para buscar un cliente"
+                                    [typeToSearchText]="'Escriba para buscar...'" bindLabel="nombre_cliente"
+                                    bindValue="id_cliente" (clear)="limpiarSeleccion()"
+                                    formControlName="idclientedefectopos_sucursal"
+                                    [notFoundText]="'No se encontraron clientes'"
+                                    [class.is-invalid]="sucursalForm.controls['idclientedefectopos_sucursal']|isInvalid">
+                                </ng-select>
+                                <div class="text-danger">
+                                    <div
+                                        *ngIf="sucursalForm.controls['idclientedefectopos_sucursal']|hasError:'required'">
+                                        Seleccionar el cliente
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="idusuarioventaonlinedefecto_sucursal">Usuario Venta On line
+                                    (Ecommerce)</label>
+                                <ng-select [searchable]="true" [items]="clientes" [multiple]="false"
+                                    [loading]="isLoading" (search)="buscarCliente($event.term)"
+                                    placeholder="Escriba para buscar un usuario"
+                                    [typeToSearchText]="'Escriba para buscar...'" bindLabel="usuario"
+                                    bindValue="id_usuario" (clear)="limpiarSeleccion()"
+                                    formControlName="idusuarioventaonlinedefecto_sucursal"
+                                    [notFoundText]="'No se encontraron clientes'"
+                                    [class.is-invalid]="sucursalForm.controls['idusuarioventaonlinedefecto_sucursal']|isInvalid">
+                                </ng-select>
+                                <div class="text-danger">
+                                    <div
+                                        *ngIf="sucursalForm.controls['idusuarioventaonlinedefecto_sucursal']|hasError:'required'">
+                                        Seleccionar el usuario
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
+                    <button type="button" style="padding-left: 9px;" data-dismiss="modal"
+                        class="btn btn-outline-secondary mx-3">
+                        <i style="vertical-align: text-bottom;" class="bx bx-left-arrow-alt"></i>
+                        Salir</button>
+                    <button (click)="GuardarActualizaruser()" type="button" class="btn btn-success"
+                        value="create-product"><i style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                        Guardar
+                    </button>
+                </ng-container>
+                <ng-template #elseTemplate>
+                    <button type="button" class="btn btn-success" value="create-product"><em
+                            class="fa fa-spin fa-circle-o-notch"></em>
+                        Guardando...
+                    </button>
+                </ng-template>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<app-modal-bodega #hijomodalbodega [texto_cabezera]="texto_cabezera"  (respuesta)="manejarRespuestaBodega($event)" ></app-modal-bodega>

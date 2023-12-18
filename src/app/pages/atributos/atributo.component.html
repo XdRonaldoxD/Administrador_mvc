@@ -1,23 +1,9 @@
-<!-- ============================================================== -->
-<!-- Container fluid  -->
-<!-- ============================================================== -->
 <div class="container-fluid">
-    <!-- ============================================================== -->
-    <!-- Bread crumb and right sidebar toggle -->
-    <!-- ============================================================== -->
-    <div class="row page-titles">
+    <div class="row page-titles mb-0">
         <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">ATRIBUTO</h3>
+            <h3 class="text-themecolor"> <strong>ATRIBUTO</strong></h3>
         </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- End Bread crumb and right sidebar toggle -->
-    <!-- ============================================================== -->
-
-    <!-- ============================================================== -->
-    <!-- Start Page Content -->
-    <!-- ============================================================== -->
-    <!-- row -->
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -25,7 +11,7 @@
                     <div class="row MT-1">
                         <div class="col-md-12 d-flex justify-content-end">
                             <div class="row m-0">
-                                <button (click)="AbrirModal()" class="btn btn-success btn-reset">NUEVO ATRIBUTO <i
+                                <button (click)="AbrirModal()" class="btn btn-success btn-reset"> <strong> NUEVO ATRIBUTO </strong><i
                                         class="mdi mdi-checkbox-multiple-blank-outline"></i> </button>
 
                             </div>
@@ -45,7 +31,7 @@
                                 <!-- ANGULAR SERVER SIDE -->
                                 <div class="table-responsive">
                                     <table datatable [dtOptions]="dtOptions[0]" [dtTrigger]="reload_producto"
-                                        class="row-border hover " width="100%">
+                                        class="table table-striped color-table info-table" width="100%">
                                         <thead>
                                             <tr>
                                                 <th style="text-align: center;">ACCION</th>
@@ -96,7 +82,7 @@
                                 <!-- ANGULAR SERVER SIDE -->
                                 <div class="table-responsive">
                                     <table datatable [dtOptions]="dtOptions[1]"
-                                        [dtTrigger]="reload_producto_deshabilitado" class="row-border hover "
+                                        [dtTrigger]="reload_producto_deshabilitado" class="table table-striped color-table info-table"
                                         width="100%">
                                         <thead>
                                             <tr>

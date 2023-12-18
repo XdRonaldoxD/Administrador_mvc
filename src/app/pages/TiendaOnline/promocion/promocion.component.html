@@ -1,0 +1,179 @@
+<div class="container-fluid">
+    <div class="row page-titles mb-0">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor"> <strong>PROMOCIONES</strong></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row MT-1">
+                        <div class="col-md-12 d-flex justify-content-end">
+                            <div class="row m-0">
+                                <button (click)="AbrirModal()" class="btn btn-success btn-reset"> <strong> NUEVO
+                                        PROMOCION </strong><i class="mdi mdi-checkbox-multiple-blank-outline"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="nav nav-pills m-t-30 m-b-30">
+                        <li class=" nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab"
+                                aria-expanded="false">Activos</a> </li>
+                    </ul>
+                    <div class="tab-content br-n pn">
+                        <div id="navpills-1" class="tab-pane active">
+                            <div class="row">
+                                <!-- ANGULAR SERVER SIDE -->
+                                <div class="table-responsive">
+                                    <table summary="Slider" datatable [dtOptions]="dtOptions[0]"
+                                        [dtTrigger]="reload_producto" class="table table-striped color-table info-table"
+                                        width="100%">
+                                        <thead>
+                                            <tr style="vertical-align: middle;text-align: center;"
+                                                class="text-uppercase">
+                                                <th class="text-center">NOMBRE</th>
+                                                <th class="text-center">IMAGEN</th>
+                                                <th class="text-center">FECHA TERMINO/ESTADO</th>
+                                                <th class="text-center">ACCION</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let e of listarProducto;">
+                                                <tr style="vertical-align: middle;text-align: center;">
+                                                    <td>{{e.titulo_promocion}}</td>
+                                                    <td><img src="{{e.url_promocion}}" class="w-50" alt=""></td>
+                                                    <td>
+                                                        <div>{{e.fecha_promocion | date:'dd/MM/yyyy'}}</div>
+                                                        <div>
+                                                            <label class="label" [class.label-info]="e.estado === 1" [class.label-danger]="e.estado !== 1">
+                                                                {{ e.estado === 1 ? 'Activo' : 'Finalizado' }}
+                                                              </label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="button-group">
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-info btn-circle"
+                                                                tooltip="Editar Slider" placement="top" [showDelay]="50"
+                                                                [hideDelay]="50" (click)="EditarPromocion(e)">
+                                                                <i class="fa  fa-edit "></i> </button>
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-danger btn-circle"
+                                                                tooltip="Eliminar Promocion" placement="top"
+                                                                (click)="EliminarPromocion(e.id_promocion)"
+                                                                [showDelay]="50" [hideDelay]="50">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                        <tbody *ngIf="listarProducto.length <= 0">
+                                            <tr>
+                                                <td colspan="4" class="no-data-available">No hay información!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="exampleModalPromocion" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalPromocion" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center"><strong>{{texto_cabezera}}</strong></h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close" data-original-title=""
+                    title=""><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="promocionForm" autocomplete="nope" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <h6 for="name" class="col-sm-12 control-label">Titulo<span
+                                        class="text-danger">(*)</span></h6>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" placeholder="Ingrese un titulo"
+                                        formControlName="titulo_promocion"
+                                        [class.is-invalid]="promocionForm.controls['titulo_promocion']|isInvalid">
+                                    <div class="text-danger">
+                                        <div *ngIf="promocionForm.controls['titulo_promocion']|hasError:'required'">
+                                            Titulo Vacia
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <h6 for="name" class="col-sm-12 control-label">Fecha Termino<span class="text-danger">(*)</span></h6>
+                                <div class="col-sm-12">
+                                    <input type="date" class="form-control" placeholder="Ingrese la fecha"
+                                        formControlName="fecha_promocion"
+                                        [class.is-invalid]="promocionForm.controls['fecha_promocion']|isInvalid">
+                                    <div class="text-danger">
+                                        <div *ngIf="promocionForm.controls['fecha_promocion']|hasError:'required'">
+                                            Fecha Vacia
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-12">
+                            <div class="form-group">
+                                <h6 for="name" class="col-sm-12 control-label">Descripción<span class="text-danger">(*)</span></h6>
+                                <div class="col-sm-12">
+                                    <div class="summernote">
+                                    </div>
+                                    <div class="text-danger">
+                                        <div *ngIf="promocionForm.controls['descripcion_promocion']|hasError:'required'">
+                                            Descripción Vacia
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-12">
+                            <div class="form-group col-12">
+                                <h4 class="card-title">Subir Imagen Tamaño Recomendado <strong>(730x490)</strong><span
+                                        class="text-danger">(*)</span></h4>
+                                <input #foto type="file" formControlName="file_escritorio" id="file_escritorio_promocion"
+                                    data-default-file="" accept="image/png,image/jpeg" class="dropify" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal" data-original-title="" title="">SALIR</button>
+                    <button (click)="GuardarActualizarCategoria()" type="button"
+                        class="btn btn-success" value="create-product"><i
+                            style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                        Guardar
+                    </button>
+                </ng-container>
+                <ng-template #elseTemplate>
+                    <button type="button" class="btn btn-success" value="create-product"><em
+                            class="fa fa-spin fa-circle-o-notch"></em>
+                        Guardando...
+                    </button>
+                </ng-template>
+
+            </div>
+        </div>
+
+    </div>
+</div>

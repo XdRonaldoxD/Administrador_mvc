@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  api_url:"https://www.crm.sistemasdurand.com/"
+  api_url:"https://apisistemarosa.boticarosa.com/"
 };

@@ -21,21 +21,35 @@ export class ProductoService {
     const formData = new FormData();
     formData.append('id_producto', id_producto);
     const headers = new HttpHeaders({
-      Authorization: token
+      Authorization: this.token
     });
     return this.httpcliente.post(environment.api_url+"?controller=NuevoProducto&action=ListaProductosRelacionado", formData, { headers: headers })
   }
-  TraerProductosID(id_producto: any, token: any): Observable<any> {
+  TraerProductosID(id_producto: any): Observable<any> {
     let Params = new HttpParams();
     Params = Params.append('id_producto', id_producto);
     Params = Params.append('consultaquery', true);
     const headers = new HttpHeaders({
-      Authorization: token
+      Authorization: this.token
     });
     return this.httpcliente.get(environment.api_url+"?controller=Producto&action=TraerDatosProductos", { headers: headers, params: Params })
   }
-
-
+  TraerProductos(): Observable<any> {
+    let Params = new HttpParams();
+    const headers = new HttpHeaders({
+      Authorization: this.token
+    });
+    return this.httpcliente.get(environment.api_url+"?controller=Producto&action=TraerProductos", { headers: headers, params: Params })
+  }
+  TraerProductoIdRelacionado(id_producto: any): Observable<any> {
+    let Params = new HttpParams();
+    Params = Params.append('id_producto', id_producto);
+    const headers = new HttpHeaders({
+      Authorization: this.token
+    });
+    return this.httpcliente.get(environment.api_url+"?controller=Producto&action=traerProductoIdRelacionado", { headers: headers, params: Params })
+  }
+  
   GuardarProductoActualizar(token: any, valorescategoria: any, informacionForm: any, PrecioStockForm: any, imagenes_producto: any, colores: any, especificaciones: any, producto_relacion: any, atributo_seleccionado: any): Observable<any> {
     const formData = new FormData();
     formData.append('informacionForm', JSON.stringify(informacionForm));
@@ -47,25 +61,34 @@ export class ProductoService {
     formData.append('valorescategoria', JSON.stringify(valorescategoria));
     formData.append('atributo_seleccionado', JSON.stringify(atributo_seleccionado));
     const headers = new HttpHeaders({
-      Authorization: token
+      Authorization: this.token
     });
     return this.httpcliente.post(environment.api_url+"?controller=NuevoProducto&action=GuardarProductoActualizar", formData, { headers: headers })
   }
 
-  GestionarStockProducto(token: any, GestionarStock: any): Observable<any> {
+  GestionarStockProducto(GestionarStock: any): Observable<any> {
     const formData = new FormData();
     formData.append('GestionarStock', JSON.stringify(GestionarStock));
     const headers = new HttpHeaders({
-      Authorization: token
+      Authorization: this.token
     });
     return this.httpcliente.post(environment.api_url+"?controller=Producto&action=GestionarStockProducto", formData, { headers: headers })
   }
-  GestionActivoDesactivadoProducto(token: any, accion: any, id_producto: any) {
+  TraerBodegaStock(id_producto:any): Observable<any> {
+    const formData = new FormData();
+    formData.append('id_producto', id_producto);
+    const headers = new HttpHeaders({
+      Authorization: this.token
+    });
+    return this.httpcliente.post(environment.api_url+"?controller=Producto&action=traerBodegaStock", formData, { headers: headers })
+  }
+
+  GestionActivoDesactivadoProducto(accion: any, id_producto: any) {
     const formData = new FormData();
     formData.append('accion', accion);
     formData.append('id_producto', id_producto);
     const headers = new HttpHeaders({
-      Authorization: token
+      Authorization: this.token
     });
     return this.httpcliente.post(environment.api_url+"?controller=Producto&action=GestionActivoDesactivadoProducto", formData, { headers: headers })
   }
@@ -99,6 +122,15 @@ export class ProductoService {
       Authorization: this.token 
     });
     return this.httpcliente.get(environment.api_url+"?controller=NuevoProducto&action=filtrarMarca", { headers: headers , params: Params })
+  }
 
+  BuscarProductoRelacionado(term:string,id_producto:any): Observable<any>{
+    let Params = new HttpParams();
+    Params = Params.append('search', term);
+    Params = Params.append('id_producto',JSON.stringify(id_producto));
+    const headers = new HttpHeaders({
+      Authorization: this.token 
+    });
+    return this.httpcliente.get(environment.api_url+"?controller=Producto&action=filtrarProductoRelacionado", { headers: headers , params: Params })
   }
 }

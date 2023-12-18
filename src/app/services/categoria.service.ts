@@ -29,11 +29,7 @@ export class CategoriaService {
 
   GestionarCategoria(token:any,formulario:any,categoria_padre:any,imagen:any): Observable<any> {
     const formData = new FormData();
-    formData.append('id_categoria', formulario.id_categoria);
-    formData.append('glosa_categoria', formulario.glosa_categoria);
-    formData.append('id_tipo_inventario', formulario.id_tipo_inventario);
-    formData.append('descripcion_categoria', formulario.descripcion_categoria);
-    formData.append('visibleOnline', formulario.visibleOnline);
+    formData.append('formulario', JSON.stringify(formulario));
     formData.append('accion', formulario.accion);
     formData.append('categoria_padre', JSON.stringify(categoria_padre));
     formData.append('imagen',imagen)

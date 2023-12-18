@@ -5,9 +5,9 @@
     <!-- ============================================================== -->
     <!-- Bread crumb and right sidebar toggle -->
     <!-- ============================================================== -->
-    <div class="row page-titles">
+    <div class="row page-titles mb-0">
         <div class="col-md-5 align-self-center">
-            <h3 class="text-themecolor">ACTUALIZAR PRODUCTO</h3>
+            <h3 class="text-themecolor"> <strong>ACTUALIZAR PRODUCTO</strong></h3>
         </div>
     </div>
     <!-- ============================================================== -->
@@ -21,41 +21,47 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body p-0">
                     <div class="col-md-12" style="z-index:0;">
                         <div class="card">
                             <div class="card-body p-b-0">
                                 <!-- Nav tabs -->
                                 <ul class="nav nav-tabs customtab2" role="tablist">
-                                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home7"
-                                            role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span
+                                    <li class="nav-item disabled"> <a class="nav-link active" data-toggle="tab"
+                                            href="#home7-editar" role="tab"><span class="hidden-sm-up"><i
+                                                    class="ti-home"></i></span> <span
                                                 class="hidden-xs-down">INFORMACIÓN</span></a> </li>
-                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile7"
-                                            role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
+                                    <li class="nav-item disabled"> <a class="nav-link" data-toggle="tab"
+                                            href="#profile7-editar" role="tab"><span class="hidden-sm-up"><i
+                                                    class="ti-user"></i></span> <span
                                                 class="hidden-xs-down">PRECIO-STOCK</span></a> </li>
-                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages7"
-                                            role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span
+                                    <li class="nav-item disabled"> <a class="nav-link" data-toggle="tab"
+                                            href="#messages7-editar" role="tab"><span class="hidden-sm-up"><i
+                                                    class="ti-email"></i></span> <span
                                                 class="hidden-xs-down">IMAGENES</span></a> </li>
-                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages8"
-                                            role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span
+                                    <li *ngIf="id_tipo_inventario==1" class="nav-item disabled"> <a class="nav-link"
+                                            data-toggle="tab" href="#messages8-editar" role="tab"><span
+                                                class="hidden-sm-up"><i class="ti-email"></i></span> <span
                                                 class="hidden-xs-down">COLOR DE PRODUCTO</span></a> </li>
-                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages9"
-                                            role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span
+                                    <li class="nav-item disabled"> <a class="nav-link" data-toggle="tab"
+                                            href="#messages9-editar" role="tab"><span class="hidden-sm-up"><i
+                                                    class="ti-email"></i></span> <span
                                                 class="hidden-xs-down">ESPECIFICACIONES</span></a> </li>
-                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages10"
-                                            role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span
-                                                class="hidden-xs-down">PRODUCTO RELACIONADOS</span></a> </li>
+                                    <li class="nav-item disabled"> <a class="nav-link" data-toggle="tab"
+                                            href="#messages10-editar" role="tab"><span class="hidden-sm-up"><i
+                                                    class="ti-email"></i></span> <span class="hidden-xs-down">PRODUCTO
+                                                RELACIONADOS</span></a> </li>
                                 </ul>
                                 <!-- Tab panes -->
                                 <div class="tab-content">
-                                    <div class="tab-pane active mt-4" id="home7" role="tabpanel">
+                                    <div class="tab-pane active mt-4" id="home7-editar" role="tabpanel">
                                         <form [formGroup]="informacionForm" autocomplete="nope"
                                             enctype="multipart/form-data">
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 col-12 ">
                                                     <div class="form-group">
-                                                        <label for="firstName1">SKU<STRONg
-                                                                class="text-danger">(*)</STRONg></label>
+                                                        <label for="firstName1">SKU<strong
+                                                                class="text-danger">(*)</strong></label>
                                                         <input type="text" class="form-control"
                                                             (keyup)="VerificarSku($event)"
                                                             formControlName="codigo_producto"
@@ -69,17 +75,20 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label for="codigo_barra_producto">Codigo Barra</label>
-                                                        <input type="text" class="form-control" formControlName="codigo_barra_producto" placeholder="Codigo barra del producto" >
+                                                        <input type="text" class="form-control"
+                                                            formControlName="codigo_barra_producto"
+                                                            placeholder="Codigo barra del producto">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 col-12">
                                                     <div class="form-group">
-                                                        <label for="emailAddress1">Nombre</label>
+                                                        <label for="emailAddress1">Nombre<strong
+                                                                class="text-danger">(*)</strong></label>
                                                         <input type="email" class="form-control"
                                                             formControlName="glosa_producto"
                                                             placeholder="Nombre del producto"
@@ -93,41 +102,68 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-6">
+                                                <div class="col-12 col-md-6">
                                                     <div class="form-group">
-                                                        <label for="id_tipo_afectacion">Tipo Afectación<strong class="text-danger">(*)</strong></label>
-                                                        <select  formControlName="id_tipo_afectacion" [class.is-invalid]="informacionForm.controls['id_tipo_afectacion']|isInvalid"
+                                                        <label for="id_tipo_afectacion">Tipo Afectación<strong
+                                                                class="text-danger">(*)</strong></label>
+                                                        <select formControlName="id_tipo_afectacion"
+                                                            [class.is-invalid]="informacionForm.controls['id_tipo_afectacion']|isInvalid"
                                                             class="form-control">
                                                             <option value="">Seleccionar Afectación</option>
-                                                            <option value="{{item.id_tipo_afectacion}}" *ngFor="let item of tipo_afectacion">{{item.descripcion}}</option>
+                                                            <option value="{{item.id_tipo_afectacion}}"
+                                                                *ngFor="let item of tipo_afectacion">
+                                                                {{item.descripcion}}</option>
                                                         </select>
                                                         <div class="text-danger">
-                                                            <div  *ngIf="informacionForm.controls['id_tipo_afectacion']|hasError:'required'">
+                                                            <div
+                                                                *ngIf="informacionForm.controls['id_tipo_afectacion']|hasError:'required'">
                                                                 Seleccionar Afectación.
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="col-12 col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="id_marca">Marca</label>
+                                                        <ng-select [searchable]="true" [items]="marcas"
+                                                            [multiple]="false" [loading]="isLoading"
+                                                            (search)="buscarMarca($event.term)"
+                                                            placeholder="Escriba para buscar una marca"
+                                                            [typeToSearchText]="'Escriba para buscar...'"
+                                                            bindLabel="glosa_marca" bindValue="id_marca"
+                                                            (clear)="limpiarSeleccion('marca')"
+                                                            formControlName="id_marca"
+                                                            [notFoundText]="'No se encontraron marcas'">
+                                                        </ng-select>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="col-12 col-md-6 d-flex justify-content-start align-items-center">
+                                                    <button (click)="AbrirModal()"
+                                                        class="btn btn-sm btn-success">Agregar Marca <i
+                                                            class="fa fa-plus-circle" aria-hidden="true"></i></button>
+                                                </div>
 
-                                                <div class="col-md-12">
+                                                <div class="col-md-12 col-12">
                                                     <div class="form-group">
                                                         <label for="location1">Descripción Extendida</label>
-                                                        <textarea formControlName="descripcion_extendida"
+                                                        <textarea #descripcionExtendida
+                                                            formControlName="descripcion_extendida"
                                                             class="form-control descripcion_extendida" rows="5"
                                                             placeholder="Descripción de la categoría"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-12">
+                                                <div class="col-md-12 col-12">
                                                     <div class="form-group">
                                                         <label for="phoneNumber1">Descripción Corta</label>
-                                                        <textarea formControlName="descripcion_corta"
+                                                        <textarea #descripcionCorta formControlName="descripcion_corta"
                                                             class="form-control descripcion_corta" rows="5"
                                                             placeholder="Descripción de la categoría"></textarea>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label for="date1">Tipo Inventario<strong
                                                                 class="text-danger">(*)</strong></label>
@@ -148,7 +184,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6" style="margin-top: 2.3rem;">
+                                                <div class="col-md-6 col-12" style="margin-top: 2.3rem;">
                                                     <div class="form-group">
                                                         <label class="inline custom-control custom-checkbox block">
                                                             <input type="checkbox" class="custom-control-input"
@@ -159,19 +195,49 @@
                                                         </label>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
+                                                <div class="col-md-6 col-12" *ngIf="id_tipo_inventario==3">
                                                     <div class="form-group">
-                                                        <label for="date1">Categoria</label>
-                                                        <div id="t-crear-categoria">
-                                                            
-                                                        </div>
+                                                        <label for="date1">Formas Farmaceutica</label>
+                                                        <ng-select [searchable]="true" [multiple]="false"
+                                                            placeholder="Escriba para buscar"
+                                                            [typeToSearchText]="'Escriba para buscar...'"
+                                                            formControlName="id_unidad"
+                                                            [notFoundText]="'No se encontraron'">
+                                                            <ng-option value="">Seleccionar formar</ng-option>
+                                                            <ng-option value="{{item.id_unidad}}"
+                                                                *ngFor="let item of arregloFormaFarmaceutica">
+                                                                {{item.glosa_unidad}}</ng-option>
+                                                        </ng-select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-12" *ngIf="id_tipo_inventario==3">
+                                                    <div class="form-group">
+                                                        <label for="date1">Tipo Concentración</label>
+                                                        <ng-select [searchable]="true" [multiple]="false"
+                                                            placeholder="Escriba para buscar"
+                                                            [typeToSearchText]="'Escriba para buscar...'"
+                                                            formControlName="id_tipo_concentracion"
+                                                            [notFoundText]="'No se encontraron'">
+                                                            <ng-option value="">Seleccionar concentración</ng-option>
+                                                            <ng-option value="{{item.id_tipo_concentracion}}"
+                                                                *ngFor="let item of arregloTipoConcentracion">
+                                                                {{item.glosa_tipo_concentracion}}</ng-option>
+                                                        </ng-select>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-12">
+                                                <div class="col-md-12 col-12">
+                                                    <div class="form-group">
+                                                        <label for="date1">Categoria</label>
+                                                        <div id="t-editar-categoria-producto">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row" *ngIf="id_tipo_inventario==1">
+                                                <div class="col-md-12 col-12">
                                                     <div class="form-group">
                                                         <label for="date1">Atributo</label>
                                                         <div id="atributo-producto">
@@ -180,27 +246,37 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div id="button_right" class="col-sm-12 col-md-12">
-                                                    <button type="button" style="padding-left: 9px;"
-                                                        routerLink="/Producto" class="btn btn-outline-secondary mx-3"
-                                                        id="btn-close-crud"><i style="vertical-align: text-bottom;"
-                                                            class="bx bx-left-arrow-alt"></i> Volver</button>
-                                                    <button (click)="GuardarProductoCompleto()" type="button"
-                                                        [disabled]="buttonDisabled" class="btn btn-success"
-                                                        value="create-product"><i style="vertical-align: text-bottom;"
-                                                            class="bx bx-save"></i>
-                                                        Guardar
-                                                    </button>
+                                                <div class="col-12 col-md-12  text-right">
+                                                    <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
+                                                        <button type="button" style="padding-left: 9px;"
+                                                            routerLink="/Producto"
+                                                            class="btn btn-outline-secondary mx-3"
+                                                            id="btn-close-crud"><i style="vertical-align: text-bottom;"
+                                                                class="bx bx-left-arrow-alt"></i>
+                                                            Volver</button>
+                                                        <button (click)="GuardarProductoCompleto()" type="button"
+                                                            class="btn btn-success" value="create-product"><i
+                                                                style="vertical-align: text-bottom;"
+                                                                class="bx bx-save"></i>
+                                                            Guardar
+                                                        </button>
+                                                    </ng-container>
+                                                    <ng-template #elseTemplate>
+                                                        <button type="button" class="btn btn-success"
+                                                            value="create-product"><em
+                                                                class="fa fa-spin fa-circle-o-notch"></em>
+                                                            Guardando...
+                                                        </button>
+                                                    </ng-template>
                                                 </div>
                                             </div>
                                         </form>
 
                                     </div>
-                                    <div class="tab-pane  p-20" id="profile7" role="tabpanel">
-                                        <form [formGroup]="PrecioStockForm" autocomplete="nope"
-                                            enctype="multipart/form-data">
-                                            <div class="row mt-4">
-                                                <div class="col-md-6">
+                                    <div class="tab-pane  p-20" id="profile7-editar" role="tabpanel">
+                                        <form [formGroup]="PrecioStockForm" autocomplete="nope">
+                                            <div class="row mt-4 ">
+                                                <div class="col-md-6 col-12 p-0">
                                                     <div class="form-group">
                                                         <label for="jobTitle1">Precio Venta <strong
                                                                 class="text-danger">(*)</strong></label>
@@ -215,75 +291,92 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="videoUrl1">Stock <strong
-                                                                class="text-danger">(*)</strong></label>
-                                                        <input type="number" class="form-control"
-                                                            formControlName="stock" placeholder="Stock del Producto"
-                                                            [class.is-invalid]="PrecioStockForm.controls['stock']|isInvalid">
-                                                        <div class="text-danger">
-                                                            <div
-                                                                *ngIf="PrecioStockForm.controls['stock']|hasError:'required'">
-                                                                Stock Producto Vacio.
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="videoUrl1">Precio Costo </label>
-                                                        <input type="number" class="form-control"
-                                                            formControlName="precio_costo"
-                                                            placeholder="Precio de costo del Producto">
-                                                    </div>
-                                                </div>
                                             </div>
-                                            <div class="row" style="justify-content: center;"
-                                                *ngIf="checked_atributo.length>0">
-                                                <div class="col-8">
-                                                    <table class="table color-bordered-table muted-bordered-table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th colspan="2" class="text-center">
-                                                                    <h3 class="text-white">Stock Del Atributo</h3>
-                                                                </th>
-                                                            </tr>
-                                                            <tr>
-                                                                <th class="text-center">Atributo Seleccionado</th>
-                                                                <th class="text-center">Stock</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr *ngFor="let item of checked_atributo">
-                                                                <td>{{item.glosa_atributo}}</td>
-                                                                <td><input type="number" [value]="item.cantidad"
-                                                                        class="form-control text-center"
-                                                                        (keyup)="GuardarCantidadAtributo($event.target,item.id_atributo)">
-                                                                </td>
-                                                            </tr>
 
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+                                            <div class="row table-responsive">
+                                                <table class="table table-striped color-table info-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>BODEGA(S)</th>
+                                                            <th class="text-center">STOCK</th>
+                                                            <th class="text-center">PRECIO COMPRA</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let element of PrecioStockForm.value.stock">
+                                                            <td class="text-left">
+                                                                <h5> <strong>{{element.glosa_bodega}}</strong> </h5>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="number"
+                                                                    [disabled]="true"
+                                                                    [value]="element.total_stock_producto_bodega">
+
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="number"
+                                                                    [disabled]="true"
+                                                                    [value]="element.ultimopreciocompra_stock_producto_bodega">
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
-                                            <div class="row">
-                                                <div id="button_right" class="col-sm-12 col-md-12">
+                                        </form>
+                                        <div class="row" style="justify-content: center;"
+                                            *ngIf="checked_atributo.length>0">
+                                            <div class="col-md-8 col-12">
+                                                <table class="table color-bordered-table muted-bordered-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="2" class="text-center">
+                                                                <h3 class="text-white">Stock Del Atributo</h3>
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-center">Atributo Seleccionado</th>
+                                                            <th class="text-center">Stock</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let item of checked_atributo">
+                                                            <td>{{item.glosa_atributo}}</td>
+                                                            <td><input type="number" [value]="item.cantidad"
+                                                                    class="form-control text-center"
+                                                                    (keyup)="GuardarCantidadAtributo($event.target,item.id_atributo)">
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-12  text-right">
+                                                <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
                                                     <button type="button" style="padding-left: 9px;"
                                                         routerLink="/Producto" class="btn btn-outline-secondary mx-3"
                                                         id="btn-close-crud"><i style="vertical-align: text-bottom;"
-                                                            class="bx bx-left-arrow-alt"></i> Volver</button>
+                                                            class="bx bx-left-arrow-alt"></i>
+                                                        Volver</button>
                                                     <button (click)="GuardarProductoCompleto()" type="button"
-                                                        [disabled]="buttonDisabled" class="btn btn-success"
-                                                        value="create-product"><i style="vertical-align: text-bottom;"
-                                                            class="bx bx-save"></i>
+                                                        class="btn btn-success" value="create-product"><i
+                                                            style="vertical-align: text-bottom;" class="bx bx-save"></i>
                                                         Guardar
                                                     </button>
-                                                </div>
+                                                </ng-container>
+                                                <ng-template #elseTemplate>
+                                                    <button type="button" class="btn btn-success"
+                                                        value="create-product"><em
+                                                            class="fa fa-spin fa-circle-o-notch"></em>
+                                                        Guardando...
+                                                    </button>
+                                                </ng-template>
+
                                             </div>
-                                        </form>
+                                        </div>
+
                                     </div>
-                                    <div class="tab-pane p-20" id="messages7" role="tabpanel">
+                                    <div class="tab-pane p-20" id="messages7-editar" role="tabpanel">
                                         <div class="row mt-4">
                                             <div
                                                 class="col-md-6  d-flex justify-content-end align-items-center text-right">
@@ -362,8 +455,8 @@
                                                                         <button type="button"
                                                                             (click)="EliminarImagen(indice)"
                                                                             class="btn btn-danger eliminar_imagen"
-                                                                            data-toggle="tooltip"
-                                                                            data-original-title="Eliminar"><i
+                                                                            tooltip="Eliminar" placement="top"
+                                                                            [showDelay]="50" [hideDelay]="50"><i
                                                                                 class="fa fa-times-rectangle"></i></button>
                                                                     </td>
                                                                 </tr>
@@ -375,21 +468,30 @@
 
                                         </div>
                                         <div class="row">
-                                            <div id="button_right" class="col-sm-12 col-md-12">
-                                                <button type="button" style="padding-left: 9px;" routerLink="/Producto"
-                                                    class="btn btn-outline-secondary mx-3" id="btn-close-crud"><i
-                                                        style="vertical-align: text-bottom;"
-                                                        class="bx bx-left-arrow-alt"></i> Volver</button>
-                                                <button (click)="GuardarProductoCompleto()" type="button"
-                                                    [disabled]="buttonDisabled" class="btn btn-success"
-                                                    value="create-product"><i style="vertical-align: text-bottom;"
-                                                        class="bx bx-save"></i>
-                                                    Guardar
-                                                </button>
+                                            <div class="col-12 col-md-12  text-right">
+                                                <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
+                                                    <button type="button" style="padding-left: 9px;"
+                                                        routerLink="/Producto" class="btn btn-outline-secondary mx-3"
+                                                        id="btn-close-crud"><i style="vertical-align: text-bottom;"
+                                                            class="bx bx-left-arrow-alt"></i>
+                                                        Volver</button>
+                                                    <button (click)="GuardarProductoCompleto()" type="button"
+                                                        class="btn btn-success" value="create-product"><i
+                                                            style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                        Guardar
+                                                    </button>
+                                                </ng-container>
+                                                <ng-template #elseTemplate>
+                                                    <button type="button" class="btn btn-success"
+                                                        value="create-product"><em
+                                                            class="fa fa-spin fa-circle-o-notch"></em>
+                                                        Guardando...
+                                                    </button>
+                                                </ng-template>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane p-20" id="messages8" role="tabpanel">
+                                    <div class="tab-pane p-20" id="messages8-editar" role="tabpanel">
                                         <div class="row mt-4">
                                             <div class="col-12 text-right">
                                                 <button (click)="AgregarColor()" type="button"
@@ -408,40 +510,52 @@
                                                     <label for="">Eliminar</label>
                                                 </div>
                                             </div>
-                                            <form id="color_ropas" name="color_ropas" class="col-12 color_agregar">
-                                                <!-- <div class="row">
+                                            <div class="col-12">
+                                                <div class="row" *ngFor="let element of arregloColor,let i=index">
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <input type="color"  class="form-control color" />
+                                                            <input type="color" class="form-control"
+                                                                [(ngModel)]='element.hexadecimal_producto_color' />
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
-                                                        <input input="text" class="form-control nombrecolor" />
+                                                        <input input="text" class="form-control"
+                                                            [(ngModel)]='element.nombre_producto_color' />
                                                     </div>
-                                                    <div class="col-md-2 text-center" >
-                                                        <i class="mdi mdi-delete-circle EliminarColumnas"
+                                                    <div class="col-md-2 text-center">
+                                                        <i class="mdi mdi-delete-circle"
+                                                            (click)="EliminarColumnascolor(i)"
                                                             style="font-size:2rem;color: red;cursor:pointer;"></i>
                                                     </div>
-                                                </div> -->
-                                            </form>
+                                                </div>
+                                            </div>
 
                                         </div>
                                         <div class="row">
-                                            <div id="button_right" class="col-sm-12 col-md-12">
-                                                <button type="button" style="padding-left: 9px;" routerLink="/Producto"
-                                                    class="btn btn-outline-secondary mx-3" id="btn-close-crud"><i
-                                                        style="vertical-align: text-bottom;"
-                                                        class="bx bx-left-arrow-alt"></i> Volver</button>
-                                                <button (click)="GuardarProductoCompleto()" type="button"
-                                                    [disabled]="buttonDisabled" class="btn btn-success"
-                                                    value="create-product"><i style="vertical-align: text-bottom;"
-                                                        class="bx bx-save"></i>
-                                                    Guardar
-                                                </button>
+                                            <div class="col-12 col-md-12  text-right">
+                                                <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
+                                                    <button type="button" style="padding-left: 9px;"
+                                                        routerLink="/Producto" class="btn btn-outline-secondary mx-3"
+                                                        id="btn-close-crud"><i style="vertical-align: text-bottom;"
+                                                            class="bx bx-left-arrow-alt"></i>
+                                                        Volver</button>
+                                                    <button (click)="GuardarProductoCompleto()" type="button"
+                                                        class="btn btn-success" value="create-product"><i
+                                                            style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                        Guardar
+                                                    </button>
+                                                </ng-container>
+                                                <ng-template #elseTemplate>
+                                                    <button type="button" class="btn btn-success"
+                                                        value="create-product"><em
+                                                            class="fa fa-spin fa-circle-o-notch"></em>
+                                                        Guardando...
+                                                    </button>
+                                                </ng-template>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane p-20" id="messages9" role="tabpanel">
+                                    <div class="tab-pane p-20" id="messages9-editar" role="tabpanel">
                                         <div class="row mt-4">
                                             <div
                                                 class="col-md-6  d-flex justify-content-end align-items-center text-right">
@@ -458,73 +572,86 @@
                                             <div class="w-100 mt-1">
                                                 <div class="card">
                                                     <div class="card-body ">
-                                                        <table id="tabla_especificaciones"
-                                                            class="tablesaw table-bordered table-hover table"
-                                                            data-tablesaw-mode="swipe">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th scope="col" data-tablesaw-sortable-col
-                                                                        data-tablesaw-priority="persist">Nombre</th>
-                                                                    <th scope="col" data-tablesaw-sortable-col
-                                                                        data-tablesaw-priority="1">Descripción</th>
-                                                                    <th scope="col" data-tablesaw-sortable-col
-                                                                        data-tablesaw-priority="2">Acción</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody id="tbody">
-                                                                <!-- <tr>
-                                                                    <td> <input class="form-control" readonly
-                                                                            type="text" value="Material principal">
-                                                                    </td>
-                                                                    <td><input class="form-control" readonly type="text"
-                                                                            value="Algodón"></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td><input class="form-control"  type="text"
-                                                                            value="Pack/piezas"></td>
-                                                                    <td><input class="form-control"  type="text"
-                                                                            value="2 piezas"></td>
-                                                                </tr> -->
+                                                        <div class="table-responsive">
+                                                            <table class="tablesaw table-bordered table-hover table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Nombre</th>
+                                                                        <th>Descripción</th>
+                                                                        <th>Acción</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr
+                                                                        *ngFor="let element of arregloEspecificacion; let i = index">
+                                                                        <td>
+                                                                            <input class="form-control nombre"
+                                                                                type="text"
+                                                                                [(ngModel)]="element.glosa_especificaciones_producto">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input class="form-control descripcion"
+                                                                                type="text"
+                                                                                [(ngModel)]="element.respuesta_especificaciones_producto">
+                                                                        </td>
+                                                                        <td>
+                                                                            <button type="button"
+                                                                                (click)="eliminarFila(i)"
+                                                                                class="btn btn-danger"
+                                                                                tooltip="Eliminar" placement="top"
+                                                                                [showDelay]="50" [hideDelay]="50"><i
+                                                                                    class="fa fa-times-rectangle"></i></button>
+                                                                        </td>
+                                                                    </tr>
 
-                                                            </tbody>
-                                                        </table>
-
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
 
                                         </div>
                                         <div class="row">
-                                            <div id="button_right" class="col-sm-12 col-md-12">
-                                                <button type="button" style="padding-left: 9px;" routerLink="/Producto"
-                                                    class="btn btn-outline-secondary mx-3" id="btn-close-crud"><i
-                                                        style="vertical-align: text-bottom;"
-                                                        class="bx bx-left-arrow-alt"></i> Volver</button>
-                                                <button (click)="GuardarProductoCompleto()" type="button"
-                                                    [disabled]="buttonDisabled" class="btn btn-success"
-                                                    value="create-product"><i style="vertical-align: text-bottom;"
-                                                        class="bx bx-save"></i>
-                                                    Guardar
-                                                </button>
+                                            <div class="col-12 col-md-12  text-right">
+                                                <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
+                                                    <button type="button" style="padding-left: 9px;"
+                                                        routerLink="/Producto" class="btn btn-outline-secondary mx-3"
+                                                        id="btn-close-crud"><i style="vertical-align: text-bottom;"
+                                                            class="bx bx-left-arrow-alt"></i>
+                                                        Volver</button>
+                                                    <button (click)="GuardarProductoCompleto()" type="button"
+                                                        class="btn btn-success" value="create-product"><i
+                                                            style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                        Guardar
+                                                    </button>
+                                                </ng-container>
+                                                <ng-template #elseTemplate>
+                                                    <button type="button" class="btn btn-success"
+                                                        value="create-product"><em
+                                                            class="fa fa-spin fa-circle-o-notch"></em>
+                                                        Guardando...
+                                                    </button>
+                                                </ng-template>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="tab-pane p-20" id="messages10" role="tabpanel">
+                                    <div class="tab-pane p-20" id="messages10-editar" role="tabpanel">
                                         <div class="row mt-4">
                                             <div class="col-md-3">
                                                 <label class="h6 m-0" for="">Nombre del Producto</label>
                                             </div>
                                             <div class="col-md-8">
                                                 <ng-select (change)="BuscarProductoRelaciondo($event)"
-                                                    [clearable]="false" #producto_proveedor="ngModel"
-                                                    name="producto_proveedor" [(ngModel)]="producto_relacionado"
-                                                    [required]="false">
-                                                    <ng-option value="" hidden>Seleccione el Producto</ng-option>
-                                                    <ng-option *ngFor="let item of listaProductosRelacionado"
-                                                        [value]="item.id_producto" glosa="{{item.path_producto_imagen}}"
-                                                        path="{{item.glosa_producto}}">
-                                                        {{item.glosa_producto}}</ng-option>
+                                                    [searchable]="true" [items]="listaProductosRelacionado"
+                                                    [multiple]="false" [loading]="isLoading"
+                                                    (search)="SearchProductoRelacionado($event.term)"
+                                                    placeholder="Escriba para buscar un producto"
+                                                    [typeToSearchText]="'Escriba para buscar...'"
+                                                    bindLabel="glosa_producto" bindValue="id_producto"
+                                                    (clear)="limpiarSeleccion('producto-relacionado')" #productoSelect
+                                                    [notFoundText]="'No se encontraron productos'">
                                                 </ng-select>
                                             </div>
 
@@ -534,24 +661,24 @@
                                                         <table class="tablesaw table-bordered table-hover table">
                                                             <thead>
                                                                 <tr>
-                                                                    <th class="text-center">NOMBRE</th>
                                                                     <th class="text-center">IMÁGEN</th>
+                                                                    <th class="text-center">NOMBRE</th>
                                                                     <th class="text-center">ACCIÓN</th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody id="tbody">
+                                                            <tbody>
                                                                 <tr *ngFor="let e of listarProductoRelacionados;">
                                                                     <td>
                                                                         <div class="card">
                                                                             <div class="card-body">
                                                                                 <span
                                                                                     class="mytooltip tooltip-effect-1">
-                                                                                    <img src="{{e.arreglo_imagen[0].imagen}}"
+                                                                                    <img src="{{e.path_producto_imagen}}"
                                                                                         class="tooltip-item" alt="user"
                                                                                         width="100" />
                                                                                     <span
                                                                                         class="tooltip-content clearfix text-center">
-                                                                                        <img src="{{e.arreglo_imagen[0].imagen}}"
+                                                                                        <img src="{{e.path_producto_imagen}}"
                                                                                             alt="euclid" /><span
                                                                                             class="tooltip-text"></span>
                                                                                     </span>
@@ -559,12 +686,13 @@
                                                                             </div>
                                                                         </div>
                                                                     </td>
-                                                                    <td>{{e.glosa_producto}}</td>
+                                                                    <td>{{e.glosa_producto}} ({{e.codigo_producto}})
+                                                                    </td>
                                                                     <td><button type="button"
                                                                             (click)="RecuperarProductoRelacionado(e)"
                                                                             class="btn btn-danger eliminar_imagen"
-                                                                            id_imagen="0" data-toggle="tooltip"
-                                                                            data-original-title="Eliminar"><i
+                                                                            tooltip="Eliminar" placement="top"
+                                                                            [showDelay]="50" [hideDelay]="50"><i
                                                                                 class="fa fa-times-rectangle"></i></button>
                                                                     </td>
                                                                 </tr>
@@ -576,17 +704,26 @@
 
                                         </div>
                                         <div class="row">
-                                            <div id="button_right" class="col-sm-12 col-md-12">
-                                                <button type="button" style="padding-left: 9px;" routerLink="/Producto"
-                                                    class="btn btn-outline-secondary mx-3" id="btn-close-crud"><i
-                                                        style="vertical-align: text-bottom;"
-                                                        class="bx bx-left-arrow-alt"></i> Volver</button>
-                                                <button (click)="GuardarProductoCompleto()" type="button"
-                                                    [disabled]="buttonDisabled" class="btn btn-success"
-                                                    value="create-product"><i style="vertical-align: text-bottom;"
-                                                        class="bx bx-save"></i>
-                                                    Guardar
-                                                </button>
+                                            <div class="col-12 col-md-12  text-right">
+                                                <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
+                                                    <button type="button" style="padding-left: 9px;"
+                                                        routerLink="/Producto" class="btn btn-outline-secondary mx-3"
+                                                        id="btn-close-crud"><i style="vertical-align: text-bottom;"
+                                                            class="bx bx-left-arrow-alt"></i>
+                                                        Volver</button>
+                                                    <button (click)="GuardarProductoCompleto()" type="button"
+                                                        class="btn btn-success" value="create-product"><i
+                                                            style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                                                        Guardar
+                                                    </button>
+                                                </ng-container>
+                                                <ng-template #elseTemplate>
+                                                    <button type="button" class="btn btn-success"
+                                                        value="create-product"><em
+                                                            class="fa fa-spin fa-circle-o-notch"></em>
+                                                        Guardando...
+                                                    </button>
+                                                </ng-template>
                                             </div>
                                         </div>
                                     </div>
@@ -643,3 +780,5 @@
 <!-- ============================================================== -->
 <!-- ============================================================== -->
 <!-- Dashboard Ecommerce Starts -->
+<app-modal-marca #hijomodalmarca [texto_cabezera]="texto_cabezera"
+    (respuesta)="manejarRespuesta($event)"></app-modal-marca>

@@ -29,7 +29,7 @@ export class BajaComprobantesComponent implements OnInit {
   listarDocumentos: any = [];
   token: any;
   usuario: any;
-  
+
   dtOptions: DataTables.Settings[] = [];
   reload_producto: any = new Subject();
   ProductoBuscar!: FormGroup;
@@ -63,7 +63,7 @@ export class BajaComprobantesComponent implements OnInit {
   url_ticket: string = '';
   busquedafactura: boolean = false;
 
-  documento: String = 'NOTA CREDTIO';
+
   constructor(
     private http: HttpClient,
     private servicio_login: LoginService,
@@ -80,17 +80,17 @@ export class BajaComprobantesComponent implements OnInit {
     this.datosanulacion = this.fb.group({
       id_documento: [''],
       tipo_documento: [''],
-      tipo_anulacion: ['',[Validators.required]],
+      tipo_anulacion: ['', [Validators.required]],
       comentario: [''],
       fecha_devolucion: [new Date().toISOString().substring(0, 10)],
-      documento: [''],
-      id_usuario:[this.usuario.sub]
+      documento: ['NOTA CREDTIO'],
+      id_usuario: [this.usuario.sub]
     });
 
   }
 
   ngOnInit(): void {
-
+    $("[data-dismiss='modal']").click();
     this.Mostrar_Productos();
     this.Mostrar_TipoDevolucion();
   }
@@ -231,7 +231,15 @@ export class BajaComprobantesComponent implements OnInit {
       });
       return;
     }
-    this.datosanulacion.get('documento')?.setValue(this.documento);
+
+    if (this.datosanulacion.value.documento == "ANULAR" && this.datosanulacion.value.tipo_documento === "BOLETA") {
+      this.toast.error(`No puede anular Boletas `, 'Documento', {
+        timeOut: 2000,
+        positionClass: 'toast-top-right',
+      });
+      return;
+    }
+
     this.datosanulacion.markAllAsTouched();
     if (this.datosanulacion.invalid) {
       this.toast.error(`Campos obligatorio `, 'Validación', {
@@ -284,6 +292,9 @@ export class BajaComprobantesComponent implements OnInit {
     this.Totales.subtotal = 0;
     this.Totales.total = 0;
     this.VolverPagina();
+  }
+  tipoComprobante() {
+
   }
 
 

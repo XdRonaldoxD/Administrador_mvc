@@ -109,8 +109,15 @@ export class NotaVenta {
     return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=VerificarCajaAbierta", { headers: headers ,params:Params })
   }
 
-  
-
+  FiltrarCliente(search:any,documento:string):Observable<any>{
+    let Params = new HttpParams();
+    Params = Params.append('search', search);
+    Params = Params.append('documento', documento);
+    const headers = new HttpHeaders({
+      Authorization: this.token
+    });
+    return this.httpcliente.get(environment.api_url+"?controller=Cliente&action=FiltrarCliente", { headers: headers ,params:Params })
+  }
   BuscarDni(Dni_boleta:any):Observable<any>{
     return this.httpcliente.get(`https://dniruc.apisperu.com/api/v1/dni/${Dni_boleta}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InNtaXRoeGQxMThAZ21haWwuY29tIn0.24c7XETuRuTQLUqSjOH7BsKM19n6kKMOtY06qeUYX40`)
   }

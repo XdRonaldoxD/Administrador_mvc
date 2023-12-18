@@ -31,13 +31,12 @@ export class AtributoComponent implements OnInit {
   constructor(private http: HttpClient,
     private servicio_login: LoginService,
     private servicio_atributo: AtributoService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private el: ElementRef
 
   ) { }
   ngOnInit(): void {
-    // $('.textarea_editor').wysihtml5();
-
-    this.editor = $('.textarea_editor').wysihtml5().data('wysihtml5').editor;
+    $("[data-dismiss='modal']").click();
     this.categoriaForm = this.fb.group({
       id_atributo: [''],
       glosa_atributo: ['', [Validators.required]],
@@ -95,6 +94,27 @@ export class AtributoComponent implements OnInit {
   ngAfterViewInit(): void {
     this.reload_producto.next();
     this.reload_producto_deshabilitado.next();
+    $(this.el.nativeElement).find('.textarea_editor').summernote({
+      height: 60,
+      minHeight: null,
+      maxHeight: null,
+      focus: false,
+      toolbar: [
+        ['style', ['style']],
+        ['font', ['bold', 'underline', 'clear']],
+        ['fontname', ['fontname']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        // ['table', ['table']]
+        // ['insert', ['link', 'picture', 'video']],
+        // ['view', ['fullscreen', 'codeview', 'help']],
+      ],
+      callbacks: {
+        onChange: (contents: any) => {
+          this.categoriaForm.get('descripcion_atributo')!.setValue(contents);
+        }
+      }
+    });
   }
   //FIN
 
@@ -189,7 +209,6 @@ export class AtributoComponent implements OnInit {
   AbrirModal() {
     this.categoriaForm.reset();
     this.categoriaForm.get('accion')!.setValue('CREAR');
-    this.editor.setValue('');
     $("#t-crear-categoria").html('');
     this.listarCategorias();
     this.texto_cabezera = 'Nuevo Atributo';
@@ -257,7 +276,7 @@ export class AtributoComponent implements OnInit {
   GuardarActualizarCategoria() {
 
     //NOTA GUARDAMOS EL TEXTO ENRIQUECIDO EN LA DESCRIPCION
-    this.categoriaForm.get('descripcion_atributo')!.setValue(this.editor.getValue());
+   
     this.categoriaForm.markAllAsTouched();
     if (this.categoriaForm.invalid) {
       return;
@@ -395,7 +414,6 @@ export class AtributoComponent implements OnInit {
         this.categoriaForm.get('glosa_atributo')!.setValue(resp.glosa_atributo);
         this.categoriaForm.get('descripcion_atributo')!.setValue(resp.descripcion_atributo);
         this.categoriaForm.get('accion')!.setValue('EDITAR');
-        this.editor.setValue(resp.descripcion_atributo);
         this.listarCategoriasEditar(resp.id_padre_atributo, resp.id_atributo);
 
       }, error: (error) => {

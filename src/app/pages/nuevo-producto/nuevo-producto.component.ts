@@ -1,12 +1,14 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy, Renderer2 } from '@angular/core';
 import { CategoriaService } from '../../services/categoria.service';
 import { LoginService } from '../../services/login.service';
 import { finalize, Subject, takeUntil } from 'rxjs';
 import { ProductoService } from '../../services/producto.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { AtributoService } from '../../services/atributo.service';
 import { Atributo_seleccionado } from 'src/app/interface/Datatable';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { ModalMarcaComponent } from '../modals/modal-marca/modal-marca.component';
 declare var $: any;
 declare var document: any;
 declare var Swal: any;
@@ -18,8 +20,9 @@ declare var Swal: any;
 })
 export class NuevoProductoComponent implements OnInit, OnDestroy {
   @ViewChild('codigo_producto') codigo_producto?: ElementRef;
+  @ViewChild('hijomodalmarca') hijomodalmarca: ModalMarcaComponent | any;
+  @ViewChild('productoSelect') productoSelect: any;
   token: any;
-
   tipo_inventario?: any = [];
   imagenes_producto?: any = [];
   producto_relacionado: any = '';
@@ -29,8 +32,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
   listarProductoRelacionados: any = [];
   informacionForm!: FormGroup;
   PrecioStockForm!: FormGroup;
-  descripcion_extendida: any;
-  descripcion_corta: any;
+
   checked_atributo: Atributo_seleccionado[] = [];
   checked_categoria: any = [];
   tipo_afectacion: any = [];
@@ -39,8 +41,14 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
   Unsuscribe: any = new Subject();
   color: any;
   GuardarInformacion: boolean = false;
-  isLoading:boolean = false;
+  isLoading: boolean = false;
   marcas: any[] = [];
+  arregloEspecificacion: any[] = [];
+  texto_cabezera: string = '';
+  id_tipo_inventario: any = null;
+  arregloBodegas: any[] = [];
+  arregloFormaFarmaceutica: any[] = [];
+  arregloTipoConcentracion: any[] = [];
   constructor(
     private servicio_categoria: CategoriaService,
     private servicio_login: LoginService,
@@ -48,42 +56,101 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
     private servicio_atributo: AtributoService,
     private fb: FormBuilder,
     private router: Router,
-  ) { 
+    private toastr: ToastrService,
+    private el: ElementRef,
+    private route: ActivatedRoute,
+    private renderer: Renderer2
+  ) {
+
+    this.informacionForm = this.fb.group({
+      codigo_producto: ['', [Validators.required]],
+      tipo_inventario: ['', [Validators.required]],
+      id_tipo_afectacion: ['', [Validators.required]],
+      visible_tienda: [false],
+      descripcion_corta: [],
+      descripcion_extendida: [],
+      codigo_barra_producto: [],
+      id_marca: [],
+      glosa_producto: ['', [Validators.required]],
+      id_unidad: [''],
+      id_tipo_concentracion: [''],
+    });
+    this.PrecioStockForm = this.fb.group({
+      precio_venta: ['', [Validators.required]],
+      stock: [[]],
+    });
     this.token = this.servicio_login.getToken();
+    this.route.data.pipe(takeUntil(this.Unsuscribe)).subscribe((respuesta: any) => {
+      this.tipo_inventario = respuesta.datos.tipo_inventario;
+      this.tipo_afectacion = respuesta.datos.tipo_afectacion;
+      this.arregloBodegas = respuesta.datos.bodegas;
+      this.arregloFormaFarmaceutica=respuesta.datos.unidad;
+      this.arregloTipoConcentracion=respuesta.datos.tipo_concentracion;
+    })
   }
 
   ngOnDestroy(): void {
     this.Unsuscribe.unsubscribe();
   }
+  ngAfterViewInit(): void {
+    $(this.el.nativeElement).find('.descripcion_extendida').summernote({
+      height: 60,
+      minHeight: null,
+      maxHeight: null,
+      focus: false,
+      toolbar: [
+        ['style', ['style']],
+        ['font', ['bold', 'underline', 'clear']],
+        ['fontname', ['fontname']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        // ['table', ['table']]
+        // ['insert', ['link', 'picture', 'video']],
+        // ['view', ['fullscreen', 'codeview', 'help']],
+      ],
+      callbacks: {
+        onChange: (contents: any) => {
+          this.informacionForm.get('descripcion_extendida')!.setValue(contents);
+        }
+      }
+    });
+    $(this.el.nativeElement).find('.descripcion_corta').summernote({
+      height: 60,
+      minHeight: null,
+      maxHeight: null,
+      focus: false,
+      toolbar: [
+        ['style', ['style']],
+        ['font', ['bold', 'underline', 'clear']],
+        ['fontname', ['fontname']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        // ['table', ['table']]
+        // ['insert', ['link', 'picture', 'video']],
+        // ['view', ['fullscreen', 'codeview', 'help']],
+      ],
+      callbacks: {
+        onChange: (contents: any) => {
+          this.informacionForm.get('descripcion_corta')!.setValue(contents);
+        }
+      }
+    });
+    setTimeout(() => {
+      const navItems = document.querySelectorAll('.nav-item');
+      navItems.forEach((navItem: any) => {
+        this.renderer.removeClass(navItem, 'disabled');
+      });
+    }, 1500);
+  }
+
+
 
   ngOnInit(): void {
-    this.descripcion_extendida = $('.descripcion_extendida').wysihtml5().data('wysihtml5').editor;
-    this.descripcion_corta = $('.descripcion_corta').wysihtml5().data('wysihtml5').editor;
+    $("[data-dismiss='modal']").click();
+    $("#t-crear-categoria").children("div").remove();
+    var estructura_html = "<div><h6 for=\"name\" class=\"col-sm-12 control-label\">Categoría Padre</h6><div id=\"treeview_container\" class=\"hummingbird-treeview t-view-editar\" style=\"height: auto; display: block;\"><ul style='list-style: none;' id=\"treeview\" class=\"hummingbird-base\"></ul></div></div>";
+    $("#t-crear-categoria").html(estructura_html);
 
-
-    this.servicio_categoria.Inventario(this.token).pipe(finalize(() => {
-      $("#t-crear-categoria").children("div").remove();
-      var estructura_html = "<div><h6 for=\"name\" class=\"col-sm-12 control-label\">Categoría Padre</h6><div id=\"treeview_container\" class=\"hummingbird-treeview t-view-editar\" style=\"height: auto; display: block;\"><ul style='list-style: none;' id=\"treeview\" class=\"hummingbird-base\"></ul></div></div>";
-      $("#t-crear-categoria").html(estructura_html);
-    }), takeUntil(this.Unsuscribe)).subscribe(
-      {
-        next: (res) => {
-          this.tipo_inventario = res;
-        }, error: (error) => {
-
-        }
-      }
-    )
-
-    this.producto_serv.TraerAfectacion().pipe(takeUntil(this.Unsuscribe)).subscribe(
-      {
-        next: (res) => {
-          this.tipo_afectacion = res;
-        }, error: (error) => {
-
-        }
-      }
-    )
 
     $(document).on("click", "input[name='agregar_imagen']", (elemento: any) => {
       let cantidad = 0;
@@ -95,7 +162,6 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
           $(".agregar_imagen").prop("disabled", true);
           $(elemento.target).prop("disabled", false);
           this.imagenes_producto[$(elemento.target).attr("value")].portada = true;
-          console.log(this.imagenes_producto);
         } else {
           this.imagenes_producto[$(elemento.target).attr("value")].portada = false;
           $(".agregar_imagen").prop("disabled", false);
@@ -119,65 +185,11 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
       this.imagenes_producto.splice($(elemento.target).attr("id_imagen"), 1);
       this.construirtabla();
     })
-    $(document).on("keyup", ".posicion", (elemento: any) => {
-      this.imagenes_producto[$(elemento.target).attr("id_posicion")].orden_imagen = $(elemento.target).val();
-    })
-    $(document).on("click", ".EliminarColumnas", ($evento: any) => {
-      let div = $evento.target.parentElement.parentElement;
-      div.remove();
-    })
     $(function () {
       $(document).trigger("enhance.tablesaw");
     });
-    $(document).on("keyup", ".nombre", (elemento: any) => {
-      var escrito = elemento.target.value;
-      if (escrito != '') {
-        $(elemento.target).removeClass('is-invalid');
-      } else {
-        $(elemento.target).addClass('is-invalid');
-      }
-    })
-    $(document).on("keyup", ".descripcion", (elemento: any) => {
-      var escrito = $(elemento.target).val();
-      if (escrito !== '') {
-        $(elemento.target).removeClass('is-invalid');
-      } else {
-        $(elemento.target).addClass('is-invalid');
-      }
-    })
-    this.producto_serv.ListaProductosRelacionado(this.token, this.producto_relacionado).pipe(takeUntil(this.Unsuscribe)).subscribe({
-      next: resp => {
-        this.listaProductosRelacionado = resp;
-      },
-      error: erro => {
-        Swal.fire({
-          toast: true,
-          position: 'top',
-          icon: 'error',
-          title: 'Error en los productos relacionados.',
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 5000
-        })
-      }
-    })
-    this.informacionForm = this.fb.group({
-      codigo_producto: ['', [Validators.required]],
-      tipo_inventario: ['', [Validators.required]],
-      id_tipo_afectacion: ['', [Validators.required]],
-      visible_tienda: [false],
-      descripcion_corta: [],
-      descripcion_extendida: [],
-      codigo_barra_producto:[],
-      id_marca:[],
-      glosa_producto: ['', [Validators.required]]
-    });
-    this.PrecioStockForm = this.fb.group({
-      precio_venta: ['', [Validators.required]],
-      stock: ['', [Validators.required]],
-      precio_costo: [],
 
-    });
+
     this.listarAtributo();
 
     $(document).on("click", "input[name='atributo_padre']", (elemento: any) => {
@@ -195,14 +207,16 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
 
     })
 
-    $(document).on("click", "input[name='categoria_padre']", (elemento: any) => {
-      //Recorremos todos los input checkbox con name = Colores y que se encuentren "checked"
-      if ($(elemento.target).is(':checked')) {
-        this.checked_categoria.push(elemento.target.value);
-      } else {
-        this.producto_serv.removeItemFromArr(this.checked_categoria, elemento.target.value)
-      }
-    })
+    // $(document).on("click", "input[name='categoria_padre']", (elemento: any) => {
+    //   //Recorremos todos los input checkbox con name = Colores y que se encuentren "checked"
+    //   if ($(elemento.target).is(':checked')) {
+    //     this.checked_categoria.push(elemento.target.value);
+    //   } else {
+    //     this.producto_serv.removeItemFromArr(this.checked_categoria, elemento.target.value)
+    //   }
+    // })
+
+
   }
 
 
@@ -227,18 +241,18 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
   }
 
   listarCategorias(valor_inventario: any) {
+    this.id_tipo_inventario = valor_inventario.value;
     this.servicio_categoria.CargarCategoria(this.token, valor_inventario.value).pipe(finalize(() => {
     })).subscribe(
       {
         next: (arreglo) => {
           var html = "";
-          var vacio = "";
           if (arreglo.categoria == null) {
-            var estructura_html = "<div><h6 for=\"name\" class=\"col-sm-12 control-label\">Categoría Padre</h6><div id=\"treeview_container\" class=\"hummingbird-treeview t-view-editar\" style=\"height: auto;  display: block;\"><ul style='list-style: none;' id=\"treeview\" class=\"hummingbird-base\"></ul></div></div>";
+            var estructura_html = "<div><h6 for=\"name\" class=\"col-sm-12 control-label\">Categoría Padre</h6><div id=\"treeview_container\" class=\"hummingbird-treeview t-view-editar\" style=\"height: auto;  display: block;overflow: auto\"><ul style='list-style: none;' id=\"treeview\" class=\"hummingbird-base\"></ul></div></div>";
           } else {
             $.each(arreglo.categoria, (i: any, data: any) => {
-              html += "<li><i class=\"fa fa-minus\"></i>";
-              html += `<label  class="inline custom-control custom-checkbox block"><input id="${data.id_categoria}" value=${data.id_categoria} name='categoria_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input selector-categoria" ><span  class="custom-control-indicator"></span><span class="custom-control-description ml-0"> ${data.glosa_categoria}</span></label>`;
+              html += "<li class='categoria-item'><i class=\"fa fa-plus\"></i>";
+              html += `<label style="pointer-events: none;" class="inline custom-control custom-checkbox block"><input id="${data.id_categoria}_categoria" value=${data.id_categoria} name='categoria_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input" ><span  class="custom-control-indicator"></span><span class="custom-control-description ml-0"> ${data.glosa_categoria}</span></label>`;
               if (typeof data.subcategoria !== 'undefined') {
                 html += this.arbolSubcategoria(data.subcategoria);
               } else {
@@ -246,9 +260,9 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
               }
               html += "</li>";
             });
-            var estructura_html = "<div><h6 for=\"name\" class=\"col-sm-12 control-label\">Categoría Padre</h6><div id=\"treeview_container\" class=\"hummingbird-treeview t-view-editar\" style=\"height: auto;  display: block;\"><ul style='list-style: none;' id=\"treeview\" class=\"hummingbird-base\">" + html + "</ul></div></div>";
+            var estructura_html = "<div><h6 for=\"name\" class=\"col-sm-12 control-label\">Categoría Padre</h6><div id=\"treeview_container\" class=\"hummingbird-treeview t-view-editar\" style=\"height: auto;  display: block;overflow: auto\"><ul style='list-style: none;' id=\"treeview\" class=\"hummingbird-base\">" + html + "</ul></div></div>";
           }
-          $("#t-crear-categoria").html(estructura_html);
+          $("#t-crear-categoria-producto").html(estructura_html);
           $(".marcador-subcategoria").parent().find("label").children().removeAttr('hidden');
           $(".marcador-subcategoria-hijo").parent().find("label").children().removeAttr('hidden');
           $(".marcador-subcategoria").parent().find("i").css("pointer-events", "none").css("color", "#fff");
@@ -262,21 +276,25 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
   }
 
   arbolSubcategoria(subcategoria: any) {
-    var html = "";
-    html += "<ul style='display:block;list-style: none;' >";
+    var html = "<ul style='list-style: none; display: none;'>"; // Añade display: none para ocultar las subcategorías inicialmente
     if (typeof subcategoria !== 'undefined') {
       $.each(subcategoria, (i: any, data: any) => {
-        html += `<li><i class='fa fa-minus'></i>
-        <label  class="inline custom-control custom-checkbox block"><input id="${data.id_categoria}" value=${data.id_categoria} name='categoria_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input selector-categoria" ><span  class="custom-control-indicator"></span><span class="custom-control-description ml-0"> ${data.glosa_categoria}</span></label>`;
-        if (typeof data.subcategoria !== 'undefined') {
+        var tieneSubcategoria = typeof data.subcategoria !== 'undefined';
+        var estilo = tieneSubcategoria ? 'style="pointer-events: none;"' : ''; // Aplicar el estilo solo si tiene subcategorías
+        html += `<li class='categoria-item'><i class='fa ${tieneSubcategoria ? "fa-plus" : "fa-minus"}'></i>
+          <label ${estilo} class="inline custom-control custom-checkbox block">
+            <input id="${data.id_categoria}_categoria" value=${data.id_categoria} name='categoria_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input" ${tieneSubcategoria ? "disabled" : ""}>
+            <span class="custom-control-indicator"></span>
+            <span class="custom-control-description ml-0">${data.glosa_categoria}</span>
+          </label>`;
+        if (tieneSubcategoria) {
           html += this.arbolSubcategoria(data.subcategoria);
         } else {
-          html += "<h6  hidden class='marcador-subcategoria-hijo'>Subcategoria hijo</h6>";
+          html += "<h6 hidden class='marcador-subcategoria-hijo'>Subcategoria hijo</h6>";
         }
         html += "</li>";
-
       });
-    };
+    }
     html += "</ul>";
     return html;
   }
@@ -339,7 +357,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
 
 
   levantarmodalimagenes() {
-    var drDestroy = $('.dropify').dropify({
+    $('.dropify').dropify({
       messages: {
         default: 'Arrastre y suelte un archivo aquí o haga clic en',
         replace: 'Arrastre y suelte un archivo o haga clic para reemplazar',
@@ -450,60 +468,37 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
   }
 
   AgregarInputtabla(): any {
-    var tr_ultimo = $('table tr:last');
-    let td1 = $(tr_ultimo).children()[0];
-    let td2 = $(tr_ultimo).children()[1];
-    console.log($(td1).find("input").val());
-    if ($(td1).find("input").val() == '' || $(td2).find("input").val() == '') {
-      if ($(td1).find("input").val() == '') {
-        $(td1).find("input").addClass('is-invalid');
-      } else {
-        $(td1).find("input").removeClass('is-invalid');
+    this.arregloEspecificacion.push({
+      id_especificaciones_producto: null,
+      glosa_especificaciones_producto: '',
+      respuesta_especificaciones_producto: ''
+    });
+  }
 
-      }
-      if ($(td2).find("input").val() == '') {
-        $(td2).find("input").addClass('is-invalid');
-      } else {
-        $(td2).find("input").removeClass('is-invalid');
-
-      }
-      Swal.fire({
-        toast: true,
-        position: 'top',
-        icon: 'error',
-        title: 'Ingrese el valor en la fila porfavor.',
-        showConfirmButton: false,
-        timerProgressBar: true,
-        timer: 5000
-      })
-      return false;
-    }
-    $("#tbody").append(`<tr>
-    <td> <input  class="form-control nombre"  type="text" value=""></td>
-    <td><input class="form-control descripcion"  type="text" value=""></td>
-    </tr>`);
+  eliminarFila(index: number) {
+    this.arregloEspecificacion.splice(index, 1);
   }
 
 
-  BuscarProductoRelaciondo(id_producto: any): any {
-    this.producto_serv.TraerProductosID(id_producto, this.token).pipe(finalize(() => {
-      var indice = this.listaProductosRelacionado.findIndex((item: any) => item.id_producto === id_producto);;
-      if (indice > -1) {
-        this.listaProductosRelacionado.splice(indice, 1);
-      }
-      this.producto_relacionado = '';
-
-    })).subscribe(
-      {
-        next: resp => {
-          this.listarProductoRelacionados.push(resp)
-        },
-        error: error => {
-          console.log(error);
-
+  BuscarProductoRelaciondo(data: any): any {
+    if (data && data.id_producto) {
+      this.producto_serv.TraerProductosID(data.id_producto).pipe(finalize(() => {
+        this.limpiarSeleccion('producto-relacionado');
+        this.productoSelect.clearModel();
+      }), takeUntil(this.Unsuscribe)).subscribe(
+        {
+          next: resp => {
+            this.listarProductoRelacionados.push(resp)
+          },
+          error: error => {
+            this.toastr.success(`Error al seleccionar el producto.`, undefined, {
+              timeOut: 3000,
+              positionClass: 'toast-top-right',
+            });
+          }
         }
-      }
-    )
+      )
+    }
   }
 
   RecuperarProductoRelacionado(producto: any) {
@@ -545,21 +540,9 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
     }
 
     //
-
-    //ESPECIFICACIONES
-    let especificaciones: any = [];
-    document.querySelectorAll('#tabla_especificaciones tbody tr').forEach(function (e: any) {
-      let consult = {
-        nombre: e.querySelector('.nombre').value,
-        descripcion: e.querySelector('.descripcion').value,
-      };
-      especificaciones.push(consult);
-    });
-
-
-    //
     this.informacionForm.markAllAsTouched()
     this.PrecioStockForm.markAllAsTouched()
+    this.PrecioStockForm.get('stock')?.setValue(this.arregloBodegas);
     if (this.informacionForm.invalid || this.PrecioStockForm.invalid) {
       Swal.fire({
         toast: true,
@@ -600,8 +583,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
       this.checked_atributo.forEach((element: any) => {
         cantidad += element.cantidad;
       });
-      console.log(cantidad);
-      console.log(this.PrecioStockForm.value.stock);
+
       if (cantidad > this.PrecioStockForm.value.stock) {
         Swal.fire({
           toast: true,
@@ -617,9 +599,8 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
     };
 
     this.GuardarInformacion = true;
-    this.informacionForm.get('descripcion_corta')!.setValue(this.descripcion_corta.getValue());
-    this.informacionForm.get('descripcion_extendida')!.setValue(this.descripcion_extendida.getValue());
-    this.producto_serv.GuardarProductoActualizar(this.token, valorescategoria, this.informacionForm.value, this.PrecioStockForm.value, this.imagenes_producto, coloresHexadecimal, especificaciones, this.listarProductoRelacionados, this.checked_atributo)
+
+    this.producto_serv.GuardarProductoActualizar(this.token, valorescategoria, this.informacionForm.value, this.PrecioStockForm.value, this.imagenes_producto, coloresHexadecimal, this.arregloEspecificacion, this.listarProductoRelacionados, this.checked_atributo)
       .pipe(takeUntil(this.Unsuscribe),
         finalize(() => {
           this.GuardarInformacion = false;
@@ -680,23 +661,78 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
     }, 700);
   }
 
-  buscarMarca(term: string){
+  buscarMarca(term: string) {
     this.isLoading = true;
-    if (term.length>1) {
+    if (term.length > 1) {
       this.producto_serv.BuscarMarca(term).pipe(takeUntil(this.Unsuscribe))
-      .subscribe((data: any) => {
-        this.marcas = data.map((item: any) => item);
-        this.isLoading = false;
-      });
-    }else{
-      this.limpiarSeleccion();
+        .subscribe((data: any) => {
+          this.marcas = data.map((item: any) => item);
+          this.isLoading = false;
+        });
+    } else {
+      this.limpiarSeleccion('marca');
       this.isLoading = false;
     }
- 
   }
-  limpiarSeleccion() {
-    this.marcas= [];
+  buscarProductoRelacionado(term: string) {
+    this.isLoading = true;
+    if (term.length > 1) {
+      this.producto_serv.BuscarMarca(term).pipe(takeUntil(this.Unsuscribe))
+        .subscribe((data: any) => {
+          this.marcas = data.map((item: any) => item);
+          this.isLoading = false;
+        });
+    } else {
+      this.limpiarSeleccion('producto-relacionado');
+      this.isLoading = false;
+    }
   }
+  limpiarSeleccion(tipo: string) {
+    switch (tipo) {
+      case 'marca':
+        this.marcas = [];
+        break;
+      case 'producto-relacionado':
+        this.listaProductosRelacionado = [];
+        break;
+      default:
+        break;
+    }
+  }
+  manejarRespuesta(respuesta: any) {
+    console.log("PADRE", respuesta) // Manejar la respuesta aquí
+    this.marcas = [respuesta];
+    this.informacionForm.get('id_marca')?.setValue(respuesta.id_marca);
+  }
+  AbrirModal() {
+    this.texto_cabezera = "CREAR MARCA";
+    $('#exampleModalCenter').modal('show');
+    let datos = {
+      accion: 'CREAR',
+      modulo: 'PRODUCTO'
+    }
+    this.hijomodalmarca.llamarFuncionHijoDesdePadre(datos);
+  }
+
+  SearchProductoRelacionado(term: string) {
+    this.isLoading = true;
+    let id_productos = this.listarProductoRelacionados.map((item: any) => item.id_producto);
+    if (term.length > 1) {
+      this.producto_serv.BuscarProductoRelacionado(term, id_productos).pipe(takeUntil(this.Unsuscribe))
+        .subscribe((data: any) => {
+          this.listaProductosRelacionado = data.map((item: any) => ({
+            glosa_producto: `${item.glosa_producto} (${item.codigo_producto})`,
+            id_producto: item.id_producto,
+          }));
+          this.isLoading = false;
+        });
+    } else {
+      this.limpiarSeleccion('producto-relacionado');
+      this.isLoading = false;
+    }
+  }
+
+
 
 
 }

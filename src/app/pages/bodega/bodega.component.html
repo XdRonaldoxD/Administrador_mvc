@@ -1,0 +1,123 @@
+<div class="container-fluid">
+    <div class="row page-titles mb-0 ">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor"> <strong>BODEGAS</strong></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row MT-1">
+                        <div class="col-md-12 d-flex justify-content-end">
+                            <div class="row m-0">
+                                <button (click)="AbrirModal()" class="btn btn-success btn-reset">NUEVO BODEGA <i
+                                        class="mdi mdi-checkbox-multiple-blank-outline"></i> </button>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="nav nav-pills m-t-10 m-b-10">
+                        <li class=" nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab"
+                                aria-expanded="false">Activos</a> </li>
+                        <li class="nav-item"> <a href="#navpills-2" class="nav-link" data-toggle="tab"
+                                aria-expanded="false">Deshabilitado</a> </li>
+                    </ul>
+                    <div class="tab-content br-n pn">
+                        <div id="navpills-1" class="tab-pane active">
+                            <div class="row">
+                                <!-- ANGULAR SERVER SIDE -->
+                                <div class="table-responsive">
+                                    <table datatable [dtOptions]="dtOptions[0]" [dtTrigger]="reload_bodega" class="table table-striped color-table info-table" width="100%">
+                                        <thead>
+                                            <tr style="vertical-align: middle;text-align: center;"
+                                                class="text-uppercase">
+                                                <th class="text-center">NOMBRE</th>
+                                                <th class="text-center">ACCION</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let e of listarProducto;">
+                                                <tr style="vertical-align: middle;text-align: center;">
+                                                    <td>{{e.glosa_bodega}}</td>
+                                                    <td>
+                                                        <div class="button-group">
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-info btn-circle"
+                                                                tooltip="Editar Bodega" placement="top" [showDelay]="15"
+                                                                [hideDelay]="15" (click)="EditarBodega(e)">
+                                                                <i class="fa  fa-edit "></i> </button>
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-danger btn-circle"
+                                                                tooltip="Deshabilitar Bodega" placement="top"
+                                                                (click)="EstadoBodega('desactivar',e.id_bodega)"
+                                                                [showDelay]="15" [hideDelay]="15">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                        <tbody *ngIf="listarProducto.length <= 0">
+                                            <tr>
+                                                <td colspan="2" class="no-data-available">No hay información!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div id="navpills-2" class="tab-pane">
+                            <div class="row">
+                                <div class="table-responsive">
+                                    <table datatable [dtOptions]="dtOptions[1]"
+                                        [dtTrigger]="reload_bodega_deshabilitado" class="table table-striped color-table info-table" width="100%">
+                                        <thead>
+                                            <tr style="vertical-align: middle;text-align: center;"
+                                                class="text-uppercase">
+                                                <th class="text-center">NOMBRE</th>
+                                                <th class="text-center">ACCION</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let e of listarProductoDeshabilitado;">
+                                                <tr style="vertical-align: middle;text-align: center;">
+                                                    <td>{{e.glosa_bodega}}</td>
+                                                    <td>
+                                                        <div class="button-group">
+                                                            <button type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-info btn-circle"><i
+                                                                    tooltip="Editar Bodega" placement="top"
+                                                                    (click)="EditarBodega(e)" [hideDelay]="15"
+                                                                    [showDelay]="15" class="fa  fa-edit "></i> </button>
+                                                            <button (click)="EstadoBodega('activado',e.id_bodega)"
+                                                                type="button" style="width: 20px;height: 20px;"
+                                                                class="btn btn-sm btn-success btn-circle"><i
+                                                                    tooltip="Activar Bodega" placement="top"
+                                                                    [showDelay]="15" [hideDelay]="15"
+                                                                    class="fa fa-check"></i> </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                        <tbody *ngIf="listarProductoDeshabilitado.length == 0">
+                                            <tr>
+                                                <td colspan="2" class="no-data-available">No hay información!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<app-modal-bodega #hijomodalbodega [texto_cabezera]="texto_cabezera"  (respuesta)="manejarRespuesta($event)" ></app-modal-bodega>

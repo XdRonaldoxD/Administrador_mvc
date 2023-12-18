@@ -1,8 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Subject, takeUntil } from 'rxjs';
-import { CategoriaService } from 'src/app/services/categoria.service';
+import { Subject, finalize, takeUntil } from 'rxjs';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { NotaVenta } from 'src/app/services/notaventa.service';
 import { LoginService } from 'src/app/services/login.service';
@@ -40,7 +39,24 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
   unsubscribe$: any = new Subject();
   color: any;
   usuario: any = null;
-
+  GuardarInformacion:boolean=false;
+  comprobante_defecto = [
+    {
+      value: "NOTA VENTA",
+      label: "NOTA VENTA",
+    },
+    {
+      value: "BOLETA",
+      label: "BOLETA",
+    },
+    {
+      value: "FACTURA",
+      label: "FACTURA",
+    }
+  ]
+    sucursal: any = [];
+  bodega: any = [];
+  bodega_filtrar: any = [];
   constructor(
 
     private servicio_login: LoginService,
@@ -73,6 +89,7 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
+    $("[data-dismiss='modal']").click();
     this.usuario = this.servicio_login.getIdentity();
     this.TraerDepartamento();
     this.informacionForm = this.fb.group({
@@ -96,6 +113,9 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
       dominio: [window.location.hostname],
       serie_factura: [''],
       serie_boleta: [''],
+      id_sucursal: [''],
+      id_bodega: [''],
+      comprobante_defecto:['NOTA VENTA']
     });
     $('.dropify').dropify({
       messages: {
@@ -153,13 +173,11 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.Helper.initializeSummernoteEditor('pixelgoogle_empresa');
-    this.Helper.initializeSummernoteEditor('pixelfacebook_empresa');
-    $('.pixelgoogle_empresa').summernote('code', '');
-    $('.pixelfacebook_empresa').summernote('code', '');
-
     this.empresa.TraerEmpresa().pipe(takeUntil(this.unsubscribe$)).subscribe({
-      next: resp => {
+      next: respuesta => {
+        let resp=respuesta.data;
+        this.sucursal=respuesta.sucursal;
+        this.bodega=respuesta.bodegas;
         if (resp) {
           if (resp.idDepartamento) {
             this.SeleccionarDepartamento(resp.idDepartamento);
@@ -167,6 +185,7 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
           if (resp.idProvincia) {
             this.SeleccionarProvincia(resp.idProvincia);
           }
+      
           this.informacionForm.patchValue({
             ruc_empresa: resp.ruc_empresa_venta_online,
             razon_social_empresa: resp.razon_social_empresa_venta_online,
@@ -184,10 +203,14 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
             pixelfacebook_empresa: resp.pixelfacebook_empresa_venta_online,
             nombre_empresa: resp.nombre_empresa_venta_online,
             email_empresa_venta_online: resp.email_empresa_venta_online,
-            giro_empresa_venta_online: resp.giro_empresa_venta_online
+            giro_empresa_venta_online: resp.giro_empresa_venta_online,
+            id_bodega:resp.id_bodega ?? '',
+            id_sucursal:resp.id_sucursal ?? ''
           });
-          $('.pixelgoogle_empresa').summernote('code', resp.pixelgoogle_empresa_venta_online);
-          $('.pixelfacebook_empresa').summernote('code', resp.pixelfacebook_empresa_venta_online);
+          if (resp.id_sucursal) {
+            this.Seleccionar('Sucursal')
+          }
+       
           this.Helper.resetPreview('icono_empresa', resp.urlicono_empresa_venta_online, resp.public_idicono_empresa_venta_online);
           this.Helper.resetPreview('logo_empresa_horizonta', resp.urllogohorizontal_empresa_venta_online, resp.public_idlogohorizontal_empresa_venta_online);
           this.Helper.resetPreview('logo_empresa_vertical', resp.urllogovertical_empresa_venta_online, resp.public_idlogovertical_empresa_venta_online);
@@ -230,16 +253,17 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
     this.archivo_certificado = archivo;
   }
 
-  GuardarInformacionCompleto(): void {
-    console.log(this.archivo_certificado);
-    var pixelgoogle_empresa = $('.pixelgoogle_empresa').summernote('code');
-    var pixelfacebook_empresa = $('.pixelfacebook_empresa').summernote('code');
-    if (pixelgoogle_empresa === "<p><br></p>" || pixelfacebook_empresa === '<p><br></p>') {
-      pixelgoogle_empresa = '';
-      pixelfacebook_empresa = '';
+  Seleccionar(tipo: string) {
+    switch (tipo) {
+      case 'Sucursal':
+        let id_sucursal = this.informacionForm.value.id_sucursal;
+        this.bodega_filtrar = this.bodega.filter((item: any) => item.id_sucursal == id_sucursal)
+        break;
     }
-    this.informacionForm.get('pixelgoogle_empresa')!.setValue(pixelgoogle_empresa.trim());
-    this.informacionForm.get('pixelfacebook_empresa')!.setValue(pixelfacebook_empresa.trim());
+  }
+
+  GuardarInformacionCompleto(): void {
+
     this.informacionForm.markAllAsTouched()
     if (this.informacionForm.invalid) {
       Swal.fire({
@@ -271,8 +295,10 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
       logo_empresa_horizonta: logo_empresa_horizonta,
       logo_empresa_vertical: logo_empresa_vertical
     }
-
-    this.empresa.EnviarInformacionEmpresa(this.informacionForm.value, this.archivo_certificado, imagenes).pipe(takeUntil(this.unsubscribe$)).subscribe({
+    this.GuardarInformacion=true;
+    this.empresa.EnviarInformacionEmpresa(this.informacionForm.value, this.archivo_certificado, imagenes).pipe(takeUntil(this.unsubscribe$),finalize(()=>{
+      this.GuardarInformacion=false;
+    })).subscribe({
       next: resp => {
         this.informacionForm.get('id_empresa_venta_online')?.setValue(resp);
         if (!this.usuario.id_empresa) {
@@ -290,7 +316,6 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
           timeOut: 3000,
           positionClass: 'toast-top-right',
         });
-        return;
       }
     })
 
@@ -303,7 +328,6 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
     if (departamento) {
       id_departamento = departamento;
     }
-    console.log(id_departamento);
     this.nota_venta.TraerProvincia(id_departamento).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: resp => {
         this.provincias = resp;

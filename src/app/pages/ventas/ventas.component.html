@@ -3,9 +3,9 @@
 <!-- ============================================================== -->
 <div class="container-fluid">
 
-    <div class="row page-titles">
+    <div class="row page-titles mb-0">
         <div class="col-md-5 align-self-center">
-            <h2 class="text-themecolor">Ventas</h2>
+            <h2 class="text-themecolor"> <strong>Ventas</strong></h2>
         </div>
     </div>
 
@@ -50,10 +50,9 @@
                         <div class="row">
                             <!-- ANGULAR SERVER SIDE -->
                             <div class="table-responsive">
-                                <table datatable [dtOptions]="dtOptions[0]" [dtTrigger]="reload_producto" class="row-border hover " width="100%">
+                                <table datatable [dtOptions]="dtOptions[0]" [dtTrigger]="reload_producto" class="table table-striped color-table info-table" width="100%">
                                     <thead>
                                         <tr style="vertical-align: middle;text-align: center;" class="text-uppercase">
-                                            <th class="text-center">N° DOCUMENTO</th>
                                             <th class="text-center">TIPO DE DOCUMENTO</th>
                                             <th class="text-center">VENDEDOR</th>
                                             <th class="text-center">NOMBRE/RAZON SOCIAL</th>
@@ -65,8 +64,7 @@
                                     <tbody>
                                         <ng-container *ngFor="let e of ListarCajaHabilitados;">
                                             <tr style="vertical-align: middle;text-align: center;" *ngIf="e.id_boleta">
-                                                <td>{{e.numero_boleta}}</td>
-                                                <td>{{"BOLETA ELECTRONICA"}}</td>
+                                                <td>{{"BOLETA ELECTRONICA N°"}} {{e.numero_boleta}}</td>
                                                 <td>{{e.nombre_staff_boleta}} {{e.apellidopaterno_staff_boleta}}
                                                     {{e.apellidomaterno_staff_boleta}}</td>
                                                 <td>{{e.nombre_cliente}} {{e.apellidopaterno_cliente}}
@@ -98,8 +96,7 @@
                                                 </td>
                                             </tr>
                                             <tr style="vertical-align: middle;text-align: center;" *ngIf="e.id_factura">
-                                                <td>{{e.numero_factura}}</td>
-                                                <td>{{"FACTURA ELECTRONICA"}}</td>
+                                                <td>{{"FACTURA ELECTRONICA N°"}} {{e.numero_factura}}</td>
                                                 <td>{{e.nombre_staff_factura}} {{e.apellidopaterno_staff_factura}}
                                                     {{e.apellidomaterno_staff_factura}}</td>
                                                 <td>{{e.nombre_cliente}} {{e.apellidopaterno_cliente}}
@@ -131,8 +128,7 @@
                                                 </td>
                                             </tr>
                                             <tr style="vertical-align: middle;text-align: center;" *ngIf="e.id_nota_venta">
-                                                <td>{{e.numero_nota_venta}}</td>
-                                                <td>{{"NOTA VENTA"}}</td>
+                                                <td>{{"NOTA VENTA N°"}} {{e.numero_nota_venta}}</td>
                                                 <td>{{e.nombre_staff_nota_venta}} {{e.apellidopaterno_staff_nota_venta}}
                                                     {{e.apellidomaterno_staff_nota_venta}}</td>
                                                 <td>{{e.nombre_cliente}} {{e.apellidopaterno_cliente}}
@@ -167,7 +163,7 @@
                                     </tbody>
                                     <tbody *ngIf="ListarCajaHabilitados.length == 0">
                                         <tr>
-                                            <td colspan="5" class="no-data-available">No data!</td>
+                                            <td colspan="6" class="no-data-available">No data!</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -202,12 +198,12 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
+                    <table class="table table-striped color-table info-table">
                         <thead>
                             <tr>
-                                <th style="width:25%;">MÉTODO DE PAGO</th>
-                                <th style="width:20%;">DESTINO</th>
-                                <th style="width:20%;">MONTO</th>
+                                <th style="width:30%;">MÉTODO DE PAGO</th>
+                                <th style="width:50%;">DESTINO</th>
+                                <th style="width:40%;">MONTO</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -239,7 +235,7 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-striped color-table info-table">
                         <thead>
                             <tr>
                                 <th style="width:20%;">SKU</th>

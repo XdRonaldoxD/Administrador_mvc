@@ -27,6 +27,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    $("[data-dismiss='modal']").click();
     Pusher.logToConsole = false;
     const pusher = new Pusher('0900f1535d671035b532', {
       cluster: 'us2'

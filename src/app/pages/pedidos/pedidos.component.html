@@ -1,23 +1,9 @@
-<!-- ============================================================== -->
-<!-- Container fluid  -->
-<!-- ============================================================== -->
 <div class="container-fluid">
-    <!-- ============================================================== -->
-    <!-- Bread crumb and right sidebar toggle -->
-    <!-- ============================================================== -->
-    <div class="row page-titles">
+    <div class="row page-titles mb-0">
         <div class="col-md-5 align-self-center">
-            <h2 class="text-themecolor">PEDIDOS</h2>
+            <h2 class="text-themecolor"> <strong>PEDIDOS</strong></h2>
         </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- End Bread crumb and right sidebar toggle -->
-    <!-- ============================================================== -->
-
-    <!-- ============================================================== -->
-    <!-- Start Page Content -->
-    <!-- ============================================================== -->
-    <!-- row -->
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -74,8 +60,7 @@
                             <div class="row">
                                 <!-- ANGULAR SERVER SIDE -->
                                 <div class="table-responsive">
-                                    <table datatable [dtOptions]="dtOptions[0]" [dtTrigger]="reload_producto"
-                                        class="row-border hover " width="100%">
+                                    <table datatable [dtOptions]="dtOptions[0]" [dtTrigger]="reload_producto" class="table table-striped color-table info-table " width="100%">
                                         <thead>
                                             <tr style="vertical-align: middle;text-align: center;"
                                                 class="text-uppercase">
@@ -89,7 +74,6 @@
                                                 <th class="text-center">ESTADO PREPARACION</th>
                                                 <th class="text-center">ARTICULOS</th>
                                                 <th class="text-center">FORMA ENTREGA</th>
-                                             
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -127,7 +111,7 @@
                                         </tbody>
                                         <tbody *ngIf="listarProducto.length == 0">
                                             <tr>
-                                                <td colspan="10" class="no-data-available">No data!</td>
+                                                <td colspan="10" class="no-data-available">No hay información!</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -141,16 +125,19 @@
                                 <!-- ANGULAR SERVER SIDE -->
                                 <div class="table-responsive">
                                     <table datatable [dtOptions]="dtOptions[1]"
-                                        [dtTrigger]="reload_producto_deshabilitado" class="row-border hover "
-                                        width="100%">
+                                        [dtTrigger]="reload_producto_deshabilitado" class="table table-striped color-table info-table" width="100%">
                                         <thead>
-                                            <tr style="vertical-align: middle;text-align: center;"
-                                                class="text-uppercase">
-                                                <th class="text-center">ACCION</th>
-                                                <th class="text-center">PRODUCTO</th>
-                                                <th class="text-center">STOCK</th>
-                                                <th class="text-center">PRECIO VENTA</th>
-                                                <th class="text-center">CODIGO(SKU)</th>
+                                            <tr style="vertical-align: middle;text-align: center;" class="text-uppercase">
+                                                <th class="text-center">ACCIONES</th>
+                                                <th class="text-center">PEDIDO</th>
+                                                <th class="text-center">FECHA</th>
+                                                <th class="text-center">CLIENTE</th>
+                                                <th class="text-center">TOTAL</th>
+                                                <th class="text-center">ESTADO</th>
+                                                <th class="text-center">ESTADO PAGO</th>
+                                                <th class="text-center">ESTADO PREPARACION</th>
+                                                <th class="text-center">ARTICULOS</th>
+                                                <th class="text-center">FORMA ENTREGA</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -192,7 +179,7 @@
                                         </tbody>
                                         <tbody *ngIf="listarProducto.length == 0">
                                             <tr>
-                                                <td colspan="4" class="no-data-available">No hay información!</td>
+                                                <td colspan="10" class="no-data-available">No hay información!</td>
                                             </tr>
                                         </tbody>
                                     </table>

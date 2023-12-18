@@ -41,6 +41,7 @@ export class LibroVentasComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    $("[data-dismiss='modal']").click();
     // Obtener la fecha actual
     const fechaActual = new Date();
 
@@ -68,6 +69,7 @@ export class LibroVentasComponent implements OnInit {
     myHeaders.append("Authorization", this.token);
     let parameters = new FormData();
     parameters.append("id_usuario", this.UserIdentificado.sub);
+    parameters.append("id_empresa", this.UserIdentificado.id_empresa);
     parameters.append("informacionForm", JSON.stringify(this.informacionForm.value));
     let requestOptions: any = {
       method: 'POST',

@@ -39,6 +39,10 @@ import { BajaComprobantesComponent } from './baja-comprobantes/baja-comprobantes
 import { LibroVentasComponent } from './libro-ventas/libro-ventas.component';
 import { UsuarioComponent } from './usuario/usuario.component';
 import { ModalMarcaComponent } from './modals/modal-marca/modal-marca.component';
+import { BodegaComponent } from './bodega/bodega.component';
+import { ModalBodegaComponent } from './modals/modal-bodega/modal-bodega.component';
+import { SucursalComponent } from './sucursal/sucursal.component';
+import { PromocionComponent } from './TiendaOnline/promocion/promocion.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +74,11 @@ import { ModalMarcaComponent } from './modals/modal-marca/modal-marca.component'
     BajaComprobantesComponent,
     LibroVentasComponent,
     UsuarioComponent,
-    ModalMarcaComponent
+    ModalMarcaComponent,
+    BodegaComponent,
+    ModalBodegaComponent,
+    SucursalComponent,
+    PromocionComponent
   ],
   exports: [
     IsInvalidPipe,

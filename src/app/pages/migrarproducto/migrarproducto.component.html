@@ -5,8 +5,8 @@
     <!-- Website Analytics Starts-->
     <div class="col-md-12 col-sm-12">
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h1 class="text-bold-600" style="text-align:left;">EXCEL PRODUCTOS</h1>
+            <div class="card-header d-flex justify-content-between align-items-center p-0">
+                <h1 class="text-bold-600" style="text-align:left;"> <strong>EXCEL PRODUCTOS</strong></h1>
             </div>
             <div class="card-content">
                 <form #enviarProducto="ngForm" (ngSubmit)="EnviarProducto(enviarProducto)"
@@ -15,14 +15,11 @@
                         <h2 class="text-center">Archivo para producto(.xls)</h2>
                         <div class="row justify-content-center">
                             <h6 class="mt-1"> <i class="bx bx-notepad"></i>Actualizar Producto </h6>
-                            <label class="switch">
-                                <input type="checkbox" (change)="DetectarTipoAccion($event)" name="actualizar_producto"
-                                    id="actualizar_producto" class="actualizar_producto">
-                                <span class="slider round">
-                                    <p>NO</p>
-                                    <p>SI</p>
-                                </span>
-                            </label>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="switch">
+                                <label> <strong>NO</strong><input  (change)="DetectarTipoAccion($event)" type="checkbox"><span class="lever"></span> <strong>SI</strong></label>
+                            </div>
                         </div>
                         <div class="row justify-content-center d-none" #mensaje>
                             <p class="text-danger mostrar_texto ">Solo actualiza el producto no creará</p>
@@ -76,7 +73,9 @@
 
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title text-center texto_principal">Datos No Registrados</h4>
+                <h4 class="modal-title text-center texto_principal">Verificar Excel</h4>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close" data-original-title=""
+                title=""><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 p-0 existe_producto d-none">
@@ -100,7 +99,7 @@
                     </div>
                 </div>
                 <div class="col-md-12 p-0 validarColumnas d-none">
-                    <div>
+                    <div class="table-responsive">
                         <table class="table   table-bordered center-text-table" style="width:100%">
                             <thead>
                                 <!-- <th>Numero</th> -->
@@ -118,7 +117,7 @@
             </div>
 
             <div class="modal-footer">
-                <div id="button_right" class="col-sm-12 col-md-12">
+                <div id="button_right" class="col-sm-12 col-md-12 col-12">
                     <button type="button" style="padding-left: 9px;" data-dismiss="modal"
                         class="btn btn-outline-secondary" id="btn-close-crud"><i style="vertical-align: text-bottom;"
                             class="bx bx-left-arrow-alt"></i> Volver</button>

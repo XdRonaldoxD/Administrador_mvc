@@ -10,29 +10,28 @@
                 <div class="card-body">
                     <form action="" [formGroup]="ProductoBuscar" autocomplete="nope">
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-3 col-12">
                                 <div class="form-group">
-                                    <h5 class="m-t-30">Filtro Pedido</h5>
-                                    <input name="producto" type="text" placeholder="Filtrar pedidos"
-                                        class="form-control" formControlName="filtrar_pedido">
+                                    <h5>Filtro Pedido</h5>
+                                    <input name="producto" type="text" placeholder="Filtrar pedidos" class="form-control" formControlName="filtrar_pedido">
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <h5 class="m-t-30">Estado</h5>
+                            <div class="col-md-3 col-12">
+                                <h5>Estado</h5>
                                 <select class="selectpicker" title="Seleccionar Estado" multiple data-style="form-control btn-secondary" formControlName="estado_pedido">
                                     <option *ngFor="let item of estado_pedido" value="{{item.id_estado_pedido}}">{{item.glosa_estado_pedido}}</option>
                                 </select>
                             </div>
-                            <div class="col-md-3">
-                                <h5 class="m-t-30">Estado del pago</h5>
+                            <div class="col-md-3 col-12">
+                                <h5>E. del pago</h5>
                                 <select class="selectpicker" title="Seleccionar Estado Pago" multiple data-style="form-control btn-secondary" formControlName="estado_pago">
                                     <ng-container *ngFor="let item of estado_pago">
                                         <option value="{{item.id_estado_pago}}">{{item.glosa_estado_pago}}</option>
                                     </ng-container>
                                 </select>
                             </div>
-                            <div class="col-md-3">
-                                <h5 class="m-t-30">Estado de la prepararación</h5>
+                            <div class="col-md-3 col-12">
+                                <h5>E. de prepararación</h5>
                                 <select class="selectpicker" title="Seleccionar Estado Preparación" multiple data-style="form-control btn-secondary" formControlName="estado_preparacion">
                                     <option *ngFor="let item of estado_preparacion" value="{{item.id_estado_preparacion}}">{{item.glosa_estado_preparacion}}
                                     </option>

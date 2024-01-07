@@ -158,7 +158,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
           dataTablesParameters.categoria_padres = checked;
         }
         this.http.post<DataTablesResponse>(
-          environment.api_url + "?controller=Producto&action=ListaProducto",
+          environment.api_url + "&controller=Producto&action=ListaProducto",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp: any) => {
           resp.data.forEach((producto: any) => {
@@ -256,7 +256,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
           dataTablesParameters.categoria_padres = checked;
         }
         this.http.post<DataTablesResponse>(
-          environment.api_url + "?controller=Producto&action=ListaProductoDeshabilitado",
+          environment.api_url + "&controller=Producto&action=ListaProductoDeshabilitado",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProductoDeshabilitado = resp.data;
@@ -322,7 +322,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.id_producto = this.id_producto;
         this.http.post<DataTablesResponse>(
-          environment.api_url + "?controller=Producto&action=ProductoHistorial",
+          environment.api_url + "&controller=Producto&action=ProductoHistorial",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
 

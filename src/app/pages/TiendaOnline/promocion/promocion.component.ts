@@ -134,7 +134,7 @@ export class PromocionComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback: any) => {
         dataTablesParameters.vigente_slider = vigente_slider;
         this.http.post<DataTablesResponse>(
-          environment.api_url + "?controller=Promociones&action=listarPromociones",
+          environment.api_url + "&controller=Promociones&action=listarPromociones",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProducto = resp.data;

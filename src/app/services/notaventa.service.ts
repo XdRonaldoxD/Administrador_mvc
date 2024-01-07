@@ -20,27 +20,27 @@ export class NotaVenta {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=ListaMediosPagos", { headers: headers })
+    return this.httpcliente.get(environment.api_url+"&controller=NotaVenta&action=ListaMediosPagos", { headers: headers })
   }
   TraerDepartamento():Observable<any>{
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=TraerDepartamento", { headers: headers })
+    return this.httpcliente.get(environment.api_url+"&controller=NotaVenta&action=TraerDepartamento", { headers: headers })
   }
 
   AsignarCliente():Observable<any>{
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=AsignarClienteGenerico", { headers: headers })
+    return this.httpcliente.get(environment.api_url+"&controller=NotaVenta&action=AsignarClienteGenerico", { headers: headers })
   }
 
   EnviarCorreloElectronicoEmail(datos:any):Observable<any>{
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url+"?controller=NotaVenta&action=EnviarCorreloElectronicoEmail",datos,{ headers: headers })
+    return this.httpcliente.post(environment.api_url+"&controller=NotaVenta&action=EnviarCorreloElectronicoEmail",datos,{ headers: headers })
   }
 
   BuscarDepartamento(departamento:any):Observable<any>{
@@ -49,7 +49,7 @@ export class NotaVenta {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=BuscarDepartamento", { headers: headers , params: Params })
+    return this.httpcliente.get(environment.api_url+"&controller=NotaVenta&action=BuscarDepartamento", { headers: headers , params: Params })
   }
   BuscarProvincia(provincia:any):Observable<any>{
     let Params = new HttpParams();
@@ -57,7 +57,7 @@ export class NotaVenta {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=BuscarProvincia", { headers: headers , params: Params })
+    return this.httpcliente.get(environment.api_url+"&controller=NotaVenta&action=BuscarProvincia", { headers: headers , params: Params })
   }
   BuscarDistrito(distrito:any):Observable<any>{
     let Params = new HttpParams();
@@ -65,7 +65,7 @@ export class NotaVenta {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=BuscarDistrito", { headers: headers , params: Params })
+    return this.httpcliente.get(environment.api_url+"&controller=NotaVenta&action=BuscarDistrito", { headers: headers , params: Params })
   }
   TraerProvincia(id_departamento:any):Observable<any>{
     let Params = new HttpParams();
@@ -73,7 +73,7 @@ export class NotaVenta {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=TraerProvincia", { headers: headers , params: Params })
+    return this.httpcliente.get(environment.api_url+"&controller=NotaVenta&action=TraerProvincia", { headers: headers , params: Params })
   }
   TraerDistrito(id_provincia:any):Observable<any>{
     let Params = new HttpParams();
@@ -81,7 +81,7 @@ export class NotaVenta {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=TraerDistrito", { headers: headers , params: Params })
+    return this.httpcliente.get(environment.api_url+"&controller=NotaVenta&action=TraerDistrito", { headers: headers , params: Params })
   }
 
   GuardarCliente(informacion_cliente:any):Observable<any>{
@@ -90,14 +90,14 @@ export class NotaVenta {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url+"?controller=NotaVenta&action=GuardarCliente", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url+"&controller=NotaVenta&action=GuardarCliente", formData, { headers: headers })
   }
 
   GenerarNegocio(datos:any):Observable<any>{
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url+"?controller=Negocio&action=GenerarNegocio", datos, { headers: headers })
+    return this.httpcliente.post(environment.api_url+"&controller=Negocio&action=GenerarNegocio", datos, { headers: headers })
   }
 
   VerificarCajaAbierta(id_usuario:any):Observable<any>{
@@ -106,7 +106,7 @@ export class NotaVenta {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.get(environment.api_url+"?controller=NotaVenta&action=VerificarCajaAbierta", { headers: headers ,params:Params })
+    return this.httpcliente.get(environment.api_url+"&controller=NotaVenta&action=VerificarCajaAbierta", { headers: headers ,params:Params })
   }
 
   FiltrarCliente(search:any,documento:string):Observable<any>{
@@ -116,7 +116,7 @@ export class NotaVenta {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.get(environment.api_url+"?controller=Cliente&action=FiltrarCliente", { headers: headers ,params:Params })
+    return this.httpcliente.get(environment.api_url+"&controller=Cliente&action=FiltrarCliente", { headers: headers ,params:Params })
   }
   BuscarDni(Dni_boleta:any):Observable<any>{
     return this.httpcliente.get(`https://dniruc.apisperu.com/api/v1/dni/${Dni_boleta}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InNtaXRoeGQxMThAZ21haWwuY29tIn0.24c7XETuRuTQLUqSjOH7BsKM19n6kKMOtY06qeUYX40`)

@@ -17,7 +17,7 @@ export class PedidoService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.get(environment.api_url+"?controller=Pedido&action=FiltrarEstadosPedidos", { headers: headers })
+    return this.httpcliente.get(environment.api_url+"&controller=Pedido&action=FiltrarEstadosPedidos", { headers: headers })
   }
   TraerPedido(id_pedido: any, token: any): Observable<any> {
     let Params = new HttpParams();
@@ -25,7 +25,7 @@ export class PedidoService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.get(environment.api_url+"?controller=Pedido&action=TraerPedido", { headers: headers , params: Params })
+    return this.httpcliente.get(environment.api_url+"&controller=Pedido&action=TraerPedido", { headers: headers , params: Params })
   }
   ActualizarPedidoEstados(id_pedido: any, token: any,accion:string,id_actualizar_estado_preparacion:any): Observable<any> {
     const formData = new FormData();
@@ -35,6 +35,6 @@ export class PedidoService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post(environment.api_url+"?controller=Pedido&action=ActualizarPedidoEstados",formData ,{headers: headers})
+    return this.httpcliente.post(environment.api_url+"&controller=Pedido&action=ActualizarPedidoEstados",formData ,{headers: headers})
   }
 }

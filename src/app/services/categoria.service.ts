@@ -16,7 +16,7 @@ export class CategoriaService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post(environment.api_url+"?controller=Categoria&action=TraerTipoInventario",null,{headers:headers})
+    return this.httpcliente.post(environment.api_url+"&controller=Categoria&action=TraerTipoInventario",null,{headers:headers})
   }
   CargarCategoria(token:any,id_tipo_inventario:any): Observable<any> {
     const formData = new FormData();
@@ -24,7 +24,7 @@ export class CategoriaService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post(environment.api_url+"?controller=Categoria&action=CargarCategoria", formData,{headers:headers})
+    return this.httpcliente.post(environment.api_url+"&controller=Categoria&action=CargarCategoria", formData,{headers:headers})
   }
 
   GestionarCategoria(token:any,formulario:any,categoria_padre:any,imagen:any): Observable<any> {
@@ -36,7 +36,7 @@ export class CategoriaService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post(environment.api_url+"?controller=Categoria&action=GestionarCategoria", formData,{headers:headers})
+    return this.httpcliente.post(environment.api_url+"&controller=Categoria&action=GestionarCategoria", formData,{headers:headers})
   }
 
   TraerCategoria(token:any,id_categoria:any): Observable<any> {
@@ -45,7 +45,7 @@ export class CategoriaService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post(environment.api_url+"?controller=Categoria&action=TraerCategoria", formData,{headers:headers})
+    return this.httpcliente.post(environment.api_url+"&controller=Categoria&action=TraerCategoria", formData,{headers:headers})
   }
 
   Habilitar_Deshabilitar_Categoria(token:any,id_categoria:any,accion:string): Observable<any> {
@@ -55,7 +55,7 @@ export class CategoriaService {
     const headers = new HttpHeaders({
       Authorization: token
     });
-    return this.httpcliente.post(environment.api_url+"?controller=Categoria&action=Habilitar_Deshabilitar_Categoria", formData,{headers:headers})
+    return this.httpcliente.post(environment.api_url+"&controller=Categoria&action=Habilitar_Deshabilitar_Categoria", formData,{headers:headers})
   }
 
 

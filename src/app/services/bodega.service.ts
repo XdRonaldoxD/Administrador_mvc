@@ -22,7 +22,7 @@ export class BodegaService {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url + "?controller=Bodega&action=gestionarBodega", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url + "&controller=Bodega&action=gestionarBodega", formData, { headers: headers })
   }
 
   TraerBodega(id_bodega:any): Observable<any> {
@@ -31,7 +31,7 @@ export class BodegaService {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url+"?controller=Bodega&action=TraerBodega", formData,{headers:headers})
+    return this.httpcliente.post(environment.api_url+"&controller=Bodega&action=TraerBodega", formData,{headers:headers})
   }
   gestionarestadoBodega(id_bodega:any,vigente_bodega:string): Observable<any> {
     const formData = new FormData();
@@ -40,7 +40,7 @@ export class BodegaService {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url+"?controller=Bodega&action=gestionarestadoBodega", formData,{headers:headers})
+    return this.httpcliente.post(environment.api_url+"&controller=Bodega&action=gestionarestadoBodega", formData,{headers:headers})
   }
 
   

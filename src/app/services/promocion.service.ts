@@ -24,7 +24,7 @@ export class PromocionService {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url + "?controller=Promociones&action=gestionarPromociones", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url + "&controller=Promociones&action=gestionarPromociones", formData, { headers: headers })
   }
   eliminarPromocion(id_promocion: any): Observable<any> {
     const formData = new FormData();
@@ -32,7 +32,7 @@ export class PromocionService {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url + "?controller=Promociones&action=eliminarPromocion", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url + "&controller=Promociones&action=eliminarPromocion", formData, { headers: headers })
   }
 
 

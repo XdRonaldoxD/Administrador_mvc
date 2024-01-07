@@ -142,7 +142,27 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       ordering: false,
       // scrollX:true,
       language: {
-        url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",
+        processing: "Procesando...",
+        lengthMenu: "Mostrar _MENU_ registros",
+        zeroRecords: "No se encontraron resultados",
+        emptyTable: "Ningún dato disponible en esta tabla",
+        info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+        infoFiltered: "(filtrado de un total de _MAX_ registros)",
+        infoPostFix: "",
+        search: "Buscar:",
+        url: "",
+        loadingRecords: "Cargando...",
+        paginate: {
+          first: "Primero",
+          last: "Último",
+          next: "Siguiente",
+          previous: "Anterior"
+        },
+        aria: {
+          sortAscending: "Activar para ordenar la columna de manera ascendente",
+          sortDescending: "Activar para ordenar la columna de manera descendente"
+        },
       },
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.filtrar_pedido = this.ProductoBuscar.value.filtrar_pedido;
@@ -158,7 +178,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
         }
 
         this.http.post<DataTablesResponse>(
-          environment.api_url+"?controller=Pedido&action=ListarPedidos",
+          environment.api_url+"&controller=Pedido&action=ListarPedidos",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProducto = resp.data;
@@ -219,7 +239,27 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       order: [],
       // scrollX:true,
       language: {
-        url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",
+        processing: "Procesando...",
+        lengthMenu: "Mostrar _MENU_ registros",
+        zeroRecords: "No se encontraron resultados",
+        emptyTable: "Ningún dato disponible en esta tabla",
+        info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+        infoFiltered: "(filtrado de un total de _MAX_ registros)",
+        infoPostFix: "",
+        search: "Buscar:",
+        url: "",
+        loadingRecords: "Cargando...",
+        paginate: {
+          first: "Primero",
+          last: "Último",
+          next: "Siguiente",
+          previous: "Anterior"
+        },
+        aria: {
+          sortAscending: "Activar para ordenar la columna de manera ascendente",
+          sortDescending: "Activar para ordenar la columna de manera descendente"
+        },
       },
       ajax: (dataTablesParameters: any, callback) => {
         if (this.ProductoBuscar.value.glosa_producto) {
@@ -241,7 +281,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
           dataTablesParameters.categoria_padres = checked;
         }
         this.http.post<DataTablesResponse>(
-          environment.api_url+"?controller=Producto&action=ListaProductoDeshabilitado",
+          environment.api_url+"&controller=Producto&action=ListaProductoDeshabilitado",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProductoDeshabilitado = resp.data;

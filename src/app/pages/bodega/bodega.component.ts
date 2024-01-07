@@ -105,7 +105,7 @@ export class BodegaComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback:any) => {
         dataTablesParameters.vigente_bodega = vigente_bodega;
         this.http.post<DataTablesResponse>(
-          environment.api_url + "?controller=Bodega&action=listarBodegas",
+          environment.api_url + "&controller=Bodega&action=listarBodegas",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           if (vigente_bodega==1) {

@@ -147,9 +147,10 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     $("[data-dismiss='modal']").click();
-    $("#t-crear-categoria").children("div").remove();
+    
+    $("#t-crear-categoria-producto").children("div").remove();
     var estructura_html = "<div><h6 for=\"name\" class=\"col-sm-12 control-label\">Categoría Padre</h6><div id=\"treeview_container\" class=\"hummingbird-treeview t-view-editar\" style=\"height: auto; display: block;\"><ul style='list-style: none;' id=\"treeview\" class=\"hummingbird-base\"></ul></div></div>";
-    $("#t-crear-categoria").html(estructura_html);
+    $("#t-crear-categoria-producto").html(estructura_html);
 
 
     $(document).on("click", "input[name='agregar_imagen']", (elemento: any) => {

@@ -27,7 +27,7 @@ export class SliderService {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url + "?controller=Slider&action=ActualizarCrearSlider", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url + "&controller=Slider&action=ActualizarCrearSlider", formData, { headers: headers })
   }
   GestionActivoDesactivadoSlider(id_slider: any, accion: string): Observable<any> {
     const formData = new FormData();
@@ -36,7 +36,7 @@ export class SliderService {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url + "?controller=Slider&action=GestionActivoDesactivado", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url + "&controller=Slider&action=GestionActivoDesactivado", formData, { headers: headers })
   }
 
 

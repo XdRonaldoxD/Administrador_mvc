@@ -171,7 +171,7 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          environment.api_url + "?controller=Categoria&action=ListaCategoria",
+          environment.api_url + "&controller=Categoria&action=ListaCategoria",
           dataTablesParameters, { headers: headers }
         ).pipe(takeUntil(this.unsubscribe$))
           .subscribe((resp) => {
@@ -238,7 +238,7 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          environment.api_url + "?controller=Categoria&action=ListaCategoriaDeshabilitado",
+          environment.api_url + "&controller=Categoria&action=ListaCategoriaDeshabilitado",
           dataTablesParameters, { headers: headers }
         ).pipe(takeUntil(this.unsubscribe$))
           .subscribe((resp) => {

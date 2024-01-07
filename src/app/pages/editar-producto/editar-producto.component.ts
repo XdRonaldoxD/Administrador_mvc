@@ -212,7 +212,6 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
       {
         next: (res) => {
           this.tipo_inventario = res;
-
         }, error: (error) => {
 
         }

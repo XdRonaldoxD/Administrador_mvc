@@ -310,13 +310,13 @@
                             <div class="form-group">
                                 <label for="idusuarioventaonlinedefecto_sucursal">Usuario Venta On line
                                     (Ecommerce)</label>
-                                <ng-select [searchable]="true" [items]="clientes" [multiple]="false"
-                                    [loading]="isLoading" (search)="buscarCliente($event.term)"
+                                <ng-select [searchable]="true" [items]="usuarios" [multiple]="false"
+                                     (search)="buscaUsuarioDefecto($event.term)"
                                     placeholder="Escriba para buscar un usuario"
-                                    [typeToSearchText]="'Escriba para buscar...'" bindLabel="usuario"
-                                    bindValue="id_usuario" (clear)="limpiarSeleccion()"
+                                    [typeToSearchText]="'Escriba para buscar...'" bindLabel="nombre_staff"
+                                    bindValue="id_usuario" (clear)="limpiarSeleccionUsuario()"
                                     formControlName="idusuarioventaonlinedefecto_sucursal"
-                                    [notFoundText]="'No se encontraron clientes'"
+                                    [notFoundText]="'No se encontraron usuario'"
                                     [class.is-invalid]="sucursalForm.controls['idusuarioventaonlinedefecto_sucursal']|isInvalid">
                                 </ng-select>
                                 <div class="text-danger">

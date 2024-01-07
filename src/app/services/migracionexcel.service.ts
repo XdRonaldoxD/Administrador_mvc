@@ -26,14 +26,14 @@ export class MigracionexcelService {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url+"?controller=ProductoExcel&action=EnviarArchivoProducto",formData,{headers})
+    return this.httpcliente.post(environment.api_url+"&controller=ProductoExcel&action=EnviarArchivoProducto",formData,{headers})
   }
 
   traerTipoDocumento():Observable<any>{
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.get(environment.api_url+"?controller=LibroVentas&action=traerTipoDocumento",{headers})
+    return this.httpcliente.get(environment.api_url+"&controller=LibroVentas&action=traerTipoDocumento",{headers})
   }
   exportarLibroVentas(informacionForm:any):Observable<any>{
     const formData=new FormData();
@@ -42,7 +42,7 @@ export class MigracionexcelService {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url+"?controller=LibroVentas&action=exportarLibroVentas",formData,{headers})
+    return this.httpcliente.post(environment.api_url+"&controller=LibroVentas&action=exportarLibroVentas",formData,{headers})
   }
 
   

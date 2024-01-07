@@ -5,7 +5,7 @@
             <div class="card-content">
                 <div class="card-body vertical-line p-0">
                     <div class="row m-0">
-                        <div class="col-md-8 p-0">
+                        <div class="col-md-8 p-0 col-12">
                             <div class="row m-0">
                                 <div class="col-md-12 p-0">
                                     <div class="card m-0">
@@ -121,21 +121,21 @@
                                                                             formControlName="cliente">
                                                                         </ng-select>
                                                                     </div>
-                                                                    <div class="d-flex col-4">
+                                                                    <div class="d-flex col-4 p-0">
                                                                         <button (click)="AsignarCliente()" type="button"
                                                                             tooltip="Asignar Cliente" placement="top"
-                                                                            class="btn btn-success btn-circle"><i
+                                                                            class="btn btn-sm btn-success btn-circle"><i
                                                                                 class="fa fa-address-book-o"></i>
                                                                         </button>
                                                                         <button (click)="ClienteNuevo()" type="button"
                                                                             tooltip="Agregar Cliente" placement="top"
-                                                                            class="btn btn-info btn-circle mx-2"><i
+                                                                            class="btn btn-sm btn-info btn-circle mx-2"><i
                                                                                 class="fa fa-address-book-o"></i>
                                                                         </button>
                                                                         <button (click)="ClienteActualizar()"
                                                                             type="button" tooltip="Editar Cliente"
                                                                             placement="top"
-                                                                            class="btn btn-warning btn-circle ">
+                                                                            class="btn btn-sm btn-warning btn-circle ">
                                                                             <i class="fa fa-pencil-square-o"
                                                                                 aria-hidden="true"></i>
                                                                         </button>
@@ -165,7 +165,7 @@
                                                                                 (change)="VerficarDocumentoCliente($event.target)"
                                                                                 class="form-control"
                                                                                 formControlName="tipo_documento">
-                                                                                <option value="NOTA_VENTA">Nota Venta
+                                                                                <option value="NOTA VENTA">Nota Venta
                                                                                 </option>
                                                                                 <option value="BOLETA">Boleta
                                                                                     Electrónica</option>
@@ -231,31 +231,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div [class.d-none]="borrador_nota_venta==true" class="col-md-4  p-0">
+                        <div [class.d-none]="borrador_nota_venta==true" class="col-md-4  p-0 col-12">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="card m-0" style="padding: 20px; background-color: #f8f9fa;">
+                                    <div class="card m-0 p-1" style="padding: 20px; background-color: #f8f9fa;">
                                         <div class="nota-venta">
                                             <div class="row mb-1 mx-0">
-                                                <div class="col-md-12 d-flex justify-content-between p-0">
-                                                    <i class="fa fa-product-hunt" aria-hidden="true"></i>
-                                                    <h6 class="m-0 col-12">Buscar Productos</h6>
-                                                    <div class="d-flex right-header">
-                                                        <div class="d-flex align-items-center mr-2">
-                                                            <object data="" class="iconos_svg" width="auto" height="20"
-                                                                style="margin-right: 8px;"> </object>
-                                                            <p class="m-0"><span class="texto-caja"></span></p>
-                                                        </div>
-                                                        <div class="d-flex align-items-center">
-                                                            <object data="" class="iconos_svg" width="auto" height="20"
-                                                                style="margin-right: 8px;"> </object>
-                                                            <p class="m-0"><span class="texto-sucursal"></span> <br>
-                                                                <span class="texto-bodega"></span>
-                                                            </p>
-                                                        </div>
-                                                    </div>
+                                                <div class="col-12 d-flex justify-content-between p-0">
+                                                    <h6 class="m-0"> <i class="fa fa-product-hunt" aria-hidden="true"></i>Buscar Productos</h6>
                                                 </div>
-                                                <form action="" [formGroup]="ProductoBuscar" autocomplete="nope">
+                                                <form [formGroup]="ProductoBuscar" autocomplete="nope">
                                                     <div class="input-group">
                                                         <input type="text" class="form-control" placeholder=""
                                                             aria-label="" aria-describedby="basic-addon1"
@@ -263,14 +248,13 @@
                                                             formControlName="glosa_producto">
                                                         <button (click)="BuscarProductos()"
                                                             class="btn btn-light-info text-info font-weight-medium"
-                                                            type="button">Buscar <i class="fa fa-search"
-                                                                aria-hidden="true"></i> </button>
+                                                            type="button">Buscar <i class="fa fa-search" aria-hidden="true"></i> 
+                                                        </button>
                                                     </div>
                                                 </form>
                                             </div>
                                             <div class="row mx-0">
-                                                <div class="col-12 p-0 content-tabla"
-                                                    style="overflow-y: auto; overflow-x: hidden;">
+                                                <div class="col-12 p-0 content-tabla" style="overflow-y: auto; overflow-x: hidden;">
                                                     <table id="tabla_borrador_ventas"
                                                         class="table table-borderless table-hover mb-0 tabla_producto_agregado"
                                                         width="100%" datatable [dtOptions]="dtOptions[0]"
@@ -326,7 +310,7 @@
                         </div>
 
                         <!-- METODOS DE PAGO -->
-                        <div [class.d-none]="metodos_pago_nota_venta==true" class="col-md-4"
+                        <div [class.d-none]="metodos_pago_nota_venta==true" class="col-md-4 col-12"
                             style="overflow-y: auto;overflow-x: hidden;height: calc(100vh - 125px);background-color: white;">
                             <div class="container">
                                 <div class="row mt-2">

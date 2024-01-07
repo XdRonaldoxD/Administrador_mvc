@@ -20,7 +20,7 @@ export class SucursalService {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.get(environment.api_url + "?controller=Sucursal&action=traerDatosSucursal", { headers })
+    return this.httpcliente.get(environment.api_url + "&controller=Sucursal&action=traerDatosSucursal", { headers })
   }
   buscarClienteDefecto(term:string): Observable<any>{
     let Params = new HttpParams();
@@ -28,15 +28,26 @@ export class SucursalService {
     const headers = new HttpHeaders({
       Authorization: this.token 
     });
-    return this.httpcliente.get(environment.api_url+"?controller=Sucursal&action=buscarClienteDefecto", { headers: headers , params: Params })
+    return this.httpcliente.get(environment.api_url+"&controller=Sucursal&action=buscarClienteDefecto", { headers: headers , params: Params })
   }
+
+  buscaUsuarioDefecto(term:string): Observable<any>{
+    let Params = new HttpParams();
+    Params = Params.append('search', term);
+    const headers = new HttpHeaders({
+      Authorization: this.token 
+    });
+    return this.httpcliente.get(environment.api_url+"&controller=Sucursal&action=buscaUsuarioDefecto", { headers: headers , params: Params })
+  }
+
+  
   traerSucursal(id_sucursal: any): Observable<any> {
     const formData = new FormData();
     formData.append('id_sucursal', id_sucursal);
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url + "?controller=Sucursal&action=traerSucursal", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url + "&controller=Sucursal&action=traerSucursal", formData, { headers: headers })
   }
   gestionarSucursal(sucursal: any): Observable<any> {
     const formData = new FormData();
@@ -44,7 +55,7 @@ export class SucursalService {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url + "?controller=Sucursal&action=gestionarSucursal", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url + "&controller=Sucursal&action=gestionarSucursal", formData, { headers: headers })
   }
   gestionarestadoSucursal(id_sucursal:any,vigente_sucursal:any): Observable<any> {
     const formData = new FormData();
@@ -53,7 +64,7 @@ export class SucursalService {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url+"?controller=Sucursal&action=estadoSucursal", formData,{headers:headers})
+    return this.httpcliente.post(environment.api_url+"&controller=Sucursal&action=estadoSucursal", formData,{headers:headers})
   }
   
 }

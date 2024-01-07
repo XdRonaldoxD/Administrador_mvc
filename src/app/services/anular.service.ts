@@ -23,14 +23,14 @@ export class AnularService {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.get(environment.api_url+"?controller=AnularDocumento&action=traerDocumento", { headers: headers ,params: Params})
+    return this.httpcliente.get(environment.api_url+"&controller=AnularDocumento&action=traerDocumento", { headers: headers ,params: Params})
   }
 
   TraerMotivoDevolucion(): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.get(environment.api_url+"?controller=AnularDocumento&action=traerMotivoDevolucion", { headers: headers})
+    return this.httpcliente.get(environment.api_url+"&controller=AnularDocumento&action=traerMotivoDevolucion", { headers: headers})
   }
 
   GenerarDocumento(datos:any): Observable<any> {
@@ -42,14 +42,14 @@ export class AnularService {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url+"?controller=AnularDocumento&action=anularDocumentoElectronico",  formData ,{ headers: headers})
+    return this.httpcliente.post(environment.api_url+"&controller=AnularDocumento&action=anularDocumentoElectronico",  formData ,{ headers: headers})
   }
 
   EnviarCorreloElectronicoEmail(datos:any):Observable<any>{
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url+"?controller=NotaVenta&action=EnviarCorreloElectronicoEmail",datos,{ headers: headers })
+    return this.httpcliente.post(environment.api_url+"&controller=NotaVenta&action=EnviarCorreloElectronicoEmail",datos,{ headers: headers })
   }
 
   

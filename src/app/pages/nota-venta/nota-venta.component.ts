@@ -93,7 +93,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
       id_empresa: [this.identificacion.id_empresa],
       cliente: [null],
       vendedor: [this.identificacion.sub],
-      tipo_documento: ['NOTA_VENTA']
+      tipo_documento: ['NOTA VENTA']
     });
 
     this.informacionFormCliente = this.fb.group({
@@ -217,7 +217,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
           dataTablesParameters.filtro_buscar = this.ProductoBuscar.value.glosa_producto;
         }
         this.http.post<DataTablesResponse>(
-          environment.api_url + "?controller=NotaVenta&action=ListaProductos",
+          environment.api_url + "&controller=NotaVenta&action=ListaProductos",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProducto = resp.data;
@@ -933,7 +933,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     this.AsignarCliente();
     this.informacionForm.get('vendedor')?.setValue(this.identificacion.sub);
     this.informacionForm.get('id_empresa')?.setValue(this.identificacion.id_empresa);
-    this.informacionForm.get('tipo_documento')?.setValue('NOTA_VENTA');
+    this.informacionForm.get('tipo_documento')?.setValue('NOTA VENTA');
     this.VolverPagina();
   }
 

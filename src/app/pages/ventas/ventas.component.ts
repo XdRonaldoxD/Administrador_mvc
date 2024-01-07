@@ -50,13 +50,13 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
 
   Respuesta_detalle: any = false;
   mostrar_documento: any = false;
-  MetodosPagos:any=[];
-  DetalleVentasProductos:any=[];
+  MetodosPagos: any = [];
+  DetalleVentasProductos: any = [];
   Correo_pdf: string = '';
   Correo_ticket: string = '';
   url_pdf: string = '';
   url_ticket: string = '';
-  documento:string='';
+  documento: string = '';
   constructor(
     private http: HttpClient,
     private servicio_login: LoginService,
@@ -67,11 +67,11 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
   ) {
     this.usuario = servicio_login.getIdentity();
     this.FiltroCajaBuscar = this.fb.group({
-      pos_negocio:[''],
+      pos_negocio: [''],
       fechacreacion_negocio_fin: [this.pipe.transform(Date.now(), 'yyyy-MM-dd'), Validators.required],
       fechacreacion_negocio_inicio: [this.pipe.transform(Date.now(), 'yyyy-MM-dd'), Validators.required]
     });
-  
+
 
   }
   ngOnInit(): void {
@@ -98,25 +98,25 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
     this.reload_producto_deshabilitado.next();
   }
 
-  VerPagos(id_negocio_global:any) {
+  VerPagos(id_negocio_global: any) {
     this.servicio_caja.TraerPagos(id_negocio_global).pipe(takeUntil(this.Unsuscribe)).subscribe({
-      next:resp=>{
-        this.MetodosPagos=resp;
+      next: resp => {
+        this.MetodosPagos = resp;
         $("#nuevaCajaModal").modal("show");
       },
-      error:error=>{
+      error: error => {
 
       }
-    }) 
+    })
 
-    
+
 
   }
 
 
   ListarCaja() {
     //posicion es para el datatable
- 
+
     let headers = new HttpHeaders()
       .set('Authorization', this.token);
     this.dtOptions[0] = {
@@ -126,20 +126,38 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
       processing: true,
       responsive: true,
       destroy: true,
-
-      // scrollX:true,
       language: {
-        url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json",
+        processing: "Procesando...",
+        lengthMenu: "Mostrar _MENU_ registros",
+        zeroRecords: "No se encontraron resultados",
+        emptyTable: "Ningún dato disponible en esta tabla",
+        info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+        infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+        infoFiltered: "(filtrado de un total de _MAX_ registros)",
+        infoPostFix: "",
+        search: "Buscar:",
+        url: "",
+        loadingRecords: "Cargando...",
+        paginate: {
+          first: "Primero",
+          last: "Último",
+          next: "Siguiente",
+          previous: "Anterior"
+        },
+        aria: {
+          sortAscending: "Activar para ordenar la columna de manera ascendente",
+          sortDescending: "Activar para ordenar la columna de manera descendente"
+        },
       },
       ajax: (dataTablesParameters: any, callback) => {
-        dataTablesParameters.pos_negocio =  this.FiltroCajaBuscar.value.pos_negocio;
+        dataTablesParameters.pos_negocio = this.FiltroCajaBuscar.value.pos_negocio;
         dataTablesParameters.fechacreacion_negocio_inicio = this.FiltroCajaBuscar.value.fechacreacion_negocio_inicio;
         dataTablesParameters.fechacreacion_negocio_fin = this.FiltroCajaBuscar.value.fechacreacion_negocio_fin;
         this.http.post<DataTablesResponse>(
-          environment.api_url + "?controller=Venta&action=ListarVentas",
+          environment.api_url + "&controller=Venta&action=ListarVentas",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
-            this.ListarCajaHabilitados = resp.data;
+          this.ListarCajaHabilitados = resp.data;
           callback({
             recordsTotal: resp.recordsTotal,
             recordsFiltered: resp.recordsFiltered,
@@ -182,7 +200,7 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
         $("#detalle_ventas_producto").modal("show");
         this.DetalleVentasProductos = resp;
       }, error: error => {
-        this.DetalleVentasProductos =[];
+        this.DetalleVentasProductos = [];
         Swal.fire({
           toast: true,
           position: 'top',
@@ -199,7 +217,7 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
 
 
 
-  VisualizarPdf(item: any) {
+  VisualizarPdf(item:any) {
     Swal.fire({
       title: 'Comprobante',
       html: 'Generando Comprobante del Cliente...',
@@ -235,12 +253,12 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
           this.url_pdf=`${item.ruta_archivo}/FACTURA/${item.path_documento}`;
           this.url_ticket=`${item.ruta_archivo}/FACTURA/${item.path_ticket_factura}`;
         }
-        $(".imprimirTicket").addClass('active');
-        $(".imprimirTicketcontent").addClass('active');
         setTimeout(() => {
+          $(".imprimirTicket").addClass('active');
+          $(".imprimirTicketcontent").addClass('active');
           $('#ajax-mostrar-pdf').modal('show');
           Swal.close();
-        }, 1500);
+        }, 1000);
       },
     });
 
@@ -314,7 +332,7 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
 
-  
+
 
 
 

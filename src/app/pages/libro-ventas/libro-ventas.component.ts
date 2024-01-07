@@ -85,7 +85,7 @@ export class LibroVentasComponent implements OnInit {
       showConfirmButton: false,
       onBeforeOpen: () => {
         Swal.showLoading();
-        fetch(environment.api_url + "?controller=LibroVentas&action=exportarLibroVentas", requestOptions)
+        fetch(environment.api_url + "&controller=LibroVentas&action=exportarLibroVentas", requestOptions)
           .then(response => response.blob())
           .then(blob => {
             let url = window.URL.createObjectURL(blob);

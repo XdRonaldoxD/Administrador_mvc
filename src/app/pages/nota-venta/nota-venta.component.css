@@ -2,7 +2,7 @@
   display: none;
 }
 .content-tabla {
-  height: calc(100vh - 268px);
+  height: calc(100vh - 210px);
 }
 .vacio_stock {
   color: white;

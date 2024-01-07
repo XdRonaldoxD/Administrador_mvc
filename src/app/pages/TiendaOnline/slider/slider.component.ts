@@ -151,7 +151,7 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback: any) => {
         dataTablesParameters.vigente_slider = vigente_slider;
         this.http.post<DataTablesResponse>(
-          environment.api_url + "?controller=Slider&action=ListarSlider",
+          environment.api_url + "&controller=Slider&action=ListarSlider",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           if (vigente_slider === 1) {
@@ -195,7 +195,7 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
       dropdownParent: $("#exampleModalCenter"),
       width: "100%",
       ajax: {
-        url: environment.api_url + "?controller=Categoria&action=FiltrarCategoria", //URL for searching companies
+        url: environment.api_url + "&controller=Categoria&action=FiltrarCategoria", //URL for searching companies
         dataType: "json",
         headers: { 'Authorization': this.token },
         delay: 200,
@@ -337,7 +337,7 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
       dropdownParent: $("#exampleModalCenter"),
       width: "100%",
       ajax: {
-        url: environment.api_url + "?controller=Categoria&action=FiltrarCategoria", //URL for searching companies
+        url: environment.api_url + "&controller=Categoria&action=FiltrarCategoria", //URL for searching companies
         dataType: "json",
         headers: { 'Authorization': this.token },
         delay: 200,

@@ -184,7 +184,7 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
         dataTablesParameters.fechacreacion_caja_inicio = this.FiltroCajaBuscar.value.fechacreacion_caja_inicio;
         dataTablesParameters.fechacreacion_caja_fin = this.FiltroCajaBuscar.value.fechacreacion_caja_fin;
         this.http.post<DataTablesResponse>(
-          environment.api_url + "?controller=Caja&action=ListaCaja_Habilitado_Deshabilitado",
+          environment.api_url + "&controller=Caja&action=ListaCaja_Habilitado_Deshabilitado",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           if (posicion == 0) {

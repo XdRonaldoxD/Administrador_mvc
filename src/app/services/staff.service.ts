@@ -24,7 +24,7 @@ export class StaffService {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url + "?controller=Staff&action=MostrarStaff", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url + "&controller=Staff&action=MostrarStaff", formData, { headers: headers })
   }
 
   GestionarStaff(InformacionStaff: any): Observable<any> {
@@ -33,7 +33,7 @@ export class StaffService {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url + "?controller=Staff&action=GestionarStaff", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url + "&controller=Staff&action=GestionarStaff", formData, { headers: headers })
   }
 
   ActualizarPass(Informacionpassword: any): Observable<any> {
@@ -44,14 +44,14 @@ export class StaffService {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url + "?controller=Staff&action=updatepass", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url + "&controller=Staff&action=updatepass", formData, { headers: headers })
   }
 
   mostrarDatosUsuario(): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.get(environment.api_url+"?controller=Staff&action=mostrarDatosUsuario", { headers: headers})
+    return this.httpcliente.get(environment.api_url+"&controller=Staff&action=mostrarDatosUsuario", { headers: headers})
   }
 
   GestionActivoDesactivadoStaff(id_usuario: any, accion: string): Observable<any> {
@@ -61,7 +61,7 @@ export class StaffService {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.post(environment.api_url + "?controller=Staff&action=gestionActivoDesactivado", formData, { headers: headers })
+    return this.httpcliente.post(environment.api_url + "&controller=Staff&action=gestionActivoDesactivado", formData, { headers: headers })
   }
 
   CorreoEdicionUsuarioEnUso(id_staff:any,email_usuario:any):Observable<any>{
@@ -71,7 +71,7 @@ export class StaffService {
     const headers = new HttpHeaders({
       Authorization: this.token
     });
-    return this.httpcliente.get(environment.api_url+"?controller=Staff&action=correoEdicionUsuarioEnUso",{ params: Params , headers: headers })
+    return this.httpcliente.get(environment.api_url+"&controller=Staff&action=correoEdicionUsuarioEnUso",{ params: Params , headers: headers })
   }
 
 }

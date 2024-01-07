@@ -48,7 +48,7 @@ export class MigrarproductoComponent implements OnInit {
       showConfirmButton: false,
       didOpen: () => {
         Swal.showLoading();
-        fetch(environment.api_url+"?controller=ProductoExcel&action=ExportarDatos", requestOptions)
+        fetch(environment.api_url+"&controller=ProductoExcel&action=ExportarDatos", requestOptions)
           .then(response => response.blob())
           .then(blob => {
             var url = window.URL.createObjectURL(blob);
@@ -81,7 +81,7 @@ export class MigrarproductoComponent implements OnInit {
       showConfirmButton: false,
       didOpen: () => {
         Swal.showLoading();
-        fetch(environment.api_url+"?controller=ProductoExcel&action=ExportarPlantilla", requestOptions)
+        fetch(environment.api_url+"&controller=ProductoExcel&action=ExportarPlantilla", requestOptions)
           .then(response => response.blob())
           .then(blob => {
             var url = window.URL.createObjectURL(blob);

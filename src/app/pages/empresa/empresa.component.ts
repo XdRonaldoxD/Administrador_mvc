@@ -39,7 +39,7 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
   unsubscribe$: any = new Subject();
   color: any;
   usuario: any = null;
-  GuardarInformacion:boolean=false;
+  GuardarInformacion: boolean = false;
   comprobante_defecto = [
     {
       value: "NOTA VENTA",
@@ -54,7 +54,7 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
       label: "FACTURA",
     }
   ]
-    sucursal: any = [];
+  sucursal: any = [];
   bodega: any = [];
   bodega_filtrar: any = [];
   constructor(
@@ -111,11 +111,16 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
       pixelgoogle_empresa: [''],
       pixelfacebook_empresa: [''],
       dominio: [window.location.hostname],
-      serie_factura: [''],
-      serie_boleta: [''],
       id_sucursal: [''],
       id_bodega: [''],
-      comprobante_defecto:['NOTA VENTA']
+      comprobante_defecto: ['NOTA VENTA'],
+      serie_factura: [''],
+      serie_boleta: [''],
+      serie_nc_boleta: [''],
+      serie_nc_factura: [''],
+      serie_nd_boleta: [''],
+      serie_nd_factura: [''],
+      serie_nota_venta: [''],
     });
     $('.dropify').dropify({
       messages: {
@@ -127,32 +132,61 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  FormarSerie(event: any, tipo: string): any {
+  FormarSerie(event: any, tipo: string): void {
     const inputValue: string = event.target.value;
-    // Limitar la cantidad de palabras a 4
     const words: string[] = inputValue.trim().split(/\s+/);
     const limitedWords: string[] = words.slice(0, 4);
-    if (tipo === "FACTURA") {
-      // Asegurarse de que la primera letra sea 'F'
-      const firstWord: string = limitedWords[0].toUpperCase();
-      const firstLetter: string = firstWord.charAt(0);
-      const isF: boolean = firstLetter === 'F';
 
-      // Actualizar el valor del control de formulario
-      const updatedValue: string = isF ? limitedWords.join(' ') : 'F';
-      this.informacionForm.controls['serie_factura'].setValue(updatedValue);
+    let prefix: string;
+
+    switch (tipo) {
+      case "FACTURA":
+        prefix = 'F';
+        break;
+      case "BOLETA":
+        prefix = 'B';
+        break;
+      case "NOTA CREDITO BOLETA":
+        prefix = 'BN';
+        break;
+      case "NOTA CREDITO FACTURA":
+        prefix = 'FN';
+        break;
+      case "NOTA DEBITO BOLETA":
+        prefix = 'BD';
+        break;
+      case "NOTA DEBITO FACTURA":
+        prefix = 'FD';
+        break;
+      default:
+        prefix = '';
+        return; // Tipo no reconocido
     }
-    if (tipo === "BOLETA") {
-      // Asegurarse de que la primera letra sea 'F'
-      const firstWord: string = limitedWords[0].toUpperCase();
-      const firstLetter: string = firstWord.charAt(0);
-      const isF: boolean = firstLetter === 'B';
-
-      // Actualizar el valor del control de formulario
-      const updatedValue: string = isF ? limitedWords.join(' ') : 'B';
-      this.informacionForm.controls['serie_boleta'].setValue(updatedValue);
+    const firstWord: string = limitedWords[0].toUpperCase();
+    const isCorrectPrefix: boolean = firstWord.startsWith(prefix);
+    const updatedValue: string = isCorrectPrefix ? limitedWords.join(' ') : prefix;
+    switch (tipo) {
+      case "FACTURA":
+        this.informacionForm.controls['serie_factura'].setValue(updatedValue);
+        break;
+      case "BOLETA":
+        this.informacionForm.controls['serie_boleta'].setValue(updatedValue);
+        break;
+      case "NOTA CREDITO BOLETA":
+        this.informacionForm.controls['serie_nc_boleta'].setValue(updatedValue);
+        break;
+      case "NOTA CREDITO FACTURA":
+        this.informacionForm.controls['serie_nc_factura'].setValue(updatedValue);
+        break;
+      case "NOTA DEBITO BOLETA":
+        this.informacionForm.controls['serie_nd_boleta'].setValue(updatedValue);
+        break;
+      case "NOTA DEBITO FACTURA":
+        this.informacionForm.controls['serie_nd_factura'].setValue(updatedValue);
+        break;
     }
   }
+
 
   TraerCertificadoEmpresa() {
     this.empresa.TraerCertificadoEmpresa(this.informacionForm.value.id_empresa_venta_online).pipe(takeUntil(this.unsubscribe$)).subscribe({
@@ -160,24 +194,47 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
         this.listacertificados = resp;
       },
       error: error => {
-
+        this.toast.error('Error al traer el certificado', 'Certificado', {
+          timeOut: 3000,
+          positionClass: 'toast-top-right',
+        });
       }
     })
 
   }
-  DescargarCertificado(id_certificado_digital: number): void {
 
+  AccionCertificado(id_certificado_digital: number, accion: string): void {
+    this.empresa.AccionCertificado(id_certificado_digital, accion).pipe(takeUntil(this.unsubscribe$)).subscribe({
+      next: resp => {
+        this.TraerCertificadoEmpresa();
+        switch (accion) {
+          case 'DESCARGAR':
+            window.location.href = resp;
+            break;
+          default:
+            this.toast.success(resp, 'Certificado', {
+              timeOut: 3000,
+              positionClass: 'toast-top-right',
+            });
+            break;
+        }
+      },
+      error: error => {
+        this.toast.error('Error en el accion del certificado', 'Certificado', {
+          timeOut: 3000,
+          positionClass: 'toast-top-right',
+        });
+      }
+    })
   }
-  eliminarCertificado(id_certificado_digital: number): void {
 
-  }
 
   ngAfterViewInit(): void {
     this.empresa.TraerEmpresa().pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: respuesta => {
-        let resp=respuesta.data;
-        this.sucursal=respuesta.sucursal;
-        this.bodega=respuesta.bodegas;
+        let resp = respuesta.data;
+        this.sucursal = respuesta.sucursal;
+        this.bodega = respuesta.bodegas;
         if (resp) {
           if (resp.idDepartamento) {
             this.SeleccionarDepartamento(resp.idDepartamento);
@@ -185,7 +242,7 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
           if (resp.idProvincia) {
             this.SeleccionarProvincia(resp.idProvincia);
           }
-      
+
           this.informacionForm.patchValue({
             ruc_empresa: resp.ruc_empresa_venta_online,
             razon_social_empresa: resp.razon_social_empresa_venta_online,
@@ -204,13 +261,13 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
             nombre_empresa: resp.nombre_empresa_venta_online,
             email_empresa_venta_online: resp.email_empresa_venta_online,
             giro_empresa_venta_online: resp.giro_empresa_venta_online,
-            id_bodega:resp.id_bodega ?? '',
-            id_sucursal:resp.id_sucursal ?? ''
+            id_bodega: resp.id_bodega ?? '',
+            id_sucursal: resp.id_sucursal ?? ''
           });
           if (resp.id_sucursal) {
             this.Seleccionar('Sucursal')
           }
-       
+
           this.Helper.resetPreview('icono_empresa', resp.urlicono_empresa_venta_online, resp.public_idicono_empresa_venta_online);
           this.Helper.resetPreview('logo_empresa_horizonta', resp.urllogohorizontal_empresa_venta_online, resp.public_idlogohorizontal_empresa_venta_online);
           this.Helper.resetPreview('logo_empresa_vertical', resp.urllogovertical_empresa_venta_online, resp.public_idlogovertical_empresa_venta_online);
@@ -295,9 +352,9 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
       logo_empresa_horizonta: logo_empresa_horizonta,
       logo_empresa_vertical: logo_empresa_vertical
     }
-    this.GuardarInformacion=true;
-    this.empresa.EnviarInformacionEmpresa(this.informacionForm.value, this.archivo_certificado, imagenes).pipe(takeUntil(this.unsubscribe$),finalize(()=>{
-      this.GuardarInformacion=false;
+    this.GuardarInformacion = true;
+    this.empresa.EnviarInformacionEmpresa(this.informacionForm.value, this.archivo_certificado, imagenes).pipe(takeUntil(this.unsubscribe$), finalize(() => {
+      this.GuardarInformacion = false;
     })).subscribe({
       next: resp => {
         this.informacionForm.get('id_empresa_venta_online')?.setValue(resp);
@@ -305,11 +362,12 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
           this.usuario.id_empresa = resp;
           this.servicio_login.saveIdentity(this.usuario);
         }
-        this.TraerCertificadoEmpresa();
-        this.toast.success('Actualizado Correctamente', 'Empresa', {
+        this.toast.success('Gestionado Correctamente', 'Empresa', {
           timeOut: 3000,
           positionClass: 'toast-top-right',
         });
+        this.TraerCertificadoEmpresa();
+        this.limpiarInformacionCertificado();
 
       }, error: error => {
         this.toast.error(error.error, '', {
@@ -319,6 +377,13 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     })
 
+  }
+
+  limpiarInformacionCertificado(){
+    this.informacionForm.get('usuario_sol')?.setValue('')
+    this.informacionForm.get('clave_sol')?.setValue('')
+    this.informacionForm.get('clave_archivo')?.setValue('')
+    this.archivo_certificado=null;
   }
 
 

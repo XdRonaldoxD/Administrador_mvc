@@ -137,7 +137,7 @@ export class AtributoComponent implements OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          environment.api_url+"?controller=Atributo&action=ListaAtributo",
+          environment.api_url+"&controller=Atributo&action=ListaAtributo",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProducto = resp.data;
@@ -181,7 +181,7 @@ export class AtributoComponent implements OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          environment.api_url+"?controller=Atributo&action=ListaAtributoDeshabilitado",
+          environment.api_url+"&controller=Atributo&action=ListaAtributoDeshabilitado",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProductoDeshabilitado = resp.data;

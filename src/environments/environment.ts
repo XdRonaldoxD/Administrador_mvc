@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api_url:"http://localhost/MVC_CRM/"
+  api_url:"http://localhost/MVC_CRM/?dominio=localhost"
 };
 
 /*

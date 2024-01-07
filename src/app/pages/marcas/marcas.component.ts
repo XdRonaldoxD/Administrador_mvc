@@ -105,7 +105,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          environment.api_url + "?controller=Marca&action=ListarMarca",
+          environment.api_url + "&controller=Marca&action=ListarMarca",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProducto = resp.data;
@@ -147,7 +147,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         dataTablesParameters.usuario_id = "Prueba";
         this.http.post<DataTablesResponse>(
-          environment.api_url + "?controller=Marca&action=listarMarcaDesactivados",
+          environment.api_url + "&controller=Marca&action=listarMarcaDesactivados",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarProductoDeshabilitado = resp.data;

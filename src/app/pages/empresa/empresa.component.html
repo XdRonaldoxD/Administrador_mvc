@@ -11,7 +11,7 @@
                 <div class="card-body">
                     <div class="col-md-12" style="z-index:0;">
                         <div class="card">
-                            <div class="card-body p-b-0">
+                            <div class="card-body">
                                 <!-- Nav tabs -->
                                 <ul class="nav nav-tabs customtab2" role="tablist">
                                     <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home7"
@@ -21,6 +21,9 @@
                                             (click)="TraerCertificadoEmpresa()" href="#certificado-digital"
                                             role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
                                                 class="hidden-xs-down">CERTIFICADO-DIGITAL</span></a> </li>
+                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#serie-documento"
+                                            role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
+                                                class="hidden-xs-down">SERIE-DOCUMENTO</span></a></li>
                                     <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#imagenes"
                                             role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
                                                 class="hidden-xs-down">IMAGENES</span></a> </li>
@@ -246,9 +249,101 @@
                                                                 placeholder="Ingresar la clave del certificado">
                                                         </div>
                                                     </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-12 text-right">
+                                                        <ng-container *ngIf="!GuardarInformacion; else elseTemplate">
+                                                            <button (click)="GuardarInformacionCompleto()" type="button"
+                                                                class="btn btn-success" value="create-product">
+                                                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                                                Guardar
+                                                            </button>
+                                                        </ng-container>
+                                                        <ng-template #elseTemplate>
+                                                            <button type="button" class="btn btn-success"
+                                                                value="create-product"><em
+                                                                    class="fa fa-spin fa-circle-o-notch"></em>
+                                                                Guardando...
+                                                            </button>
+                                                        </ng-template>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="row">
+                                            <div class="card-body p-0 mt-1">
+                                                <div class="table-responsive">
+                                                    <table class="table color-bordered-table muted-bordered-table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Nombre</th>
+                                                                <th>Fecha Inicio</th>
+                                                                <th>Estado</th>
+                                                                <th>Accion</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let item of listacertificados">
+                                                                <td>{{item.nombre_certificado_digital}}</td>
+                                                                <td>
+                                                                    <div>Inicio: {{item.fechainicio_certificado_digital|
+                                                                        date: 'yyyy-MM-dd h:mm a '}} </div>
+                                                                    <div>Termino: {{item.fechafin_certificado_digital |
+                                                                        date: 'yyyy-MM-dd h:mm a '}} </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div>
+                                                                        <ng-container *ngIf="item.fechafin_certificado_digital>fechaActual; else elseTemplate">
+                                                                            <span class="label label-light-success">Vigente</span>
+                                                                        </ng-container>
+                                                                        <ng-template #elseTemplate>
+                                                                            <span class="label label-light-danger">Caducado</span>
+                                                                        </ng-template>
+                                                                    </div>
+                                                                    <ng-container *ngIf="item.uso_certificado_digital">
+                                                                        <div> <span class="label label-light-success" style="background-color: #0fa804;color: #ffffff;">En Uso</span></div>
+                                                                    </ng-container>
+                                                                </td>
+                                                                <td>
+                                                                    <a (click)="AccionCertificado(item.id_certificado_digital,'ACTIVAR')"
+                                                                        tooltip="Usar Certificado" placement="top"
+                                                                        [showDelay]="50" [hideDelay]="50"
+                                                                        class="cursor-pointer"
+                                                                        style="background-color: rgb(15, 168, 4);padding:0.4rem;border-radius: 2rem;cursor: pointer;color: white;">
+                                                                        <i style="font-size: 20px;"
+                                                                            class="fa fa-check-circle-o"
+                                                                            aria-hidden="true"></i>
+                                                                    </a>
+                                                                    <a (click)="AccionCertificado(item.id_certificado_digital,'ELIMINAR')"
+                                                                        tooltip="Eliminar Certificado" placement="top"
+                                                                        [showDelay]="50" [hideDelay]="50"
+                                                                        class="cursor-pointer"
+                                                                        style="background-color: red;padding:0.4rem;border-radius: 2rem;cursor: pointer;color: white;">
+                                                                        <i style="font-size: 20px;" class="fa fa-times"
+                                                                            aria-hidden="true"></i>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr *ngIf="listacertificados.length<=0">
+                                                                <td colspan="4" class="text-center">No hay certificado
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="tab-pane  p-20" id="serie-documento" role="tabpanel">
+                                        <div class="row">
+                                            <form [formGroup]="informacionForm" autocomplete="nope"
+                                                enctype="multipart/form-data">
+                                                <div class="row mt-4">
                                                     <div class="col-12 col-md-6">
                                                         <div class="form-group">
-                                                            <label for="videoUrl1">Serie Factura </label>
+                                                            <label for="videoUrl1">Serie Factura</label>
                                                             <input type="text" class="form-control" [maxlength]="4"
                                                                 (keyup)="FormarSerie($event,'FACTURA')"
                                                                 formControlName="serie_factura"
@@ -261,6 +356,51 @@
                                                             <input type="text" class="form-control" [maxlength]="4"
                                                                 (keyup)="FormarSerie($event,'BOLETA')"
                                                                 formControlName="serie_boleta"
+                                                                placeholder="ingrese la serie">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="videoUrl1">Serie Nota Credito Boleta</label>
+                                                            <input type="text" class="form-control" [maxlength]="4"
+                                                                (keyup)="FormarSerie($event,'NOTA CREDITO BOLETA')"
+                                                                formControlName="serie_nc_boleta"
+                                                                placeholder="ingrese la serie">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="videoUrl1">Serie Nota Credito Factura</label>
+                                                            <input type="text" class="form-control" [maxlength]="4"
+                                                                (keyup)="FormarSerie($event,'NOTA CREDITO FACTURA')"
+                                                                formControlName="serie_nc_factura"
+                                                                placeholder="ingrese la serie">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="videoUrl1">Serie Nota Debito Boleta</label>
+                                                            <input type="text" class="form-control" [maxlength]="4"
+                                                                (keyup)="FormarSerie($event,'NOTA DEBITO BOLETA')"
+                                                                formControlName="serie_nd_boleta"
+                                                                placeholder="ingrese la serie">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="videoUrl1">Serie Nota Debito Factura</label>
+                                                            <input type="text" class="form-control" [maxlength]="4"
+                                                                (keyup)="FormarSerie($event,'NOTA DEBITO FACTURA')"
+                                                                formControlName="serie_nd_factura"
+                                                                placeholder="ingrese la serie">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="videoUrl1">Serie Nota Venta</label>
+                                                            <input type="text" class="form-control" [maxlength]="4"
+                                                                (keyup)="FormarSerie($event,'NOTA VENTA')"
+                                                                formControlName="serie_nota_venta"
                                                                 placeholder="ingrese la serie">
                                                         </div>
                                                     </div>
@@ -285,72 +425,6 @@
                                                 </div>
                                             </form>
                                         </div>
-                                        <div class="row">
-                                            <div class="card-body">
-                                                <div class="table-responsive">
-                                                    <table class="table color-bordered-table muted-bordered-table">
-                                                        <thead>
-                                                            <tr>
-
-                                                                <th>Nombre</th>
-                                                                <th>Fecha Inicio</th>
-                                                                <th>Estado</th>
-                                                                <th>Accion</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr *ngFor="let item of listacertificados">
-                                                                <td>{{item.nombre_certificado_digital}}</td>
-                                                                <td>
-                                                                    <div>Inicio: {{item.fechainicio_certificado_digital
-                                                                        |
-                                                                        date: 'yyyy-MM-dd h:mm a '}} </div>
-                                                                    <div>Termino: {{item.fechafin_certificado_digital |
-                                                                        date: 'yyyy-MM-dd h:mm a '}} </div>
-                                                                </td>
-                                                                <td>
-                                                                    <ng-container
-                                                                        *ngIf="item.fechafin_certificado_digital>fechaActual; else elseTemplate">
-                                                                        <span
-                                                                            class="label label-light-success">Activo</span>
-                                                                    </ng-container>
-                                                                    <ng-template #elseTemplate>
-                                                                        <span
-                                                                            class="label label-light-danger">Inactivo</span>
-                                                                    </ng-template>
-                                                                </td>
-                                                                <td>
-                                                                    <a (click)="DescargarCertificado(item.id_certificado_digital)"
-                                                                        tooltip="Descargar Certificado" placement="top"
-                                                                        [showDelay]="50" [hideDelay]="50"
-                                                                        class="cursor-pointer"
-                                                                        style="background-color: rgb(13, 146, 190);padding:0.4rem;border-radius: 2rem;cursor: pointer;color: white;">
-                                                                        <i style="font-size: 20px;"
-                                                                            class="fa fa-download"
-                                                                            aria-hidden="true"></i>
-                                                                    </a>
-                                                                    <a (click)="eliminarCertificado(item.id_certificado_digital)"
-                                                                        tooltip="Eliminar Certificado" placement="top"
-                                                                        [showDelay]="50" [hideDelay]="50"
-                                                                        class="cursor-pointer"
-                                                                        style="background-color: red;padding:0.4rem;border-radius: 2rem;cursor: pointer;color: white;">
-                                                                        <i style="font-size: 20px;" class="fa fa-times"
-                                                                            aria-hidden="true"></i>
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                            <tr *ngIf="listacertificados.length<=0">
-                                                                <td colspan="4" class="text-center">No hay certificado
-                                                                </td>
-                                                            </tr>
-
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
                                     </div>
                                     <div class="tab-pane  p-20" id="imagenes" role="tabpanel">
                                         <div class="row">
@@ -410,7 +484,8 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <h5 for="name" class=" control-label mt-3">
-                                                                    <strong>Pixel Facebook</strong> </h5>
+                                                                    <strong>Pixel Facebook</strong>
+                                                                </h5>
                                                                 <textarea formControlName="pixelfacebook_empresa"
                                                                     class="form-control" cols="30" rows="10"></textarea>
                                                             </div>

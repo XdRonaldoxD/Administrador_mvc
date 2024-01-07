@@ -3,7 +3,7 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } fr
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, finalize, takeUntil } from 'rxjs';
 import { DataTablesResponse } from 'src/app/interface/Datatable';
 import { Totales } from 'src/app/interface/Datos';
 import { AnularService } from 'src/app/services/anular.service';
@@ -84,7 +84,8 @@ export class BajaComprobantesComponent implements OnInit {
       comentario: [''],
       fecha_devolucion: [new Date().toISOString().substring(0, 10)],
       documento: ['NOTA CREDTIO'],
-      id_usuario: [this.usuario.sub]
+      id_usuario: [this.usuario.sub],
+      id_empresa: [this.usuario.id_empresa]
     });
 
   }
@@ -128,7 +129,7 @@ export class BajaComprobantesComponent implements OnInit {
           dataTablesParameters.filtro_buscar = this.ProductoBuscar.value.glosa_producto;
         }
         this.http.post<DataTablesResponse>(
-          environment.api_url + "?controller=AnularDocumento&action=listaDocumentoElectronicos",
+          environment.api_url + "&controller=AnularDocumento&action=listaDocumentoElectronicos",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           this.listarDocumentos = resp.data;
@@ -256,7 +257,9 @@ export class BajaComprobantesComponent implements OnInit {
       showConfirmButton: false,
       onOpen: () => {
         Swal.showLoading();
-        this.anular.GenerarDocumento(this.datosanulacion.value).pipe(takeUntil(this.unsubscribe$)).subscribe({
+        this.anular.GenerarDocumento(this.datosanulacion.value).pipe(takeUntil(this.unsubscribe$),finalize(()=>{
+          Swal.close();
+        })).subscribe({
           next: respuesta => {
             this.url_pdf = respuesta.pdf;
             this.url_ticket = respuesta.ticket;
@@ -267,19 +270,12 @@ export class BajaComprobantesComponent implements OnInit {
             $(".imprimirTicket").addClass('active');
             $(".imprimirTicketcontent").addClass('active');
             $('#ajax-mostrar-pdf').modal('show');
-            Swal.close();
           },
           error: error => {
-            Swal.fire({
-              toast: true,
-              position: 'top',
-              icon: 'error',
-              title: `Error al emitir el documento.`,
-              showConfirmButton: false,
-              timerProgressBar: true,
-              timer: 5000
-            })
-            Swal.close();
+            this.toast.error(error.error, 'Error', {
+              timeOut: 2000,
+              positionClass: 'toast-top-right',
+            });
           }
         })
       },

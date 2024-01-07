@@ -184,7 +184,7 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback: any) => {
         dataTablesParameters.vigente_usuario = vigente_usuario;
         this.http.post<DataTablesResponse>(
-          environment.api_url + "?controller=Staff&action=listUserActive",
+          environment.api_url + "&controller=Staff&action=listUserActive",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           if (vigente_usuario === 1) {

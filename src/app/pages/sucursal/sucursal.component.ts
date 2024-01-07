@@ -44,6 +44,7 @@ export class SucursalComponent implements AfterViewInit, OnDestroy, OnInit {
   filtrar_distrito: any = [];
   filtrar_provincia: any = [];
   clientes: any[] = [];
+  usuarios: any[] = [];
   isLoading: boolean = false;
   constructor(
     private http: HttpClient,
@@ -115,8 +116,21 @@ export class SucursalComponent implements AfterViewInit, OnDestroy, OnInit {
       this.isLoading = false;
     }
   }
+  buscaUsuarioDefecto(term: string) {
+    if (term.length > 1) {
+      this.Sucursal.buscaUsuarioDefecto(term).pipe(takeUntil(this.Unsuscribe))
+        .subscribe((data: any) => {
+          this.usuarios = data.map((item: any) => item);
+        });
+    } else {
+      this.limpiarSeleccion();
+    }
+  }
   limpiarSeleccion() {
     this.clientes = [];
+  }
+  limpiarSeleccionUsuario() {
+    this.usuarios = [];
   }
 
   SucursalHabilitados() {
@@ -175,7 +189,7 @@ export class SucursalComponent implements AfterViewInit, OnDestroy, OnInit {
       ajax: (dataTablesParameters: any, callback: any) => {
         dataTablesParameters.vigente_sucursal = vigente_sucursal;
         this.http.post<DataTablesResponse>(
-          environment.api_url + "?controller=Sucursal&action=listaSucursal",
+          environment.api_url + "&controller=Sucursal&action=listaSucursal",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
           if (vigente_sucursal === 1) {

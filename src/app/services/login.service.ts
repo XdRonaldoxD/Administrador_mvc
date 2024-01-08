@@ -37,6 +37,14 @@ export class LoginService {
   saveIdentity(respuesta: any) {
     localStorage.setItem('UserIdentificado', JSON.stringify(respuesta));
   }
+  saveIdentityPartial(key: string, value: any) {
+    let identity = localStorage.getItem('UserIdentificado');
+    if (identity && identity !== 'undefined') {
+      this.UserIdentificado = JSON.parse(identity);
+      this.UserIdentificado[key] = value;
+      localStorage.setItem('UserIdentificado', JSON.stringify(this.UserIdentificado));
+    }
+  }
   savetoken(respuesta: any) {
     localStorage.setItem('token', respuesta);
   }

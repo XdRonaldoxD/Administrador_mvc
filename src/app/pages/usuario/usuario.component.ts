@@ -246,9 +246,10 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
         $('#exampleModalCenter').modal('hide');
         this.ngAfterViewInit();
         this.GuardarInformacion = false;
-
+       
       })).subscribe({
         next: resp => {
+          this.servicio_login.saveIdentityPartial('id_bodega',this.userForm.value.id_bodega)
           this.toastr.success(`Staf ${resp} Exitosamente`, 'Realizado', {
             timeOut: 3000,
             positionClass: 'toast-top-right',

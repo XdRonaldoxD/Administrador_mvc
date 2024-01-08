@@ -217,7 +217,7 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
 
 
 
-  VisualizarPdf(item:any) {
+  VisualizarPdf(item: any) {
     Swal.fire({
       title: 'Comprobante',
       html: 'Generando Comprobante del Cliente...',
@@ -226,33 +226,34 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
       showConfirmButton: false,
       onOpen: () => {
         Swal.showLoading();
-        if (item.id_nota_venta) {
-          this.documento="NOTA VENTA";
-          var htmlticket = `<embed src="${item.ruta_archivo}/NOTA_VENTA/${item.urlticket_nota_venta}" frameborder="0" width="100%" height="400px">`;
-          $("#viewjs2_negocio").html(htmlticket);
-          var htmlpdf = `<embed src="${item.ruta_archivo}/NOTA_VENTA/${item.urlpdf_nota_venta}" frameborder="0" width="100%" height="400px">`;
-          $("#viewjs_negocio").html(htmlpdf);
-          this.url_pdf=`${item.ruta_archivo}/NOTA_VENTA/${item.urlpdf_nota_venta}`;
-          this.url_ticket=`${item.ruta_archivo}/NOTA_VENTA/${item.urlticket_nota_venta}`;
-        }
-        if (item.id_boleta) {
-          this.documento="BOLETA";
-          var htmlticket = `<embed src="${item.ruta_archivo}/BOLETA/${item.path_ticket_boleta}" frameborder="0" width="100%" height="400px">`;
-          $("#viewjs2_negocio").html(htmlticket);
-          var htmlpdf = `<embed src="${item.ruta_archivo}/BOLETA/${item.path_boleta}" frameborder="0" width="100%" height="400px">`;
-          $("#viewjs_negocio").html(htmlpdf);
-          this.url_pdf=`${item.ruta_archivo}/BOLETA/${item.path_boleta}`;
-          this.url_ticket=`${item.ruta_archivo}/BOLETA/${item.path_ticket_boleta}`;
-        }
-        if (item.id_factura) {
-          this.documento="FACTURA";
-          var htmlticket = `<embed src="${item.ruta_archivo}/FACTURA/${item.path_ticket_factura}" frameborder="0" width="100%" height="400px">`;
-          $("#viewjs2_negocio").html(htmlticket);
-          var htmlpdf = `<embed src="${item.ruta_archivo}/FACTURA/${item.path_documento}" frameborder="0" width="100%" height="400px">`;
-          $("#viewjs_negocio").html(htmlpdf);
-          this.url_pdf=`${item.ruta_archivo}/FACTURA/${item.path_documento}`;
-          this.url_ticket=`${item.ruta_archivo}/FACTURA/${item.path_ticket_factura}`;
-        }
+        // if (item.id_nota_venta) {
+        //   this.documento = "NOTA VENTA";
+        //   var htmlticket = `<iframe  src="${item.ruta_archivo}/NOTA_VENTA/${item.urlticket_nota_venta}" frameborder="0" width="100%" height="400px"></iframe>`;
+        //   $("#viewjs2_negocio").html(htmlticket);
+        //   var htmlpdf = `<iframe  src="${item.ruta_archivo}/NOTA_VENTA/${item.urlpdf_nota_venta}" frameborder="0" width="100%" height="400px"></iframe>`;
+        //   $("#viewjs_negocio").html(htmlpdf);
+        //   this.url_pdf = `${item.ruta_archivo}/NOTA_VENTA/${item.urlpdf_nota_venta}`;
+        //   this.url_ticket = `${item.ruta_archivo}/NOTA_VENTA/${item.urlticket_nota_venta}`;
+        // }
+        // console.log(`"${item.ruta_archivo}/BOLETA/${item.path_ticket_boleta}"`)
+        // if (item.id_boleta) {
+        //   this.documento = "BOLETA";
+        //   var htmlticket = `<iframe  src="${item.ruta_archivo}/BOLETA/${item.path_ticket_boleta}" frameborder="0" width="100%" height="400px"></iframe>`;
+        //   $("#viewjs2_negocio").html(htmlticket);
+        //   var htmlpdf = `<iframe  src="${item.ruta_archivo}/BOLETA/${item.path_boleta}" frameborder="0" width="100%" height="400px"></iframe>`;
+        //   $("#viewjs_negocio").html(htmlpdf);
+        //   this.url_pdf = `${item.ruta_archivo}/BOLETA/${item.path_boleta}`;
+        //   this.url_ticket = `${item.ruta_archivo}/BOLETA/${item.path_ticket_boleta}`;
+        // }
+        // if (item.id_factura) {
+        //   this.documento = "FACTURA";
+        //   var htmlticket = `<iframe  src="${item.ruta_archivo}/FACTURA/${item.path_ticket_factura}" frameborder="0" width="100%" height="400px"></iframe>`;
+        //   $("#viewjs2_negocio").html(htmlticket);
+        //   var htmlpdf = `<iframe  src="${item.ruta_archivo}/FACTURA/${item.path_documento}" frameborder="0" width="100%" height="400px"></iframe>`;
+        //   $("#viewjs_negocio").html(htmlpdf);
+        //   this.url_pdf = `${item.ruta_archivo}/FACTURA/${item.path_documento}`;
+        //   this.url_ticket = `${item.ruta_archivo}/FACTURA/${item.path_ticket_factura}`;
+        // }
         setTimeout(() => {
           $(".imprimirTicket").addClass('active');
           $(".imprimirTicketcontent").addClass('active');

@@ -15,7 +15,7 @@
                 <div class="card-body">
                     <form action="" [formGroup]="FiltroCajaBuscar" autocomplete="nope">
                         <div class="row">
-                            <div class="col-3">
+                            <div class="col-md-3 col-12">
                                 <div class="form-group">
                                     <label for="pos_negocio">Medio Llegada</label>
                                     <select class="form-control" id="pos_negocio" formControlName="pos_negocio">
@@ -25,19 +25,19 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-md-3 col-12">
                                 <div class="form-group">
                                     <label for="fechacreacion_negocio_inicio">Fecha Desde <strong class="text-danger">(*)</strong></label>
                                     <input type="date" class="form-control" id="fechacreacion_negocio_inicio" formControlName="fechacreacion_negocio_inicio">
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-md-3 col-12">
                                 <div class="form-group">
                                     <label for="fechacreacion_negocio_fin">Fecha Hasta<strong class="text-danger">(*)</strong></label>
                                     <input type="date" class="form-control" id="fechacreacion_negocio_fin" formControlName="fechacreacion_negocio_fin">
                                 </div>
                             </div>
-                            <div class="col-3 d-flex align-items-center mt-1">
+                            <div class="col-md-3 col-12 d-flex align-items-center mt-1">
                                 <button (click)="buscar()" class="btn btn-primary btn-buscar">Buscar</button>
                             </div>
                         </div>
@@ -270,7 +270,7 @@
 
 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
     aria-hidden="true" style="display: none;" id="ajax-mostrar-pdf">
-    <div class="modal-dialog modal-lg" style="width:55%;">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header pb-0">
                 <h1 class="text-bold-600" style="text-align:left;">COMPROBANTE</h1>
@@ -308,6 +308,7 @@
                     <div class="tab-pane imprimirTicketcontent" id="ticket" aria-labelledby="ticket-tab"
                         role="tabpanel">
                         <div class="container px-0" id="viewjs2_negocio">
+                            <iframe  title="prueba" src="http://localhost/MVC_CRM//archivo/localhost/BOLETA/Ticket_202401071704671435.pdf" frameborder="0"></iframe>
                         </div>
                         <div class="row">
                             <div class="col-md-6">

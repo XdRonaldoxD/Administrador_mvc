@@ -31,11 +31,14 @@ export class SidebarComponent implements OnInit {
 
   ocultarSidebarMobil() {
     if (window.innerWidth <= 767) {
-      let tiMenuElement: any = document.querySelector('.ti-menu');
-      let navItemElement: any = document.querySelector('.nav-link');
-      if (tiMenuElement) {
-        navItemElement.click();
-      }
+      let elementosConShowSidebar: NodeListOf<Element> = document.querySelectorAll('.show-sidebar');
+      elementosConShowSidebar.forEach(elemento => {
+        elemento.classList.remove('show-sidebar');
+      });
+      document.querySelectorAll('i.ti-close').forEach(function(iconoTiClose) {
+        iconoTiClose.classList.remove('ti-close');
+        iconoTiClose.classList.add('ti-menu');
+      });
     }
   }
 

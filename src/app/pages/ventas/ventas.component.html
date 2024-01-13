@@ -269,7 +269,7 @@
 
 
 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-    aria-hidden="true" style="display: none;" id="ajax-mostrar-pdf">
+    aria-hidden="true" style="display: none;" id="ajax-mostrar-pdf" data-backdrop="static"  data-keyboard="false">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header pb-0">
@@ -307,8 +307,8 @@
                     </div>
                     <div class="tab-pane imprimirTicketcontent" id="ticket" aria-labelledby="ticket-tab"
                         role="tabpanel">
-                        <div class="container px-0" id="viewjs2_negocio">
-                            <iframe  title="prueba" src="http://localhost/MVC_CRM//archivo/localhost/BOLETA/Ticket_202401071704671435.pdf" frameborder="0"></iframe>
+                        <div class="container px-0"  *ngIf="url_ticket">
+                            <app-extended-pdf [url_pdf]="url_ticket" ></app-extended-pdf>
                         </div>
                         <div class="row">
                             <div class="col-md-6">

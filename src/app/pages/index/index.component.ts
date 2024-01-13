@@ -8,15 +8,18 @@ import { LoginService } from 'src/app/services/login.service';
 })
 export class IndexComponent implements OnInit {
 
-  identificacion: any ;
+  identificacion: any;
   constructor(
     private servicio_login: LoginService,
-  ) { 
+  ) {
     this.identificacion = this.servicio_login.getIdentity();
   }
 
   ngOnInit(): void {
-    
+    var elemento: any = document.querySelector("[data-dismiss='modal']");
+    if (elemento) {
+      elemento.click();
+    }
   }
 
 }

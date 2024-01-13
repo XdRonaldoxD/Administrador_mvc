@@ -1,6 +1,7 @@
-import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, Renderer2 } from '@angular/core';
 import { LoginService } from './services/login.service';
 import { Subject, takeUntil } from 'rxjs';
+import { Title } from '@angular/platform-browser';
 
 
 declare var $: any;
@@ -20,22 +21,37 @@ export class AppComponent implements OnInit {
   constructor(
     private elementRef: ElementRef,
     private Login: LoginService,
+    private titleService: Title,
+    private renderer: Renderer2
   ) { }
 
   ngOnInit(): void {
-    this.Login.TraerIconoEmpresa().pipe(takeUntil(this.Unsuscribe)).subscribe({
-      next: resp => {
-        //INICIALIZAMOS EL ICONO
-        const linkElement: any = document.querySelector('link[rel="icon"]');
-        linkElement.setAttribute('href', resp);
-        //-----------------------------
-      }, error: error => {
-
-      }
-    })
-
-
-
+    var elemento: any = document.querySelector("[data-dismiss='modal']");
+    if (elemento) {
+      elemento.click();
+    }
+    // this.Login.TraerIconoEmpresa().pipe(takeUntil(this.Unsuscribe)).subscribe({
+    //   next: resp => {
+    //     //INICIALIZAMOS EL ICONO
+    //     if (resp.nombre_empresa) {
+    //       this.titleService.setTitle(resp.nombre_empresa)
+    //     }
+    //     if (resp.icono) {
+    //       const head = document.head || document.getElementsByTagName('head')[0];
+    //       const linkElement = document.createElement('link');
+    //       linkElement.rel = 'icon';
+    //       linkElement.type = 'image/x-icon';
+    //       linkElement.href = resp.icono;
+    //       const existingLink = head.querySelector('link[rel="icon"]');
+    //       if (existingLink) {
+    //         head.removeChild(existingLink);
+    //       }
+    //       head.appendChild(linkElement);
+    //     }
+    //     //-----------------------------
+    //   }, error: error => {
+    //   }
+    // })
     $(() => {
       "use strict";
       $(function () {
@@ -99,7 +115,7 @@ export class AppComponent implements OnInit {
   //   event.returnValue = '';
   //   localStorage.removeItem("UserIdentificado");
   // }
-  
+
   // @HostListener('visibilitychange', ['$event'])
   // visibilityChangeHandler(event: any) {
   //   if (document.visibilityState === 'hidden') {

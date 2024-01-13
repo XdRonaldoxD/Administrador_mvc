@@ -179,7 +179,7 @@
                                                         </div>
                                                         <div class="col-md-5">
                                                             <div class="row mb-1">
-                                                                <div class="col-md-12">
+                                                                <div class="col-md-12 p-0">
                                                                     <table class="tabla_totales" width="100%">
                                                                         <tr>
                                                                             <td class="text-left" colspan="3">
@@ -735,7 +735,8 @@
                     </div>
                     <div class="tab-pane imprimirTicketcontent" id="ticket" aria-labelledby="ticket-tab"
                         role="tabpanel">
-                        <div class="container px-0" id="viewjs2_negocio">
+                        <div class="container px-0" *ngIf="url_ticket">
+                            <app-extended-pdf [url_pdf]="url_ticket" ></app-extended-pdf>
                         </div>
                         <div class="row">
                             <div class="col-md-6">

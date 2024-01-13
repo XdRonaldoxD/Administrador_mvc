@@ -43,6 +43,8 @@ import { BodegaComponent } from './bodega/bodega.component';
 import { ModalBodegaComponent } from './modals/modal-bodega/modal-bodega.component';
 import { SucursalComponent } from './sucursal/sucursal.component';
 import { PromocionComponent } from './TiendaOnline/promocion/promocion.component';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { ExtendedPdfComponent } from './pdf/extended-pdf/extended-pdf.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +80,8 @@ import { PromocionComponent } from './TiendaOnline/promocion/promocion.component
     BodegaComponent,
     ModalBodegaComponent,
     SucursalComponent,
-    PromocionComponent
+    PromocionComponent,
+    ExtendedPdfComponent
   ],
   exports: [
     IsInvalidPipe,
@@ -98,7 +101,8 @@ import { PromocionComponent } from './TiendaOnline/promocion/promocion.component
     TooltipModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    ToastrModule.forRoot()  
+    ToastrModule.forRoot(),
+    NgxExtendedPdfViewerModule
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })

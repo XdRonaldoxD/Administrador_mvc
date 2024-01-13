@@ -246,7 +246,8 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
         this.MedioPago = resp;
       },
       error: error => {
-
+        this.toast.error(`Verificar los Pagos.`, 'Medio Pago');
+        return;
       }
     })
   }
@@ -582,7 +583,6 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   EncontrarDatos(evento: any, Documento: string) {
     let numero_documento = evento.target.value;
-    console.log(evento.keyCode);
     if (evento.keyCode == 13) {
       this.BuscarDocumentoLoading = true;
       if (Documento == "RUC") {
@@ -899,9 +899,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
           next: respuesta => {
             this.url_pdf = respuesta.pdf;
             this.url_ticket = respuesta.ticket;
-            var htmlticket = `<embed src="${respuesta.ticket}" frameborder="0" width="100%" height="400px">`;
-            $("#viewjs2_negocio").html(htmlticket);
-            var htmlpdf = `<embed src="${respuesta.pdf}" frameborder="0" width="100%" height="400px">`;
+            var htmlpdf = `<iframe src="${respuesta.pdf}" frameborder="0" width="100%" height="400px"></iframe>`;
             $("#viewjs_negocio").html(htmlpdf);
             $(".imprimirTicket").addClass('active');
             $(".imprimirTicketcontent").addClass('active');
@@ -940,7 +938,6 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   LimpiarModalNegocio() {
     $('#ajax-mostrar-pdf').modal('hide');
-    $("#viewjs2_negocio").html('');
     $("#viewjs_negocio").html('');
     $(".imprimirTicket").removeClass('active');
     $(".imprimirTicketcontent").removeClass('active');

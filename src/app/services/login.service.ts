@@ -130,9 +130,7 @@ export class LoginService {
   }
 
   TraerIconoEmpresa(): Observable<any> {
-    const dominio = window.location.hostname;
     const formData = new FormData();
-    formData.append('dominio', dominio);
     const headers = new HttpHeaders();
     return this.httpcliente.post(environment.api_url + "&controller=Usuario&action=ConsultarDominio", formData, { headers: headers })
   }

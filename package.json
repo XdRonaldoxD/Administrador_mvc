@@ -26,6 +26,7 @@
     "jquery": "^3.6.3",
     "ng2-tooltip-directive": "^2.10.3",
     "ngx-color-picker": "^11.0.0",
+    "ngx-extended-pdf-viewer": "^10.0.0",
     "ngx-toastr": "^14.3.0",
     "rxjs": "~7.4.0",
     "sweetalert2": "^10.15.7",

@@ -7,6 +7,7 @@ import { CategoriaService } from '../../services/categoria.service';
 import { ProductoService } from '../../services/producto.service';
 import { environment } from 'src/environments/environment';
 import { ToastrService } from 'ngx-toastr';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 
 declare var $: any;
@@ -21,7 +22,19 @@ class DataTablesResponse {
 @Component({
   selector: 'app-productos',
   templateUrl: './productos.component.html',
-  styleUrls: ['./productos.component.css']
+  styleUrls: ['./productos.component.css'],
+  animations: [
+    trigger('slideInFromLeft', [
+      transition(':enter', [
+        style({ transform: 'translateX(-100%)', opacity: 0 }),
+        animate('500ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('500ms ease-in', style({ transform: 'translateX(-100%)', opacity: 0 })),
+      ]),
+    ]),
+  ],
+  
 })
 export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild('cantidad') cantidad!: ElementRef;

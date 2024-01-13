@@ -10,6 +10,7 @@ import { Totales, Totales_pagados } from 'src/app/interface/Datos';
 import { LoginService } from 'src/app/services/login.service';
 import { NotaVenta } from 'src/app/services/notaventa.service';
 import { environment } from 'src/environments/environment';
+import { animate, style, transition, trigger } from '@angular/animations';
 import Swal from 'sweetalert2';
 
 declare var $: any;
@@ -17,7 +18,18 @@ declare var document: any;
 @Component({
   selector: 'app-nota-venta',
   templateUrl: './nota-venta.component.html',
-  styleUrls: ['./nota-venta.component.css']
+  styleUrls: ['./nota-venta.component.css'],
+  animations: [
+    trigger('fade', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('500ms', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('500ms', style({ opacity: 0 })),
+      ]),
+    ]),
+  ],
 })
 export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('search_input_producto') search_input_producto: ElementRef | undefined;

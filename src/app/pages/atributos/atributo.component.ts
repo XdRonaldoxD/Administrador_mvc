@@ -7,12 +7,25 @@ import { Subject, finalize } from 'rxjs';
 import { DataTablesResponse } from 'src/app/interface/Datatable';
 import { AtributoService } from '../../services/atributo.service';
 import { environment } from 'src/environments/environment';
+import { animate, style, transition, trigger } from '@angular/animations';
+
 declare var $: any;
 declare var Swal: any;
 @Component({
   selector: 'app-atributo',
   templateUrl: './atributo.component.html',
-  styleUrls: ['./atributo.component.css']
+  styleUrls: ['./atributo.component.css'],
+  animations: [
+    trigger('slideInFromLeft', [
+      transition(':enter', [
+        style({ transform: 'translateX(-100%)', opacity: 0 }),
+        animate('500ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('500ms ease-in', style({ transform: 'translateX(-100%)', opacity: 0 })),
+      ]),
+    ]),
+  ],
 })
 export class AtributoComponent implements OnInit {
   @ViewChild('GuardarAtibuto') GuardarAtibuto!: ElementRef;

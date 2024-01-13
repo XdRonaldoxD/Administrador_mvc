@@ -9,6 +9,7 @@ import { Atributo_seleccionado } from 'src/app/interface/Datatable';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ModalMarcaComponent } from '../modals/modal-marca/modal-marca.component';
+import { animate, style, transition, trigger } from '@angular/animations';
 declare var $: any;
 declare var document: any;
 declare var Swal: any;
@@ -16,7 +17,18 @@ declare var Swal: any;
 @Component({
   selector: 'app-nuevo-producto',
   templateUrl: './nuevo-producto.component.html',
-  styleUrls: ['./nuevo-producto.component.css']
+  styleUrls: ['./nuevo-producto.component.css'],
+  animations: [
+    trigger('fade', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('500ms', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('500ms', style({ opacity: 0 })),
+      ]),
+    ]),
+  ],
 })
 export class NuevoProductoComponent implements OnInit, OnDestroy {
   @ViewChild('codigo_producto') codigo_producto?: ElementRef;

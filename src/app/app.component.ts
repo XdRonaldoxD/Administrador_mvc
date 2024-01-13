@@ -107,8 +107,6 @@ export class AppComponent implements OnInit {
     });
 
   }
-
-
   // @HostListener('window:beforeunload', ['$event'])
   // beforeUnloadHandler(event: any) {
   //   event.preventDefault();

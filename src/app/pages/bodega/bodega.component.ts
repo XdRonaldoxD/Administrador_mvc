@@ -11,12 +11,23 @@ import Swal from 'sweetalert2';
 import { ModalMarcaComponent } from '../modals/modal-marca/modal-marca.component';
 import { BodegaService } from 'src/app/services/bodega.service';
 import { ModalBodegaComponent } from '../modals/modal-bodega/modal-bodega.component';
-
+import { animate, style, transition, trigger } from '@angular/animations';
 declare var $: any;
 @Component({
   selector: 'app-bodega',
   templateUrl: './bodega.component.html',
-  styleUrls: ['./bodega.component.css']
+  styleUrls: ['./bodega.component.css'],
+  animations: [
+    trigger('slideInFromLeft', [
+      transition(':enter', [
+        style({ transform: 'translateX(-100%)', opacity: 0 }),
+        animate('500ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('500ms ease-in', style({ transform: 'translateX(-100%)', opacity: 0 })),
+      ]),
+    ]),
+  ],
 })
 export class BodegaComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild('hijomodalbodega') hijomodalbodega: ModalBodegaComponent | any;

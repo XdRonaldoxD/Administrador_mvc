@@ -8,8 +8,7 @@ import { MarcaService } from '../../services/marca.service';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { ModalMarcaComponent } from '../modals/modal-marca/modal-marca.component';
-
-
+import { animate, style, transition, trigger } from '@angular/animations';
 declare var $: any;
 declare var Swal: any;
 class DataTablesResponse {
@@ -22,7 +21,18 @@ class DataTablesResponse {
 @Component({
   selector: 'app-marcas',
   templateUrl: './marcas.component.html',
-  styleUrls: ['./marcas.component.css']
+  styleUrls: ['./marcas.component.css'],
+  animations: [
+    trigger('slideInFromLeft', [
+      transition(':enter', [
+        style({ transform: 'translateX(-100%)', opacity: 0 }),
+        animate('500ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('500ms ease-in', style({ transform: 'translateX(-100%)', opacity: 0 })),
+      ]),
+    ]),
+  ],
 })
 export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild('hijomodalmarca') hijomodalmarca: ModalMarcaComponent | any;

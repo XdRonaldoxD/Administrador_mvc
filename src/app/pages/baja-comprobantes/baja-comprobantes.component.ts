@@ -8,8 +8,8 @@ import { DataTablesResponse } from 'src/app/interface/Datatable';
 import { Totales } from 'src/app/interface/Datos';
 import { AnularService } from 'src/app/services/anular.service';
 import { LoginService } from 'src/app/services/login.service';
-import { NotaVenta } from 'src/app/services/notaventa.service';
 import { environment } from 'src/environments/environment';
+import { animate, style, transition, trigger } from '@angular/animations';
 import Swal from 'sweetalert2';
 
 declare var $: any;
@@ -17,7 +17,18 @@ declare var document: any;
 @Component({
   selector: 'app-baja-comprobantes',
   templateUrl: './baja-comprobantes.component.html',
-  styleUrls: ['./baja-comprobantes.component.css']
+  styleUrls: ['./baja-comprobantes.component.css'],
+  animations: [
+    trigger('fade', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('500ms', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('500ms', style({ opacity: 0 })),
+      ]),
+    ]),
+  ],
 })
 export class BajaComprobantesComponent implements OnInit {
   @ViewChild('search_input_producto') search_input_producto: ElementRef | undefined;

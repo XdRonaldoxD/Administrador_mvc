@@ -230,10 +230,10 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
         $('#ajax-mostrar-pdf').modal('show');
         if (item.id_nota_venta) {
           this.documento = "NOTA VENTA";
-          var htmlpdf = `<iframe  src="${item.ruta_archivo}/NOTA_VENTA/${item.urlpdf_nota_venta}" frameborder="0" width="100%" height="400px"></iframe>`;
+          var htmlpdf = `<iframe  src="${item.ruta_archivo}/NOTA VENTA/${item.urlpdf_nota_venta}" frameborder="0" width="100%" height="400px"></iframe>`;
           $("#viewjs_negocio").html(htmlpdf);
-          this.url_pdf = `${item.ruta_archivo}/NOTA_VENTA/${item.urlpdf_nota_venta}`;
-          this.url_ticket = `${item.ruta_archivo}/NOTA_VENTA/${item.urlticket_nota_venta}`;
+          this.url_pdf = `${item.ruta_archivo}/NOTA VENTA/${item.urlpdf_nota_venta}`;
+          this.url_ticket = `${item.ruta_archivo}/NOTA VENTA/${item.urlticket_nota_venta}`;
         }
         if (item.id_boleta) {
           this.documento = "BOLETA";

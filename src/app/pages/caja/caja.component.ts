@@ -323,9 +323,9 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
       onOpen: () => {
         Swal.showLoading();
         if (item.id_nota_venta) {
-          var htmlticket = `<embed src="${item.ruta_archivo}/NOTA_VENTA/${item.urlticket_nota_venta}" frameborder="0" width="100%" height="400px">`;
+          var htmlticket = `<embed src="${item.ruta_archivo}/NOTA VENTA/${item.urlticket_nota_venta}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs2_negocio").html(htmlticket);
-          var htmlpdf = `<embed src="${item.ruta_archivo}/NOTA_VENTA/${item.urlpdf_nota_venta}" frameborder="0" width="100%" height="400px">`;
+          var htmlpdf = `<embed src="${item.ruta_archivo}/NOTA VENTA/${item.urlpdf_nota_venta}" frameborder="0" width="100%" height="400px">`;
           $("#viewjs_negocio").html(htmlpdf);
         }
         if (item.id_boleta) {

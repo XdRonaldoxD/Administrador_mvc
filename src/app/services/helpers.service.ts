@@ -42,4 +42,30 @@ export class HelpersService {
       }
     });
   }
+
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  validarNumeroDecimal(event: any): void {
+    const inputElement = event.target as HTMLInputElement;
+    let inputValue: string = inputElement.value;
+  
+    // Remover caracteres no permitidos (solo números y un punto decimal)
+    inputValue = inputValue.replace(/[^0-9.]/g, '');
+  
+    // Separar parte entera y decimal
+    const parts = inputValue.split('.');
+    const integerPart = parts[0];
+    const decimalPart = parts.length > 1 ? `.${parts[1]}` : '';
+  
+    // Limitar la longitud de la parte decimal a dos caracteres
+    const limitedDecimalPart = decimalPart.slice(0, 3);
+  
+    // Reconstruir el valor con la parte entera y la parte decimal limitada
+    const finalValue:any = `${integerPart}${limitedDecimalPart}`;
+    return finalValue;
+  }
 }

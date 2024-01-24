@@ -180,11 +180,15 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
               // Crear arreglos para almacenar la información separada
               producto.bodegas = [];
               producto.stock_bodegas = [];
+              producto.precioventa = [];
               // Iterar sobre la información de cada bodega
               bodegasInfo.forEach((info: any) => {
-                const [bodega, stock] = info.split('@');
+                const [bodega, stock,precioventa] = info.split('@');
+                console.log(precioventa);
                 producto.bodegas.push(bodega);
                 producto.stock_bodegas.push(parseInt(stock, 10)); // Convertir a entero
+                producto.precioventa.push(precioventa);
+
               });
             }
           });
@@ -202,10 +206,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
           width: "30%"
         },
         {
-          width: "30%"
-        },
-        {
-          width: "10%"
+          width: "40%"
         },
         {
           width: "30%"
@@ -271,7 +272,24 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
         this.http.post<DataTablesResponse>(
           environment.api_url + "&controller=Producto&action=ListaProductoDeshabilitado",
           dataTablesParameters, { headers: headers }
-        ).subscribe((resp) => {
+        ).subscribe((resp:any) => {
+          resp.data.forEach((producto: any) => {
+            if (producto.total_stock_producto_bodega) {
+              const bodegasInfo = producto.total_stock_producto_bodega.split('|');
+              // Crear arreglos para almacenar la información separada
+              producto.bodegas = [];
+              producto.stock_bodegas = [];
+              producto.precioventa = [];
+              // Iterar sobre la información de cada bodega
+              bodegasInfo.forEach((info: any) => {
+                const [bodega, stock,precioventa] = info.split('@');
+                producto.bodegas.push(bodega);
+                producto.stock_bodegas.push(parseInt(stock, 10)); // Convertir a entero
+                producto.precioventa.push(precioventa);
+
+              });
+            }
+          });
           this.listarProductoDeshabilitado = resp.data;
           callback({
             recordsTotal: resp.recordsTotal,
@@ -282,13 +300,10 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
       },
       columns: [
         {
+          width: "30%"
+        },
+        {
           width: "40%"
-        },
-        {
-          width: "20%"
-        },
-        {
-          width: "10%"
         },
         {
           width: "30%"

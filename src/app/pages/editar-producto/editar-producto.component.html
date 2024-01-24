@@ -1,23 +1,9 @@
-<!-- ============================================================== -->
-<!-- Container fluid  -->
-<!-- ============================================================== -->
 <div class="container-fluid">
-    <!-- ============================================================== -->
-    <!-- Bread crumb and right sidebar toggle -->
-    <!-- ============================================================== -->
     <div class="row page-titles mb-0">
         <div class="col-md-5 align-self-center">
             <h3 class="text-themecolor"> <strong>ACTUALIZAR PRODUCTO</strong></h3>
         </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- End Bread crumb and right sidebar toggle -->
-    <!-- ============================================================== -->
-
-    <!-- ============================================================== -->
-    <!-- Start Page Content -->
-    <!-- ============================================================== -->
-    <!-- row -->
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -27,29 +13,27 @@
                             <div class="card-body p-b-0">
                                 <!-- Nav tabs -->
                                 <ul class="nav nav-tabs customtab2" role="tablist">
-                                    <li class="nav-item disabled"> <a class="nav-link active" data-toggle="tab"
+                                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab"
                                             href="#home7-editar" role="tab"><span class="hidden-sm-up"><i
-                                                    class="ti-home"></i></span> <span
+                                                    class="ti-home fa fa-file-text"></i></span> <span
                                                 class="hidden-xs-down">INFORMACIÓN</span></a> </li>
-                                    <li class="nav-item disabled"> <a class="nav-link" data-toggle="tab"
-                                            href="#profile7-editar" role="tab"><span class="hidden-sm-up"><i
-                                                    class="ti-user"></i></span> <span
-                                                class="hidden-xs-down">PRECIO-STOCK</span></a> </li>
-                                    <li class="nav-item disabled"> <a class="nav-link" data-toggle="tab"
-                                            href="#messages7-editar" role="tab"><span class="hidden-sm-up"><i
-                                                    class="ti-email"></i></span> <span
-                                                class="hidden-xs-down">IMAGENES</span></a> </li>
-                                    <li *ngIf="id_tipo_inventario==1" class="nav-item disabled"> <a class="nav-link"
+                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile7-editar"
+                                            role="tab"><span class="hidden-sm-up"><i class="ti-package"></i></span>
+                                            <span class="hidden-xs-down">PRECIO-STOCK</span></a> </li>
+                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages7-editar"
+                                            role="tab"><span class="hidden-sm-up"><i class="fa fa-image"></i></span>
+                                            <span class="hidden-xs-down">IMAGENES</span></a> </li>
+                                    <li *ngIf="id_tipo_inventario==1" class="nav-item"> <a class="nav-link"
                                             data-toggle="tab" href="#messages8-editar" role="tab"><span
                                                 class="hidden-sm-up"><i class="ti-email"></i></span> <span
                                                 class="hidden-xs-down">COLOR DE PRODUCTO</span></a> </li>
-                                    <li class="nav-item disabled"> <a class="nav-link" data-toggle="tab"
-                                            href="#messages9-editar" role="tab"><span class="hidden-sm-up"><i
-                                                    class="ti-email"></i></span> <span
-                                                class="hidden-xs-down">ESPECIFICACIONES</span></a> </li>
-                                    <li class="nav-item disabled"> <a class="nav-link" data-toggle="tab"
+                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages9-editar"
+                                            role="tab"><span class="hidden-sm-up"><i class="ti-notepad"></i></span>
+                                            <span class="hidden-xs-down">ESPECIFICACIONES</span></a> </li>
+                                    <li class="nav-item "> <a class="nav-link" data-toggle="tab"
                                             href="#messages10-editar" role="tab"><span class="hidden-sm-up"><i
-                                                    class="ti-email"></i></span> <span class="hidden-xs-down">PRODUCTO
+                                                    class="fa fa-dropbox"></i></span> <span
+                                                class="hidden-xs-down">PRODUCTO
                                                 RELACIONADOS</span></a> </li>
                                 </ul>
                                 <!-- Tab panes -->
@@ -274,55 +258,37 @@
 
                                     </div>
                                     <div class="tab-pane  p-20" id="profile7-editar" role="tabpanel">
-                                        <form [formGroup]="PrecioStockForm" autocomplete="nope">
-                                            <div class="row mt-4 ">
-                                                <div class="col-md-6 col-12 p-0">
-                                                    <div class="form-group">
-                                                        <label for="jobTitle1">Precio Venta <strong
-                                                                class="text-danger">(*)</strong></label>
-                                                        <input type="number" class="form-control" id="jobTitle1"
-                                                            formControlName="precio_venta" placeholder="Precio Venta"
-                                                            [class.is-invalid]="PrecioStockForm.controls['precio_venta']|isInvalid">
-                                                        <div class="text-danger">
-                                                            <div
-                                                                *ngIf="PrecioStockForm.controls['precio_venta']|hasError:'required'">
-                                                                Precio Venta Vacio.
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row table-responsive">
-                                                <table class="table table-striped color-table info-table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>BODEGA(S)</th>
-                                                            <th class="text-center">STOCK</th>
-                                                            <th class="text-center">PRECIO COMPRA</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr *ngFor="let element of PrecioStockForm.value.stock">
-                                                            <td class="text-left">
-                                                                <h5> <strong>{{element.glosa_bodega}}</strong> </h5>
-                                                            </td>
-                                                            <td>
-                                                                <input class="form-control" type="number"
-                                                                    [disabled]="true"
-                                                                    [value]="element.total_stock_producto_bodega">
-
-                                                            </td>
-                                                            <td>
-                                                                <input class="form-control" type="number"
-                                                                    [disabled]="true"
-                                                                    [value]="element.ultimopreciocompra_stock_producto_bodega">
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </form>
+                                        <div class="row table-responsive">
+                                            <table class="table table-striped color-table info-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>BODEGA(S)</th>
+                                                        <th class="text-center">STOCK</th>
+                                                        <th class="text-center">PRECIO COMPRA</th>
+                                                        <th class="text-center">PRECIO VENTA</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let element of arregloBodegas">
+                                                        <td class="text-left">
+                                                            <h5> <strong>{{element.glosa_bodega}}</strong> </h5>
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control" type="number" [disabled]="true"
+                                                                [(ngModel)]="element.total_stock_producto_bodega">
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control" type="number" [disabled]="rol"
+                                                                [(ngModel)]="element.ultimopreciocompra_stock_producto_bodega" (input)="onInput($event)">
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control" type="number" [disabled]="rol"
+                                                                [(ngModel)]="element.precioventa_stock_producto_bodega" (input)="onInput($event)">
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                         <div class="row" style="justify-content: center;"
                                             *ngIf="checked_atributo.length>0">
                                             <div class="col-md-8 col-12">

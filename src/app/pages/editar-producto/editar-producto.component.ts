@@ -9,6 +9,7 @@ import { Atributo_seleccionado } from 'src/app/interface/Datatable';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalMarcaComponent } from '../modals/modal-marca/modal-marca.component';
 import { ToastrService } from 'ngx-toastr';
+import { HelpersService } from 'src/app/services/helpers.service';
 declare var $: any;
 declare var document: any;
 declare var Swal: any;
@@ -48,7 +49,10 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
   id_tipo_inventario: any = null
   arregloFormaFarmaceutica: any[] = [];
   arregloTipoConcentracion: any[] = [];
+  arregloBodegas: any[] = [];
   GuardarInformacion: boolean = false;
+  rol:boolean=true;
+  usuario:any=null;
   constructor(
     private servicio_categoria: CategoriaService,
     private servicio_login: LoginService,
@@ -58,9 +62,14 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
     private renderer: Renderer2,
     private route: ActivatedRoute,
     private toastr: ToastrService,
-    private el: ElementRef
+    private el: ElementRef,
+    private helper:HelpersService
   ) {
-
+    this.token = this.servicio_login.getToken();
+    this.usuario=this.servicio_login.getIdentity();
+    if (this.usuario && this.usuario.id_perfil==1) {//SOLO PARA LOS ADMINISTRADORES
+      this.rol=false;
+    } 
     this.informacionForm = this.fb.group({
       id_producto: ['', [Validators.required]],
       codigo_producto: ['', [Validators.required]],
@@ -76,10 +85,9 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
       id_tipo_concentracion: [''],
     });
     this.PrecioStockForm = this.fb.group({
-      precio_venta: ['', [Validators.required]],
       stock: [[]]
     });
-    this.token = this.servicio_login.getToken();
+  
     this.listarAtributo();
     this.route.data.pipe(takeUntil(this.Unsuscribe), finalize(() => {
 
@@ -108,8 +116,6 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
       this.informacionForm.get('glosa_producto')?.setValue(res.glosa_producto);
 
 
-      this.PrecioStockForm.get('precio_venta')?.setValue(res.precioventa_producto);
-
 
 
 
@@ -130,7 +136,7 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
 
       this.imagenes_producto = res.arreglo_imagen;
       this.listarProductoRelacionados = res.arreglo_relacionado;
-      this.PrecioStockForm.get('stock')?.setValue(res.stock_producto_bodega);
+      this.arregloBodegas=res.stock_producto_bodega;
 
       setTimeout(() => {
         this.listarCategorias(this.informacionForm.value.tipo_inventario, true);
@@ -195,12 +201,12 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
         }
       }
     });
-    setTimeout(() => {
-      const navItems = document.querySelectorAll('.nav-item');
-      navItems.forEach((navItem: any) => {
-        this.renderer.removeClass(navItem, 'disabled');
-      });
-    }, 1500);
+    // setTimeout(() => {
+    //   const navItems = document.querySelectorAll('.nav-item');
+    //   navItems.forEach((navItem: any) => {
+    //     this.renderer.removeClass(navItem, 'disabled');
+    //   });
+    // }, 1500);
   }
   ngOnInit(): void {
     $("[data-dismiss='modal']").click();
@@ -614,8 +620,8 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
 
   GuardarProductoCompleto() {
     this.informacionForm.markAllAsTouched()
-    this.PrecioStockForm.markAllAsTouched()
-    if (this.informacionForm.invalid || this.PrecioStockForm.invalid) {
+    this.PrecioStockForm.get('stock')?.setValue(this.arregloBodegas);
+    if (this.informacionForm.invalid) {
       Swal.fire({
         toast: true,
         position: 'top',
@@ -751,6 +757,11 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
       modulo: 'PRODUCTO'
     }
     this.hijomodalmarca.llamarFuncionHijoDesdePadre(datos);
+  }
+
+  onInput(event: any): void {
+    const inputElement:any = event.target as HTMLInputElement;
+    inputElement.value =this.helper.validarNumeroDecimal(event);
   }
 
 

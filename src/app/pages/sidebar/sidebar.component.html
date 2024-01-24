@@ -15,7 +15,7 @@
                 <li class="nav-devider"></li>
                 <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
                             class="fa fa-folder"></i><span class="hide-menu">INVENTARIOS<span
-                                class="label label-rouded label-themecolor pull-right">4</span></span></a>
+                                class="label label-rouded label-themecolor pull-right">6</span></span></a>
                     <ul aria-expanded="false" class="collapse" #EventoClick>
                         <li><a class="desactivar" (click)="Seleccionar($event.target)" routerLink="/Sucursal"
                                 href="javascript:void()"><i class="mdi mdi-home-modern"></i> SUCURSAL</a>
@@ -34,7 +34,7 @@
                 </li>
                 <li><a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
                             class="mdi mdi-cash"></i><span class="hide-menu">PAGOS<span
-                                class="label label-rouded label-themecolor pull-right">3</span></span></a>
+                                class="label label-rouded label-themecolor pull-right">4</span></span></a>
                     <ul aria-expanded="false" class="collapse" #EventoClick>
                         <li>
                             <a (click)="Seleccionar($event.target)" class="desactivar" routerLink="/Nota-Venta"
@@ -59,24 +59,25 @@
                             class="mdi mdi-bullseye"></i><span class="hide-menu">REPORTE<span
                                 class="label label-rouded label-themecolor pull-right">3</span></span></a>
                     <ul aria-expanded="false" class="collapse" #EventoClick>
-                        <li><a (click)="Seleccionar($event.target)" class="desactivar" routerLink="/Pedidos">
-                                <i class="mdi mdi-book"></i> PEDIDOS</a>
-                        </li>
 
                         <li><a (click)="Seleccionar($event.target)" class="desactivar" routerLink="/Importar-Inventario"
                                 href="javascript:void()"> <i class="mdi mdi-cube-send"></i> REPORTE PRODUCTOS</a>
                         </li>
-
+                        <li><a (click)="Seleccionar($event.target)" class="desactivar" routerLink="/Venta-Producto"
+                                href="javascript:void()"> <i class="mdi mdi-cube-send"></i> REPORTE VENTA PRODUCTO</a>
+                        </li>
                         <li><a (click)="Seleccionar($event.target)" class="desactivar" routerLink="/Libro-Ventas"
                                 href="javascript:void()"> <i class="mdi mdi-cube-send"></i> LIBRO VENTAS</a>
                         </li>
-
                     </ul>
                 </li>
                 <li><a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
                             class="mdi mdi-gauge"></i><span class="hide-menu">TIENDA EN LINEA<span
-                                class="label label-rouded label-themecolor pull-right">1</span></span></a>
+                                class="label label-rouded label-themecolor pull-right">4</span></span></a>
                     <ul aria-expanded="false" class="collapse" #EventoClick>
+                        <li><a (click)="Seleccionar($event.target)" class="desactivar" routerLink="/Pedidos">
+                                <i class="mdi mdi-book"></i> PEDIDOS</a>
+                        </li>
                         <li>
                             <a (click)="Seleccionar($event.target)" class="desactivar" routerLink="/Slider"
                                 href="javascript:void()"> <i class="mdi mdi-web"></i> SLIDER</a>

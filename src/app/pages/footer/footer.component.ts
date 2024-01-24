@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,10 +7,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./footer.component.css']
 })
 export class FooterComponent implements OnInit {
-
-  constructor() { }
+  fechaActual: string;
+  constructor(private datePipe: DatePipe) {
+    this.fechaActual = this.obtenerFechaActual();
+   }
 
   ngOnInit(): void {
+  }
+
+  obtenerFechaActual(): any {
+    // Obtener la fecha actual utilizando DatePipe
+    const fecha = new Date();
+    const fecha_actual= this.datePipe.transform(fecha, 'yyyy');
+    return fecha_actual;
   }
 
 }

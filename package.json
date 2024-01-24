@@ -21,6 +21,7 @@
     "@ng-select/ng-select": "^3.7.3",
     "angular-animations": "^0.11.0",
     "angular-datatables": "^13.1.0",
+    "apexcharts": "^3.45.1",
     "datatables.net": "^1.13.1",
     "datatables.net-dt": "^1.13.1",
     "jquery": "^3.6.3",

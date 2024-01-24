@@ -31,6 +31,7 @@ import { SucursalComponent } from './sucursal/sucursal.component';
 import { SucursalresolverService } from '../resolver/Sucursalresolver.service';
 import { TraerDatosProductoService } from '../resolver/TraerDatosProductosresolver.service';
 import { PromocionComponent } from './TiendaOnline/promocion/promocion.component';
+import { ReporteVentaProductoComponent } from './reporte-venta-producto/reporte-venta-producto.component';
 
 
 const pagesRoutes: Routes = [
@@ -78,6 +79,7 @@ const pagesRoutes: Routes = [
       { path: 'Usuario', component: UsuarioComponent },
       { path: 'Bodega', component: BodegaComponent },
       { path: 'Promociones', component: PromocionComponent },
+      { path: 'Venta-Producto', component: ReporteVentaProductoComponent },
       {
         path: 'Sucursal', component: SucursalComponent,
         resolve: { datos: SucursalresolverService }

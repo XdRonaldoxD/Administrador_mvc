@@ -377,8 +377,8 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
     this.sliderForm.get('accion')!.setValue('ACTUALIZAR');
     this.sliderForm.get('id_categoria')!.setValue(item.id_categoria);
     this.sliderForm.get('titulo_slider')!.setValue(item.nombre_slider);
-    this.Helper.resetPreview('file_escritorio', environment.api_url + '/archivo/imagen_slider/' + item.pathescritorio_slider, item.pathescritorio_slider);
-    this.Helper.resetPreview('file_mobile', environment.api_url + '/archivo/imagen_slider/' + item.pathmobile_slider, item.pathmobile_slider);
+    this.Helper.resetPreview('file_escritorio',item.rutacritorio_slider, item.pathescritorio_slider);
+    this.Helper.resetPreview('file_mobile', item.rutamobile_slider, item.pathmobile_slider);
     let html = `<option value=${item.id_categoria}>${item.glosa_categoria}</option>`;
     $("#id_categoria").html(html);
     this.texto_cabezera = 'EDITAR SLIDER';

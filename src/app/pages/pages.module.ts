@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { PagesComponent } from './pages.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
@@ -45,6 +45,7 @@ import { SucursalComponent } from './sucursal/sucursal.component';
 import { PromocionComponent } from './TiendaOnline/promocion/promocion.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { ExtendedPdfComponent } from './pdf/extended-pdf/extended-pdf.component';
+import { ReporteVentaProductoComponent } from './reporte-venta-producto/reporte-venta-producto.component';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,8 @@ import { ExtendedPdfComponent } from './pdf/extended-pdf/extended-pdf.component'
     ModalBodegaComponent,
     SucursalComponent,
     PromocionComponent,
-    ExtendedPdfComponent
+    ExtendedPdfComponent,
+    ReporteVentaProductoComponent
   ],
   exports: [
     IsInvalidPipe,
@@ -104,6 +106,7 @@ import { ExtendedPdfComponent } from './pdf/extended-pdf/extended-pdf.component'
     ToastrModule.forRoot(),
     NgxExtendedPdfViewerModule
   ],
+  providers: [DatePipe],
   schemas: [NO_ERRORS_SCHEMA]
 })
 export class PagesModule { }

@@ -81,8 +81,7 @@
                                             <tr style="vertical-align: middle;text-align: center;"
                                                 class="text-uppercase">
                                                 <th class="text-center">PRODUCTO</th>
-                                                <th class="text-center">STOCK</th>
-                                                <th class="text-center">P. VENTA</th>
+                                                <th class="text-center">STOCK|P. VENTA</th>
                                                 <th class="text-center">ACCION</th>
                                             </tr>
                                         </thead>
@@ -100,13 +99,12 @@
                                                             <strong class="color-strong">{{e.bodegas[i]}}:</strong>
                                                             <span
                                                                 [ngClass]="{'label-info': stock > 0, 'label-danger': stock <= 0}"
-                                                                class="label">
-                                                               Stock:{{stock}}
-                                                            </span>
+                                                                class="label">Stock:{{stock}}
+                                                            </span> |
+                                                            <span class="color-strong">P.Venta:{{e.precioventa[i] |
+                                                                currency: 'S/': 'symbol': '': 'en-PE'}}</span>
                                                         </div>
                                                     </td>
-                                                    <td>{{e.precioventa_producto | currency: 'S/': 'symbol': '':
-                                                        'en-PE'}}</td>
                                                     <td>
                                                         <div class="button-group d-flex justify-content-center">
                                                             <button type="button" style="width: 20px;height: 20px;"
@@ -159,8 +157,7 @@
                                             <tr style="vertical-align: middle;text-align: center;"
                                                 class="text-uppercase">
                                                 <th class="text-center">PRODUCTO</th>
-                                                <th class="text-center">STOCK</th>
-                                                <th class="text-center">P. VENTA</th>
+                                                <th class="text-center">STOCK|P. VENTA</th>
                                                 <th class="text-center">ACCION</th>
                                             </tr>
                                         </thead>
@@ -173,16 +170,17 @@
                                                                 class="color-strong">SKU:</strong>{{e.codigo_producto}}
                                                         </div>
                                                     </td>
-                                                    <ng-container *ngIf="e.stock_producto>0; else elseTemplate">
-                                                        <td><span class="label label-info">{{e.stock_producto}}</span>
-                                                        </td>
-                                                    </ng-container>
-                                                    <ng-template #elseTemplate>
-                                                        <td><span class="label label-danger">{{e.stock_producto}}</span>
-                                                        </td>
-                                                    </ng-template>
-                                                    <td>{{e.precioventa_producto}}</td>
-                                                    <td>{{e.codigo_producto}}</td>
+                                                    <td class="text-left">
+                                                        <div *ngFor="let stock of e.stock_bodegas; let i = index">
+                                                            <strong class="color-strong">{{e.bodegas[i]}}:</strong>
+                                                            <span
+                                                                [ngClass]="{'label-info': stock > 0, 'label-danger': stock <= 0}"
+                                                                class="label">Stock:{{stock}}
+                                                            </span> |
+                                                            <span class="color-strong">P.Venta:{{e.precioventa[i] |
+                                                                currency: 'S/': 'symbol': '': 'en-PE'}}</span>
+                                                        </div>
+                                                    </td>
                                                     <td>
                                                         <div class="button-group d-flex justify-content-center">
                                                             <button type="button" style="width: 20px;height: 20px;"
@@ -253,9 +251,12 @@
                         <div class="col-md-4 col-12">
                             <div class="form-group">
                                 <label for="accion_gestionar">Bodega <strong class="text-danger">(*)</strong></label>
-                                <select (change)="EscogerBodega($event.target)" formControlName="id_bodega" [class.is-invalid]="GestionarStock.controls['id_bodega']|isInvalid" class="form-control">
+                                <select (change)="EscogerBodega($event.target)" formControlName="id_bodega"
+                                    [class.is-invalid]="GestionarStock.controls['id_bodega']|isInvalid"
+                                    class="form-control">
                                     <option value="">Seleccionar Bodega</option>
-                                    <option  [selected]="bodega.length==1" value="{{item.id_bodega}}" *ngFor="let item of bodega">{{item.glosa_bodega}}</option>
+                                    <option [selected]="bodega.length==1" value="{{item.id_bodega}}"
+                                        *ngFor="let item of bodega">{{item.glosa_bodega}}</option>
                                 </select>
                             </div>
                         </div>
@@ -304,22 +305,21 @@
                 </form>
             </div>
             <div class="modal-footer">
-                    <ng-container *ngIf="!GuardarStock; else elseTemplate">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal" data-original-title=""
+                <ng-container *ngIf="!GuardarStock; else elseTemplate">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal" data-original-title=""
                         title="">SALIR</button>
-                        <button (click)="GestionarStockProducto()" type="button"
-                            class="btn btn-success" value="create-product"><i
-                                style="vertical-align: text-bottom;" class="bx bx-save"></i>
-                                GUARDAR STOCK
-                        </button>
-                    </ng-container>
-                    <ng-template #elseTemplate>
-                        <button type="button" class="btn btn-success" value="create-product"><em
-                                class="fa fa-spin fa-circle-o-notch"></em>
-                            Guardando...
-                        </button>
-                    </ng-template>
-                    
+                    <button (click)="GestionarStockProducto()" type="button" class="btn btn-success"
+                        value="create-product"><i style="vertical-align: text-bottom;" class="bx bx-save"></i>
+                        GUARDAR STOCK
+                    </button>
+                </ng-container>
+                <ng-template #elseTemplate>
+                    <button type="button" class="btn btn-success" value="create-product"><em
+                            class="fa fa-spin fa-circle-o-notch"></em>
+                        Guardando...
+                    </button>
+                </ng-template>
+
             </div>
         </div>
 

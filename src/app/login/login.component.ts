@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   id_usuario: any;
   private unsubscribe$ = new Subject<void>();
+  loading:boolean=false;
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -40,15 +41,15 @@ export class LoginComponent implements OnInit, OnDestroy {
       password: ['', [Validators.required]]
     });
 
-    const sign_in_btn:any = document.querySelector("#sign-in-btn");
-    const sign_up_btn:any = document.querySelector("#sign-up-btn");
-    const container:any = document.querySelector(".container-login");
-    sign_up_btn.addEventListener("click", () => {
-      container.classList.add("sign-up-mode");
-    });
-    sign_in_btn.addEventListener("click", () => {
-      container.classList.remove("sign-up-mode");
-    });
+    // const sign_in_btn:any = document.querySelector("#sign-in-btn");
+    // const sign_up_btn:any = document.querySelector("#sign-up-btn");
+    // const container:any = document.querySelector(".container-login");
+    // sign_up_btn.addEventListener("click", () => {
+    //   container.classList.add("sign-up-mode");
+    // });
+    // sign_in_btn.addEventListener("click", () => {
+    //   container.classList.remove("sign-up-mode");
+    // });
 
   }
 
@@ -63,10 +64,13 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
     // Otra Manera de finalizar el servicio con pipe
+    this.loading=true;
     this.servicio_login.LoginUsuario(this.loginForm.value)
       .pipe(
-        //USAMOS PARA EL USO DE MEMORIA(TOMARA COMPLETADO EL  SUBCRIBE)
-        takeUntil(this.unsubscribe$)
+        takeUntil(this.unsubscribe$),
+        finalize(()=>{
+          this.loading=false;
+        })
       )
       .subscribe({
         next: (respuesta) => {
@@ -78,6 +82,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.servicio_login.LoginUsuario(this.loginForm.value, true)
               .pipe(finalize(() => {
                 this.router.navigateByUrl('/inicio').then();
+                this.loading=false;
               })
               ).subscribe({
                 next: (respuesta) => {
@@ -85,7 +90,6 @@ export class LoginComponent implements OnInit, OnDestroy {
                 },
               });
           }
-
         },
         error: (error) => {
           Swal.fire({

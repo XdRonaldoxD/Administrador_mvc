@@ -54,17 +54,16 @@
         <div class="signin-signup">
             <form class="sign-in-form" [formGroup]="loginForm" autocomplete="nope">
                 <h2 class="title">Iniciar Sesión</h2>
-                <div class="input-field"  [class.is-invalid]="loginForm.controls['email']|isInvalid">
+                <div class="input-field" [class.is-invalid]="loginForm.controls['email']|isInvalid">
                     <i class="fa fa-user" aria-hidden="true"></i>
-                    <input type="email" formControlName="email"
-                        [autocomplete]="true"
+                    <input type="email" formControlName="email" [autocomplete]="true"
                         placeholder="customer@example.com" />
                 </div>
                 <div class="text-danger">
                     <div style="font-weight: 700;" *ngIf="loginForm.controls['email']|hasError:'required'">
                         Correo Vacia
                     </div>
-                    <div  style="font-weight: 700;" *ngIf="loginForm.controls['email']|hasError:'email'">
+                    <div style="font-weight: 700;" *ngIf="loginForm.controls['email']|hasError:'email'">
                         Correo Incorrecto
                     </div>
                 </div>
@@ -74,19 +73,25 @@
                         [class.is-invalid]="loginForm.controls['password']|isInvalid" formControlName="password" />
                 </div>
                 <div class="text-danger">
-                    <div  style="font-weight: 700;" *ngIf="loginForm.controls['password']|hasError:'required'">
+                    <div style="font-weight: 700;" *ngIf="loginForm.controls['password']|hasError:'required'">
                         Contraseña Vacia
                     </div>
                 </div>
-                <input type="button" value="Ingresar" class="btn-login solid" (click)="login()" />
+                <button *ngIf="!loading" type="button" (click)="login()" class="btn-login solid">
+                    INGRESAR
+                </button>
+                <button *ngIf="loading" type="button" class="btn-login solid"><em
+                        class="fa fa-spin fa-circle-o-notch"></em>
+                    Iniciando...
+                </button>
+
             </form>
             <form class="sign-up-form" [formGroup]="registrarForm" autocomplete="nope">
                 <h2 class="title">Registrarse</h2>
                 <div class="input-field">
                     <i class="fa fa-user"></i>
                     <input type="text" formControlName="nombre"
-                      [class.is-invalid]="registrarForm.controls['nombre']|isInvalid"
-                       placeholder="Nombre" />
+                        [class.is-invalid]="registrarForm.controls['nombre']|isInvalid" placeholder="Nombre" />
                 </div>
                 <div class="text-danger">
                     <div *ngIf="registrarForm.controls['nombre']|hasError:'required'">
@@ -96,7 +101,7 @@
                 <div class="input-field">
                     <i class="fa fa-envelope" aria-hidden="true"></i>
                     <input type="email" formControlName="email"
-                    [class.is-invalid]="registrarForm.controls['email']|isInvalid" placeholder="Email" />
+                        [class.is-invalid]="registrarForm.controls['email']|isInvalid" placeholder="Email" />
                 </div>
                 <div class="text-danger">
                     <div *ngIf="registrarForm.controls['email']|hasError:'required'">
@@ -108,8 +113,8 @@
                 </div>
                 <div class="input-field">
                     <i class="fa fa-lock"></i>
-                    <input  type="password" formControlName="password"
-                    [class.is-invalid]="registrarForm.controls['password']|isInvalid" placeholder="Contraseña" />
+                    <input type="password" formControlName="password"
+                        [class.is-invalid]="registrarForm.controls['password']|isInvalid" placeholder="Contraseña" />
                 </div>
                 <div class="text-danger">
                     <div *ngIf="registrarForm.controls['password']|hasError:'required'">
@@ -124,12 +129,12 @@
 
     <div class="panels-container">
         <div class="panel left-panel">
-            <div class="content">
+            <!-- <div class="content">
                 <h3>Nuevo Aqui ?</h3>
                 <button class="btn-login transparent" id="sign-up-btn">
                     REGISTRARSE
                 </button>
-            </div>
+            </div> -->
             <img src="../../assets/img/log.svg" class="image" alt="" />
         </div>
         <div class="panel right-panel">
@@ -146,7 +151,8 @@
 
 
 
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <form #registrarDoctor="ngForm" (ngSubmit)="CerrandoSession()">
             <div class="modal-content">
@@ -159,48 +165,48 @@
                     <div class="row">
                         <div class="col-md-12 text-center mt-1 mb-0 p-0">
                             <svg class="w-25" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-                            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512"
-                            style="enable-background:new 0 0 512 512;" xml:space="preserve">
-                            <linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="256" y1="514" x2="256"
-                                y2="2" gradientTransform="matrix(1 0 0 -1 0 514)">
-                                <stop offset="0" style="stop-color:#2AF598" />
-                                <stop offset="1" style="stop-color:#009EFD" />
-                            </linearGradient>
-                            <path style="fill:url(#SVGID_1_);" d="M512,60v392c0,33.084-26.916,60-60,60H60c-33.084,0-60-26.916-60-60v-80h40v80
+                                xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512"
+                                style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                                <linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="256" y1="514" x2="256"
+                                    y2="2" gradientTransform="matrix(1 0 0 -1 0 514)">
+                                    <stop offset="0" style="stop-color:#2AF598" />
+                                    <stop offset="1" style="stop-color:#009EFD" />
+                                </linearGradient>
+                                <path style="fill:url(#SVGID_1_);" d="M512,60v392c0,33.084-26.916,60-60,60H60c-33.084,0-60-26.916-60-60v-80h40v80
                                 c0,11.028,8.972,20,20,20h392c11.028,0,20-8.972,20-20V60c0-11.028-8.972-20-20-20H60c-11.028,0-20,8.972-20,20v80H0V60
                                 C0,26.916,26.916,0,60,0h392C485.084,0,512,26.916,512,60z M211.716,352L240,380.284L364.284,256L240,131.716L211.716,160l76,76H0
                                 v40h287.716L211.716,352z" />
-                            <g>
-                            </g>
-                            <g>
-                            </g>
-                            <g>
-                            </g>
-                            <g>
-                            </g>
-                            <g>
-                            </g>
-                            <g>
-                            </g>
-                            <g>
-                            </g>
-                            <g>
-                            </g>
-                            <g>
-                            </g>
-                            <g>
-                            </g>
-                            <g>
-                            </g>
-                            <g>
-                            </g>
-                            <g>
-                            </g>
-                            <g>
-                            </g>
-                            <g>
-                            </g>
-                        </svg>
+                                <g>
+                                </g>
+                                <g>
+                                </g>
+                                <g>
+                                </g>
+                                <g>
+                                </g>
+                                <g>
+                                </g>
+                                <g>
+                                </g>
+                                <g>
+                                </g>
+                                <g>
+                                </g>
+                                <g>
+                                </g>
+                                <g>
+                                </g>
+                                <g>
+                                </g>
+                                <g>
+                                </g>
+                                <g>
+                                </g>
+                                <g>
+                                </g>
+                                <g>
+                                </g>
+                            </svg>
                             <p class="text-uppercase">¿Seguro de cerrar su sesión Activado?</p>
                         </div>
 

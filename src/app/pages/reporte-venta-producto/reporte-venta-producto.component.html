@@ -1,0 +1,72 @@
+<div class="container-fluid" [@fade]>
+    <div class="row page-titles mb-0">
+        <div class="col-md-5 col-12 align-self-center">
+            <h3 class="text-themecolor"><strong>REPORTE VENTA PRODUCTO</strong></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form [formGroup]="filtrarForm" autocomplete="nope" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-3 col-12">
+                                <div class="form-group">
+                                    <label for="" class="m-0">Fecha Inicio</label>
+                                    <input type="date" class="form-control" formControlName="fecha_inicio">
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-12">
+                                <div class="form-group">
+                                    <label for="" class="m-0">Fecha Fin</label>
+                                    <input type="date" class="form-control" formControlName="fecha_fin">
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-12 d-flex justify-content-start align-items-center">
+                                <button class="btn  btn-dark" (click)="Filtrar()">Buscar</button>
+                            </div>
+                            <div class="col-md-3 col-12 d-flex justify-content-end align-items-center">
+                                <button class="btn  btn-success" (click)="ExportarExcel()" >Exportar</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            <div id="piechart"></div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="table-responsive" style="border-radius: 10px;width: 100%;height: calc(100vh - 268px);overflow:auto">
+                                <table summary="Slider" datatable [dtOptions]="dtOptions[0]"
+                                    [dtTrigger]="reload_producto" class="table table-striped color-table info-table"
+                                    width="100%"  >
+                                    <thead>
+                                        <tr style="vertical-align: middle;text-align: center;" class="text-uppercase">
+                                            <th class="text-center text-sm">PRODUCTO</th>
+                                            <th class="text-center text-sm">CANTIDAD</th>
+                                            <th class="text-center text-sm">TOTAL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="vertical-align: middle;text-align: center;" *ngFor="let e of productovendidos;">
+                                            <td class="text-center text-sm">{{e.glosa_producto}}</td>
+                                            <td class="text-center text-sm">{{e.cantidad_negocio_detalle}}</td>
+                                            <td class="text-center text-sm">{{e.total_negocio_detalle  | currency: 'S/': 'symbol': '':'en-PE'}}</td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody *ngIf="productovendidos.length <= 0">
+                                        <tr>
+                                            <td colspan="3" class="no-data-available">No hay información!</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>

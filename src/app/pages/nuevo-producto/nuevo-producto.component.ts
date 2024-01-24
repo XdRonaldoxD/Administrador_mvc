@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ModalMarcaComponent } from '../modals/modal-marca/modal-marca.component';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { HelpersService } from 'src/app/services/helpers.service';
 declare var $: any;
 declare var document: any;
 declare var Swal: any;
@@ -71,7 +72,8 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
     private toastr: ToastrService,
     private el: ElementRef,
     private route: ActivatedRoute,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private helper:HelpersService
   ) {
 
     this.informacionForm = this.fb.group({
@@ -88,7 +90,6 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
       id_tipo_concentracion: [''],
     });
     this.PrecioStockForm = this.fb.group({
-      precio_venta: ['', [Validators.required]],
       stock: [[]],
     });
     this.token = this.servicio_login.getToken();
@@ -147,12 +148,12 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
         }
       }
     });
-    setTimeout(() => {
-      const navItems = document.querySelectorAll('.nav-item');
-      navItems.forEach((navItem: any) => {
-        this.renderer.removeClass(navItem, 'disabled');
-      });
-    }, 1500);
+    // setTimeout(() => {
+    //   const navItems = document.querySelectorAll('.nav-item');
+    //   navItems.forEach((navItem: any) => {
+    //     this.renderer.removeClass(navItem, 'disabled');
+    //   });
+    // }, 1500);
   }
 
 
@@ -554,9 +555,8 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
 
     //
     this.informacionForm.markAllAsTouched()
-    this.PrecioStockForm.markAllAsTouched()
     this.PrecioStockForm.get('stock')?.setValue(this.arregloBodegas);
-    if (this.informacionForm.invalid || this.PrecioStockForm.invalid) {
+    if (this.informacionForm.invalid) {
       Swal.fire({
         toast: true,
         position: 'top',
@@ -743,6 +743,11 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
       this.limpiarSeleccion('producto-relacionado');
       this.isLoading = false;
     }
+  }
+
+  onInput(event: any): void {
+    const inputElement:any = event.target as HTMLInputElement;
+    inputElement.value =this.helper.validarNumeroDecimal(event);
   }
 
 

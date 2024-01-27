@@ -8,6 +8,7 @@ import { ProductoService } from '../../services/producto.service';
 import { environment } from 'src/environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { HelpersService } from 'src/app/services/helpers.service';
 
 
 declare var $: any;
@@ -67,7 +68,8 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
     private fb: FormBuilder,
     private servicio_categoria: CategoriaService,
     private servicio_producto: ProductoService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private helper:HelpersService
   ) {
     this.usuario = servicio_login.getIdentity();
     this.ProductoBuscar = this.fb.group({
@@ -78,11 +80,12 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
     this.GestionarStock = this.fb.group({
       accion: ['', [Validators.required]],
       precio_compra: [null],
+      precio_venta: [null,[Validators.required]],
       cantidad: ['', [Validators.required]],
       stock_final: [''],
       stock_producto: [''],
       comentario: [''],
-      id_bodega: [''],
+      id_bodega: ['',[Validators.required]],
       id_usuario: [this.usuario.sub],
       id_producto: [null]
     });
@@ -443,7 +446,12 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
 
   AbrirModalGestionarStock(datos_producto: any) {
     this.Producto = datos_producto;
+    this.GestionarStock.reset();
     this.GestionarStock.get('id_producto')!.setValue(datos_producto.id_producto)
+    this.GestionarStock.get('id_usuario')!.setValue(this.usuario.sub);
+    this.GestionarStock.get('accion')!.setValue('')
+    this.GestionarStock.get('id_bodega')!.setValue('')
+    console.log(this.GestionarStock.value)
     this.servicio_producto.TraerBodegaStock(datos_producto.id_producto).pipe(takeUntil(this.destroy), finalize(() => {
       $('#exampleModalCenter').modal('show');
     })).subscribe({
@@ -473,8 +481,10 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
   EscogerBodega(bodega: any) {
     let stock_bodega = this.bodega.find((item: any) => item.id_bodega == bodega.value)
     if (stock_bodega) {
-      this.GestionarStock.get('stock_final')!.setValue(stock_bodega.total_stock_producto_bodega)
-      this.GestionarStock.get('stock_producto')!.setValue(stock_bodega.total_stock_producto_bodega)
+      this.GestionarStock.get('stock_final')!.setValue(stock_bodega.total_stock_producto_bodega ?? 0)
+      this.GestionarStock.get('stock_producto')!.setValue(stock_bodega.total_stock_producto_bodega ?? 0)
+      this.GestionarStock.get('precio_venta')!.setValue(stock_bodega.precioventa_stock_producto_bodega ?? 0)
+      this.GestionarStock.get('precio_compra')!.setValue(stock_bodega.ultimopreciocompra_stock_producto_bodega ?? 0)
     }
   }
 
@@ -486,9 +496,6 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
     this.GuardarStock=true;
     this.servicio_producto.GestionarStockProducto(this.GestionarStock.value).pipe(takeUntil(this.destroy), finalize(() => {
       $('#exampleModalCenter').modal('hide');
-      this.GestionarStock.reset();
-      this.GestionarStock.get('accion')!.setValue('');
-      this.GestionarStock.get('id_usuario')!.setValue(this.usuario.sub);
       this.GuardarStock=false;
     })).subscribe({
       next: (res) => {
@@ -517,6 +524,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
       this.cantidad.nativeElement.setAttribute("disabled", "");
       this.tipo_movimiento = null;
     }
+
     this.GestionarStock.get('stock_final')!.setValue(this.GestionarStock.value.stock_producto);
   }
   Cantidades(valor: any) {
@@ -604,5 +612,11 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
     this.reload_producto_historial.next();
     $('#exampleHistorialProducto').modal('show');
   }
+
+  onInput(event: any): void {
+    const inputElement:any = event.target as HTMLInputElement;
+    inputElement.value =this.helper.validarNumeroDecimal(event);
+  }
+
 
 }

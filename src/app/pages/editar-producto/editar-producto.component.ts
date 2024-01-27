@@ -761,7 +761,8 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
 
   onInput(event: any): void {
     const inputElement:any = event.target as HTMLInputElement;
-    inputElement.value =this.helper.validarNumeroDecimal(event);
+    const valor=this.helper.validarNumeroDecimal(event);
+    inputElement.value=valor;
   }
 
 

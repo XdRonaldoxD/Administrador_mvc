@@ -89,13 +89,12 @@
                                             <ng-container *ngFor="let e of listarProducto;">
                                                 <tr style="vertical-align: middle;text-align: center;">
                                                     <td class="text-left">
-                                                        <div>{{e.glosa_producto}}</div>
-                                                        <div><strong
-                                                                class="color-strong">SKU:</strong>{{e.codigo_producto}}
+                                                        <div  class="color-strong">{{e.glosa_producto}}</div>
+                                                        <div><span >SKU:</span>{{e.codigo_producto}}
                                                         </div>
                                                     </td>
                                                     <td class="text-left">
-                                                        <div *ngFor="let stock of e.stock_bodegas; let i = index">
+                                                        <div *ngFor="let stock of e.stock_bodegas; let i = index; let last = last">
                                                             <strong class="color-strong">{{e.bodegas[i]}}:</strong>
                                                             <span
                                                                 [ngClass]="{'label-info': stock > 0, 'label-danger': stock <= 0}"
@@ -103,6 +102,7 @@
                                                             </span> |
                                                             <span class="color-strong">P.Venta:{{e.precioventa[i] |
                                                                 currency: 'S/': 'symbol': '': 'en-PE'}}</span>
+                                                            <hr style="border-color: #000;" class="my-1 color-strong" *ngIf="!last">
                                                         </div>
                                                     </td>
                                                     <td>
@@ -165,7 +165,7 @@
                                             <ng-container *ngFor="let e of listarProductoDeshabilitado;">
                                                 <tr style="vertical-align: middle;text-align: center;">
                                                     <td class="text-left">
-                                                        <div>{{e.glosa_producto}}</div>
+                                                        <div class="color-strong" >{{e.glosa_producto}}</div>
                                                         <div><strong
                                                                 class="color-strong">SKU:</strong>{{e.codigo_producto}}
                                                         </div>
@@ -260,8 +260,6 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-4 col-12">
                             <div class="form-group">
                                 <label for="cantidad_gestionar">Cantidad <span class="text-danger">(*)</span></label>
@@ -271,11 +269,21 @@
                                     placeholder="ingresar una cantidad" class="form-control" #cantidad>
                             </div>
                         </div>
-                        <div class="col-md-4 col-12">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-12" *ngIf="tipo_movimiento == 1">
                             <div class="form-group">
                                 <label for="precio_compra">Precio de compra</label>
                                 <input type="number" formControlName="precio_compra"
                                     [class.is-invalid]="GestionarStock.controls['precio_compra']|isInvalid"
+                                    placeholder="ingrese precio de compra" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-12" *ngIf="tipo_movimiento == 1">
+                            <div class="form-group">
+                                <label for="precio_venta">Precio de venta <span class="text-danger">(*)</span></label>
+                                <input type="text" formControlName="precio_venta" (input)="onInput($event)"
+                                    [class.is-invalid]="GestionarStock.controls['precio_venta']|isInvalid"
                                     placeholder="ingrese precio de compra" class="form-control">
                             </div>
                         </div>
@@ -284,8 +292,7 @@
                                 <label for="stock_gestionar">Stock final </label>
                                 <input type="text" placeholder="Stock final" class="form-control"
                                     formControlName="stock_final"
-                                    [class.is-invalid]="GestionarStock.controls['stock_final']|isInvalid" readonly
-                                    value="">
+                                    [class.is-invalid]="GestionarStock.controls['stock_final']|isInvalid" readonly>
                             </div>
                         </div>
                     </div>
@@ -354,10 +361,14 @@
                         <tbody>
                             <ng-container *ngFor="let e of listarProductoHistorial;">
                                 <tr style="vertical-align: middle;text-align: center;">
-                                    <td>{{e.glosa_tipo_movimiento}}</td>
+                                    <td  class="color-strong">{{e.glosa_tipo_movimiento}}</td>
                                     <td>{{e.fecha_producto_historial | date:'dd/MM/yyyy hh:mm a'}}</td>
                                     <td>{{e.cantidadmovimiento_producto_historial}}</td>
-                                    <td>{{e.glosa_bodega}}</td>
+                                    <td>
+                                       <div class="color-strong">{{e.glosa_bodega}}</div>
+                                       <div *ngIf="e.preciocompra_producto_historial" class="color-strong">P. Compra:{{e.preciocompra_producto_historial | number:'1.2-2' }}</div>
+                                       <div *ngIf="e.precioventa_producto_historial" class="color-strong">P. Venta:{{e.precioventa_producto_historial | number:'1.2-2' }}</div>
+                                    </td>
                                     <td>{{e.nombre_staff}} {{e.apellidopaterno_staff}}</td>
                                     <td>{{e.glosa_tipo_documento}}</td>
                                     <td>{{e.comentario_producto_historial}}</td>

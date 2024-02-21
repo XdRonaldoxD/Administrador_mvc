@@ -135,7 +135,7 @@
 <!-- ============================================================== -->
 
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter"
-    aria-hidden="true"  data-backdrop="static" data-keyboard="false">
+    aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -199,36 +199,46 @@
                             </div>
                         </div>
                         <div class="col-md-12 col-12 px-5" id="t-categoria">
-                            
+
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-md-12 col-12" align="center">
-                            <img *ngIf="!imgTemporal" src="../../../assets/assets/images/users/avatar-staff.jpg"
-                                class="img-responsive elevation-2 w-25" alt="User Image">
-                            <img *ngIf="imgTemporal" [src]="imgTemporal" class="img-responsive elevation-2 w-25"
-                                alt="User Image">
-                            <input #fileInput (change)="seleccioneImagen($event.target)" type="file" name="imagen"
-                                [accept]="'image/*'" class="form-control-file mt-3">
-                            <label><strong>Tamaño Imagen 200 x 100</strong></label>
-                        </div>
-                    </div>
-                    <div class="row d-none">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <h6 for="name" class="col-sm-12 control-label">Descripción</h6>
-                                <div style=" padding: 0px 15px 0px 15px; ">
-                                    <textarea name="descripcion_categoria" class="form-control textarea_editor"
-                                        rows="15" placeholder="Descripción de la categoría"
-                                        formControlName="descripcion_categoria"></textarea>
-                                </div>
+                        <div class="col-md-6 col-12" align="center">
+                           <label><strong>Imagen para el megamenu Web</strong></label>
+                            <div class="switch">
+                                <label>
+                                    <strong>NO</strong><input formControlName="visibleimagen" type="checkbox" (change)="DetectarTipoAccion($event,'Megamenu')"><span class="lever"></span>
+                                    <strong>SI</strong>
+                                </label>
                             </div>
+                            <ng-container *ngIf="activarImagenMegamenu">
+                                <img *ngIf="!imgTemporal" src="../../../assets/assets/images/users/avatar-staff.jpg"
+                                    class="img-responsive elevation-2 w-25" alt="User Image">
+                                <img *ngIf="imgTemporal" [src]="imgTemporal" class="img-responsive elevation-2 w-25"
+                                    alt="User Image">
+                                <input #fileInputMegamenu (change)="seleccioneImagen($event.target)" type="file" name="imagen"
+                                    [accept]="'image/*'" class="form-control-file mt-3">
+                                <label><strong>Tamaño Imagen 370 x 230</strong></label>
+                            </ng-container>
+                        </div>
+                        <div class="col-md-6 col-12" align="center">
+                        <label><strong>Imagen para la categoria populares Web</strong></label>
+                            <div class="switch">
+                                <label> <strong>NO</strong><input formControlName="visibleimagenpopular" type="checkbox" (change)="DetectarTipoAccion($event,'Populares')"><span class="lever"></span>
+                                    <strong>SI</strong></label>
+                            </div>
+                            <ng-container *ngIf="activarImagenMegamenuPopular">
+                            <img *ngIf="!imgTemporalPopular" src="../../../assets/assets/images/users/avatar-staff.jpg"
+                                class="img-responsive elevation-2 w-25" alt="User Image">
+                            <img *ngIf="imgTemporalPopular" [src]="imgTemporalPopular" class="img-responsive elevation-2 w-25"
+                                alt="User Image">
+                            <input #fileInputPopular (change)="seleccioneImagenPopular($event.target)" type="file" name="imagen"
+                                [accept]="'image/*'" class="form-control-file mt-3">
+                            <label><strong>Tamaño Imagen 700 x 700</strong></label>
+                        </ng-container>
                         </div>
                     </div>
-
-
-
                     <div style="display:flex; flex-wrap:nowrap;align-items: center;" class="col-md-6">
                         <div>
                             <label>Visible Online</label>

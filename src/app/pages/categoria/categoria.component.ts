@@ -28,13 +28,16 @@ declare var Swal: any;
   ],
 })
 export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
-  @ViewChild('fileInput') fileInput!: ElementRef;
+  @ViewChild("fileInputMegamenu") fileInputMegamenu?: ElementRef;
+  @ViewChild("fileInputPopular") fileInputPopular?: ElementRef;
   titulo_texto: string = '';
   dtOptions: DataTables.Settings[] = [];
   reload_producto: any = new Subject();
   reload_producto_deshabilitado: any = new Subject();
   imgTemporal: string | null = '';
+  imgTemporalPopular: string | null = '';
   imagenSubir: File | undefined | null;
+  imagenSubirPopular: File | undefined | null;
 
   //Identificacion del usuario
   identity: any;
@@ -46,6 +49,9 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
   cantidadProducto: any = 0;
   cantidadProductoDeshabilitado: any = 0;
   GuardarInformacion: boolean = false;
+  activarImagenMegamenu: boolean = false;
+  activarImagenMegamenuPopular: boolean = false;
+
   private unsubscribe$ = new Subject<void>();
   constructor(private http: HttpClient,
     private servicio_login: LoginService,
@@ -56,6 +62,8 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
   ) { }
   ngOnInit(): void {
     $("[data-dismiss='modal']").click();
+    this.activarImagenMegamenuPopular = false;
+    this.activarImagenMegamenu = false;
     this.categoriaForm = this.fb.group({
       id_categoria: [''],
       glosa_categoria: ['', [Validators.required]],
@@ -63,6 +71,8 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
       descripcion_categoria: [''],
       codigo_categoria: [''],
       visibleOnline: [true],
+      visibleimagen: [false],
+      visibleimagenpopular: [false],
       accion: ['CREAR'],
     });
     this.token = this.servicio_login.getToken();
@@ -115,27 +125,6 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
   ngAfterViewInit(): void {
     this.reload_producto.next();
     this.reload_producto_deshabilitado.next();
-    $(this.el.nativeElement).find('.textarea_editor').summernote({
-      height: 60,
-      minHeight: null,
-      maxHeight: null,
-      focus: false,
-      toolbar: [
-        ['style', ['style']],
-        ['font', ['bold', 'underline', 'clear']],
-        ['fontname', ['fontname']],
-        ['color', ['color']],
-        ['para', ['ul', 'ol', 'paragraph']],
-        // ['table', ['table']]
-        // ['insert', ['link', 'picture', 'video']],
-        // ['view', ['fullscreen', 'codeview', 'help']],
-      ],
-      callbacks: {
-        onChange: (contents: any) => {
-          this.categoriaForm.get('descripcion_categoria')!.setValue(contents);
-        }
-      }
-    });
   }
   //FIN
 
@@ -278,12 +267,16 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
     this.categoriaForm.reset();
     this.categoriaForm.get('id_tipo_inventario')!.setValue('');
     this.categoriaForm.get('visibleOnline')!.setValue(true);
+    this.categoriaForm.get('visibleimagenpopular')!.setValue(false);
+    this.categoriaForm.get('visibleimagen')!.setValue(false);
     this.categoriaForm.get('codigo_categoria')!.setValue(codigo);
     this.categoriaForm.get('accion')!.setValue('CREAR');
     $("#t-categoria").html('');
     this.imgTemporal = null;
+    this.imgTemporalPopular = null;
+    this.activarImagenMegamenu = false;
+    this.activarImagenMegamenuPopular = false;
     this.titulo_texto = 'Nueva Categoría';
-    this.fileInput.nativeElement.value = '';
     $('#exampleModalCenter').modal('show');
   }
 
@@ -294,7 +287,7 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
         next: (arreglo) => {
           var html = "";
           if (arreglo.categoria == null) {
-            var estructura_html:any = "<div><h6 for=\"name\" class=\"col-sm-12 control-label\">Categoría Padre</h6><div id=\"treeview_container\" class=\"hummingbird-treeview t-view-editar\" style=\"height: auto;  display: block;overflow: auto\"><ul style='list-style: none;' id=\"treeview\" class=\"hummingbird-base\"></ul></div></div>";
+            var estructura_html: any = "<div><h6 for=\"name\" class=\"col-sm-12 control-label\">Categoría Padre</h6><div id=\"treeview_container\" class=\"hummingbird-treeview t-view-editar\" style=\"height: auto;  display: block;overflow: auto\"><ul style='list-style: none;' id=\"treeview\" class=\"hummingbird-base\"></ul></div></div>";
           } else {
             let shouldShowTree = true; // Flag to determine if the tree should be shown
             arreglo.categoria.forEach((data: any) => {
@@ -310,9 +303,9 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
               }
               html += "</li>";
             });
-  
+
             if (shouldShowTree) {
-              var estructura_html:any = "<div><h6 for=\"name\" class=\"col-sm-12 control-label\">Categoría Padre</h6><div id=\"treeview_container\" class=\"hummingbird-treeview t-view-editar\" style=\"height: auto;  display: block;overflow: auto\"><ul style='list-style: none;' id=\"treeview\" class=\"hummingbird-base\">" + html + "</ul></div></div>";
+              var estructura_html: any = "<div><h6 for=\"name\" class=\"col-sm-12 control-label\">Categoría Padre</h6><div id=\"treeview_container\" class=\"hummingbird-treeview t-view-editar\" style=\"height: auto;  display: block;overflow: auto\"><ul style='list-style: none;' id=\"treeview\" class=\"hummingbird-base\">" + html + "</ul></div></div>";
             }
           }
           $("#t-categoria").html(estructura_html);
@@ -365,7 +358,7 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
     });
     // Utilizamos console.log para ver comprobar que en realidad contiene algo el arreglo
     this.GuardarInformacion = true;
-    this.servicio_categoria.GestionarCategoria(this.token, this.categoriaForm.value, checked, this.imagenSubir).pipe(takeUntil(this.unsubscribe$), finalize(() => {
+    this.servicio_categoria.GestionarCategoria(this.token, this.categoriaForm.value, checked, this.imagenSubir, this.imagenSubirPopular).pipe(takeUntil(this.unsubscribe$), finalize(() => {
       this.reload_producto.next();
       $('#exampleModalCenter').modal('hide');
       this.GuardarInformacion = false;
@@ -392,37 +385,55 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
 
 
   TraerCategoria(id_categoria: any) {
+    this.imgTemporal = null;
+    this.imgTemporalPopular = null;
+    this.activarImagenMegamenu = false;
+    this.activarImagenMegamenuPopular = false;
     this.titulo_texto = 'Editar Categoría';
+    this.categoriaForm.patchValue({
+      visibleimagen: false,
+      visibleimagenpopular: false,
+    });
+
     this.servicio_categoria.TraerCategoria(this.token, id_categoria)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (resp: any) => {
+          const { id_categoria, glosa_categoria, id_tipo_inventario, codigo_categoria, descripcion_categoria, visibleonline_categoria, pathimagen_categoria, pathimagenpopular_categoria } = resp;
           this.categoriaForm.reset({
-            id_categoria: resp.id_categoria,
-            glosa_categoria: resp.glosa_categoria,
-            id_tipo_inventario: `${resp.id_tipo_inventario}`,
-            codigo_categoria: `${resp.codigo_categoria ?? ''}`,
-            descripcion_categoria: resp.descripcion_categoria,
+            id_categoria,
+            glosa_categoria,
+            id_tipo_inventario: `${id_tipo_inventario}`,
+            codigo_categoria: `${codigo_categoria ?? ''}`,
+            descripcion_categoria,
             accion: 'EDITAR',
-            visibleOnline: resp.visibleonline_categoria ? true : false,
+            visibleOnline: !!visibleonline_categoria,
           });
-          let id_tipo_inventario = {
-            value: resp.id_tipo_inventario
+          this.listarCategorias({ value: id_tipo_inventario }, id_categoria);
+          // MUESTRA LA IMAGEN DE LA CATEGORIA
+          console.log(pathimagen_categoria);
+          if (pathimagen_categoria) {
+            this.categoriaForm.get('visibleimagen')!.setValue(true);
+            this.imgTemporal = pathimagen_categoria;
+            this.activarImagenMegamenu = true;
           }
-          this.listarCategorias(id_tipo_inventario, resp.id_categoria);
-          this.imgTemporal = null;
-          this.fileInput.nativeElement.value = '';
-          if (resp.pathimagen_categoria) {
-            this.imgTemporal = resp.pathimagen_categoria;
+          // ------------------------------------------
+          // MUESTRA LA IMAGEN DE LA CATEGORIA POPULAR
+          if (pathimagenpopular_categoria) {
+            this.categoriaForm.get('visibleimagenpopular')!.setValue(true);
+            this.imgTemporalPopular = pathimagenpopular_categoria;
+            this.activarImagenMegamenuPopular = true;
           }
-        }, error: (error) => {
+          // ----------------------------------------------------
+        },
+        error: (error) => {
           this.toastr.error(`Error al traer la categoria.`, undefined, {
             timeOut: 3000,
             positionClass: 'toast-top-right',
           });
-        }
-      })
-    $('#exampleModalCenter').modal('show');
+        },
+        complete: () => $('#exampleModalCenter').modal('show'), // Mostrar modal después de completar la suscripción
+      });
   }
 
   Habilitar_Deshabilitar_Categoria(id_categoria: number, accion: string) {
@@ -476,12 +487,39 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
       this.imagenSubir = null;
       return;
     }
-
     this.imagenSubir = imagen.files[0];
-
     let reader: any = new FileReader();
-    let urlImagentemp = reader.readAsDataURL(this.imagenSubir);
+    reader.readAsDataURL(this.imagenSubir);
     reader.onloadend = () => (this.imgTemporal = reader.result as string);
+  }
+  seleccioneImagenPopular(imagen: any) {
+    if (imagen.files[0].type.indexOf("image") < 0) {
+      Swal.fire(
+        "Sólo imágenes",
+        "El Archivo seleccionado no es una imagen",
+        "error"
+      );
+      this.imagenSubirPopular = null;
+      return;
+    }
+    this.imagenSubirPopular = imagen.files[0];
+    let reader: any = new FileReader();
+    reader.readAsDataURL(this.imagenSubirPopular);
+    reader.onloadend = () => (this.imgTemporalPopular = reader.result as string);
+  }
+
+
+
+  DetectarTipoAccion(e: any, tipo: string) {
+    const accion = e.currentTarget.checked;
+    switch (tipo) {
+      case 'Populares':
+        this.activarImagenMegamenuPopular = accion;
+        break;
+      default:
+        this.activarImagenMegamenu = accion;
+        break;
+    }
   }
 
 }

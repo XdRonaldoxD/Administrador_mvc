@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ModalMarcaComponent } from '../modals/modal-marca/modal-marca.component';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { HelpersService } from 'src/app/services/helpers.service';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 declare var $: any;
 declare var document: any;
 declare var Swal: any;
@@ -31,10 +32,12 @@ declare var Swal: any;
     ]),
   ],
 })
+
 export class NuevoProductoComponent implements OnInit, OnDestroy {
   @ViewChild('codigo_producto') codigo_producto?: ElementRef;
   @ViewChild('hijomodalmarca') hijomodalmarca: ModalMarcaComponent | any;
   @ViewChild('productoSelect') productoSelect: any;
+
   token: any;
   tipo_inventario?: any = [];
   imagenes_producto?: any = [];
@@ -62,6 +65,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
   arregloBodegas: any[] = [];
   arregloFormaFarmaceutica: any[] = [];
   arregloTipoConcentracion: any[] = [];
+  modulesQuill: any;
   constructor(
     private servicio_categoria: CategoriaService,
     private servicio_login: LoginService,
@@ -70,12 +74,10 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private router: Router,
     private toastr: ToastrService,
-    private el: ElementRef,
     private route: ActivatedRoute,
-    private renderer: Renderer2,
-    private helper:HelpersService
+    private helper: HelpersService,
   ) {
-
+    this.modulesQuill = this.helper.getToolbarConfig();
     this.informacionForm = this.fb.group({
       codigo_producto: ['', [Validators.required]],
       tipo_inventario: ['', [Validators.required]],
@@ -97,8 +99,8 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
       this.tipo_inventario = respuesta.datos.tipo_inventario;
       this.tipo_afectacion = respuesta.datos.tipo_afectacion;
       this.arregloBodegas = respuesta.datos.bodegas;
-      this.arregloFormaFarmaceutica=respuesta.datos.unidad;
-      this.arregloTipoConcentracion=respuesta.datos.tipo_concentracion;
+      this.arregloFormaFarmaceutica = respuesta.datos.unidad;
+      this.arregloTipoConcentracion = respuesta.datos.tipo_concentracion;
     })
   }
 
@@ -106,61 +108,13 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
     this.Unsuscribe.unsubscribe();
   }
   ngAfterViewInit(): void {
-    $(this.el.nativeElement).find('.descripcion_extendida').summernote({
-      height: 60,
-      minHeight: null,
-      maxHeight: null,
-      focus: false,
-      toolbar: [
-        ['style', ['style']],
-        ['font', ['bold', 'underline', 'clear']],
-        ['fontname', ['fontname']],
-        ['color', ['color']],
-        ['para', ['ul', 'ol', 'paragraph']],
-        // ['table', ['table']]
-        // ['insert', ['link', 'picture', 'video']],
-        // ['view', ['fullscreen', 'codeview', 'help']],
-      ],
-      callbacks: {
-        onChange: (contents: any) => {
-          this.informacionForm.get('descripcion_extendida')!.setValue(contents);
-        }
-      }
-    });
-    $(this.el.nativeElement).find('.descripcion_corta').summernote({
-      height: 60,
-      minHeight: null,
-      maxHeight: null,
-      focus: false,
-      toolbar: [
-        ['style', ['style']],
-        ['font', ['bold', 'underline', 'clear']],
-        ['fontname', ['fontname']],
-        ['color', ['color']],
-        ['para', ['ul', 'ol', 'paragraph']],
-        // ['table', ['table']]
-        // ['insert', ['link', 'picture', 'video']],
-        // ['view', ['fullscreen', 'codeview', 'help']],
-      ],
-      callbacks: {
-        onChange: (contents: any) => {
-          this.informacionForm.get('descripcion_corta')!.setValue(contents);
-        }
-      }
-    });
-    // setTimeout(() => {
-    //   const navItems = document.querySelectorAll('.nav-item');
-    //   navItems.forEach((navItem: any) => {
-    //     this.renderer.removeClass(navItem, 'disabled');
-    //   });
-    // }, 1500);
   }
 
 
 
   ngOnInit(): void {
     $("[data-dismiss='modal']").click();
-    
+
     $("#t-crear-categoria-producto").children("div").remove();
     var estructura_html = "<div><h6 for=\"name\" class=\"col-sm-12 control-label\">Categoría Padre</h6><div id=\"treeview_container\" class=\"hummingbird-treeview t-view-editar\" style=\"height: auto; display: block;\"><ul style='list-style: none;' id=\"treeview\" class=\"hummingbird-base\"></ul></div></div>";
     $("#t-crear-categoria-producto").html(estructura_html);
@@ -746,8 +700,8 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
   }
 
   onInput(event: any): void {
-    const inputElement:any = event.target as HTMLInputElement;
-    inputElement.value =this.helper.validarNumeroDecimal(event);
+    const inputElement: any = event.target as HTMLInputElement;
+    inputElement.value = this.helper.validarNumeroDecimal(event);
   }
 
 

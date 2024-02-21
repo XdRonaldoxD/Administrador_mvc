@@ -94,9 +94,7 @@
                                                             [class.is-invalid]="informacionForm.controls['id_tipo_afectacion']|isInvalid"
                                                             class="form-control">
                                                             <option value="">Seleccionar Afectación</option>
-                                                            <option value="{{item.id_tipo_afectacion}}"
-                                                                *ngFor="let item of tipo_afectacion">
-                                                                {{item.descripcion}}</option>
+                                                            <option value="{{item.id_tipo_afectacion}}" *ngFor="let item of tipo_afectacion">{{item.descripcion}}</option>
                                                         </select>
                                                         <div class="text-danger">
                                                             <div
@@ -131,10 +129,8 @@
                                                 <div class="col-md-12 col-12">
                                                     <div class="form-group">
                                                         <label for="location1">Descripción Extendida</label>
-                                                        <textarea #descripcionExtendida
-                                                            formControlName="descripcion_extendida"
-                                                            class="form-control descripcion_extendida" rows="5"
-                                                            placeholder="Descripción de la categoría"></textarea>
+                                                            <quill-editor formControlName="descripcion_extendida" #descripcion_extendida
+                                                            [modules]="modulesQuill"></quill-editor>
                                                     </div>
                                                 </div>
                                             </div>
@@ -142,9 +138,8 @@
                                                 <div class="col-md-12 col-12">
                                                     <div class="form-group">
                                                         <label for="phoneNumber1">Descripción Corta</label>
-                                                        <textarea #descripcionCorta formControlName="descripcion_corta"
-                                                            class="form-control descripcion_corta" rows="5"
-                                                            placeholder="Descripción de la categoría"></textarea>
+                                                        <quill-editor formControlName="descripcion_corta" #descripcion_corta
+                                                            [modules]="modulesQuill"></quill-editor>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 col-12">
@@ -279,11 +274,13 @@
                                                         </td>
                                                         <td>
                                                             <input class="form-control" type="text" [disabled]="rol"
-                                                                [(ngModel)]="element.ultimopreciocompra_stock_producto_bodega" (input)="onInput($event)">
+                                                                [(ngModel)]="element.ultimopreciocompra_stock_producto_bodega"
+                                                                (input)="onInput($event)">
                                                         </td>
                                                         <td>
                                                             <input class="form-control" type="text" [disabled]="rol"
-                                                                [(ngModel)]="element.precioventa_stock_producto_bodega" (input)="onInput($event)">
+                                                                [(ngModel)]="element.precioventa_stock_producto_bodega"
+                                                                (input)="onInput($event)">
                                                         </td>
                                                     </tr>
                                                 </tbody>

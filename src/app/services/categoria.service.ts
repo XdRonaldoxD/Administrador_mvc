@@ -27,12 +27,13 @@ export class CategoriaService {
     return this.httpcliente.post(environment.api_url+"&controller=Categoria&action=CargarCategoria", formData,{headers:headers})
   }
 
-  GestionarCategoria(token:any,formulario:any,categoria_padre:any,imagen:any): Observable<any> {
+  GestionarCategoria(token:any,formulario:any,categoria_padre:any,imagen:any,imagen_popular:any): Observable<any> {
     const formData = new FormData();
     formData.append('formulario', JSON.stringify(formulario));
     formData.append('accion', formulario.accion);
     formData.append('categoria_padre', JSON.stringify(categoria_padre));
     formData.append('imagen',imagen)
+    formData.append('imagen_popular',imagen_popular)
     const headers = new HttpHeaders({
       Authorization: token
     });

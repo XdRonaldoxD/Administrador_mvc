@@ -80,28 +80,6 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
   ngAfterViewInit(): void {
     this.reload_producto.next();
     this.reload_producto_deshabilitado.next();
-
-    $(this.el.nativeElement).find('.summernote').summernote({
-      height: 50,
-      minHeight: null,
-      maxHeight: null,
-      focus: false,
-      toolbar: [
-        ['style', ['style']],
-        ['font', ['bold', 'underline', 'clear']],
-        ['fontname', ['fontname']],
-        ['color', ['color']],
-        ['para', ['ul', 'ol', 'paragraph']],
-        // ['table', ['table']]
-        // ['insert', ['link', 'picture', 'video']],
-        // ['view', ['fullscreen', 'codeview', 'help']],
-      ],
-      callbacks: {
-        onChange: (contents: any) => {
-          this.sliderForm.get('texto_slider')?.setValue(contents);
-        }
-      }
-    });
   }
   //FIN
 
@@ -227,7 +205,6 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
       placeholder: "Busque una categoria",
       minimumInputLength: 3
     });
-    this.limpiarEditorSummernote();
     $('#exampleModalCenter').modal('show');
 
   }
@@ -331,7 +308,6 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
 
   }
   EditarSlider(item: any) {
-    this.limpiarEditorSummernote();
     //MOTIVO CUANDO HABRO UN MODAL DESDE OTRO MODULO SE QUEDA PEGADO Y PARA INICIALIZARLO ME TOMA DE ESTA MANERA
     $("#id_categoria").select2({
       dropdownParent: $("#exampleModalCenter"),
@@ -370,9 +346,6 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
       minimumInputLength: 3
     });
     //---------------------------------------------------------
-
-    const $summernote = $(this.el.nativeElement).find('.summernote');
-    $summernote.summernote('code', item.texto_slider);
     this.sliderForm.get('id_slider')!.setValue(item.id_slider);
     this.sliderForm.get('accion')!.setValue('ACTUALIZAR');
     this.sliderForm.get('id_categoria')!.setValue(item.id_categoria);
@@ -385,10 +358,6 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
     $('#exampleModalCenter').modal('show');
   }
 
-  limpiarEditorSummernote() {
-    const $summernote = $(this.el.nativeElement).find('.summernote');
-    $summernote.summernote('code', ''); // Establece el contenido en blanco
-  }
 
 
 

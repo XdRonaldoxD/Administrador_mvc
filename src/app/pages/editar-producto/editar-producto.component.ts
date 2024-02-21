@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ModalMarcaComponent } from '../modals/modal-marca/modal-marca.component';
 import { ToastrService } from 'ngx-toastr';
 import { HelpersService } from 'src/app/services/helpers.service';
+import { QuillViewComponent } from 'ngx-quill';
 declare var $: any;
 declare var document: any;
 declare var Swal: any;
@@ -22,9 +23,10 @@ declare var Swal: any;
 })
 export class EditarProductoComponent implements OnInit, OnDestroy {
   @ViewChild('hijomodalmarca') hijomodalmarca: ModalMarcaComponent | any;
-  @ViewChild('descripcionExtendida') descripcionExtendida: ElementRef | any;
-  @ViewChild('descripcionCorta') descripcionCorta: ElementRef | any;
   @ViewChild('productoSelect') productoSelect: any;
+  @ViewChild('descripcion_extendida') descripcion_extendida?: QuillViewComponent;
+  @ViewChild('descripcion_corta') descripcion_corta?: QuillViewComponent;
+
   token: any;
   tipo_inventario?: any = [];
   imagenes_producto?: any = [];
@@ -51,8 +53,10 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
   arregloTipoConcentracion: any[] = [];
   arregloBodegas: any[] = [];
   GuardarInformacion: boolean = false;
-  rol:boolean=true;
-  usuario:any=null;
+  rol: boolean = true;
+  usuario: any = null;
+  modulesQuill: any;
+  private res: any; // Propiedad para almacenar el valor de res
   constructor(
     private servicio_categoria: CategoriaService,
     private servicio_login: LoginService,
@@ -63,13 +67,14 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private toastr: ToastrService,
     private el: ElementRef,
-    private helper:HelpersService
+    private helper: HelpersService
   ) {
+    this.modulesQuill = this.helper.getToolbarConfig();
     this.token = this.servicio_login.getToken();
-    this.usuario=this.servicio_login.getIdentity();
-    if (this.usuario && this.usuario.id_perfil==1) {//SOLO PARA LOS ADMINISTRADORES
-      this.rol=false;
-    } 
+    this.usuario = this.servicio_login.getIdentity();
+    if (this.usuario && this.usuario.id_perfil == 1) {//SOLO PARA LOS ADMINISTRADORES
+      this.rol = false;
+    }
     this.informacionForm = this.fb.group({
       id_producto: ['', [Validators.required]],
       codigo_producto: ['', [Validators.required]],
@@ -87,142 +92,86 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
     this.PrecioStockForm = this.fb.group({
       stock: [[]]
     });
-  
+
     this.listarAtributo();
     this.route.data.pipe(takeUntil(this.Unsuscribe), finalize(() => {
-
     })).subscribe((respuesta: any) => {
-      let res = respuesta.datos.producto;
+      this.res = respuesta.datos.producto;
       this.arregloFormaFarmaceutica = respuesta.datos.unidad;
       this.arregloTipoConcentracion = respuesta.datos.tipo_concentracion;
-      this.tipo_afectacion = res.tipoAfectacion;
-      if (res.visibleonline_producto === 1) {
-        res.visibleonline_producto = true;
+      this.tipo_inventario = respuesta.datos.tipo_inventario;
+      this.tipo_afectacion = this.res.tipoAfectacion;
+      if (this.res.visibleonline_producto === 1) {
+        this.res.visibleonline_producto = true;
       } else {
-        res.visibleonline_producto = false;
+        this.res.visibleonline_producto = false;
       }
-
-      this.informacionForm.get('id_producto')?.setValue(res.id_producto);
-      this.informacionForm.get('id_unidad')?.setValue(`${res.id_unidad ?? ''}`);
-      this.informacionForm.get('id_tipo_concentracion')?.setValue(`${res.id_tipo_concentracion ?? ''}`);
-      this.informacionForm.get('codigo_producto')?.setValue(res.codigo_producto);
-      this.informacionForm.get('tipo_inventario')?.setValue(res.id_tipo_inventario);
-      this.informacionForm.get('visible_tienda')?.setValue(res.visibleonline_producto);
-      this.informacionForm.get('id_tipo_afectacion')?.setValue(res.id_tipo_afectacion);
-      this.informacionForm.get('codigo_barra_producto')?.setValue(res.codigo_barra_producto);
-
-      this.informacionForm.get('descripcion_corta')?.setValue(res.detalle_producto);
-      this.informacionForm.get('descripcion_extendida')?.setValue(res.detallelargo_producto);
-      this.informacionForm.get('glosa_producto')?.setValue(res.glosa_producto);
-
-
-
-
-
+      this.informacionForm.get('id_producto')?.setValue(this.res.id_producto);
+      this.informacionForm.get('id_unidad')?.setValue(`${this.res.id_unidad ?? ''}`);
+      this.informacionForm.get('id_tipo_concentracion')?.setValue(`${this.res.id_tipo_concentracion ?? ''}`);
+      this.informacionForm.get('codigo_producto')?.setValue(this.res.codigo_producto);
+      this.informacionForm.get('tipo_inventario')?.setValue(this.res.id_tipo_inventario);
+      this.informacionForm.get('visible_tienda')?.setValue(this.res.visibleonline_producto);
+      this.informacionForm.get('id_tipo_afectacion')?.setValue(this.res.id_tipo_afectacion);
+      this.informacionForm.get('codigo_barra_producto')?.setValue(this.res.codigo_barra_producto);
+      this.informacionForm.get('glosa_producto')?.setValue(this.res.glosa_producto);
+      this.informacionForm.get('descripcion_corta')?.setValue(this.res.detalle_producto);
+      this.informacionForm.get('descripcion_extendida')?.setValue(this.res.detallelargo_producto);
       this.marcas = [{
-        id_marca: res.id_marca,
-        glosa_marca: res.glosa_marca
+        id_marca: this.res.id_marca,
+        glosa_marca: this.res.glosa_marca
       }];
-      this.informacionForm.get('id_marca')?.setValue(res.id_marca);
-
-      this.checked_atributo = res.arreglo_atributo_producto;
-      this.arregloColor = res.arreglo_color;
-
-
-      this.arregloEspecificacion = res.arreglo_especificacion;
-      res.arreglo_categoria_producto.forEach((element: any) => {
-        this.checked_categoria.push(element.id_categoria);
-      });
-
-      this.imagenes_producto = res.arreglo_imagen;
-      this.listarProductoRelacionados = res.arreglo_relacionado;
-      this.arregloBodegas=res.stock_producto_bodega;
-
-      setTimeout(() => {
-        this.listarCategorias(this.informacionForm.value.tipo_inventario, true);
-      }, 500);
-
-      setTimeout(() => {
-        this.checked_atributo.forEach((element: any) => {
-          $(`#${element.id_atributo}_atributo`).prop('checked', true);
-        });
-
-        this.checked_categoria.forEach((element: any) => {
-          $(`#${element}_categoria`).prop('checked', true);
-        });
-      }, 1000);
+      this.informacionForm.get('id_marca')?.setValue(this.res.id_marca);
+      this.arregloColor = this.res.arreglo_color;
+      this.arregloEspecificacion = this.res.arreglo_especificacion;
+      this.imagenes_producto = this.res.arreglo_imagen;
+      this.listarProductoRelacionados = this.res.arreglo_relacionado;
+      this.arregloBodegas = this.res.stock_producto_bodega;
       $(document).trigger("enhance.tablesaw");
     })
   }
-
   ngOnDestroy(): void {
     this.Unsuscribe.unsubscribe();
   }
   ngAfterViewInit(): void {
-    $(this.el.nativeElement).find('.descripcion_extendida').summernote({
-      height: 60,
-      minHeight: null,
-      maxHeight: null,
-      focus: false,
-      toolbar: [
-        ['style', ['style']],
-        ['font', ['bold', 'underline', 'clear']],
-        ['fontname', ['fontname']],
-        ['color', ['color']],
-        ['para', ['ul', 'ol', 'paragraph']],
-        // ['table', ['table']]
-        // ['insert', ['link', 'picture', 'video']],
-        // ['view', ['fullscreen', 'codeview', 'help']],
-      ],
-      callbacks: {
-        onChange: (contents: any) => {
-          this.informacionForm.get('descripcion_extendida')!.setValue(contents);
+    // TERMINA SU EJECUCION CON NGAFTERVIEWINIT-----------------------------------
+    // Configuración de Quill
+    const descripcion_corta: any = this.descripcion_corta?.quillEditor;
+    const descripcion_extendida: any = this.descripcion_extendida?.quillEditor;
+    if (descripcion_corta) {
+      descripcion_corta.clipboard.dangerouslyPasteHTML(this.res.detalle_producto);
+    }
+    if (descripcion_extendida) {
+      descripcion_extendida.clipboard.dangerouslyPasteHTML(this.res.detallelargo_producto);
+    }
+    // --------------------------------------------------------------------------------------
+    $("#t-editar-categoria-producto").children("div").remove();
+    var estructura_html = "<div><h6 for=\"name\" class=\"col-sm-12 control-label\">Categoría Padre</h6><div id=\"treeview_container\" class=\"hummingbird-treeview t-view-editar\" style=\"height: auto; display: block;overflow: auto\"><ul style='list-style: none;' id=\"treeview\" class=\"hummingbird-base\"></ul></div></div>";
+    $("#t-editar-categoria-producto").html(estructura_html);
+    setTimeout(() => {
+      this.checked_atributo.forEach((element: any) => {
+        const checkbox = document.getElementById(`${element.id_atributo}_atributo`) as HTMLInputElement;
+        if (checkbox) {
+          checkbox.checked = true;
         }
-      }
-    });
-    $(this.el.nativeElement).find('.descripcion_corta').summernote({
-      height: 60,
-      minHeight: null,
-      maxHeight: null,
-      focus: false,
-      toolbar: [
-        ['style', ['style']],
-        ['font', ['bold', 'underline', 'clear']],
-        ['fontname', ['fontname']],
-        ['color', ['color']],
-        ['para', ['ul', 'ol', 'paragraph']],
-        // ['table', ['table']]
-        // ['insert', ['link', 'picture', 'video']],
-        // ['view', ['fullscreen', 'codeview', 'help']],
-      ],
-      callbacks: {
-        onChange: (contents: any) => {
-          this.informacionForm.get('descripcion_corta')!.setValue(contents);
+      });
+
+      this.checked_categoria.forEach((element: any) => {
+        const checkbox = document.getElementById(`${element}_categoria`) as HTMLInputElement;
+        if (checkbox) {
+          checkbox.checked = true;
         }
-      }
-    });
-    // setTimeout(() => {
-    //   const navItems = document.querySelectorAll('.nav-item');
-    //   navItems.forEach((navItem: any) => {
-    //     this.renderer.removeClass(navItem, 'disabled');
-    //   });
-    // }, 1500);
+      });
+    }, 1500);
+    //----------------------------------------------------------------------------
   }
   ngOnInit(): void {
     $("[data-dismiss='modal']").click();
-    this.servicio_categoria.Inventario(this.token).pipe(finalize(() => {
-      $("#t-editar-categoria-producto").children("div").remove();
-      var estructura_html = "<div><h6 for=\"name\" class=\"col-sm-12 control-label\">Categoría Padre</h6><div id=\"treeview_container\" class=\"hummingbird-treeview t-view-editar\" style=\"height: auto; display: block;overflow: auto\"><ul style='list-style: none;' id=\"treeview\" class=\"hummingbird-base\"></ul></div></div>";
-      $("#t-editar-categoria-producto").html(estructura_html);
-    })).subscribe(
-      {
-        next: (res) => {
-          this.tipo_inventario = res;
-        }, error: (error) => {
-
-        }
-      }
-    )
+    // PRIMERO SE INICIALIZA CON NGINIT EL COMPONENTE
+    this.listarCategorias(this.res.id_tipo_inventario, true);
+    this.checked_atributo = this.res.arreglo_atributo_producto;
+    this.checked_categoria = this.res.arreglo_categoria_producto.map((element: any) => element.id_categoria);
+    // ------------------------------------------------------------------------------------------
     $(document).on("keyup", ".posicion", (elemento: any) => {
       this.imagenes_producto[$(elemento.target).attr("id_posicion")].orden_imagen = $(elemento.target).val();
     })
@@ -760,9 +709,9 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
   }
 
   onInput(event: any): void {
-    const inputElement:any = event.target as HTMLInputElement;
-    const valor=this.helper.validarNumeroDecimal(event);
-    inputElement.value=valor;
+    const inputElement: any = event.target as HTMLInputElement;
+    const valor = this.helper.validarNumeroDecimal(event);
+    inputElement.value = valor;
   }
 
 

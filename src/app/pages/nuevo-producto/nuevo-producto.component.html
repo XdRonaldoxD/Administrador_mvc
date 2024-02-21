@@ -16,27 +16,25 @@
                                 <ul class="nav nav-tabs customtab2" role="tablist">
                                     <li class="nav-item "> <a class="nav-link active" data-toggle="tab"
                                             href="#home7-nuevo" role="tab">
-                                            <span class="hidden-sm-up"><i class="ti-home fa fa-file-text"></i></span> <span
-                                                class="hidden-xs-down">INFORMACIÓN</span></a> </li>
-                                    <li class="nav-item "> <a class="nav-link" data-toggle="tab"
-                                            href="#profile7-nuevo" role="tab"><span class="hidden-sm-up"><i
-                                                    class="ti-package"></i></span> <span
-                                                class="hidden-xs-down">PRECIO-STOCK</span></a> </li>
-                                    <li class="nav-item "> <a class="nav-link" data-toggle="tab"
-                                            href="#messages7-nuevo" role="tab"><span class="hidden-sm-up"><i
-                                                    class="fa fa-image"></i></span> <span
-                                                class="hidden-xs-down">IMAGENES</span></a> </li>
+                                            <span class="hidden-sm-up"><i class="ti-home fa fa-file-text"></i></span>
+                                            <span class="hidden-xs-down">INFORMACIÓN</span></a> </li>
+                                    <li class="nav-item "> <a class="nav-link" data-toggle="tab" href="#profile7-nuevo"
+                                            role="tab"><span class="hidden-sm-up"><i class="ti-package"></i></span>
+                                            <span class="hidden-xs-down">PRECIO-STOCK</span></a> </li>
+                                    <li class="nav-item "> <a class="nav-link" data-toggle="tab" href="#messages7-nuevo"
+                                            role="tab"><span class="hidden-sm-up"><i class="fa fa-image"></i></span>
+                                            <span class="hidden-xs-down">IMAGENES</span></a> </li>
                                     <li *ngIf="id_tipo_inventario==1" class="nav-item "> <a class="nav-link"
                                             data-toggle="tab" href="#messages8-nuevo" role="tab"><span
                                                 class="hidden-sm-up"><i class="ti-email"></i></span> <span
                                                 class="hidden-xs-down">COLOR DE PRODUCTO</span></a> </li>
-                                    <li class="nav-item "> <a class="nav-link" data-toggle="tab"
-                                            href="#messages9-nuevo" role="tab"><span class="hidden-sm-up"><i
-                                                    class="ti-notepad"></i></span> <span
-                                                class="hidden-xs-down">ESPECIFICACIONES</span></a> </li>
+                                    <li class="nav-item "> <a class="nav-link" data-toggle="tab" href="#messages9-nuevo"
+                                            role="tab"><span class="hidden-sm-up"><i class="ti-notepad"></i></span>
+                                            <span class="hidden-xs-down">ESPECIFICACIONES</span></a> </li>
                                     <li class="nav-item "> <a class="nav-link" data-toggle="tab"
                                             href="#messages10-nuevo" role="tab"><span class="hidden-sm-up"><i
-                                                    class="fa fa-dropbox"></i></span> <span class="hidden-xs-down">PRODUCTO
+                                                    class="fa fa-dropbox"></i></span> <span
+                                                class="hidden-xs-down">PRODUCTO
                                                 RELACIONADOS</span></a> </li>
                                 </ul>
                                 <!-- Tab panes -->
@@ -135,9 +133,8 @@
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="location1">Descripción Extendida</label>
-                                                        <textarea formControlName="descripcion_extendida"
-                                                            class="form-control descripcion_extendida" rows="5"
-                                                            placeholder="Descripción de la categoría"></textarea>
+                                                        <quill-editor formControlName="descripcion_extendida"
+                                                            [modules]="modulesQuill"></quill-editor>
                                                     </div>
                                                 </div>
                                             </div>
@@ -145,9 +142,8 @@
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="phoneNumber1">Descripción Corta</label>
-                                                        <textarea formControlName="descripcion_corta"
-                                                            class="form-control descripcion_corta" rows="5"
-                                                            placeholder="Descripción de la categoría"></textarea>
+                                                        <quill-editor formControlName="descripcion_corta"
+                                                            [modules]="modulesQuill"></quill-editor>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 col-12">
@@ -237,7 +233,8 @@
                                     </div>
                                     <div class="tab-pane  p-20" id="profile7-nuevo" role="tabpanel">
                                         <div class="row table-responsive">
-                                            <h4> <strong> Por favor llenar los datos son obligatorios <span class="text-danger">(*)</span></strong></h4>
+                                            <h4> <strong> Por favor llenar los datos son obligatorios <span
+                                                        class="text-danger">(*)</span></strong></h4>
                                             <table class="table table-striped color-table info-table">
                                                 <thead>
                                                     <tr>
@@ -258,11 +255,13 @@
                                                         </td>
                                                         <td>
                                                             <input class="form-control" type="text"
-                                                                [(ngModel)]="element.ultimopreciocompra_stock_producto_bodega" (input)="onInput($event)">
+                                                                [(ngModel)]="element.ultimopreciocompra_stock_producto_bodega"
+                                                                (input)="onInput($event)">
                                                         </td>
                                                         <td>
                                                             <input class="form-control" type="text"
-                                                                [(ngModel)]="element.precioventa_stock_producto_bodega" (input)="onInput($event)">
+                                                                [(ngModel)]="element.precioventa_stock_producto_bodega"
+                                                                (input)="onInput($event)">
                                                         </td>
                                                     </tr>
 

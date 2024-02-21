@@ -52,20 +52,37 @@ export class HelpersService {
   validarNumeroDecimal(event: any): void {
     const inputElement = event.target as HTMLInputElement;
     let inputValue: string = inputElement.value;
-  
+
     // Remover caracteres no permitidos (solo números y un punto decimal)
     inputValue = inputValue.replace(/[^0-9.]/g, '');
-  
+
     // Separar parte entera y decimal
     const parts = inputValue.split('.');
     const integerPart = parts[0];
     const decimalPart = parts.length > 1 ? `.${parts[1]}` : '';
-  
+
     // Limitar la longitud de la parte decimal a dos caracteres
     const limitedDecimalPart = decimalPart.slice(0, 3);
-  
+
     // Reconstruir el valor con la parte entera y la parte decimal limitada
-    const finalValue:any = `${integerPart}${limitedDecimalPart}`;
+    const finalValue: any = `${integerPart}${limitedDecimalPart}`;
     return finalValue;
   }
+
+  getToolbarConfig(): any {
+    return {
+      toolbar: [
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        [{ color: [] }, { 'background': [] }],
+        [{ font: [] }],
+        [{ 'size': ['small', false, 'large', 'huge'] }],
+        
+      ],
+    };
+  }
+
+
+
 }

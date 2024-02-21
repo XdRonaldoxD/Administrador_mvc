@@ -46,6 +46,7 @@ import { PromocionComponent } from './TiendaOnline/promocion/promocion.component
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { ExtendedPdfComponent } from './pdf/extended-pdf/extended-pdf.component';
 import { ReporteVentaProductoComponent } from './reporte-venta-producto/reporte-venta-producto.component';
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
   declarations: [
@@ -104,7 +105,8 @@ import { ReporteVentaProductoComponent } from './reporte-venta-producto/reporte-
     BrowserAnimationsModule,
     HttpClientModule,
     ToastrModule.forRoot(),
-    NgxExtendedPdfViewerModule
+    NgxExtendedPdfViewerModule,
+    QuillModule.forRoot()
   ],
   providers: [DatePipe],
   schemas: [NO_ERRORS_SCHEMA]

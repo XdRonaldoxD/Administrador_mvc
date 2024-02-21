@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { QuillViewComponent } from 'ngx-quill';
 import { ToastrService } from 'ngx-toastr';
 import { Subject, finalize, takeUntil } from 'rxjs';
 import { DataTablesResponse } from 'src/app/interface/Datatable';
@@ -16,6 +17,7 @@ declare var $: any;
   styleUrls: ['./promocion.component.css']
 })
 export class PromocionComponent implements AfterViewInit, OnDestroy, OnInit {
+  @ViewChild('descripcion_promocion') descripcion_promocion?: QuillViewComponent;
   @ViewChild("foto") foto?: ElementRef;
   dtOptions: DataTables.Settings[] = [];
   reload_producto: any = new Subject();
@@ -29,15 +31,16 @@ export class PromocionComponent implements AfterViewInit, OnDestroy, OnInit {
   api_url: string = environment.api_url;
   environment: any;
   GuardarInformacion: boolean = false;
+  modulesQuill: any;
   constructor(private http: HttpClient,
     private promocion: PromocionService,
     private fb: FormBuilder,
     private servicio_login: LoginService,
     private toastr: ToastrService,
-    private Helper: HelpersService,
-    private el: ElementRef
+    private Helper: HelpersService
 
   ) {
+    this.modulesQuill = this.Helper.getToolbarConfig();
     this.promocionForm = this.fb.group({
       id_promocion: [],
       titulo_promocion: ['', [Validators.required]],
@@ -69,28 +72,6 @@ export class PromocionComponent implements AfterViewInit, OnDestroy, OnInit {
   }
   ngAfterViewInit(): void {
     this.reload_producto.next();
-
-    $(this.el.nativeElement).find('.summernote').summernote({
-      height: 50,
-      minHeight: null,
-      maxHeight: null,
-      focus: false,
-      toolbar: [
-        ['style', ['style']],
-        ['font', ['bold', 'underline', 'clear']],
-        ['fontname', ['fontname']],
-        ['color', ['color']],
-        ['para', ['ul', 'ol', 'paragraph']],
-        // ['table', ['table']]
-        // ['insert', ['link', 'picture', 'video']],
-        // ['view', ['fullscreen', 'codeview', 'help']],
-      ],
-      callbacks: {
-        onChange: (contents: any) => {
-          this.promocionForm.get('descripcion_promocion')?.setValue(contents);
-        }
-      }
-    });
   }
   //FIN
   SliderHabilitados() {
@@ -169,7 +150,7 @@ export class PromocionComponent implements AfterViewInit, OnDestroy, OnInit {
     this.promocionForm.get('accion')!.setValue('CREAR');
     $("#t-crear-categoria").html('');
     this.texto_cabezera = 'NUEVO PROMOCION';
-    this.limpiarEditorSummernote();
+    this.limpiarEditorQuill();
     const fechaActual = new Date();    // Obtener la fecha actual
     const nuevaFecha = new Date();
     nuevaFecha.setMonth(fechaActual.getMonth() + 1);    // Sumar un mes a la fecha actual
@@ -257,21 +238,23 @@ export class PromocionComponent implements AfterViewInit, OnDestroy, OnInit {
 
   }
   EditarPromocion(item: any) {
-    this.limpiarEditorSummernote();
-    const $summernote = $(this.el.nativeElement).find('.summernote');
-    $summernote.summernote('code', item.descripcion_promocion);
+    this.limpiarEditorQuill();
+    const quill:any = this.descripcion_promocion?.quillEditor;
+    quill.clipboard.dangerouslyPasteHTML(item.descripcion_promocion);//Pega el contenido HTML utilizando clipboard.dangerouslyPasteHTML
     this.promocionForm.get('id_promocion')!.setValue(item.id_promocion);
     this.promocionForm.get('accion')!.setValue('ACTUALIZAR');
     this.promocionForm.get('titulo_promocion')!.setValue(item.titulo_promocion);
     this.promocionForm.get('fecha_promocion')!.setValue(item.fecha_promocion);
+    this.promocionForm.get('descripcion_promocion')!.setValue(item.descripcion_promocion);
     this.Helper.resetPreview('file_escritorio_promocion', item.url_promocion, item.id_url_promocion);
-    this.texto_cabezera = 'EDITAR SLIDER';
+    this.texto_cabezera = 'EDITAR PROMOCIÓN';
     $('#exampleModalPromocion').modal('show');
   }
 
-  limpiarEditorSummernote() {
-    const $summernote = $(this.el.nativeElement).find('.summernote');
-    $summernote.summernote('code', ''); // Establece el contenido en blanco
+  limpiarEditorQuill() {
+    // Limpia el contenido del editor
+    this.descripcion_promocion?.quillEditor.setText('');
+
   }
 
 }

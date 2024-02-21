@@ -374,9 +374,9 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
       showConfirmButton: false,
       onOpen: () => {
         Swal.showLoading();
-        var htmlticket = `<embed src="${environment.api_url}?controller=Caja&action=TraerDetalleCaja&id_caja=${this.id_caja}&Formato=TICKET&Authorization=${this.token}" frameborder="0" width="100%" height="400px">`;
+        var htmlticket = `<embed src="${environment.api_url}&controller=Caja&action=TraerDetalleCaja&id_caja=${this.id_caja}&id_empresa=${this.usuario.id_empresa}&Formato=TICKET&Authorization=${this.token}" frameborder="0" width="100%" height="400px">`;
         $("#viewjs2_negocio").html(htmlticket);
-        var htmlpdf = `<embed src="${environment.api_url}?controller=Caja&action=TraerDetalleCaja&id_caja=${this.id_caja}&Formato=DOCUMENTO&Authorization=${this.token}" frameborder="0" width="100%" height="400px">`;
+        var htmlpdf = `<embed src="${environment.api_url}&controller=Caja&action=TraerDetalleCaja&id_caja=${this.id_caja}&id_empresa=${this.usuario.id_empresa}&Formato=DOCUMENTO&Authorization=${this.token}" frameborder="0" width="100%" height="400px">`;
         $("#viewjs_negocio").html(htmlpdf);
         $(".imprimirTicket").addClass('active');
         $(".imprimirTicketcontent").addClass('active');

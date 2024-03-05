@@ -450,7 +450,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
 
   BuscarProductoRelaciondo(data: any): any {
     if (data && data.id_producto) {
-      this.producto_serv.TraerProductosID(data.id_producto).pipe(finalize(() => {
+      this.producto_serv.TraerProductoIdRelacionado(data.id_producto).pipe(finalize(() => {
         this.limpiarSeleccion('producto-relacionado');
         this.productoSelect.clearModel();
       }), takeUntil(this.Unsuscribe)).subscribe(

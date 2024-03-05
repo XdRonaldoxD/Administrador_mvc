@@ -677,6 +677,8 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
   SearchProductoRelacionado(term: string) {
     this.isLoading = true;
     let id_productos = this.listarProductoRelacionados.map((item: any) => item.id_producto);
+    id_productos.push(this.informacionForm.value.id_producto)
+    console.log(id_productos);
     if (term.length > 1) {
       this.producto_serv.BuscarProductoRelacionado(term, id_productos).pipe(takeUntil(this.Unsuscribe))
         .subscribe((data: any) => {

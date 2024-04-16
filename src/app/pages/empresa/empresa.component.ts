@@ -134,6 +134,10 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
 
   FormarSerie(event: any, tipo: string): void {
     const inputValue: string = event.target.value;
+
+    if (inputValue == '') {
+      return;
+    }
     const words: string[] = inputValue.trim().split(/\s+/);
     const limitedWords: string[] = words.slice(0, 4);
 
@@ -242,7 +246,6 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
           if (resp.idProvincia) {
             this.SeleccionarProvincia(resp.idProvincia);
           }
-
           this.informacionForm.patchValue({
             ruc_empresa: resp.ruc_empresa_venta_online,
             razon_social_empresa: resp.razon_social_empresa_venta_online,
@@ -262,12 +265,18 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
             email_empresa_venta_online: resp.email_empresa_venta_online,
             giro_empresa_venta_online: resp.giro_empresa_venta_online,
             id_bodega: resp.id_bodega ?? '',
-            id_sucursal: resp.id_sucursal ?? ''
+            id_sucursal: resp.id_sucursal ?? '',
+            serie_boleta: resp.serie_boleta_empresa_venta_online,
+            serie_factura: resp.serie_factura_empresa_venta_online,
+            serie_nc_boleta: resp.serie_nc_boleta_empresa_venta_online,
+            serie_nc_factura: resp.serie_nc_factura_empresa_venta_online,
+            serie_nd_boleta: resp.serie_nd_boleta_empresa_venta_online,
+            serie_nd_factura: resp.serie_nd_factura_empresa_venta_online,
+            serie_nota_venta: resp.serie_nota_venta_empresa_venta_online
           });
           if (resp.id_sucursal) {
             this.Seleccionar('Sucursal')
           }
-
           this.Helper.resetPreview('icono_empresa', resp.urlicono_empresa_venta_online, resp.public_idicono_empresa_venta_online);
           this.Helper.resetPreview('logo_empresa_horizonta', resp.urllogohorizontal_empresa_venta_online, resp.public_idlogohorizontal_empresa_venta_online);
           this.Helper.resetPreview('logo_empresa_vertical', resp.urllogovertical_empresa_venta_online, resp.public_idlogovertical_empresa_venta_online);
@@ -379,11 +388,11 @@ export class EmpresaComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
 
-  limpiarInformacionCertificado(){
+  limpiarInformacionCertificado() {
     this.informacionForm.get('usuario_sol')?.setValue('')
     this.informacionForm.get('clave_sol')?.setValue('')
     this.informacionForm.get('clave_archivo')?.setValue('')
-    this.archivo_certificado=null;
+    this.archivo_certificado = null;
   }
 
 

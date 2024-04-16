@@ -628,6 +628,21 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
     }, 700);
   }
 
+  InputChangeMayuscula(event: any,tipo:string) {
+    let newValue = event.target.value.toUpperCase();
+    switch (tipo) {
+      case 'SKU':
+        this.informacionForm.controls['codigo_producto'].setValue(newValue);
+        break;
+    case 'CODIGO BARRA':
+      this.informacionForm.controls['codigo_barra_producto'].setValue(newValue);
+      break;
+      default:
+        this.informacionForm.controls['glosa_producto'].setValue(newValue);
+        break;
+    }
+}
+
   buscarMarca(term: string) {
     this.isLoading = true;
     if (term.length > 1) {

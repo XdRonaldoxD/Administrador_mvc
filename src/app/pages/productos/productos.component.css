@@ -4,3 +4,17 @@
 .color-strong{
     font-weight: 600;
 }
+.formulario-boton{
+    display: none;
+}
+.formulario-busqueda{
+    display: block;
+}
+@media screen and (max-width: 767px) {
+    .formulario-busqueda {
+        display: none; /* Ocultar formulario de búsqueda en dispositivos móviles */
+    }
+    .formulario-boton {
+        display: block; /* Ocultar formulario de búsqueda en dispositivos móviles */
+    }
+}

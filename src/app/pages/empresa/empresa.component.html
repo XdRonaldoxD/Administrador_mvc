@@ -338,14 +338,13 @@
                                     </div>
                                     <div class="tab-pane  p-20" id="serie-documento" role="tabpanel">
                                         <div class="row">
-                                            <form [formGroup]="informacionForm" autocomplete="nope"
-                                                enctype="multipart/form-data">
+                                            <form [formGroup]="informacionForm" enctype="multipart/form-data">
                                                 <div class="row mt-4">
                                                     <div class="col-12 col-md-6">
                                                         <div class="form-group">
                                                             <label for="videoUrl1">Serie Factura</label>
                                                             <input type="text" class="form-control" [maxlength]="4"
-                                                                (keyup)="FormarSerie($event,'FACTURA')"
+                                                                (blur)="FormarSerie($event,'FACTURA')"
                                                                 formControlName="serie_factura"
                                                                 placeholder="ingrese la serie">
                                                         </div>
@@ -354,7 +353,7 @@
                                                         <div class="form-group">
                                                             <label for="videoUrl1">Serie Boleta</label>
                                                             <input type="text" class="form-control" [maxlength]="4"
-                                                                (keyup)="FormarSerie($event,'BOLETA')"
+                                                                (blur)="FormarSerie($event,'BOLETA')"
                                                                 formControlName="serie_boleta"
                                                                 placeholder="ingrese la serie">
                                                         </div>
@@ -363,7 +362,7 @@
                                                         <div class="form-group">
                                                             <label for="videoUrl1">Serie Nota Credito Boleta</label>
                                                             <input type="text" class="form-control" [maxlength]="4"
-                                                                (keyup)="FormarSerie($event,'NOTA CREDITO BOLETA')"
+                                                                (blur)="FormarSerie($event,'NOTA CREDITO BOLETA')"
                                                                 formControlName="serie_nc_boleta"
                                                                 placeholder="ingrese la serie">
                                                         </div>
@@ -372,7 +371,7 @@
                                                         <div class="form-group">
                                                             <label for="videoUrl1">Serie Nota Credito Factura</label>
                                                             <input type="text" class="form-control" [maxlength]="4"
-                                                                (keyup)="FormarSerie($event,'NOTA CREDITO FACTURA')"
+                                                                (blur)="FormarSerie($event,'NOTA CREDITO FACTURA')"
                                                                 formControlName="serie_nc_factura"
                                                                 placeholder="ingrese la serie">
                                                         </div>
@@ -381,7 +380,7 @@
                                                         <div class="form-group">
                                                             <label for="videoUrl1">Serie Nota Debito Boleta</label>
                                                             <input type="text" class="form-control" [maxlength]="4"
-                                                                (keyup)="FormarSerie($event,'NOTA DEBITO BOLETA')"
+                                                                (blur)="FormarSerie($event,'NOTA DEBITO BOLETA')"
                                                                 formControlName="serie_nd_boleta"
                                                                 placeholder="ingrese la serie">
                                                         </div>
@@ -390,7 +389,7 @@
                                                         <div class="form-group">
                                                             <label for="videoUrl1">Serie Nota Debito Factura</label>
                                                             <input type="text" class="form-control" [maxlength]="4"
-                                                                (keyup)="FormarSerie($event,'NOTA DEBITO FACTURA')"
+                                                                (blur)="FormarSerie($event,'NOTA DEBITO FACTURA')"
                                                                 formControlName="serie_nd_factura"
                                                                 placeholder="ingrese la serie">
                                                         </div>
@@ -399,7 +398,7 @@
                                                         <div class="form-group">
                                                             <label for="videoUrl1">Serie Nota Venta</label>
                                                             <input type="text" class="form-control" [maxlength]="4"
-                                                                (keyup)="FormarSerie($event,'NOTA VENTA')"
+                                                                (blur)="FormarSerie($event,'NOTA VENTA')"
                                                                 formControlName="serie_nota_venta"
                                                                 placeholder="ingrese la serie">
                                                         </div>

@@ -48,6 +48,7 @@
                                                                 class="text-danger">(*)</strong></label>
                                                         <input type="text" class="form-control"
                                                             (keyup)="VerificarSku($event)"
+                                                            (input)="InputChangeMayuscula($event,'SKU')"
                                                             formControlName="codigo_producto"
                                                             placeholder="Codigo del Producto"
                                                             [class.is-invalid]="informacionForm.controls['codigo_producto']|isInvalid">
@@ -64,6 +65,7 @@
                                                         <label for="codigo_barra_producto">Codigo Barra</label>
                                                         <input type="text" class="form-control"
                                                             formControlName="codigo_barra_producto"
+                                                            (input)="InputChangeMayuscula($event,'CODIGO BARRA')"
                                                             placeholder="Codigo barra del producto">
                                                     </div>
                                                 </div>
@@ -76,6 +78,7 @@
                                                         <input type="email" class="form-control"
                                                             formControlName="glosa_producto"
                                                             placeholder="Nombre del producto"
+                                                            (input)="InputChangeMayuscula($event,'NOMBRE')"
                                                             [class.is-invalid]="informacionForm.controls['glosa_producto']|isInvalid">
                                                     </div>
                                                     <div class="text-danger">

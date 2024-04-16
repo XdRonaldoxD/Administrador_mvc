@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { finalize, Subject, takeUntil } from 'rxjs';
 import { LoginService } from '../../services/login.service';
@@ -95,6 +95,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
     //
   }
   ngOnInit(): void {
+
     $("[data-dismiss='modal']").click();
     this.ProductoHabilitados();
     this.ProductosDeshabilitados();
@@ -120,6 +121,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
   }
   //NOTA PARA EL FUNCIONAMIENTO DEL RELOAD APLICAR EN EL TYPYSCRYP Y HTML EL reload_producto
   //SOLO LLAMAR LA FUNCION => this.reload_producto.next();
+
   ngOnDestroy(): void {
     // Do not forget to unsubscribe the  (Datatable)
     this.reload_producto.unsubscribe();
@@ -134,6 +136,8 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
 
   }
   //FIN
+
+
   buscar() {
     this.reload_producto.next();
     this.reload_producto_deshabilitado.next();
@@ -144,7 +148,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
       .set('Authorization', this.token);
     this.dtOptions[0] = {
       pagingType: "full_numbers",
-      pageLength: 10,
+      pageLength: 50,
       serverSide: true,
       processing: true,
       responsive: true,
@@ -187,7 +191,6 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
               // Iterar sobre la información de cada bodega
               bodegasInfo.forEach((info: any) => {
                 const [bodega, stock,precioventa] = info.split('@');
-                console.log(precioventa);
                 producto.bodegas.push(bodega);
                 producto.stock_bodegas.push(parseInt(stock, 10)); // Convertir a entero
                 producto.precioventa.push(precioventa);
@@ -223,7 +226,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
       .set('Authorization', this.token);
     this.dtOptions[1] = {
       pagingType: "full_numbers",
-      pageLength: 10,
+      pageLength: 50,
       serverSide: true,
       processing: true,
       responsive: true,
@@ -451,7 +454,6 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
     this.GestionarStock.get('id_usuario')!.setValue(this.usuario.sub);
     this.GestionarStock.get('accion')!.setValue('')
     this.GestionarStock.get('id_bodega')!.setValue('')
-    console.log(this.GestionarStock.value)
     this.servicio_producto.TraerBodegaStock(datos_producto.id_producto).pipe(takeUntil(this.destroy), finalize(() => {
       $('#exampleModalCenter').modal('show');
     })).subscribe({

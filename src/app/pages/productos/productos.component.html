@@ -8,7 +8,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="" [formGroup]="ProductoBuscar" autocomplete="nope">
+                    <form class="formulario-busqueda"[formGroup]="ProductoBuscar" autocomplete="nope">
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
@@ -64,6 +64,15 @@
                             </div>
                         </div>
                     </form>
+                    <div class="row formulario-boton">
+                        <div class="col-md-12 d-flex justify-content-end col-12">
+                            <div class="row m-0">
+                                <button type="button" routerLink="/Nuevo-Producto"
+                                    class="btn btn-success btn-reset">NUEVO PRODUCTO <i
+                                        class="mdi mdi-checkbox-multiple-blank-outline"></i> </button>
+                            </div>
+                        </div>
+                    </div>
                     <ul class="nav nav-pills m-t-10 m-b-10">
                         <li class=" nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab"
                                 aria-expanded="false">Activos</a> </li>
@@ -354,7 +363,7 @@
                                 <th class="text-center">CANTIDAD</th>
                                 <th class="text-center">BODEGA</th>
                                 <th class="text-center">RESPONSABLE</th>
-                                <th class="text-center">TIPO DOCUMENTO</th>
+                                <th class="text-center">T. DOCUMENTO</th>
                                 <th class="text-center">COMENTARIO</th>
                             </tr>
                         </thead>

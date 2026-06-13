@@ -371,7 +371,7 @@
                         role="tabpanel">
                         <!-- [FIX PDF móvil] Comprobante ESTÁTICO (TICKET) con pdf.js (se ve en celular) -->
                         <div class="container px-0" *ngIf="url_ticket && !caja_dinamica">
-                            <app-extended-pdf [url_pdf]="url_ticket"></app-extended-pdf>
+                            <app-extended-pdf [url_pdf]="url_ticket" [zoom]="100"></app-extended-pdf>
                         </div>
                         <!-- [FIX PDF móvil] Detalle de caja (PDF dinámico de API): se mantiene <embed> -->
                         <div class="container px-0" id="viewjs2_negocio_caja" *ngIf="caja_dinamica">

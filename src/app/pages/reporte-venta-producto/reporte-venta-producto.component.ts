@@ -126,6 +126,13 @@ export class ReporteVentaProductoComponent implements AfterViewInit, OnDestroy, 
     };
   }
   Filtrar() {
+    // [QA-FIX] Evitar rango de fechas invertido.
+    const fi = this.filtrarForm.value.fecha_inicio;
+    const ff = this.filtrarForm.value.fecha_fin;
+    if (fi && ff && fi > ff) {
+      Swal.fire({ toast: true, position: 'top', icon: 'warning', title: 'La fecha inicio no puede ser mayor que la fecha fin', showConfirmButton: false, timer: 3500 });
+      return;
+    }
     this.ngAfterViewInit();
   }
   ExportarExcel(){
@@ -150,7 +157,10 @@ export class ReporteVentaProductoComponent implements AfterViewInit, OnDestroy, 
       onBeforeOpen: () => {
         Swal.showLoading();
         fetch(environment.api_url + "&controller=ReporteVentaProducto&action=exportarProductoVenta", requestOptions)
-          .then(response => response.blob())
+          .then(response => {
+            if (!response.ok) { throw new Error('HTTP ' + response.status); }
+            return response.blob();
+          })
           .then(blob => {
             let url = window.URL.createObjectURL(blob);
             let a = document.createElement('a');
@@ -161,7 +171,10 @@ export class ReporteVentaProductoComponent implements AfterViewInit, OnDestroy, 
             a.remove();
             Swal.close();
           })
-          .catch(error => console.log('error', error));
+          .catch(error => {
+            console.log('error', error);
+            Swal.close(); // [QA-FIX] evitar spinner pegado si falla la API
+          });
       },
     });
   }

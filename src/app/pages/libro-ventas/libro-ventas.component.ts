@@ -28,8 +28,8 @@ export class LibroVentasComponent implements OnInit {
   ) {
     this.token = this.servicio_login.getToken();
     this.UserIdentificado = this.servicio_login.getIdentity();
-    this.route.data.subscribe((res: any) => {
-      this.tipoDocumento = res.datos;
+    this.route.data.pipe(takeUntil(this.unsubscribe$)).subscribe((res: any) => {
+      this.tipoDocumento = res.datos || [];
     })
 
     this.informacionForm = this.fb.group({
@@ -63,6 +63,14 @@ export class LibroVentasComponent implements OnInit {
   exportarDocumento() {
     this.informacionForm.markAllAsTouched()
     if (this.informacionForm.invalid) {
+      this.toast.warning('Completa la fecha desde y hasta.', '', { timeOut: 3000, positionClass: 'toast-top-right' });
+      return;
+    }
+    // [QA-FIX] Validar que el rango de fechas no esté invertido.
+    const fd = this.informacionForm.value.fecha_desde;
+    const fh = this.informacionForm.value.fecha_hasta;
+    if (fd && fh && fd > fh) {
+      this.toast.warning('La fecha "desde" no puede ser mayor que la fecha "hasta".', '', { timeOut: 3500, positionClass: 'toast-top-right' });
       return;
     }
     let myHeaders = new Headers();
@@ -86,7 +94,10 @@ export class LibroVentasComponent implements OnInit {
       onBeforeOpen: () => {
         Swal.showLoading();
         fetch(environment.api_url + "&controller=LibroVentas&action=exportarLibroVentas", requestOptions)
-          .then(response => response.blob())
+          .then(response => {
+            if (!response.ok) { throw new Error('HTTP ' + response.status); }
+            return response.blob();
+          })
           .then(blob => {
             let url = window.URL.createObjectURL(blob);
             let a = document.createElement('a');
@@ -97,7 +108,11 @@ export class LibroVentasComponent implements OnInit {
             a.remove();
             Swal.close();
           })
-          .catch(error => console.log('error', error));
+          .catch(error => {
+            console.log('error', error);
+            Swal.close(); // [QA-FIX] evitar que el spinner quede pegado si falla la API
+            this.toast.error('No se pudo exportar el Libro de Ventas.', '', { timeOut: 3000, positionClass: 'toast-top-right' });
+          });
       },
     });
 

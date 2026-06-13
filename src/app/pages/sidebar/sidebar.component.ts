@@ -63,38 +63,48 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
         return;
       }
 
-      // Colapsa todos los grupos y limpia el "activo" de las cabeceras.
-      nav.querySelectorAll('ul.collapse').forEach((el) => {
-        el.classList.remove('in');
-        el.setAttribute('aria-expanded', 'false');
+      // [FIX] Mantenemos el MISMO modelo que el accordion del template (AdminMenu/
+      // metisMenu): grupo abierto = <li>.active + <ul class="collapse in">; cerrado =
+      // sin esas clases. metisMenu decide expandir/colapsar leyendo <li>.active, así
+      // que si tocáramos la clase en otro lado su estado se desincroniza y el menú
+      // queda "congelado". Por eso operamos sobre el <li> del grupo, no sobre el <a>.
+      nav.querySelectorAll('ul.collapse').forEach((ul) => {
+        ul.classList.remove('in');
+        ul.setAttribute('aria-expanded', 'false');
+        const li = ul.parentElement;
+        if (li) {
+          li.classList.remove('active');
+        }
+        const header = li ? li.querySelector('a.has-arrow') : null;
+        if (header) {
+          header.setAttribute('aria-expanded', 'false');
+        }
       });
-      nav.querySelectorAll('a.has-arrow.active').forEach((el) => el.classList.remove('active'));
 
-      // El ítem activo lo marca routerLinkActive; abrimos su grupo contenedor.
+      // El ítem activo lo marca routerLinkActive; abrimos solo su grupo contenedor.
       const activo = nav.querySelector('a.desactivar.active');
       if (!activo) {
         return;
       }
       const grupoUl = activo.closest('ul.collapse');
-      if (grupoUl) {
-        grupoUl.classList.add('in');
-        grupoUl.setAttribute('aria-expanded', 'true');
-        const cabecera = grupoUl.parentElement
-          ? grupoUl.parentElement.querySelector('a.has-arrow')
-          : null;
-        if (cabecera) {
-          cabecera.setAttribute('aria-expanded', 'true');
-          cabecera.classList.add('active');
+      if (!grupoUl) {
+        return;
+      }
+      grupoUl.classList.add('in');
+      grupoUl.setAttribute('aria-expanded', 'true');
+      const grupoLi = grupoUl.parentElement;
+      if (grupoLi) {
+        grupoLi.classList.add('active');
+        const header = grupoLi.querySelector('a.has-arrow');
+        if (header) {
+          header.setAttribute('aria-expanded', 'true');
         }
       }
     });
   }
-  Seleccionar($evento: any) {
-    for (let i = 0; i < this.EventoClick?.nativeElement.children.length; i++) {
-      this.EventoClick?.nativeElement.children[i].firstElementChild.classList.remove('active');
-    }
-    $(".desactivar").removeClass('active');
-    $evento.classList.add('active');
+  Seleccionar(_evento?: any) {
+    // El resaltado del ítem activo lo gestiona routerLinkActive (en la plantilla);
+    // aquí solo cerramos el sidebar en móvil al elegir una opción.
     this.ocultarSidebarMobil();
   }
 

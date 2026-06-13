@@ -1,0 +1,114 @@
+<div class="container-fluid">
+  <h4 class="page-title">KARDEX DE INVENTARIO</h4>
+
+  <!-- Filtros -->
+  <div class="card">
+    <div class="card-body">
+      <form [formGroup]="filtro" class="row">
+        <div class="col-md-5 mb-2">
+          <label>Producto <span class="text-danger">(*)</span></label>
+          <ng-select [items]="productos" bindLabel="glosa_producto" bindValue="id_producto"
+            formControlName="id_producto" placeholder="Busca y selecciona un producto" [virtualScroll]="true">
+            <ng-template ng-option-tmp let-item="item">
+              {{ item.glosa_producto }} <small class="text-muted" *ngIf="item.codigo_producto">— SKU: {{ item.codigo_producto }}</small>
+            </ng-template>
+          </ng-select>
+        </div>
+        <div class="col-md-3 mb-2">
+          <label>Bodega</label>
+          <select class="form-control" formControlName="id_bodega">
+            <option [ngValue]="0">Todas las bodegas</option>
+            <option *ngFor="let b of bodegas" [ngValue]="b.id_bodega">{{ b.glosa_bodega }}</option>
+          </select>
+        </div>
+        <div class="col-md-2 mb-2">
+          <label>Desde</label>
+          <input type="date" class="form-control" formControlName="fecha_desde">
+        </div>
+        <div class="col-md-2 mb-2">
+          <label>Hasta</label>
+          <input type="date" class="form-control" formControlName="fecha_hasta">
+        </div>
+        <div class="col-12 text-right mt-2">
+          <button type="button" class="btn btn-primary" (click)="generar()">
+            <i class="fa fa-search"></i> Generar
+          </button>
+          <button type="button" class="btn btn-success ml-2" (click)="exportar()" [disabled]="!kardex">
+            <i class="fa fa-file-excel-o"></i> Exportar Excel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Cargando -->
+  <div class="card" *ngIf="cargando">
+    <div class="card-body text-center text-muted py-5">
+      <em class="fa fa-spin fa-circle-o-notch" style="font-size: 1.8rem;"></em>
+      <p class="mb-0 mt-2">Generando kardex...</p>
+    </div>
+  </div>
+
+  <!-- Resultado -->
+  <div class="card" *ngIf="kardex && !cargando">
+    <div class="card-body">
+      <div class="kardex-cab">
+        <div>
+          <h5 class="mb-0">{{ kardex.producto?.glosa_producto }}</h5>
+          <small class="text-muted" *ngIf="kardex.producto?.codigo_producto">SKU: {{ kardex.producto.codigo_producto }}</small>
+        </div>
+        <div class="kardex-saldos">
+          <span class="badge-saldo">Saldo inicial: <b>{{ kardex.saldo_inicial }}</b></span>
+          <span class="badge-saldo badge-final">Saldo final: <b>{{ kardex.saldo_final }}</b></span>
+        </div>
+      </div>
+
+      <div class="table-responsive mt-3">
+        <table class="table table-sm table-bordered kardex-tabla">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Tipo</th>
+              <th>Documento</th>
+              <th>Bodega</th>
+              <th>Usuario</th>
+              <th class="text-center">Entrada</th>
+              <th class="text-center">Salida</th>
+              <th class="text-center">Saldo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="7" class="text-right text-muted"><em>Saldo inicial</em></td>
+              <td class="text-center"><b>{{ kardex.saldo_inicial }}</b></td>
+            </tr>
+            <tr *ngFor="let m of kardex.movimientos" [title]="m.comentario || ''">
+              <td>{{ m.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>
+                <span class="pill" [class.pill-in]="m.entrada > 0" [class.pill-out]="m.salida > 0">{{ m.tipo }}</span>
+              </td>
+              <td>{{ m.documento }}</td>
+              <td>{{ m.bodega }}</td>
+              <td>{{ m.usuario }}</td>
+              <td class="text-center text-success">{{ m.entrada > 0 ? m.entrada : '' }}</td>
+              <td class="text-center text-danger">{{ m.salida > 0 ? m.salida : '' }}</td>
+              <td class="text-center"><b>{{ m.saldo }}</b></td>
+            </tr>
+            <tr *ngIf="!kardex.movimientos?.length">
+              <td colspan="8" class="text-center text-muted py-3">No hay movimientos en el rango seleccionado.</td>
+            </tr>
+          </tbody>
+          <tfoot *ngIf="kardex.movimientos?.length">
+            <tr class="kardex-totales">
+              <td colspan="5" class="text-right">TOTALES</td>
+              <td class="text-center text-success">{{ kardex.total_entrada }}</td>
+              <td class="text-center text-danger">{{ kardex.total_salida }}</td>
+              <td class="text-center">{{ kardex.saldo_final }}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>

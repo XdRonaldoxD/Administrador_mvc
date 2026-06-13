@@ -55,6 +55,7 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
   listarProducto: any = [];
   listarProductoDeshabilitado: any = [];
   listarProductoHistorial: any = [];
+  mostrarFiltros = false; // Los filtros de búsqueda inician ocultos; el usuario los muestra a voluntad.
   ProductoBuscar!: FormGroup;
   GestionarStock!: FormGroup;
   tipo_inventario?: any = [];

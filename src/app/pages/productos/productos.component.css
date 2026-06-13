@@ -10,6 +10,16 @@
 .formulario-busqueda{
     display: block;
 }
+/* Toggle de filtros: fuerzan la visibilidad por encima del media query responsive. */
+.formulario-busqueda.filtros-ocultos{
+    display: none !important;
+}
+.formulario-busqueda.filtros-visibles{
+    display: block !important;
+}
+.btn-toggle-filtros{
+    font-weight: 600;
+}
 @media screen and (max-width: 767px) {
     .formulario-busqueda {
         display: none; /* Ocultar formulario de búsqueda en dispositivos móviles */

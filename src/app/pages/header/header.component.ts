@@ -22,6 +22,8 @@ export class HeaderComponent implements OnInit ,OnDestroy {
   pipe = new DatePipe('en-US');
   token: any;
   cantidad_mensajes: number = 0;
+  // [LOGO] Imagen por defecto si la empresa no tiene logo horizontal cargado.
+  logoDefault = 'assets/img/iconorosa.png';
   private unsubscribe$ = new  Subject<void>();
   constructor(
     private servicio_login: LoginService,
@@ -49,6 +51,19 @@ export class HeaderComponent implements OnInit ,OnDestroy {
     this.identificacion = this.servicio_login.getIdentity();
     $('[data-toggle="tooltip"]').tooltip();
     this.TraerChatLineaActivo();
+  }
+
+  // [LOGO] Logo de la empresa (horizontal). Si no hay, usa la imagen por defecto.
+  get logoEmpresa(): string {
+    const url = this.identificacion?.urllogohorizontal_empresa_venta_online;
+    return url ? url : this.logoDefault;
+  }
+
+  // Si la URL del logo no carga (404/rota), cae al logo por defecto.
+  onLogoError(ev: any): void {
+    if (ev?.target) {
+      ev.target.src = this.logoDefault;
+    }
   }
 
   ngOnDestroy(): void {

@@ -735,7 +735,7 @@
                     <div class="tab-pane imprimirTicketcontent" id="ticket" aria-labelledby="ticket-tab"
                         role="tabpanel">
                         <div class="container px-0" *ngIf="url_ticket && tabComprobante==='TICKET'">
-                            <app-extended-pdf [url_pdf]="url_ticket" ></app-extended-pdf>
+                            <app-extended-pdf [url_pdf]="url_ticket" [zoom]="100"></app-extended-pdf>
                         </div>
                         <div class="row">
                             <div class="col-md-6">

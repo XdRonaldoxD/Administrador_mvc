@@ -8,7 +8,19 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form class="formulario-busqueda"[formGroup]="ProductoBuscar" autocomplete="nope">
+                    <!-- Barra siempre visible: alternar filtros + acceso a Nuevo Producto -->
+                    <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap">
+                        <button type="button" class="btn btn-outline-info btn-toggle-filtros"
+                            (click)="mostrarFiltros = !mostrarFiltros">
+                            <i class="fa" [ngClass]="mostrarFiltros ? 'fa-chevron-up' : 'fa-search'"></i>
+                            {{ mostrarFiltros ? 'Ocultar filtros' : 'Mostrar filtros de búsqueda' }}
+                        </button>
+                        <button type="button" routerLink="/Nuevo-Producto" class="btn btn-success">
+                            NUEVO PRODUCTO <i class="mdi mdi-checkbox-multiple-blank-outline"></i>
+                        </button>
+                    </div>
+                    <form class="formulario-busqueda" [class.filtros-visibles]="mostrarFiltros"
+                        [class.filtros-ocultos]="!mostrarFiltros" [formGroup]="ProductoBuscar" autocomplete="nope">
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-group">

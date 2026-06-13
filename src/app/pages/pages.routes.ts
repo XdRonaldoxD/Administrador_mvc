@@ -34,6 +34,7 @@ import { PromocionComponent } from './TiendaOnline/promocion/promocion.component
 import { ReporteVentaProductoComponent } from './reporte-venta-producto/reporte-venta-producto.component';
 import { PermisosComponent } from './permisos/permisos.component';
 import { PermisoGuard } from '../guards/permiso.guard';
+import { KardexComponent } from './kardex/kardex.component';
 
 
 const pagesRoutes: Routes = [
@@ -86,6 +87,7 @@ const pagesRoutes: Routes = [
       { path: 'Bodega', component: BodegaComponent, canActivate: [PermisoGuard], data: { modulo: 'BODEGAS' } },
       { path: 'Promociones', component: PromocionComponent, canActivate: [PermisoGuard], data: { modulo: 'PROMOCIONES' } },
       { path: 'Venta-Producto', component: ReporteVentaProductoComponent, canActivate: [PermisoGuard], data: { modulo: 'REPORTE VENTA PRODUCTO' } },
+      { path: 'Kardex', component: KardexComponent, canActivate: [PermisoGuard], data: { modulo: 'KARDEX' } },
       {
         path: 'Sucursal', component: SucursalComponent,
         resolve: { datos: SucursalresolverService },

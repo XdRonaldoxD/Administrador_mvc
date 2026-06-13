@@ -1,0 +1,27 @@
+/* [LOGO] Logo de la empresa en la barra superior (reemplaza al logo AdminPro).
+   El recuadro del logo usa el MISMO azul de la barra para que sea una sola franja
+   y no quede un bloque blanco que desentona. */
+.topbar .navbar-header,
+.navbar-header {
+  background: #1976d2 !important;
+  /* Línea divisoria sutil para separar el bloque del logo del resto de la cabecera. */
+  border-right: 2px solid rgba(255, 255, 255, 0.75);
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  padding: 6px 12px;
+}
+
+.logo-empresa {
+  max-height: 48px;
+  max-width: 200px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}

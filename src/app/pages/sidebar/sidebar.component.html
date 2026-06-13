@@ -41,13 +41,14 @@
                 </li>
 
                 <!-- REPORTE -->
-                <li *ngIf="permiso.puedeVerAlguno(['REPORTE PRODUCTOS','REPORTE VENTA PRODUCTO','LIBRO VENTAS'])">
+                <li *ngIf="permiso.puedeVerAlguno(['REPORTE PRODUCTOS','REPORTE VENTA PRODUCTO','LIBRO VENTAS','KARDEX'])">
                     <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i
                             class="mdi mdi-bullseye"></i><span class="hide-menu">REPORTE</span></a>
                     <ul aria-expanded="false" class="collapse" #EventoClick>
                         <li *ngIf="permiso.puedeVer('REPORTE PRODUCTOS')"><a (click)="Seleccionar($event.target)" class="desactivar" routerLinkActive="active" routerLink="/Importar-Inventario" href="javascript:void()"> <i class="mdi mdi-cube-send"></i> REPORTE PRODUCTOS</a></li>
                         <li *ngIf="permiso.puedeVer('REPORTE VENTA PRODUCTO')"><a (click)="Seleccionar($event.target)" class="desactivar" routerLinkActive="active" routerLink="/Venta-Producto" href="javascript:void()"> <i class="mdi mdi-cube-send"></i> REPORTE VENTA PRODUCTO</a></li>
                         <li *ngIf="permiso.puedeVer('LIBRO VENTAS')"><a (click)="Seleccionar($event.target)" class="desactivar" routerLinkActive="active" routerLink="/Libro-Ventas" href="javascript:void()"> <i class="mdi mdi-cube-send"></i> LIBRO VENTAS</a></li>
+                        <li *ngIf="permiso.puedeVer('KARDEX')"><a (click)="Seleccionar($event.target)" class="desactivar" routerLinkActive="active" routerLink="/Kardex" href="javascript:void()"> <i class="mdi mdi-clipboard-text"></i> KARDEX</a></li>
                     </ul>
                 </li>
 

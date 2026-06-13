@@ -49,6 +49,7 @@ import { ReporteVentaProductoComponent } from './reporte-venta-producto/reporte-
 import { QuillModule } from 'ngx-quill';
 import { PermisosComponent } from './permisos/permisos.component';
 import { MayusculaDirective } from '../directives/mayuscula.directive';
+import { KardexComponent } from './kardex/kardex.component';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,8 @@ import { MayusculaDirective } from '../directives/mayuscula.directive';
     SucursalComponent,
     PromocionComponent,
     ExtendedPdfComponent,
-    ReporteVentaProductoComponent
+    ReporteVentaProductoComponent,
+    KardexComponent
   ],
   exports: [
     IsInvalidPipe,

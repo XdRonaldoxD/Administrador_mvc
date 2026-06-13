@@ -4,20 +4,12 @@
         <!-- Logo -->
         <!-- ============================================================== -->
         <div class="navbar-header">
-            <a class="navbar-brand" href="index.html">
-                <!-- Logo icon --><b>
-                    <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
-                    <!-- Dark Logo icon -->
-                    <img src="assets/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
-                    <!-- Light Logo icon -->
-                    <img src="assets/assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
-                </b>
-                <!--End Logo icon -->
-                <!-- Logo text --><span>
-                    <!-- dark Logo text -->
-                    <img src="assets/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
-                    <!-- Light Logo text -->
-                    <img src="assets/assets/images/logo-light-text.png" class="light-logo" alt="homepage" /></span> </a>
+            <!-- [LOGO] Logo de la empresa (cargado en Empresa > Imágenes). Si no hay, usa
+                 una imagen por defecto. Al hacer click navega al inicio del sistema. -->
+            <a class="navbar-brand" routerLink="/inicio" style="cursor:pointer;">
+                <img [src]="logoEmpresa" (error)="onLogoError($event)" alt="logo empresa"
+                    class="logo-empresa" />
+            </a>
         </div>
         <!-- ============================================================== -->
         <!-- End Logo -->

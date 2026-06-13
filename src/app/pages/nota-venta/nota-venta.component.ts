@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -80,6 +80,9 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
   Correo_ticket: string = '';
   url_pdf: string = '';
   url_ticket: string = '';
+  // [FIX PDF] Pestaña activa del comprobante. Se usa para crear el visor pdf.js
+  // SOLO de la pestaña visible (evita el render con alto 0 px de la pestaña oculta).
+  tabComprobante: string = 'TICKET';
   busquedafactura: boolean = false;
   isLoading: boolean = false;
   contador_texto: any;
@@ -89,7 +92,8 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     private nota_venta: NotaVenta,
     private fb: FormBuilder,
     private router: Router,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private zone: NgZone
   ) {
     this.token = this.servicio_login.getToken();
     this.identificacion = this.servicio_login.getIdentity();
@@ -285,7 +289,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
           })
         } else {
           element.cantidad_seleccionado = parseInt(element.cantidad_seleccionado) + 1;
-          element.precio_venta_producto = element.precioventa_producto * element.cantidad_seleccionado;
+          element.precio_venta_producto = element.precioventa_stock_producto_bodega * element.cantidad_seleccionado;
         }
         existeProducto = true;
       }
@@ -293,7 +297,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!existeProducto) {
       const mantencion = {
         cantidad_seleccionado: 1,
-        precio_venta_producto: datos.precioventa_producto
+        precio_venta_producto: datos.precioventa_stock_producto_bodega
       };
       Object.assign(datos, mantencion);
       this.ProductoSeleccionados.push(datos);
@@ -327,7 +331,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     e.target.parentElement.parentElement.firstElementChild.value = cantidad;
     this.ProductoSeleccionados[indice].cantidad_seleccionado = cantidad;
-    this.ProductoSeleccionados[indice].precio_venta_producto = this.ProductoSeleccionados[indice].precioventa_producto * this.ProductoSeleccionados[indice].cantidad_seleccionado;
+    this.ProductoSeleccionados[indice].precio_venta_producto = this.ProductoSeleccionados[indice].precioventa_stock_producto_bodega * this.ProductoSeleccionados[indice].cantidad_seleccionado;
     this.CacularTotales();
   }
   DisminuirNumeroGeneral(e: any, indice: any) {
@@ -340,7 +344,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
       e.target.parentElement.parentElement.firstElementChild.value = cantidad;
       this.ProductoSeleccionados[indice].cantidad_seleccionado = cantidad;
     }
-    this.ProductoSeleccionados[indice].precio_venta_producto = this.ProductoSeleccionados[indice].precioventa_producto * this.ProductoSeleccionados[indice].cantidad_seleccionado;
+    this.ProductoSeleccionados[indice].precio_venta_producto = this.ProductoSeleccionados[indice].precioventa_stock_producto_bodega * this.ProductoSeleccionados[indice].cantidad_seleccionado;
 
     this.CacularTotales();
 
@@ -367,7 +371,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
       this.ProductoSeleccionados[indice].cantidad_seleccionado = cantidad;
       e.target.value = cantidad;
     }
-    this.ProductoSeleccionados[indice].precio_venta_producto = this.ProductoSeleccionados[indice].precioventa_producto * this.ProductoSeleccionados[indice].cantidad_seleccionado;
+    this.ProductoSeleccionados[indice].precio_venta_producto = this.ProductoSeleccionados[indice].precioventa_stock_producto_bodega * this.ProductoSeleccionados[indice].cantidad_seleccionado;
     this.CacularTotales();
   }
   EscribirProducto(e: any) {
@@ -909,13 +913,22 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
         Swal.showLoading();
         this.nota_venta.GenerarNegocio(datos).pipe(takeUntil(this.unsubscribe$)).subscribe({
           next: respuesta => {
-            this.url_pdf = respuesta.pdf;
-            this.url_ticket = respuesta.ticket;
-            var htmlpdf = `<iframe src="${respuesta.pdf}" frameborder="0" width="100%" height="400px"></iframe>`;
-            $("#viewjs_negocio").html(htmlpdf);
+            // [FIX PDF móvil] A4 y Ticket se muestran con app-extended-pdf (pdf.js),
+            // que sí renderiza en celular (los <iframe> con PDF no se ven en móvil).
+            // El visor SOLO se crea cuando el modal está completamente visible
+            // (evento shown.bs.modal); si se crea durante el fade-in del modal,
+            // mide 0 px de alto y la página sale en blanco.
+            this.tabComprobante = 'TICKET';
             $(".imprimirTicket").addClass('active');
             $(".imprimirTicketcontent").addClass('active');
-            $('#ajax-mostrar-pdf').modal('show');
+            const modalPdf = $('#ajax-mostrar-pdf');
+            modalPdf.off('shown.bs.modal.verpdf').on('shown.bs.modal.verpdf', () => {
+              this.zone.run(() => {
+                this.url_pdf = respuesta.pdf;
+                this.url_ticket = respuesta.ticket;
+              });
+            });
+            modalPdf.modal('show');
             Swal.close();
           },
           error: error => {
@@ -948,9 +961,20 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
+  private escapeHtml(value: any): string {
+    if (value === null || value === undefined) { return ''; }
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
   LimpiarModalNegocio() {
     $('#ajax-mostrar-pdf').modal('hide');
-    $("#viewjs_negocio").html('');
+    this.url_pdf = '';
+    this.url_ticket = '';
     $(".imprimirTicket").removeClass('active');
     $(".imprimirTicketcontent").removeClass('active');
     $(".imprimirBoletaAfectaContent ").removeClass('active');

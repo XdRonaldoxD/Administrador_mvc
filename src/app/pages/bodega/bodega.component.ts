@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Subject, finalize, takeUntil } from 'rxjs';
@@ -12,6 +12,7 @@ import { ModalMarcaComponent } from '../modals/modal-marca/modal-marca.component
 import { BodegaService } from 'src/app/services/bodega.service';
 import { ModalBodegaComponent } from '../modals/modal-bodega/modal-bodega.component';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { DataTableDirective } from 'angular-datatables';
 declare var $: any;
 @Component({
   selector: 'app-bodega',
@@ -31,10 +32,12 @@ declare var $: any;
 })
 export class BodegaComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild('hijomodalbodega') hijomodalbodega: ModalBodegaComponent | any;
+  @ViewChildren(DataTableDirective) dtElements!: QueryList<DataTableDirective>;
 
   dtOptions: DataTables.Settings[] = [];
   reload_bodega: any = new Subject();
   reload_bodega_deshabilitado: any = new Subject();
+  deshabilitadoCargado: boolean = false;
   //Identificacion del usuario
   identity: any;
   token: any;
@@ -67,9 +70,36 @@ export class BodegaComponent implements AfterViewInit, OnDestroy, OnInit {
   }
   ngAfterViewInit(): void {
     this.reload_bodega.next();
-    this.reload_bodega_deshabilitado.next();
+    if (this.deshabilitadoCargado) {
+      this.reload_bodega_deshabilitado.next();
+    }
+  }
+
+  cargarDeshabilitados(): void {
+    if (!this.deshabilitadoCargado) {
+      this.deshabilitadoCargado = true;
+      this.reload_bodega_deshabilitado.next();
+    }
   }
   //FIN
+
+  // [UI] Recarga la tabla activa MANTENIENDO la página actual (ajax.reload(null, false)),
+  // para que tras guardar/editar/cambiar estado no salte a la página 1.
+  private recargarTablaActiva(): void {
+    // Recarga las tablas de listado (activa + deshabilitado) MANTENIENDO su página
+    // (ajax.reload(null, false)). slice(0,2) excluye la tabla de historial (índice 2+).
+    const tablas = this.dtElements ? this.dtElements.toArray().slice(0, 2) : [];
+    if (tablas.length) {
+      tablas.forEach((el: any) =>
+        el.dtInstance
+          .then((dtInstance: any) => dtInstance.ajax.reload(null, false))
+          .catch(() => {})
+      );
+    } else {
+      this.reload_bodega.next();
+    }
+  }
+
   listarBodegas() {
     this.dtOptions[0] = this.createDtOptions(1);
   }
@@ -162,8 +192,7 @@ export class BodegaComponent implements AfterViewInit, OnDestroy, OnInit {
     }).then((result: any) => {
       if (result.isConfirmed) {
         this.servicio_bodega.gestionarestadoBodega(id_bodega, accion).pipe(finalize(() => {
-          this.reload_bodega.next();
-          this.reload_bodega_deshabilitado.next();
+          try { this.recargarTablaActiva(); } catch (e) { }
         })).subscribe({
           next: (res) => {
             Swal.fire(
@@ -203,8 +232,7 @@ export class BodegaComponent implements AfterViewInit, OnDestroy, OnInit {
     $('#exampleModalBodegaCenter').modal('show');
   }
   manejarRespuesta(respuesta: any) {
-    this.reload_bodega.next();
-    this.reload_bodega_deshabilitado.next();
+    this.recargarTablaActiva();
   }
 
 }

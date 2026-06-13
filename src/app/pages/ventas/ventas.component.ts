@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { finalize, Subject, takeUntil } from 'rxjs';
@@ -57,13 +57,17 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
   url_pdf: string = ``;
   url_ticket: string = ``;
   documento: string = '';
+  // [FIX PDF] Pestaña activa del comprobante. Se usa para crear el visor pdf.js
+  // SOLO de la pestaña visible (evita el render con alto 0 px de la pestaña oculta).
+  tabComprobante: string = 'TICKET';
   constructor(
     private http: HttpClient,
     private servicio_login: LoginService,
     private fb: FormBuilder,
     private servicio_caja: Caja,
     private nota_venta: NotaVenta,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private zone: NgZone
   ) {
     this.usuario = servicio_login.getIdentity();
     this.FiltroCajaBuscar = this.fb.group({
@@ -225,30 +229,39 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
       allowOutsideClick: false,
       showConfirmButton: false,
       onOpen: () => {
-        $(".imprimirTicket").addClass('active');
-        $(".imprimirTicketcontent").addClass('active');
-        $('#ajax-mostrar-pdf').modal('show');
+        // [FIX PDF móvil] A4 y Ticket se muestran con app-extended-pdf (pdf.js),
+        // que sí renderiza en celular (los <iframe> con PDF no se ven en móvil).
+        // El visor SOLO se crea cuando el modal está completamente visible
+        // (evento shown.bs.modal); si se crea durante el fade-in del modal,
+        // mide 0 px de alto y la página sale en blanco.
+        let pdf = '';
+        let ticket = '';
         if (item.id_nota_venta) {
           this.documento = "NOTA VENTA";
-          var htmlpdf = `<iframe  src="${item.ruta_archivo}/NOTA VENTA/${item.urlpdf_nota_venta}" frameborder="0" width="100%" height="400px"></iframe>`;
-          $("#viewjs_negocio").html(htmlpdf);
-          this.url_pdf = `${item.ruta_archivo}/NOTA VENTA/${item.urlpdf_nota_venta}`;
-          this.url_ticket = `${item.ruta_archivo}/NOTA VENTA/${item.urlticket_nota_venta}`;
+          pdf = `${item.ruta_archivo}/NOTA VENTA/${item.urlpdf_nota_venta}`;
+          ticket = `${item.ruta_archivo}/NOTA VENTA/${item.urlticket_nota_venta}`;
         }
         if (item.id_boleta) {
           this.documento = "BOLETA";
-          var htmlpdf = `<iframe  src="${item.ruta_archivo}/BOLETA/${item.path_boleta}" frameborder="0" width="100%" height="400px"></iframe>`;
-          $("#viewjs_negocio").html(htmlpdf);
-          this.url_pdf = `${item.ruta_archivo}/BOLETA/${item.path_boleta}`;
-          this.url_ticket = `${item.ruta_archivo}/BOLETA/${item.path_ticket_boleta}`;
+          pdf = `${item.ruta_archivo}/BOLETA/${item.path_boleta}`;
+          ticket = `${item.ruta_archivo}/BOLETA/${item.path_ticket_boleta}`;
         }
         if (item.id_factura) {
           this.documento = "FACTURA";
-          var htmlpdf = `<iframe  src="${item.ruta_archivo}/FACTURA/${item.path_documento}" frameborder="0" width="100%" height="400px"></iframe>`;
-          $("#viewjs_negocio").html(htmlpdf);
-          this.url_pdf = `${item.ruta_archivo}/FACTURA/${item.path_documento}`;
-          this.url_ticket = `${item.ruta_archivo}/FACTURA/${item.path_ticket_factura}`;
+          pdf = `${item.ruta_archivo}/FACTURA/${item.path_documento}`;
+          ticket = `${item.ruta_archivo}/FACTURA/${item.path_ticket_factura}`;
         }
+        this.tabComprobante = 'TICKET';
+        $(".imprimirTicket").addClass('active');
+        $(".imprimirTicketcontent").addClass('active');
+        const modalPdf = $('#ajax-mostrar-pdf');
+        modalPdf.off('shown.bs.modal.verpdf').on('shown.bs.modal.verpdf', () => {
+          this.zone.run(() => {
+            this.url_pdf = encodeURI(pdf);      // encodeURI por el espacio de "NOTA VENTA"
+            this.url_ticket = encodeURI(ticket);
+          });
+        });
+        modalPdf.modal('show');
         Swal.close();
       },
     });
@@ -312,9 +325,20 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
 
   }
 
+  private escapeHtml(value: any): string {
+    if (value === null || value === undefined) { return ''; }
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
   LimpiarModalNegocio() {
     $('#ajax-mostrar-pdf').modal('hide');
-    $("#viewjs_negocio").html('');
+    this.url_pdf = '';
+    this.url_ticket = '';
     $(".imprimirTicket").removeClass('active');
     $(".imprimirTicketcontent").removeClass('active');
     $(".imprimirBoletaAfectaContent ").removeClass('active');

@@ -65,8 +65,13 @@ export class EmpresaService {
     return this.httpcliente.post(environment.api_url+"&controller=Empresa&action=accionCertificado", formData,{ headers: headers})
   }
 
+  // [SEGURIDAD C6] Se consulta el RUC a través del backend (proxy), que guarda el
+  // token de apisperu del lado servidor. Antes el token viajaba en el bundle JS.
   BuscarRuc(Ruc_factura: any): Observable<any> {
-    return this.httpcliente.get(`https://dniruc.apisperu.com/api/v1/ruc/${Ruc_factura}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InNtaXRoeGQxMThAZ21haWwuY29tIn0.24c7XETuRuTQLUqSjOH7BsKM19n6kKMOtY06qeUYX40`)
+    const headers = new HttpHeaders({
+      Authorization: this.token
+    });
+    return this.httpcliente.get(environment.api_url + "&controller=Empresa&action=BuscarRuc&ruc=" + Ruc_factura, { headers: headers })
   }
   
 

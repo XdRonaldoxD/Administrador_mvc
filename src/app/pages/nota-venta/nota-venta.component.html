@@ -704,17 +704,17 @@
             <div class="modal-body pt-2 pb-0">
                 <ul class="nav nav-tabs customtab2" role="tablist">
                     <li class="nav-item"> <a class="nav-link imprimirBoletaAfecta" data-toggle="tab" href="#cuenta"
-                            role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span
+                            role="tab" (click)="tabComprobante='A4'"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span
                                 class="hidden-xs-down">A4</span></a> </li>
                     <li class="nav-item"> <a class="nav-link imprimirTicket active" data-toggle="tab" href="#ticket"
-                            role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
+                            role="tab" (click)="tabComprobante='TICKET'"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span
                                 class="hidden-xs-down">TICKET</span></a> </li>
                 </ul>
                 <div class="tab-content p-3">
                     <div class="tab-pane imprimirBoletaAfectaContent" id="cuenta" aria-labelledby="cuenta-tab"
                         role="tabpanel">
-                        <div class="container px-0" id="viewjs_negocio">
-
+                        <div class="container px-0" *ngIf="url_pdf && tabComprobante==='A4'">
+                            <app-extended-pdf [url_pdf]="url_pdf"></app-extended-pdf>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -734,7 +734,7 @@
                     </div>
                     <div class="tab-pane imprimirTicketcontent" id="ticket" aria-labelledby="ticket-tab"
                         role="tabpanel">
-                        <div class="container px-0" *ngIf="url_ticket">
+                        <div class="container px-0" *ngIf="url_ticket && tabComprobante==='TICKET'">
                             <app-extended-pdf [url_pdf]="url_ticket" ></app-extended-pdf>
                         </div>
                         <div class="row">

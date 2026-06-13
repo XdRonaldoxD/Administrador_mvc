@@ -1,4 +1,5 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { DataTableDirective } from 'angular-datatables';
 import { Subject, finalize } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -28,11 +29,13 @@ class DataTablesResponse {
 
 export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild('cantidad') cantidad!: ElementRef;
+  @ViewChildren(DataTableDirective) dtElements!: QueryList<DataTableDirective>;
 
 
   dtOptions: DataTables.Settings[] = [];
   reload_producto: any = new Subject();
   reload_producto_deshabilitado: any = new Subject();
+  deshabilitadoCargado: boolean = false;
   //Identificacion del usuario
   identity: any;
   token: any;
@@ -120,7 +123,16 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
   }
   ngAfterViewInit(): void {
     this.reload_producto.next();
-    this.reload_producto_deshabilitado.next();
+    if (this.deshabilitadoCargado) {
+      this.reload_producto_deshabilitado.next();
+    }
+  }
+
+  cargarDeshabilitados(): void {
+    if (!this.deshabilitadoCargado) {
+      this.deshabilitadoCargado = true;
+      this.reload_producto_deshabilitado.next();
+    }
   }
   //FIN
   buscar() {
@@ -325,7 +337,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
             $.each(arreglo.categoria, (i: any, data: any) => {
               html += "<li><i class=\"fa fa-minus\"></i>";
 
-              html += `<label  class="inline custom-control custom-checkbox block"><input id="${data.id_categoria}" value=${data.id_categoria} name='categoria_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input selector-categoria" ><span  class="custom-control-indicator"></span><span class="custom-control-description ml-0"> ${data.glosa_categoria}</span></label>`;
+              html += `<label  class="inline custom-control custom-checkbox block"><input id="${data.id_categoria}" value=${data.id_categoria} name='categoria_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input selector-categoria" ><span  class="custom-control-indicator"></span><span class="custom-control-description ml-0"> ${this.escapeHtml(data.glosa_categoria)}</span></label>`;
               if (typeof data.subcategoria !== 'undefined') {
                 html += this.arbolSubcategoria(data.subcategoria);
               } else {
@@ -348,13 +360,23 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
     )
   }
 
+  private escapeHtml(value: any): string {
+    if (value === null || value === undefined) { return ''; }
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
   arbolSubcategoria(subcategoria: any) {
     var html = "";
     html += "<ul style='display:block;list-style: none;' >";
     if (typeof subcategoria !== 'undefined') {
       $.each(subcategoria, (i: any, data: any) => {
-        html += `<li><i class='fa fa-minus'></i> 
-        <label  class="inline custom-control custom-checkbox block"><input id="${data.id_categoria}" value=${data.id_categoria} name='categoria_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input selector-categoria" ><span  class="custom-control-indicator"></span><span class="custom-control-description ml-0"> ${data.glosa_categoria}</span></label>`;
+        html += `<li><i class='fa fa-minus'></i>
+        <label  class="inline custom-control custom-checkbox block"><input id="${data.id_categoria}" value=${data.id_categoria} name='categoria_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input selector-categoria" ><span  class="custom-control-indicator"></span><span class="custom-control-description ml-0"> ${this.escapeHtml(data.glosa_categoria)}</span></label>`;
         if (typeof data.subcategoria !== 'undefined') {
           html += this.arbolSubcategoria(data.subcategoria);
         } else {
@@ -446,8 +468,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       if (result.isConfirmed) {
         if (accion == 'ACTIVAR') {
           this.servicio_producto.GestionActivoDesactivadoProducto(accion, id_producto).pipe(finalize(() => {
-            this.reload_producto.next();
-            this.reload_producto_deshabilitado.next();
+            try { this.recargarTablaActiva(); } catch (e) { }
           })).subscribe({
             next: (res) => {
               Swal.fire(
@@ -462,8 +483,7 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
           })
         } else {
           this.servicio_producto.GestionActivoDesactivadoProducto(accion, id_producto).pipe(finalize(() => {
-            this.reload_producto.next();
-            this.reload_producto_deshabilitado.next();
+            try { this.recargarTablaActiva(); } catch (e) { }
           })).subscribe({
             next: (res) => {
               Swal.fire(
@@ -481,6 +501,23 @@ export class PedidosComponent implements AfterViewInit, OnDestroy, OnInit {
       }
     })
 
+  }
+
+  // [UI] Recarga la tabla activa MANTENIENDO la página actual (ajax.reload(null, false)),
+  // para que tras cambiar el estado del pedido no salte a la página 1.
+  private recargarTablaActiva(): void {
+    // Recarga las tablas de listado (activa + deshabilitado) MANTENIENDO su página
+    // (ajax.reload(null, false)). slice(0,2) excluye la tabla de historial (índice 2+).
+    const tablas = this.dtElements ? this.dtElements.toArray().slice(0, 2) : [];
+    if (tablas.length) {
+      tablas.forEach((el: any) =>
+        el.dtInstance
+          .then((dtInstance: any) => dtInstance.ajax.reload(null, false))
+          .catch(() => {})
+      );
+    } else {
+      this.reload_producto.next();
+    }
   }
 
 }

@@ -41,7 +41,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
       this.agregar_mensaje?.nativeElement.insertAdjacentHTML('beforeend', `<li id=${element.id_log_chat}  (click)>
       <a    href="javascript:void(0)" class="selecciona_chat"><img 
               src="../../../assets/assets/images/users/avatar-staff.jpg" alt="user-img"
-              class="img-circle"> <span  >${element.nombre_log_chat}
+              class="img-circle"> <span  >${this.escapeHtml(element.nombre_log_chat)}
               <small   class="text-success" >${linea}  </small>
               <small   style="color: #398bf7;">${this.pipe.transform(element.fechacreacion_log_chat, 'short')} </small>
           </span></a>
@@ -57,8 +57,8 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
       if (datos.chat_seleccionado) {
         html = `<li class="reverse">
           <div class="chat-content">
-              <h5>${datos.nombre_log_chat}</h5>
-              <div class="box bg-light-inverse">${element.mensaje}</div>
+              <h5>${this.escapeHtml(datos.nombre_log_chat)}</h5>
+              <div class="box bg-light-inverse">${this.escapeHtml(element.mensaje)}</div>
           </div>
           <div class="chat-img"><img src="../../../assets/assets/images/users/avatar-staff.jpg" alt="user" /></div>
       </li>`;
@@ -94,7 +94,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
         this.agregar_mensaje?.nativeElement.insertAdjacentHTML('beforeend', `<li id=${element.id_log_chat}  (click)>
        <a href="javascript:void(0)" class="selecciona_chat ${active}"><img 
                src="../../../assets/assets/images/users/avatar-staff.jpg" alt="user-img"
-               class="img-circle"> <span  >${element.nombre_log_chat}
+               class="img-circle"> <span  >${this.escapeHtml(element.nombre_log_chat)}
                <small   class="${clase}" >${linea}  </small>
                <small   style="color: #398bf7;">${this.pipe.transform(element.fechacreacion_log_chat, 'short')} </small>
            </span></a>
@@ -116,6 +116,19 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy() {
     this.removeEventListener();
+  }
+
+  // [SEGURIDAD C7] Escapa datos no confiables (mensajes/nombres del cliente)
+  // antes de inyectarlos como HTML con insertAdjacentHTML. Evita XSS que roba
+  // la sesión del administrador.
+  private escapeHtml(value: any): string {
+    if (value === null || value === undefined) { return ''; }
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
 
   navigate(evt: any) {
@@ -142,8 +155,8 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
           if (mensajes.includes('cliente:')) {
             html = `<li class="reverse">
             <div class="chat-content">
-                <h5>${datos.nombre_log_chat}</h5>
-                <div class="box bg-light-inverse">${mensajes.replace('cliente:', '')}</div>
+                <h5>${this.escapeHtml(datos.nombre_log_chat)}</h5>
+                <div class="box bg-light-inverse">${this.escapeHtml(mensajes.replace('cliente:', ''))}</div>
             </div>
             <div class="chat-img"><img src="../../../assets/assets/images/users/avatar-staff.jpg" alt="user" /></div>
         </li>`;
@@ -152,7 +165,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
             <div class="chat-img"><img src="../../../assets/assets/images/madrina-logo.png" alt="user" /></div>
             <div class="chat-content">
                 <h5>Administrador</h5>
-                <div class="box bg-light-info">${mensajes}</div>
+                <div class="box bg-light-info">${this.escapeHtml(mensajes)}</div>
             </div>
         </li>`;
           }
@@ -178,7 +191,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
         this.agregar_mensaje?.nativeElement.insertAdjacentHTML('beforeend', `<li id=${element.id_log_chat}  (click)>
         <a    href="javascript:void(0)" class="selecciona_chat"><img 
                 src="../../../assets/assets/images/users/avatar-staff.jpg" alt="user-img"
-                class="img-circle"> <span  >${element.nombre_log_chat}
+                class="img-circle"> <span  >${this.escapeHtml(element.nombre_log_chat)}
                 <small   class="${clase}" >${linea}  </small>
                 <small   style="color: #398bf7;">${this.pipe.transform(element.fechacreacion_log_chat, 'short')} </small>
             </span></a>
@@ -203,7 +216,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
               <div class="chat-img"><img src="../../../assets/assets/images/madrina-logo.png" alt="user" /></div>
               <div class="chat-content">
                   <h5>Administrador</h5>
-                  <div class="box bg-light-info">${texto}</div>
+                  <div class="box bg-light-info">${this.escapeHtml(texto)}</div>
               </div>
           </li>`;
         this.conversacion_chat?.nativeElement.insertAdjacentHTML('beforeend', html);
@@ -267,7 +280,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
         this.agregar_mensaje?.nativeElement.insertAdjacentHTML('beforeend', `<li id=${element.id_log_chat}  (click)>
        <a href="javascript:void(0)" class="selecciona_chat ${active}"><img 
                src="../../../assets/assets/images/users/avatar-staff.jpg" alt="user-img"
-               class="img-circle"> <span  >${element.nombre_log_chat}
+               class="img-circle"> <span  >${this.escapeHtml(element.nombre_log_chat)}
                <small   class="${clase}" >${linea}  </small>
                <small   style="color: #398bf7;">${this.pipe.transform(element.fechacreacion_log_chat, 'short')} </small>
            </span></a>

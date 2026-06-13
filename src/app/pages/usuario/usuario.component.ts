@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DataTableDirective } from 'angular-datatables';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subject, finalize, takeUntil } from 'rxjs';
 import { mustMatchValidator } from 'src/app/functions/validators/must-match';
@@ -19,6 +20,7 @@ declare var $: any;
 export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild("foto") foto?: ElementRef;
   @ViewChild("foto_mobile") foto_mobile?: ElementRef;
+  @ViewChildren(DataTableDirective) dtElements!: QueryList<DataTableDirective>;
   dtOptions: DataTables.Settings[] = [];
   reload_producto: any = new Subject();
   reload_producto_deshabilitado: any = new Subject();
@@ -39,6 +41,9 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
   
   passwordactive: boolean = true;
   GuardarInformacion: boolean = false;
+  // [UI] La tabla de "Deshabilitado" se carga solo al abrir su pestaña, para evitar
+  // una segunda llamada a listUserActive en la carga inicial.
+  deshabilitadoCargado: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -51,11 +56,11 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
       id_usuario: [null],
       id_perfil: ['',[Validators.required]],
       id_staff: [''],
-      dni_staff: [''],
+      dni_staff: ['', [Validators.required, Validators.pattern('^[0-9]{8}$')]],
       nombre_staff: ['', [Validators.required]],
       apellidopaterno_staff: ['', [Validators.required]],
       apellidomaterno_staff: ['', [Validators.required]],
-      e_mail_staff: ['', [Validators.required, Validators.email], this.CorreoEdicionUsuarioEnUso.bind(this)],
+      e_mail_staff: ['', [Validators.email], this.CorreoEdicionUsuarioEnUso.bind(this)],
       telefono_staff: [''],
       celular_staff: [''],
       newPassword: ['', [Validators.required]],
@@ -135,10 +140,38 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
   }
   ngAfterViewInit(): void {
     this.reload_producto.next();
-    this.reload_producto_deshabilitado.next();
+    // La tabla de deshabilitados solo se refresca aquí si ya fue abierta antes.
+    if (this.deshabilitadoCargado) {
+      this.reload_producto_deshabilitado.next();
+    }
+  }
+
+  // [UI] Carga diferida de la tabla "Deshabilitado": se dispara una sola vez,
+  // al hacer click en su pestaña (no en la carga inicial de la pantalla).
+  cargarDeshabilitados(): void {
+    if (!this.deshabilitadoCargado) {
+      this.deshabilitadoCargado = true;
+      this.reload_producto_deshabilitado.next();
+    }
   }
   //FIN
 
+  // [UI] Recarga la tabla activa MANTENIENDO la página actual (ajax.reload(null, false)),
+  // para que tras guardar/editar/cambiar estado no salte a la página 1.
+  private recargarTablaActiva(): void {
+    // Recarga las tablas de listado (activa + deshabilitado) MANTENIENDO su página
+    // (ajax.reload(null, false)). slice(0,2) excluye la tabla de historial (índice 2+).
+    const tablas = this.dtElements ? this.dtElements.toArray().slice(0, 2) : [];
+    if (tablas.length) {
+      tablas.forEach((el: any) =>
+        el.dtInstance
+          .then((dtInstance: any) => dtInstance.ajax.reload(null, false))
+          .catch(() => {})
+      );
+    } else {
+      this.reload_producto.next();
+    }
+  }
 
   SliderHabilitados() {
     this.dtOptions[0] = this.createDtOptions(1);
@@ -230,6 +263,13 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
     this.userForm.get('confirmPassword')?.updateValueAndValidity();
     this.userForm.get('id_sucursal')?.setValue('');
     this.userForm.get('id_bodega')?.setValue('');
+    this.bodega_filtrar = [];
+    // [UI] Al crear: si hay UNA sola sucursal, preseleccionarla (y su bodega si es
+    // única). Si hay más de una, queda vacío hasta que el usuario elija.
+    if (this.sucursal && this.sucursal.length === 1) {
+      this.userForm.get('id_sucursal')?.setValue(this.sucursal[0].id_sucursal);
+      this.Seleccionar('Sucursal');
+    }
     this.passwordactive = true;
     this.texto_cabezera = 'Usuario Nuevo';
     $('#exampleModalCenter').modal('show');
@@ -243,10 +283,11 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
     this.GuardarInformacion = true;
     this.Staff.GestionarStaff(this.userForm.value).pipe(takeUntil(this.Unsuscribe),
       finalize(() => {
-        $('#exampleModalCenter').modal('hide');
-        this.ngAfterViewInit();
+        // Resetear el flag PRIMERO: garantiza que el botón nunca quede pegado en
+        // "Guardando..." aunque la recarga de la tabla falle.
         this.GuardarInformacion = false;
-       
+        $('#exampleModalCenter').modal('hide');
+        try { this.recargarTablaActiva(); } catch (e) { }
       })).subscribe({
         next: resp => {
           this.servicio_login.saveIdentityPartial('id_bodega',this.userForm.value.id_bodega)
@@ -309,7 +350,7 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
     }).then((result: any) => {
       if (result.isConfirmed) {
         this.Staff.GestionActivoDesactivadoStaff(id_usuario, accion).pipe(finalize(() => {
-          this.reload_producto.next();
+          this.recargarTablaActiva();
           this.reload_producto_deshabilitado.next();
         })).subscribe({
           next: (res) => {
@@ -368,7 +409,18 @@ export class UsuarioComponent implements AfterViewInit, OnDestroy, OnInit {
     switch (tipo) {
       case 'Sucursal':
         let id_sucursal = this.userForm.value.id_sucursal;
-        this.bodega_filtrar = this.bodega.filter((item: any) => item.id_sucursal == id_sucursal)
+        this.bodega_filtrar = this.bodega.filter((item: any) => item.id_sucursal == id_sucursal);
+        // [UI] Si la bodega actual ya no pertenece a la sucursal seleccionada (al crear
+        // o al cambiar de sucursal): preseleccionar si hay UNA sola bodega, o dejar
+        // vacío si hay más de una para que el usuario elija. En edición no se toca
+        // porque la bodega cargada sí pertenece a su sucursal.
+        const bodegaActual = this.userForm.value.id_bodega;
+        const siguePerteneciendo = this.bodega_filtrar.some((b: any) => b.id_bodega == bodegaActual);
+        if (!siguePerteneciendo) {
+          this.userForm.get('id_bodega')?.setValue(
+            this.bodega_filtrar.length === 1 ? this.bodega_filtrar[0].id_bodega : ''
+          );
+        }
         break;
     }
   }

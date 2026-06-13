@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { DataTableDirective } from 'angular-datatables';
 import { LoginService } from '../../services/login.service';
 import { CategoriaService } from '../../services/categoria.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -29,10 +30,12 @@ declare var Swal: any;
 })
 export class AtributoComponent implements OnInit {
   @ViewChild('GuardarAtibuto') GuardarAtibuto!: ElementRef;
+  @ViewChildren(DataTableDirective) dtElements!: QueryList<DataTableDirective>;
 
   dtOptions: DataTables.Settings[] = [];
   reload_producto: any = new Subject();
   reload_producto_deshabilitado: any = new Subject();
+  deshabilitadoCargado: boolean = false;
   identity: any;
   token: any;
   listarProducto: any = [];
@@ -106,7 +109,9 @@ export class AtributoComponent implements OnInit {
   }
   ngAfterViewInit(): void {
     this.reload_producto.next();
-    this.reload_producto_deshabilitado.next();
+    if (this.deshabilitadoCargado) {
+      this.reload_producto_deshabilitado.next();
+    }
     $(this.el.nativeElement).find('.textarea_editor').summernote({
       height: 60,
       minHeight: null,
@@ -128,6 +133,13 @@ export class AtributoComponent implements OnInit {
         }
       }
     });
+  }
+
+  cargarDeshabilitados(): void {
+    if (!this.deshabilitadoCargado) {
+      this.deshabilitadoCargado = true;
+      this.reload_producto_deshabilitado.next();
+    }
   }
   //FIN
 
@@ -304,9 +316,9 @@ export class AtributoComponent implements OnInit {
     // Utilizamos console.log para ver comprobar que en realidad contiene algo el arreglo
     this.GuardarAtibuto.nativeElement.setAttribute('disabled', '')
     this.servicio_atributo.GestionarAtributo(this.token, this.categoriaForm.value, checked).pipe(finalize(() => {
-      this.reload_producto.next();
       $('#exampleModalCenter').modal('hide');
       this.GuardarAtibuto.nativeElement.removeAttribute('disabled')
+      try { this.recargarTablaActiva(); } catch (e) { }
 
     })).subscribe({
       next: (res) => {
@@ -325,6 +337,23 @@ export class AtributoComponent implements OnInit {
 
       }
     })
+  }
+
+  // [UI] Recarga la tabla activa MANTENIENDO la página actual (ajax.reload(null, false)),
+  // para que tras guardar/editar el atributo no salte a la página 1.
+  private recargarTablaActiva(): void {
+    // Recarga las tablas de listado (activa + deshabilitado) MANTENIENDO su página
+    // (ajax.reload(null, false)). slice(0,2) excluye la tabla de historial (índice 2+).
+    const tablas = this.dtElements ? this.dtElements.toArray().slice(0, 2) : [];
+    if (tablas.length) {
+      tablas.forEach((el: any) =>
+        el.dtInstance
+          .then((dtInstance: any) => dtInstance.ajax.reload(null, false))
+          .catch(() => {})
+      );
+    } else {
+      this.reload_producto.next();
+    }
   }
 
   listarCategoriasEditar(atributoPadre: any, id_atributo: any) {
@@ -463,8 +492,7 @@ export class AtributoComponent implements OnInit {
               `${accion}`,
               'success'
             )
-            this.reload_producto.next();
-            this.reload_producto_deshabilitado.next();
+            this.recargarTablaActiva();
           }, error: (erro) => {
 
           }

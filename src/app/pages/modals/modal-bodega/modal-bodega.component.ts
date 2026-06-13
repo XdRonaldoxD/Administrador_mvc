@@ -38,9 +38,6 @@ export class ModalBodegaComponent implements OnInit {
     this.bodegaForm.get('glosa_bodega')!.setValue(datos.glosa_bodega ?? '');
     this.bodegaForm.get('modulo')!.setValue(datos.modulo ?? '');
   }
-
-
-
   GuardarActualizarBodega() {
     this.bodegaForm.markAllAsTouched()
     if (this.bodegaForm.invalid) {
@@ -69,5 +66,10 @@ export class ModalBodegaComponent implements OnInit {
         }
       })
   }
+
+  InputChangeMayuscula(event: any,input:string) {
+    let newValue = event.target.value.toUpperCase();
+    this.bodegaForm.controls[input].setValue(newValue);
+}
 
 }

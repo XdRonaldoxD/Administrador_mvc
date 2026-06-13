@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.pattern('^[0-9]{8}$')]],
       password: ['', [Validators.required]]
     });
 

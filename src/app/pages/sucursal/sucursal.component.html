@@ -21,7 +21,7 @@
                         <li class=" nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab"
                                 aria-expanded="false">Activos</a> </li>
                         <li class="nav-item"> <a href="#navpills-2" class="nav-link" data-toggle="tab"
-                                aria-expanded="false">Deshabilitado</a> </li>
+                                aria-expanded="false" (click)="cargarDeshabilitados()">Deshabilitado</a> </li>
                     </ul>
                     <div class="tab-content br-n pn">
                         <div id="navpills-1" class="tab-pane active">
@@ -170,6 +170,7 @@
                                 </h6>
                                 <input type="text" class="form-control" placeholder="Nombre de la sucursal"
                                     formControlName="glosa_sucursal"
+                                    (blur)="InputChangeMayuscula($event,'glosa_sucursal')" 
                                     [class.is-invalid]="sucursalForm.controls['glosa_sucursal']|isInvalid">
                                 <div class="text-danger">
                                     <div *ngIf="sucursalForm.controls['glosa_sucursal']|hasError:'required'">
@@ -181,7 +182,9 @@
                         <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <h6 class="control-label">Codigo Postal</h6>
-                                <input type="text" class="form-control" placeholder="Ingrese el codigo postal"
+                                <input type="text" class="form-control" 
+                                (blur)="InputChangeMayuscula($event,'codigo_sucursal')" 
+                                placeholder="Ingrese el codigo postal"
                                     formControlName="codigo_sucursal">
                             </div>
                         </div>
@@ -275,7 +278,7 @@
                         <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <h6 for="name" class="control-label">Dirección</h6>
-                                <input type="text" class="form-control" placeholder="Ingrese la dirección"
+                                <input type="text" class="form-control"  (blur)="InputChangeMayuscula($event,'direccion_sucursal')"  placeholder="Ingrese la dirección"
                                     formControlName="direccion_sucursal">
                             </div>
                         </div>

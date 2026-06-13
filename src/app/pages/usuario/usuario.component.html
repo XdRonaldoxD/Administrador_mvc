@@ -21,7 +21,7 @@
                         <li class=" nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab"
                                 aria-expanded="false">Activos</a> </li>
                         <li class="nav-item"> <a href="#navpills-2" class="nav-link" data-toggle="tab"
-                                aria-expanded="false">Deshabilitado</a> </li>
+                                aria-expanded="false" (click)="cargarDeshabilitados()">Deshabilitado</a> </li>
                     </ul>
                     <div class="tab-content br-n pn">
                         <div id="navpills-1" class="tab-pane active">
@@ -166,9 +166,18 @@
                     <div class="row">
                         <div class="col-md-6 col-12">
                             <div class="form-group">
-                                <h6 for="name" class="control-label">Dni</h6>
-                                <input type="text" class="form-control" placeholder="Ingrese el numero de documento"
-                                    formControlName="dni_staff">
+                                <h6 for="name" class="control-label">DNI<span class="text-danger">(*)</span></h6>
+                                <input type="text" inputmode="numeric" maxlength="8" class="form-control"
+                                    placeholder="Ingrese el numero de documento" formControlName="dni_staff"
+                                    [class.is-invalid]="userForm.controls['dni_staff']|isInvalid">
+                                <div class="text-danger"
+                                    *ngIf="userForm.get('dni_staff')?.hasError('required') && userForm.get('dni_staff')?.touched">
+                                    El DNI es obligatorio
+                                </div>
+                                <div class="text-danger"
+                                    *ngIf="userForm.get('dni_staff')?.hasError('pattern') && userForm.get('dni_staff')?.touched">
+                                    El DNI debe tener 8 dígitos
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
@@ -215,7 +224,7 @@
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-group">
-                                <h6 for="name" class="control-label">E-mail<span class="text-danger">(*)</span></h6>
+                                <h6 for="name" class="control-label">E-mail</h6>
                                 <input type="email" class="form-control" placeholder="Ingrese el e-mail"
                                     formControlName="e_mail_staff"
                                     [class.is-invalid]="userForm.controls['e_mail_staff']|isInvalid">

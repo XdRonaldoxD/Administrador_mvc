@@ -14,8 +14,8 @@
                             <div class="form-group">
                                 <h6 for="name" class="control-label">Nombre<span
                                         class="text-danger">(*)</span></h6>
-                                    <input type="text" class="form-control" id="glosa_bodega"
-                                        placeholder="Ingrese una bodega" formControlName="glosa_bodega"
+                                    <input type="text" class="form-control" (blur)="InputChangeMayuscula($event,'glosa_bodega')" 
+                                    placeholder="Ingrese una bodega" formControlName="glosa_bodega"
                                         [class.is-invalid]="bodegaForm.controls['glosa_bodega']|isInvalid">
                                     <div class="text-danger">
                                         <div *ngIf="bodegaForm.controls['glosa_bodega']|hasError:'required'">

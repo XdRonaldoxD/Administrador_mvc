@@ -7,9 +7,55 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 /* ng select */
 /* @import "~@ng-select/ng-select/themes/default.theme.css"; */
-/* // ... or  */
-/* @import "~@ng-select/ng-select/themes/material.theme.css"; */
 
 .ql-editor{
     height: 100px;
+}
+
+/* ============================================================
+   [UI] Sistema de tokens de diseño — punto ÚNICO para rebrandear.
+   El color primario se mantiene en el azul que ya usaba la app
+   (#1976d2) para NO inventar un color institucional. El equipo de
+   marca debe fijar aquí el color corporativo definitivo y todo
+   (botones, login, acentos) lo tomará desde estas variables.
+   ============================================================ */
+:root {
+  --color-primary: #1976d2;
+  --color-primary-hover: #1565c0;
+  --color-primary-contrast: #ffffff;
+  --color-surface: #ffffff;
+  --color-bg: #f4f6f9;
+  --color-border: #e0e0e0;
+  --color-text: #3e5569;
+  --color-muted: #8d97ad;
+  --color-danger: #e46a76;
+  --color-success: #06d79c;
+  --radius: 6px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+}
+
+/* Utilidades reutilizables para reemplazar los ~292 estilos inline repetidos
+   en las tablas (botones de acción cuadrados y celdas centradas). Adoptar
+   incrementalmente en los listados. */
+.btn-action {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: var(--radius);
+}
+.cell-center {
+  vertical-align: middle !important;
+  text-align: center !important;
+}
+/* Estado vacío reutilizable para listados (sustituye "No hay información!"). */
+.empty-state {
+  text-align: center;
+  color: var(--color-muted);
+  padding: var(--space-4);
 }

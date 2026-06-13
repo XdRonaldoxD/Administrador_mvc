@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DataTableDirective } from 'angular-datatables';
 import { QuillViewComponent } from 'ngx-quill';
 import { ToastrService } from 'ngx-toastr';
 import { Subject, finalize, takeUntil } from 'rxjs';
@@ -19,6 +20,7 @@ declare var $: any;
 export class PromocionComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild('descripcion_promocion') descripcion_promocion?: QuillViewComponent;
   @ViewChild("foto") foto?: ElementRef;
+  @ViewChildren(DataTableDirective) dtElements!: QueryList<DataTableDirective>;
   dtOptions: DataTables.Settings[] = [];
   reload_producto: any = new Subject();
   //Identificacion del usuario
@@ -182,9 +184,9 @@ export class PromocionComponent implements AfterViewInit, OnDestroy, OnInit {
     this.promocion.gestionarPromociones(this.promocionForm.value, file).pipe(
       takeUntil(this.Unsuscribe)
       , finalize(() => {
-        this.reload_producto.next();
         this.GuardarInformacion = false;
         $('#exampleModalPromocion').modal('hide');
+        try { this.recargarTablaActiva(); } catch (e) { }
       })).subscribe({
         next: (res) => {
           this.toastr.success(`Slider ${res} con exito`, undefined, {
@@ -214,7 +216,7 @@ export class PromocionComponent implements AfterViewInit, OnDestroy, OnInit {
     }).then((result: any) => {
       if (result.isConfirmed) {
         this.promocion.eliminarPromocion(id_promocion).pipe(takeUntil(this.Unsuscribe), finalize(() => {
-          this.reload_producto.next();
+          try { this.recargarTablaActiva(); } catch (e) { }
         })).subscribe({
           next: (res) => {
             Swal.fire(
@@ -237,6 +239,23 @@ export class PromocionComponent implements AfterViewInit, OnDestroy, OnInit {
     })
 
   }
+  // [UI] Recarga la tabla activa MANTENIENDO la página actual (ajax.reload(null, false)),
+  // para que tras guardar/editar/eliminar la promoción no salte a la página 1.
+  private recargarTablaActiva(): void {
+    // Recarga las tablas de listado (activa + deshabilitado) MANTENIENDO su página
+    // (ajax.reload(null, false)). slice(0,2) excluye la tabla de historial (índice 2+).
+    const tablas = this.dtElements ? this.dtElements.toArray().slice(0, 2) : [];
+    if (tablas.length) {
+      tablas.forEach((el: any) =>
+        el.dtInstance
+          .then((dtInstance: any) => dtInstance.ajax.reload(null, false))
+          .catch(() => {})
+      );
+    } else {
+      this.reload_producto.next();
+    }
+  }
+
   EditarPromocion(item: any) {
     this.limpiarEditorQuill();
     const quill:any = this.descripcion_promocion?.quillEditor;

@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 import { ModalBodegaComponent } from '../modals/modal-bodega/modal-bodega.component';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { DataTableDirective } from 'angular-datatables';
 declare var $: any;
 @Component({
   selector: 'app-sucursal',
@@ -32,6 +33,7 @@ export class SucursalComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild("foto") foto?: ElementRef;
   @ViewChild("foto_mobile") foto_mobile?: ElementRef;
   @ViewChild('hijomodalbodega') hijomodalbodega: ModalBodegaComponent | any;
+  @ViewChildren(DataTableDirective) dtElements!: QueryList<DataTableDirective>;
   dtOptions: DataTables.Settings[] = [];
   reload_producto: any = new Subject();
   reload_producto_deshabilitado: any = new Subject();
@@ -57,6 +59,9 @@ export class SucursalComponent implements AfterViewInit, OnDestroy, OnInit {
   clientes: any[] = [];
   usuarios: any[] = [];
   isLoading: boolean = false;
+  // [UI] La tabla de "Deshabilitado" se carga solo al abrir su pestaña, para evitar
+  // una segunda llamada a listaSucursal en la carga inicial.
+  deshabilitadoCargado: boolean = false;
   constructor(
     private http: HttpClient,
     private fb: FormBuilder,
@@ -111,9 +116,39 @@ export class SucursalComponent implements AfterViewInit, OnDestroy, OnInit {
   }
   ngAfterViewInit(): void {
     this.reload_producto.next();
-    this.reload_producto_deshabilitado.next();
+    // La tabla de deshabilitados solo se refresca aquí si ya fue abierta antes.
+    if (this.deshabilitadoCargado) {
+      this.reload_producto_deshabilitado.next();
+    }
+  }
+
+  // [UI] Carga diferida de la tabla "Deshabilitado": se dispara una sola vez,
+  // al hacer click en su pestaña (no en la carga inicial de la pantalla).
+  cargarDeshabilitados(): void {
+    if (!this.deshabilitadoCargado) {
+      this.deshabilitadoCargado = true;
+      this.reload_producto_deshabilitado.next();
+    }
   }
   //FIN
+
+  // [UI] Recarga la tabla activa MANTENIENDO la página actual (ajax.reload(null, false)),
+  // para que tras guardar/editar/cambiar estado no salte a la página 1.
+  private recargarTablaActiva(): void {
+    // Recarga las tablas de listado (activa + deshabilitado) MANTENIENDO su página
+    // (ajax.reload(null, false)). slice(0,2) excluye la tabla de historial (índice 2+).
+    const tablas = this.dtElements ? this.dtElements.toArray().slice(0, 2) : [];
+    if (tablas.length) {
+      tablas.forEach((el: any) =>
+        el.dtInstance
+          .then((dtInstance: any) => dtInstance.ajax.reload(null, false))
+          .catch(() => {})
+      );
+    } else {
+      this.reload_producto.next();
+    }
+  }
+
   buscarCliente(term: string) {
     this.isLoading = true;
     if (term.length > 1) {
@@ -256,9 +291,9 @@ export class SucursalComponent implements AfterViewInit, OnDestroy, OnInit {
     this.GuardarInformacion = true;
     this.Sucursal.gestionarSucursal(this.sucursalForm.value).pipe(takeUntil(this.Unsuscribe),
       finalize(() => {
-        $('#exampleModalSucursal').modal('hide');
-        this.ngAfterViewInit();
         this.GuardarInformacion = false;
+        $('#exampleModalSucursal').modal('hide');
+        try { this.recargarTablaActiva(); } catch (e) { }
 
       })).subscribe({
         next: resp => {
@@ -340,7 +375,7 @@ export class SucursalComponent implements AfterViewInit, OnDestroy, OnInit {
     }).then((result: any) => {
       if (result.isConfirmed) {
         this.Sucursal.gestionarestadoSucursal(id_sucursal, vigente_sucursal).pipe(finalize(() => {
-          this.ngAfterViewInit();
+          try { this.recargarTablaActiva(); } catch (e) { }
         })).subscribe({
           next: (res) => {
             Swal.fire(
@@ -383,6 +418,11 @@ export class SucursalComponent implements AfterViewInit, OnDestroy, OnInit {
     $("#exampleModalSucursal").modal('hide');
     $('#exampleModalBodegaCenter').modal('show');
   }
+
+  InputChangeMayuscula(event: any,input:string) {
+    let newValue = event.target.value.toUpperCase();
+    this.sucursalForm.controls[input].setValue(newValue);
+}
 
 
 }

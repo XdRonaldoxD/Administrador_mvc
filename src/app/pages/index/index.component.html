@@ -1,32 +1,131 @@
-<!-- ============================================================== -->
-<!-- Container fluid  -->
-<!-- ============================================================== -->
 <div class="container-fluid">
-    <!-- ============================================================== -->
-    <!-- Bread crumb and right sidebar toggle -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- End Bread crumb and right sidebar toggle -->
-    <!-- ============================================================== -->
 
-    <!-- ============================================================== -->
-    <!-- Start Page Content -->
-    <!-- ============================================================== -->
+    <!-- Bienvenida -->
     <div class="row">
         <div class="col-12">
-            <div class="card">
-                <div class="card-body p-0">
-                    <div style="font-weight: 700;" class="card-header text-center h2">BIENVENIDA A LA {{identificacion.nombre_empresa_venta_online}}</div>
-                   <img src="../../../assets/img/inicio.gif" class="w-100 img-fluid" alt="">
+            <div class="card inicio-hero">
+                <div class="inicio-hero-body">
+                    <div class="inicio-hero-text">
+                        <p class="inicio-saludo">{{ saludo }}<span *ngIf="nombreCompleto">, {{ nombreCompleto }}</span></p>
+                        <h1 class="inicio-empresa">{{ identificacion.nombre_empresa_venta_online || 'Panel de administración' }}</h1>
+                        <p class="inicio-fecha"><i class="mdi mdi-calendar-today"></i> {{ fechaHoy }}</p>
+                        <span class="inicio-rol" *ngIf="identificacion.tipo_usuario">{{ identificacion.tipo_usuario }}</span>
+                    </div>
+                    <div class="inicio-hero-icon">
+                        <i class="mdi mdi-store"></i>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- End PAge Content -->
-    <!-- ============================================================== -->
+
+    <!-- ===== Dashboard de ventas ===== -->
+    <ng-container *ngIf="mostrarDashboard">
+
+        <!-- Cargando -->
+        <div class="row" *ngIf="cargandoDash">
+            <div class="col-12">
+                <div class="card"><div class="card-body text-center text-muted py-5">
+                    <em class="fa fa-spin fa-circle-o-notch" style="font-size: 1.8rem;"></em>
+                    <p class="mb-0 mt-2">Cargando indicadores...</p>
+                </div></div>
+            </div>
+        </div>
+
+        <ng-container *ngIf="data && !cargandoDash">
+            <!-- Tarjetas KPI -->
+            <div class="row">
+                <div class="col-6 col-lg-3">
+                    <div class="card kpi-card"><div class="card-body">
+                        <span class="kpi-icon" style="background:#1976d2"><i class="mdi mdi-cash-multiple"></i></span>
+                        <div class="kpi-info">
+                            <h4 class="kpi-valor">S/ {{ data.cards.ventas_mes | number:'1.2-2' }}</h4>
+                            <span class="kpi-label">Ventas del mes</span>
+                        </div>
+                    </div></div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="card kpi-card"><div class="card-body">
+                        <span class="kpi-icon" style="background:#39DA8A"><i class="mdi mdi-receipt"></i></span>
+                        <div class="kpi-info">
+                            <h4 class="kpi-valor">{{ data.cards.cantidad_mes }}</h4>
+                            <span class="kpi-label">N° ventas del mes</span>
+                        </div>
+                    </div></div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="card kpi-card"><div class="card-body">
+                        <span class="kpi-icon" style="background:#FDAC41"><i class="mdi mdi-chart-line"></i></span>
+                        <div class="kpi-info">
+                            <h4 class="kpi-valor">S/ {{ data.cards.ticket_promedio | number:'1.2-2' }}</h4>
+                            <span class="kpi-label">Ticket promedio</span>
+                        </div>
+                    </div></div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="card kpi-card"><div class="card-body">
+                        <span class="kpi-icon" style="background:#00CFDD"><i class="mdi mdi-calendar-check"></i></span>
+                        <div class="kpi-info">
+                            <h4 class="kpi-valor">S/ {{ data.cards.ventas_hoy | number:'1.2-2' }}</h4>
+                            <span class="kpi-label">Ventas de hoy</span>
+                        </div>
+                    </div></div>
+                </div>
+            </div>
+
+            <!-- Ventas por mes -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card"><div class="card-body">
+                        <h5 class="card-title">Ventas por mes <small class="text-muted">(últimos 12 meses)</small></h5>
+                        <div id="chartPorMes"></div>
+                    </div></div>
+                </div>
+            </div>
+
+            <!-- Ventas por vendedor (admin) + Top productos -->
+            <div class="row">
+                <div class="col-12 col-lg-6" *ngIf="data.es_admin">
+                    <div class="card"><div class="card-body">
+                        <h5 class="card-title">Ventas por vendedor <small class="text-muted">(mes actual)</small></h5>
+                        <div id="chartPorUsuario"></div>
+                        <p *ngIf="!data.por_usuario?.data?.length" class="text-center text-muted mb-0 py-4">Sin ventas este mes.</p>
+                    </div></div>
+                </div>
+                <div [class.col-lg-6]="data.es_admin" class="col-12">
+                    <div class="card"><div class="card-body">
+                        <h5 class="card-title">Top productos <small class="text-muted">(mes actual)</small></h5>
+                        <div id="chartTopProductos"></div>
+                        <p *ngIf="!data.top_productos?.data?.length" class="text-center text-muted mb-0 py-4">Sin productos vendidos este mes.</p>
+                    </div></div>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
+
+    <!-- ===== Accesos rápidos ===== -->
+    <div class="row" *ngIf="accesos.length">
+        <div class="col-12">
+            <h5 class="inicio-titulo-accesos">Accesos rápidos</h5>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3" *ngFor="let a of accesos">
+            <a [routerLink]="a.ruta" class="inicio-acceso">
+                <span class="inicio-acceso-icon" [style.background]="a.color"><i [class]="a.icon"></i></span>
+                <span class="inicio-acceso-label">{{ a.label }}</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Sin módulos asignados -->
+    <div class="row" *ngIf="!accesos.length && !mostrarDashboard">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center text-muted py-5">
+                    <i class="mdi mdi-information-outline" style="font-size: 2.5rem;"></i>
+                    <p class="mb-0 mt-2">Aún no tienes módulos asignados. Contacta al administrador para que configure tus permisos.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
-<!-- ============================================================== -->
-<!-- End Container fluid  -->
-<!-- ============================================================== -->
-<!-- ============================================================== -->

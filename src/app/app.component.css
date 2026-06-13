@@ -1,0 +1,117 @@
+/* ============================================================
+   [UI] Indicador de carga global (overlay + spinner + barra superior).
+   Cubre toda la pantalla (incluido el menú), bloqueando la interacción
+   mientras hay peticiones en curso. Usa los tokens de styles.css.
+   ============================================================ */
+
+/* Barra superior delgada tipo "navegación" (feedback inmediato, sensación de rapidez) */
+.app-loading-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 100000;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-primary, #1976d2),
+    var(--color-primary-hover, #1565c0),
+    transparent
+  );
+  background-size: 45% 100%;
+  background-repeat: no-repeat;
+  animation: appBarSlide 1.1s ease-in-out infinite;
+}
+@keyframes appBarSlide {
+  0% { background-position: -45% 0; }
+  100% { background-position: 145% 0; }
+}
+
+/* Backdrop esmerilado que bloquea clicks en el menú y el contenido */
+.app-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(244, 246, 249, 0.55);
+  -webkit-backdrop-filter: blur(2.5px);
+  backdrop-filter: blur(2.5px);
+  animation: appFadeIn 0.18s ease both;
+}
+@keyframes appFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Tarjeta central */
+.app-loading-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 26px 38px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 14px 44px rgba(17, 38, 73, 0.18);
+  animation: appPop 0.22s cubic-bezier(0.2, 0.8, 0.3, 1.2) both;
+}
+@keyframes appPop {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Spinner de triple anillo */
+.app-spinner {
+  width: 54px;
+  height: 54px;
+  position: relative;
+}
+.app-spinner span {
+  position: absolute;
+  border-radius: 50%;
+  border: 4px solid transparent;
+  animation: appSpin 0.9s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+.app-spinner span:nth-child(1) {
+  inset: 0;
+  border-top-color: var(--color-primary, #1976d2);
+}
+.app-spinner span:nth-child(2) {
+  inset: 8px;
+  border-top-color: var(--color-primary-hover, #1565c0);
+  animation-duration: 1.25s;
+  animation-direction: reverse;
+}
+.app-spinner span:nth-child(3) {
+  inset: 16px;
+  border-top-color: var(--color-primary, #1976d2);
+  opacity: 0.55;
+}
+@keyframes appSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Texto con puntos animados */
+.app-loading-text {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  font-size: 14px;
+  color: var(--color-text, #3e5569);
+}
+.app-loading-text::after {
+  content: '';
+  display: inline-block;
+  width: 1.2em;
+  text-align: left;
+  animation: appDots 1.4s steps(1, end) infinite;
+}
+@keyframes appDots {
+  0% { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75% { content: '...'; }
+}

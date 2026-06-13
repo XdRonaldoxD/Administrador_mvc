@@ -52,7 +52,7 @@
                         <li class=" nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab"
                                 aria-expanded="false">Activos</a> </li>
                         <li class="nav-item"> <a href="#navpills-2" class="nav-link" data-toggle="tab"
-                                aria-expanded="false">Deshabilitado</a> </li>
+                                aria-expanded="false" (click)="cargarDeshabilitados()">Deshabilitado</a> </li>
                     </ul>
                     <div class="tab-content br-n pn">
                         <div id="navpills-1" class="tab-pane active">
@@ -171,7 +171,7 @@
                                                         <td><span class="label label-danger">{{e.stock_producto}}</span>
                                                         </td>
                                                     </ng-template>
-                                                    <td>{{e.precioventa_producto}}</td>
+                                                    <td>{{e.precioventa_stock_producto_bodega}}</td>
                                                     <td>{{e.codigo_producto}}</td>
                                                 </tr>
                                             </ng-container>

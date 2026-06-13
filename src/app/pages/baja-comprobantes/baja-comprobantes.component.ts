@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -80,7 +80,8 @@ export class BajaComprobantesComponent implements OnInit {
     private servicio_login: LoginService,
     private anular: AnularService,
     private fb: FormBuilder,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private zone: NgZone
   ) {
     this.token = this.servicio_login.getToken();
     this.usuario = this.servicio_login.getIdentity();
@@ -272,15 +273,21 @@ export class BajaComprobantesComponent implements OnInit {
           Swal.close();
         })).subscribe({
           next: respuesta => {
-            this.url_pdf = respuesta.pdf;
-            this.url_ticket = respuesta.ticket;
-            var htmlticket = `<embed src="${respuesta.ticket}" frameborder="0" width="100%" height="400px">`;
-            $("#viewjs2_negocio").html(htmlticket);
-            var htmlpdf = `<embed src="${respuesta.pdf}" frameborder="0" width="100%" height="400px">`;
-            $("#viewjs_negocio").html(htmlpdf);
+            // [FIX PDF móvil] A4 y Ticket se muestran con app-extended-pdf (pdf.js),
+            // que sí renderiza en celular (los <embed> con PDF no se ven en móvil).
+            // El visor SOLO se crea cuando el modal está completamente visible
+            // (evento shown.bs.modal); si se crea durante el fade-in del modal,
+            // mide 0 px de alto y la página sale en blanco.
             $(".imprimirTicket").addClass('active');
             $(".imprimirTicketcontent").addClass('active');
-            $('#ajax-mostrar-pdf').modal('show');
+            const modalPdf = $('#ajax-mostrar-pdf');
+            modalPdf.off('shown.bs.modal.verpdf').on('shown.bs.modal.verpdf', () => {
+              this.zone.run(() => {
+                this.url_pdf = encodeURI(respuesta.pdf);
+                this.url_ticket = encodeURI(respuesta.ticket);
+              });
+            });
+            modalPdf.modal('show');
           },
           error: error => {
             this.toast.error(error.error, 'Error', {
@@ -307,8 +314,8 @@ export class BajaComprobantesComponent implements OnInit {
 
   LimpiarModalNegocio() {
     $('#ajax-mostrar-pdf').modal('hide');
-    $("#viewjs2_negocio").html('');
-    $("#viewjs_negocio").html('');
+    this.url_pdf = '';
+    this.url_ticket = '';
     $(".imprimirTicket").removeClass('active');
     $(".imprimirTicketcontent").removeClass('active');
     $(".imprimirBoletaAfectaContent ").removeClass('active');

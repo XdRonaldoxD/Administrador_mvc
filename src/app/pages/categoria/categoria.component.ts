@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { finalize, Subject, takeUntil } from 'rxjs';
 import { LoginService } from '../../services/login.service';
@@ -30,6 +30,7 @@ declare var Swal: any;
 export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild("fileInputMegamenu") fileInputMegamenu?: ElementRef;
   @ViewChild("fileInputPopular") fileInputPopular?: ElementRef;
+  @ViewChildren(DataTableDirective) dtElements!: QueryList<DataTableDirective>;
   titulo_texto: string = '';
   dtOptions: DataTables.Settings[] = [];
   reload_producto: any = new Subject();
@@ -51,6 +52,9 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
   GuardarInformacion: boolean = false;
   activarImagenMegamenu: boolean = false;
   activarImagenMegamenuPopular: boolean = false;
+  // [UI] La tabla de "Deshabilitado" se carga solo al abrir su pestaña, para evitar
+  // una segunda llamada a ListaCategoriaDeshabilitado en la carga inicial.
+  deshabilitadoCargado: boolean = false;
 
   private unsubscribe$ = new Subject<void>();
   constructor(private http: HttpClient,
@@ -124,10 +128,38 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
   }
   ngAfterViewInit(): void {
     this.reload_producto.next();
-    this.reload_producto_deshabilitado.next();
+    // La tabla de deshabilitados solo se refresca aquí si ya fue abierta antes.
+    if (this.deshabilitadoCargado) {
+      this.reload_producto_deshabilitado.next();
+    }
+  }
+
+  // [UI] Carga diferida de la tabla "Deshabilitado": se dispara una sola vez,
+  // al hacer click en su pestaña (no en la carga inicial de la pantalla).
+  cargarDeshabilitados(): void {
+    if (!this.deshabilitadoCargado) {
+      this.deshabilitadoCargado = true;
+      this.reload_producto_deshabilitado.next();
+    }
   }
   //FIN
 
+  // [UI] Recarga la tabla activa MANTENIENDO la página actual (ajax.reload(null, false)),
+  // para que tras guardar/editar/cambiar estado no salte a la página 1.
+  private recargarTablaActiva(): void {
+    // Recarga las tablas de listado (activa + deshabilitado) MANTENIENDO su página
+    // (ajax.reload(null, false)). slice(0,2) excluye la tabla de historial (índice 2+).
+    const tablas = this.dtElements ? this.dtElements.toArray().slice(0, 2) : [];
+    if (tablas.length) {
+      tablas.forEach((el: any) =>
+        el.dtInstance
+          .then((dtInstance: any) => dtInstance.ajax.reload(null, false))
+          .catch(() => {})
+      );
+    } else {
+      this.reload_producto.next();
+    }
+  }
 
   CategoriaHabilitados() {
     let headers = new HttpHeaders()
@@ -295,7 +327,7 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
                 shouldShowTree = false; // Category and its subcategories match, don't show the tree
               }
               html += "<li class='categoria-item'><i class=\"fa fa-plus\"></i>";
-              html += `<label class="inline custom-control custom-checkbox block"><input id="${data.id_categoria}_categoria" value=${data.id_categoria} name='categoria_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input selector-categoria" ><span  class="custom-control-indicator"></span><span class="custom-control-description ml-0"> ${data.glosa_categoria}</span></label>`;
+              html += `<label class="inline custom-control custom-checkbox block"><input id="${data.id_categoria}_categoria" value=${data.id_categoria} name='categoria_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input selector-categoria" ><span  class="custom-control-indicator"></span><span class="custom-control-description ml-0"> ${this.escapeHtml(data.glosa_categoria)}</span></label>`;
               if (typeof data.subcategoria !== 'undefined') {
                 html += this.arbolSubcategoria(data.subcategoria, id_categoria_a_mostrar);
               } else {
@@ -318,6 +350,16 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
         }
       });
   }
+  private escapeHtml(value: any): string {
+    if (value === null || value === undefined) { return ''; }
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
   arbolSubcategoria(subcategoria: any, id_categoria_a_mostrar: any) {
     var html = "<ul style='list-style: none; display: none;'>"; // Añade display: none para ocultar las subcategorías inicialmente
     if (typeof subcategoria !== 'undefined') {
@@ -329,7 +371,7 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
             <label  class="inline custom-control custom-checkbox block">
               <input id="${data.id_categoria}_categoria" value=${data.id_categoria} name='categoria_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input selector-categoria">
               <span class="custom-control-indicator"></span>
-              <span class="custom-control-description ml-0">${data.glosa_categoria}</span>
+              <span class="custom-control-description ml-0">${this.escapeHtml(data.glosa_categoria)}</span>
             </label>`;
           if (tieneSubcategoria) {
             html += this.arbolSubcategoria(data.subcategoria, id_categoria_a_mostrar);
@@ -359,9 +401,9 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
     // Utilizamos console.log para ver comprobar que en realidad contiene algo el arreglo
     this.GuardarInformacion = true;
     this.servicio_categoria.GestionarCategoria(this.token, this.categoriaForm.value, checked, this.imagenSubir, this.imagenSubirPopular).pipe(takeUntil(this.unsubscribe$), finalize(() => {
-      this.reload_producto.next();
-      $('#exampleModalCenter').modal('hide');
       this.GuardarInformacion = false;
+      $('#exampleModalCenter').modal('hide');
+      try { this.recargarTablaActiva(); } catch (e) { }
     }),
       takeUntil(this.unsubscribe$))
       .subscribe({
@@ -462,7 +504,7 @@ export class CategoriaComponent implements AfterViewInit, OnDestroy, OnInit {
                 `${accion}`,
                 'success'
               )
-              this.reload_producto.next();
+              this.recargarTablaActiva();
               this.reload_producto_deshabilitado.next();
             }, error: (erro) => {
 

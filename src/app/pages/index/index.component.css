@@ -1,0 +1,170 @@
+/* ===== Bienvenida (hero) ===== */
+.inicio-hero {
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: #fff;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(13, 71, 161, 0.25);
+}
+
+.inicio-hero-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 32px;
+  gap: 16px;
+}
+
+.inicio-hero-text {
+  min-width: 0;
+}
+
+.inicio-saludo {
+  margin: 0 0 4px;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.inicio-empresa {
+  margin: 0;
+  font-size: 1.9rem;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0.3px;
+}
+
+.inicio-fecha {
+  margin: 10px 0 0;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.inicio-fecha i {
+  margin-right: 6px;
+}
+
+.inicio-rol {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 4px 14px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+}
+
+.inicio-hero-icon i {
+  font-size: 5rem;
+  opacity: 0.18;
+}
+
+/* ===== Tarjetas KPI ===== */
+.kpi-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.kpi-card .card-body {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+}
+
+.kpi-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.kpi-icon i {
+  font-size: 1.6rem;
+  color: #fff;
+}
+
+.kpi-info {
+  min-width: 0;
+}
+
+.kpi-valor {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #2b2f3a;
+  line-height: 1.1;
+}
+
+.kpi-label {
+  font-size: 0.82rem;
+  color: #8d97ad;
+}
+
+/* ===== Accesos rápidos ===== */
+.inicio-titulo-accesos {
+  margin: 22px 0 14px;
+  font-weight: 700;
+  color: #37474f;
+}
+
+.inicio-acceso {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 22px 12px;
+  margin-bottom: 24px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  color: #37474f;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.inicio-acceso:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  color: #1976d2;
+  text-decoration: none;
+}
+
+.inicio-acceso-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  margin-bottom: 12px;
+}
+
+.inicio-acceso-icon i {
+  font-size: 1.7rem;
+  color: #fff;
+}
+
+.inicio-acceso-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 575.98px) {
+  .inicio-hero-body {
+    padding: 22px;
+  }
+  .inicio-empresa {
+    font-size: 1.4rem;
+  }
+  .inicio-hero-icon {
+    display: none;
+  }
+}

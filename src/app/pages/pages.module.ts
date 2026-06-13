@@ -47,6 +47,8 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { ExtendedPdfComponent } from './pdf/extended-pdf/extended-pdf.component';
 import { ReporteVentaProductoComponent } from './reporte-venta-producto/reporte-venta-producto.component';
 import { QuillModule } from 'ngx-quill';
+import { PermisosComponent } from './permisos/permisos.component';
+import { MayusculaDirective } from '../directives/mayuscula.directive';
 
 @NgModule({
   declarations: [
@@ -57,6 +59,8 @@ import { QuillModule } from 'ngx-quill';
     HasErrorPipe,
     PagesComponent,
     SidebarComponent,
+    PermisosComponent,
+    MayusculaDirective,
     NuevoProductoComponent,
     ProductosComponent,
     PerfilComponent,

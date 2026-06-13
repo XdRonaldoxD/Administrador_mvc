@@ -1,0 +1,61 @@
+<div class="container-fluid">
+    <div class="row page-titles mb-0">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-themecolor"><strong>PERMISOS POR PERFIL</strong></h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label><strong>Perfil</strong></label>
+                            <select class="form-control" [(ngModel)]="id_perfil" (change)="seleccionarPerfil()">
+                                <option value="">-- Selecciona un perfil --</option>
+                                <option *ngFor="let p of perfiles" [value]="p.id_perfil">{{ p.glosa_perfil }}</option>
+                            </select>
+                            <small class="text-muted">El ADMINISTRADOR tiene acceso total y no se configura aquí.</small>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-end justify-content-end">
+                            <button class="btn btn-success" (click)="guardar()" [disabled]="!id_perfil || guardando">
+                                <i class="mdi mdi-content-save"></i>
+                                {{ guardando ? 'Guardando...' : 'GUARDAR PERMISOS' }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div *ngIf="cargando" class="text-center text-muted py-4">Cargando permisos...</div>
+
+                    <div *ngIf="!id_perfil && !cargando" class="empty-state">
+                        Selecciona un perfil para asignar los módulos que podrá ver.
+                    </div>
+
+                    <div class="row" *ngIf="id_perfil && !cargando">
+                        <div class="col-md-6 col-lg-4 mb-3" *ngFor="let g of grupos">
+                            <div class="card-permiso">
+                                <div class="card-permiso-header">
+                                    <label class="m-0 w-100">
+                                        <input type="checkbox" [checked]="grupoCompleto(g)"
+                                            (change)="toggleGrupo(g, $event)" />
+                                        <strong>{{ g.nombre }}</strong>
+                                    </label>
+                                </div>
+                                <div class="card-permiso-body">
+                                    <label class="item-permiso" *ngFor="let m of g.modulos">
+                                        <input type="checkbox" [checked]="estaMarcado(m.id_modulo)"
+                                            (change)="toggle(m.id_modulo, $event)" />
+                                        {{ m.glosa_modulo }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

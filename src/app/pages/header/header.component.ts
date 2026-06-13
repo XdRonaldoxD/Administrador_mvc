@@ -66,10 +66,13 @@ export class HeaderComponent implements OnInit ,OnDestroy {
       this.cantidad_mensajes = 0;
       resp.forEach((element: any) => {
         this.cantidad_mensajes++;
+        // [SEGURIDAD C7] Escapar datos del cliente antes de inyectarlos como HTML
+        // ([innerHTML]). Sin esto, un nombre/email con <img onerror=...> ejecuta JS
+        // en la sesión del administrador (robo de token).
         html += `<a href="/#/chatBox">
         <div class="user-img"> <img src="assets/assets/images/users/1.jpg" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div>
         <div class="mail-contnet">
-            <h5>${element.nombre_log_chat}</h5><span class="mail-desc">${element.email_log_chat}</span><span class="time">${this.pipe.transform(element.fechacreacion_log_chat, 'shortDate')}</span> </div>
+            <h5>${this.escapeHtml(element.nombre_log_chat)}</h5><span class="mail-desc">${this.escapeHtml(element.email_log_chat)}</span><span class="time">${this.pipe.transform(element.fechacreacion_log_chat, 'shortDate')}</span> </div>
         </a>`;
       });
       this.construirMensaje = html;
@@ -80,6 +83,17 @@ export class HeaderComponent implements OnInit ,OnDestroy {
 
       }
     })
+  }
+
+  // [SEGURIDAD C7] Escapa caracteres HTML peligrosos de datos no confiables.
+  private escapeHtml(value: any): string {
+    if (value === null || value === undefined) { return ''; }
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
 
   cerrarSession() {

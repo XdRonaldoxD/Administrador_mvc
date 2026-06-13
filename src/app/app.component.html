@@ -8,7 +8,18 @@
             <p class="loader__label">Admin Pro</p>
         </div>
     </div> -->
-  
+
+    <!-- [UI] Indicador de carga global: barra superior + overlay que bloquea el menú -->
+    <ng-container *ngIf="loading$ | async">
+        <div class="app-loading-topbar"></div>
+        <div class="app-loading-overlay">
+            <div class="app-loading-box">
+                <div class="app-spinner"><span></span><span></span><span></span></div>
+                <p class="app-loading-text">Cargando</p>
+            </div>
+        </div>
+    </ng-container>
+
     <router-outlet></router-outlet>
 
 

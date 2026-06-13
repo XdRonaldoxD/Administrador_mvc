@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DataTableDirective } from 'angular-datatables';
 import { ToastrService } from 'ngx-toastr';
 import { finalize, Subject, takeUntil } from 'rxjs';
 import { DataTablesResponse } from 'src/app/interface/Datatable';
@@ -19,6 +20,7 @@ declare var $: any;
 export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild("foto") foto?: ElementRef;
   @ViewChild("foto_mobile") foto_mobile?: ElementRef;
+  @ViewChildren(DataTableDirective) dtElements!: QueryList<DataTableDirective>;
   dtOptions: DataTables.Settings[] = [];
   reload_producto: any = new Subject();
   reload_producto_deshabilitado: any = new Subject();
@@ -32,6 +34,9 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
   Unsuscribe: any = new Subject();
   api_url: string = environment.api_url;
   environment: any;
+  // [UI] La tabla de "Deshabilitado" se carga solo al abrir su pestaña, para evitar
+  // una segunda llamada a ListarSlider en la carga inicial.
+  deshabilitadoCargado: boolean = false;
 
   constructor(private http: HttpClient,
     private slider: SliderService,
@@ -79,10 +84,38 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
   }
   ngAfterViewInit(): void {
     this.reload_producto.next();
-    this.reload_producto_deshabilitado.next();
+    // La tabla de deshabilitados solo se refresca aquí si ya fue abierta antes.
+    if (this.deshabilitadoCargado) {
+      this.reload_producto_deshabilitado.next();
+    }
+  }
+
+  // [UI] Carga diferida de la tabla "Deshabilitado": se dispara una sola vez,
+  // al hacer click en su pestaña (no en la carga inicial de la pantalla).
+  cargarDeshabilitados(): void {
+    if (!this.deshabilitadoCargado) {
+      this.deshabilitadoCargado = true;
+      this.reload_producto_deshabilitado.next();
+    }
   }
   //FIN
 
+  // [UI] Recarga la tabla activa MANTENIENDO la página actual (ajax.reload(null, false)),
+  // para que tras guardar/editar/cambiar estado no salte a la página 1.
+  private recargarTablaActiva(): void {
+    // Recarga las tablas de listado (activa + deshabilitado) MANTENIENDO su página
+    // (ajax.reload(null, false)). slice(0,2) excluye la tabla de historial (índice 2+).
+    const tablas = this.dtElements ? this.dtElements.toArray().slice(0, 2) : [];
+    if (tablas.length) {
+      tablas.forEach((el: any) =>
+        el.dtInstance
+          .then((dtInstance: any) => dtInstance.ajax.reload(null, false))
+          .catch(() => {})
+      );
+    } else {
+      this.reload_producto.next();
+    }
+  }
 
   SliderHabilitados() {
     this.dtOptions[0] = this.createDtOptions(1);
@@ -246,8 +279,8 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
     this.slider.ActualizarCrearSlider(this.sliderForm.value, file, file_mobile).pipe(
       takeUntil(this.Unsuscribe)
       , finalize(() => {
-        this.reload_producto.next();
         $('#exampleModalCenter').modal('hide');
+        try { this.recargarTablaActiva(); } catch (e) { }
       })).subscribe({
         next: (res) => {
           this.toastr.success(`Slider ${res} con exito`, undefined, {
@@ -283,8 +316,8 @@ export class SliderComponent implements AfterViewInit, OnDestroy, OnInit {
     }).then((result: any) => {
       if (result.isConfirmed) {
         this.slider.GestionActivoDesactivadoSlider(id_slider, accion).pipe(finalize(() => {
-          this.reload_producto.next();
           this.reload_producto_deshabilitado.next();
+          try { this.recargarTablaActiva(); } catch (e) { }
         })).subscribe({
           next: (res) => {
             Swal.fire(

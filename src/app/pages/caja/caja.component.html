@@ -345,8 +345,12 @@
                 <div class="tab-content p-3">
                     <div class="tab-pane imprimirBoletaAfectaContent" id="cuenta" aria-labelledby="cuenta-tab"
                         role="tabpanel">
-                        <div class="container px-0" id="viewjs_negocio">
-
+                        <!-- [FIX PDF móvil] Comprobante ESTÁTICO (A4) con pdf.js (se ve en celular) -->
+                        <div class="container px-0" *ngIf="url_pdf && !caja_dinamica">
+                            <app-extended-pdf [url_pdf]="url_pdf"></app-extended-pdf>
+                        </div>
+                        <!-- [FIX PDF móvil] Detalle de caja (PDF dinámico de API): se mantiene <embed> -->
+                        <div class="container px-0" id="viewjs_negocio_caja" *ngIf="caja_dinamica">
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -365,7 +369,12 @@
                     </div>
                     <div class="tab-pane imprimirTicketcontent" id="ticket" aria-labelledby="ticket-tab"
                         role="tabpanel">
-                        <div class="container px-0" id="viewjs2_negocio">
+                        <!-- [FIX PDF móvil] Comprobante ESTÁTICO (TICKET) con pdf.js (se ve en celular) -->
+                        <div class="container px-0" *ngIf="url_ticket && !caja_dinamica">
+                            <app-extended-pdf [url_pdf]="url_ticket"></app-extended-pdf>
+                        </div>
+                        <!-- [FIX PDF móvil] Detalle de caja (PDF dinámico de API): se mantiene <embed> -->
+                        <div class="container px-0" id="viewjs2_negocio_caja" *ngIf="caja_dinamica">
                         </div>
                         <div class="row">
                             <div class="col-md-6">

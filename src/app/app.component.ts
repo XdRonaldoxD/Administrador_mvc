@@ -1,7 +1,10 @@
 import { Component, ElementRef, HostListener, OnInit, Renderer2 } from '@angular/core';
 import { LoginService } from './services/login.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, Observable, of } from 'rxjs';
+import { switchMap, distinctUntilChanged, delay } from 'rxjs/operators';
 import { Title } from '@angular/platform-browser';
+import { Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
+import { LoadingService } from './services/loading.service';
 
 
 declare var $: any;
@@ -17,13 +20,33 @@ export class AppComponent implements OnInit {
   value: any;
   href: any;
   Unsuscribe: any = new Subject();
+  // [UI] Estado de carga global. Se retrasa 180 ms el "mostrar" para que las
+  // cargas rápidas se sientan instantáneas y el overlay no parpadee.
+  loading$: Observable<boolean>;
 
   constructor(
     private elementRef: ElementRef,
     private Login: LoginService,
     private titleService: Title,
-    private renderer: Renderer2
-  ) { }
+    private renderer: Renderer2,
+    private loadingService: LoadingService,
+    private router: Router
+  ) {
+    this.loading$ = this.loadingService.loading$.pipe(
+      // Se muestra de inmediato y se mantiene visible un mínimo (~500 ms).
+      switchMap((cargando) => (cargando ? of(true) : of(false).pipe(delay(500)))),
+      distinctUntilChanged()
+    );
+    // [UI] El overlay aparece SOLO al navegar entre módulos (entrada a un módulo),
+    // NO en acciones como buscar, autocompletar, guardar, confirmar pago o paginar.
+    this.router.events.subscribe((e) => {
+      if (e instanceof NavigationStart) {
+        this.loadingService.show();
+      } else if (e instanceof NavigationEnd || e instanceof NavigationCancel || e instanceof NavigationError) {
+        this.loadingService.hide();
+      }
+    });
+  }
 
   ngOnInit(): void {
     var elemento: any = document.querySelector("[data-dismiss='modal']");

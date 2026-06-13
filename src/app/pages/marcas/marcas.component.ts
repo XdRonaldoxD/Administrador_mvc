@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Observable, Subject, finalize, takeUntil } from 'rxjs';
 import { LoginService } from '../../services/login.service';
@@ -36,10 +36,12 @@ class DataTablesResponse {
 })
 export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild('hijomodalmarca') hijomodalmarca: ModalMarcaComponent | any;
+  @ViewChildren(DataTableDirective) dtElements!: QueryList<DataTableDirective>;
 
   dtOptions: DataTables.Settings[] = [];
   reload_producto: any = new Subject();
   reload_producto_deshabilitado: any = new Subject();
+  deshabilitadoCargado: boolean = false;
   //Identificacion del usuario
   identity: any;
   token: any;
@@ -72,10 +74,35 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
   }
   ngAfterViewInit(): void {
     this.reload_producto.next();
-    this.reload_producto_deshabilitado.next();
+    if (this.deshabilitadoCargado) {
+      this.reload_producto_deshabilitado.next();
+    }
+  }
+
+  cargarDeshabilitados(): void {
+    if (!this.deshabilitadoCargado) {
+      this.deshabilitadoCargado = true;
+      this.reload_producto_deshabilitado.next();
+    }
   }
   //FIN
 
+  // [UI] Recarga la tabla activa MANTENIENDO la página actual (ajax.reload(null, false)),
+  // para que tras guardar/editar/cambiar estado no salte a la página 1.
+  private recargarTablaActiva(): void {
+    // Recarga las tablas de listado (activa + deshabilitado) MANTENIENDO su página
+    // (ajax.reload(null, false)). slice(0,2) excluye la tabla de historial (índice 2+).
+    const tablas = this.dtElements ? this.dtElements.toArray().slice(0, 2) : [];
+    if (tablas.length) {
+      tablas.forEach((el: any) =>
+        el.dtInstance
+          .then((dtInstance: any) => dtInstance.ajax.reload(null, false))
+          .catch(() => {})
+      );
+    } else {
+      this.reload_producto.next();
+    }
+  }
 
   ProductoHabilitados() {
     let headers = new HttpHeaders()
@@ -193,8 +220,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
 
   EstadoMarca(estado: any, id_marca: any) {
     this.servicio_marca.Habilitar_Deshabilitar_Marca(this.token, id_marca, estado).pipe(takeUntil(this.Unsuscribe),finalize(()=>{
-      this.reload_producto.next();
-      this.reload_producto_deshabilitado.next();
+      try { this.recargarTablaActiva(); } catch (e) { }
     })).subscribe({
       next: resp => {
         Swal.fire({
@@ -233,8 +259,7 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
 
   manejarRespuesta(respuesta: any) {
     console.log(respuesta);
-    this.reload_producto.next();
-    this.reload_producto_deshabilitado.next();
+    this.recargarTablaActiva();
   }
 
 }

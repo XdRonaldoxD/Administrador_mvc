@@ -1,0 +1,59 @@
+.card-permiso {
+  border: 1px solid var(--color-border, #e0e0e0);
+  border-radius: var(--radius, 6px);
+  overflow: hidden;
+  height: 100%;
+}
+.card-permiso-header {
+  background: var(--color-primary, #1976d2);
+  color: #fff;
+  padding: 10px 12px;
+}
+.card-permiso-header label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.card-permiso-body {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.item-permiso {
+  margin: 0;
+  font-weight: 400;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.item-permiso:hover {
+  background: var(--color-bg, #f4f6f9);
+}
+
+/* [FIX] La plantilla AdminPro oculta los checkbox nativos (switchery/icheck).
+   Forzamos que se rendericen como cuadritos visibles y clickeables. */
+.card-permiso input[type="checkbox"] {
+  -webkit-appearance: checkbox !important;
+  -moz-appearance: checkbox !important;
+  appearance: checkbox !important;
+  opacity: 1 !important;
+  position: static !important;
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  margin: 0 10px 0 0 !important;
+  vertical-align: middle !important;
+  display: inline-block !important;
+  pointer-events: auto !important;
+  accent-color: var(--color-primary, #1976d2);
+  cursor: pointer;
+}
+.empty-state {
+  text-align: center;
+  color: var(--color-muted, #8d97ad);
+  padding: 24px;
+}

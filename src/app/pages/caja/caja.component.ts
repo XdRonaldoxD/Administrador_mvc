@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { finalize, Subject, takeUntil } from 'rxjs';
@@ -51,13 +51,23 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
   mostrar_documento: any = false;
   Correo_pdf: string = '';
   Correo_ticket: string = '';
+  // [FIX PDF móvil] URLs de los comprobantes ESTÁTICOS (NOTA VENTA/BOLETA/FACTURA)
+  // que se renderizan con app-extended-pdf (pdf.js), que sí se ve en celular.
+  url_pdf: string = '';
+  url_ticket: string = '';
+  // [FIX PDF móvil] Flag para distinguir el modo del modal #ajax-mostrar-pdf:
+  //  - false => comprobantes estáticos: usa app-extended-pdf (url_pdf/url_ticket).
+  //  - true  => detalle de caja (PDF dinámico de API): mantiene <embed> porque el
+  //             endpoint genera el PDF al vuelo y puede NO soportar fetch con Range.
+  caja_dinamica: boolean = false;
   constructor(private http: HttpClient,
     private servicio_login: LoginService,
     private fb: FormBuilder,
     private toast: ToastrService,
     private servicio_producto: ProductoService,
     private servicio_pedido: PedidoService,
-    private servicio_caja: Caja
+    private servicio_caja: Caja,
+    private zone: NgZone
   ) {
     
     this.usuario = servicio_login.getIdentity();
@@ -322,28 +332,37 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
       showConfirmButton: false,
       onOpen: () => {
         Swal.showLoading();
+        // [FIX PDF móvil] Comprobantes ESTÁTICOS: se arman las URLs (pdf=A4, ticket)
+        // y se muestran con app-extended-pdf (pdf.js). Antes se inyectaban con <embed>
+        // vía jQuery, que no se ve en celular.
+        let pdf = '';
+        let ticket = '';
         if (item.id_nota_venta) {
-          var htmlticket = `<embed src="${item.ruta_archivo}/NOTA VENTA/${item.urlticket_nota_venta}" frameborder="0" width="100%" height="400px">`;
-          $("#viewjs2_negocio").html(htmlticket);
-          var htmlpdf = `<embed src="${item.ruta_archivo}/NOTA VENTA/${item.urlpdf_nota_venta}" frameborder="0" width="100%" height="400px">`;
-          $("#viewjs_negocio").html(htmlpdf);
+          pdf = `${item.ruta_archivo}/NOTA VENTA/${item.urlpdf_nota_venta}`;
+          ticket = `${item.ruta_archivo}/NOTA VENTA/${item.urlticket_nota_venta}`;
         }
         if (item.id_boleta) {
-          var htmlticket = `<embed src="${item.ruta_archivo}/BOLETA/${item.path_ticket_boleta}" frameborder="0" width="100%" height="400px">`;
-          $("#viewjs2_negocio").html(htmlticket);
-          var htmlpdf = `<embed src="${item.ruta_archivo}/BOLETA/${item.path_boleta}" frameborder="0" width="100%" height="400px">`;
-          $("#viewjs_negocio").html(htmlpdf);
+          pdf = `${item.ruta_archivo}/BOLETA/${item.path_boleta}`;
+          ticket = `${item.ruta_archivo}/BOLETA/${item.path_ticket_boleta}`;
         }
         if (item.id_factura) {
-          var htmlticket = `<embed src="${item.ruta_archivo}/FACTURA/${item.path_ticket_factura}" frameborder="0" width="100%" height="400px">`;
-          $("#viewjs2_negocio").html(htmlticket);
-          var htmlpdf = `<embed src="${item.ruta_archivo}/FACTURA/${item.path_documento}" frameborder="0" width="100%" height="400px">`;
-          $("#viewjs_negocio").html(htmlpdf);
+          pdf = `${item.ruta_archivo}/FACTURA/${item.path_documento}`;
+          ticket = `${item.ruta_archivo}/FACTURA/${item.path_ticket_factura}`;
         }
+        this.caja_dinamica = false;
         $(".imprimirTicket").addClass('active');
         $(".imprimirTicketcontent").addClass('active');
+        // El visor pdf.js SOLO se crea cuando el modal está completamente visible
+        // (shown.bs.modal); si se crea durante el fade-in, mide 0 px de alto y sale en blanco.
+        const modalPdf = $('#ajax-mostrar-pdf');
+        modalPdf.off('shown.bs.modal.verpdf').on('shown.bs.modal.verpdf', () => {
+          this.zone.run(() => {
+            this.url_pdf = encodeURI(pdf);       // encodeURI por el espacio de "NOTA VENTA"
+            this.url_ticket = encodeURI(ticket);
+          });
+        });
         setTimeout(() => {
-          $('#ajax-mostrar-pdf').modal('show');
+          modalPdf.modal('show');
           Swal.close();
         }, 1500);
       },
@@ -351,10 +370,24 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
 
   }
 
+  private escapeHtml(value: any): string {
+    if (value === null || value === undefined) { return ''; }
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
   LimpiarModalNegocio() {
     $('#ajax-mostrar-pdf').modal('hide');
-    $("#viewjs2_negocio").html('');
-    $("#viewjs_negocio").html('');
+    // [FIX PDF móvil] Reset del modo estático (app-extended-pdf) y del dinámico (embed).
+    this.url_pdf = '';
+    this.url_ticket = '';
+    this.caja_dinamica = false;
+    $("#viewjs2_negocio_caja").html('');
+    $("#viewjs_negocio_caja").html('');
     $(".imprimirTicket").removeClass('active');
     $(".imprimirTicketcontent").removeClass('active');
     $(".imprimirBoletaAfectaContent ").removeClass('active');
@@ -374,14 +407,28 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
       showConfirmButton: false,
       onOpen: () => {
         Swal.showLoading();
-        var htmlticket = `<embed src="${environment.api_url}&controller=Caja&action=TraerDetalleCaja&id_caja=${this.id_caja}&id_empresa=${this.usuario.id_empresa}&Formato=TICKET&Authorization=${this.token}" frameborder="0" width="100%" height="400px">`;
-        $("#viewjs2_negocio").html(htmlticket);
-        var htmlpdf = `<embed src="${environment.api_url}&controller=Caja&action=TraerDetalleCaja&id_caja=${this.id_caja}&id_empresa=${this.usuario.id_empresa}&Formato=DOCUMENTO&Authorization=${this.token}" frameborder="0" width="100%" height="400px">`;
-        $("#viewjs_negocio").html(htmlpdf);
+        // [FIX PDF móvil] CASO DINÁMICO (detalle de caja): el endpoint PHP genera el
+        // PDF al vuelo y puede NO soportar fetch con Range, por lo que NO se usa
+        // app-extended-pdf (pdf.js descarga por Range). Se mantiene <embed>, pero la
+        // URL se envuelve en encodeURI. Usa contenedores propios (#..._caja) para no
+        // chocar con los de app-extended-pdf del modo estático (mismo modal).
+        const urlTicket = encodeURI(`${environment.api_url}&controller=Caja&action=TraerDetalleCaja&id_caja=${this.id_caja}&id_empresa=${this.usuario.id_empresa}&Formato=TICKET&Authorization=${this.token}`);
+        const urlPdf = encodeURI(`${environment.api_url}&controller=Caja&action=TraerDetalleCaja&id_caja=${this.id_caja}&id_empresa=${this.usuario.id_empresa}&Formato=DOCUMENTO&Authorization=${this.token}`);
+        const htmlticket = `<embed src="${urlTicket}" frameborder="0" width="100%" height="400px">`;
+        const htmlpdf = `<embed src="${urlPdf}" frameborder="0" width="100%" height="400px">`;
+        this.caja_dinamica = true;
         $(".imprimirTicket").addClass('active');
         $(".imprimirTicketcontent").addClass('active');
+        const modalPdf = $('#ajax-mostrar-pdf');
+        modalPdf.off('shown.bs.modal.verpdf').on('shown.bs.modal.verpdf', () => {
+          // El flag caja_dinamica ya está en true; los contenedores propios existen.
+          this.zone.run(() => {
+            $("#viewjs2_negocio_caja").html(htmlticket);
+            $("#viewjs_negocio_caja").html(htmlpdf);
+          });
+        });
         setTimeout(() => {
-          $('#ajax-mostrar-pdf').modal('show');
+          modalPdf.modal('show');
           Swal.close();
         }, 1500);
       },

@@ -32,6 +32,8 @@ import { SucursalresolverService } from '../resolver/Sucursalresolver.service';
 import { TraerDatosProductoService } from '../resolver/TraerDatosProductosresolver.service';
 import { PromocionComponent } from './TiendaOnline/promocion/promocion.component';
 import { ReporteVentaProductoComponent } from './reporte-venta-producto/reporte-venta-producto.component';
+import { PermisosComponent } from './permisos/permisos.component';
+import { PermisoGuard } from '../guards/permiso.guard';
 
 
 const pagesRoutes: Routes = [
@@ -44,21 +46,24 @@ const pagesRoutes: Routes = [
       { path: 'inicio', component: IndexComponent },
       {
         path: 'Nuevo-Producto', component: NuevoProductoComponent,
-        resolve: { datos: TraerDatosProductoService }
+        resolve: { datos: TraerDatosProductoService },
+        canActivate: [PermisoGuard], data: { modulo: 'PRODUCTOS' }
       },
       {
         path: 'Editar-Producto/:id_producto', component: EditarProductoComponent,
-        resolve: { datos: TraerProductosService }
+        resolve: { datos: TraerProductosService },
+        canActivate: [PermisoGuard], data: { modulo: 'PRODUCTOS' }
       },
-      { path: 'Producto', component: ProductosComponent },
+      { path: 'Producto', component: ProductosComponent, canActivate: [PermisoGuard], data: { modulo: 'PRODUCTOS' } },
       { path: 'Perfil', component: PerfilComponent },
-      { path: 'Marca', component: MarcasComponent },
-      { path: 'Categoria', component: CategoriaComponent },
-      { path: 'Atributo', component: AtributoComponent },
-      { path: 'Pedidos', component: PedidosComponent },
+      { path: 'Marca', component: MarcasComponent, canActivate: [PermisoGuard], data: { modulo: 'MARCAS' } },
+      { path: 'Categoria', component: CategoriaComponent, canActivate: [PermisoGuard], data: { modulo: 'CATEGORIAS' } },
+      { path: 'Atributo', component: AtributoComponent, canActivate: [PermisoGuard], data: { modulo: 'ATRIBUTOS' } },
+      { path: 'Pedidos', component: PedidosComponent, canActivate: [PermisoGuard], data: { modulo: 'PEDIDOS' } },
       {
         path: 'Detalle-Pedido/:id_pedido', component: PedidoDetalleComponent,
-        resolve: { pedidodetalle: PedidoresolverService }
+        resolve: { pedidodetalle: PedidoresolverService },
+        canActivate: [PermisoGuard], data: { modulo: 'PEDIDOS' }
       },
       {
         path: 'Datos-Personales/:id_usuario', component: DatosPersonalesComponent,
@@ -67,27 +72,29 @@ const pagesRoutes: Routes = [
       {
         path: 'Datos-Personales', component: DatosPersonalesComponent
       },
-      { path: 'chatBox', component: ChatBoxComponent },
-      { path: 'Importar-Inventario', component: MigrarproductoComponent },
-      { path: 'Nota-Venta', component: NotaVentaComponent },
-      { path: 'Caja', component: CajaComponent },
-      { path: 'Ventas', component: VentasComponent },
+      { path: 'chatBox', component: ChatBoxComponent, canActivate: [PermisoGuard], data: { modulo: 'CHAT CLIENTE' } },
+      { path: 'Importar-Inventario', component: MigrarproductoComponent, canActivate: [PermisoGuard], data: { modulo: 'REPORTE PRODUCTOS' } },
+      { path: 'Nota-Venta', component: NotaVentaComponent, canActivate: [PermisoGuard], data: { modulo: 'PAGO NOTA VENTA' } },
+      { path: 'Caja', component: CajaComponent, canActivate: [PermisoGuard], data: { modulo: 'CAJA' } },
+      { path: 'Ventas', component: VentasComponent, canActivate: [PermisoGuard], data: { modulo: 'VENTAS' } },
 
-      { path: 'Slider', component: SliderComponent },
-      { path: 'Empresa', component: EmpresaComponent },
-      { path: 'Baja-Comprobantes', component: BajaComprobantesComponent },
-      { path: 'Usuario', component: UsuarioComponent },
-      { path: 'Bodega', component: BodegaComponent },
-      { path: 'Promociones', component: PromocionComponent },
-      { path: 'Venta-Producto', component: ReporteVentaProductoComponent },
+      { path: 'Slider', component: SliderComponent, canActivate: [PermisoGuard], data: { modulo: 'SLIDER' } },
+      { path: 'Empresa', component: EmpresaComponent, canActivate: [PermisoGuard], data: { soloAdmin: true } },
+      { path: 'Baja-Comprobantes', component: BajaComprobantesComponent, canActivate: [PermisoGuard], data: { modulo: 'ANULAR DOCUMENTOS' } },
+      { path: 'Usuario', component: UsuarioComponent, canActivate: [PermisoGuard], data: { soloAdmin: true } },
+      { path: 'Permisos', component: PermisosComponent, canActivate: [PermisoGuard], data: { soloAdmin: true } },
+      { path: 'Bodega', component: BodegaComponent, canActivate: [PermisoGuard], data: { modulo: 'BODEGAS' } },
+      { path: 'Promociones', component: PromocionComponent, canActivate: [PermisoGuard], data: { modulo: 'PROMOCIONES' } },
+      { path: 'Venta-Producto', component: ReporteVentaProductoComponent, canActivate: [PermisoGuard], data: { modulo: 'REPORTE VENTA PRODUCTO' } },
       {
         path: 'Sucursal', component: SucursalComponent,
-        resolve: { datos: SucursalresolverService }
+        resolve: { datos: SucursalresolverService },
+        canActivate: [PermisoGuard], data: { modulo: 'SUCURSAL' }
       },
       {
         path: 'Libro-Ventas', component: LibroVentasComponent,
-        resolve: { datos: LibroVentasService }
-
+        resolve: { datos: LibroVentasService },
+        canActivate: [PermisoGuard], data: { modulo: 'LIBRO VENTAS' }
       },
       { path: '', redirectTo: '/IniciarSession', pathMatch: 'full' },
     ]

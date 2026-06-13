@@ -260,7 +260,7 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
           } else {
             $.each(arreglo.categoria, (i: any, data: any) => {
               html += "<li class='categoria-item'><i class=\"fa fa-plus\"></i>";
-              html += `<label style="pointer-events: none;" class="inline custom-control custom-checkbox block"><input id="${data.id_categoria}_categoria" value=${data.id_categoria} name='categoria_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input" ><span  class="custom-control-indicator"></span><span class="custom-control-description ml-0"> ${data.glosa_categoria}</span></label>`;
+              html += `<label style="pointer-events: none;" class="inline custom-control custom-checkbox block"><input id="${data.id_categoria}_categoria" value=${data.id_categoria} name='categoria_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input" ><span  class="custom-control-indicator"></span><span class="custom-control-description ml-0"> ${this.escapeHtml(data.glosa_categoria)}</span></label>`;
               if (typeof data.subcategoria !== 'undefined') {
                 html += this.arbolSubcategoria(data.subcategoria);
               } else {
@@ -283,6 +283,16 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
     )
   }
 
+  private escapeHtml(value: any): string {
+    if (value === null || value === undefined) { return ''; }
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
   arbolSubcategoria(subcategoria: any) {
     var html = "<ul style='list-style: none; display: none;'>"; // Añade display: none para ocultar las subcategorías inicialmente
     if (typeof subcategoria !== 'undefined') {
@@ -293,7 +303,7 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
           <label ${estilo} class="inline custom-control custom-checkbox block">
             <input id="${data.id_categoria}_categoria" value=${data.id_categoria} name='categoria_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input" ${tieneSubcategoria ? "disabled" : ""}>
             <span class="custom-control-indicator"></span>
-            <span class="custom-control-description ml-0">${data.glosa_categoria}</span>
+            <span class="custom-control-description ml-0">${this.escapeHtml(data.glosa_categoria)}</span>
           </label>`;
         if (tieneSubcategoria) {
           html += this.arbolSubcategoria(data.subcategoria);
@@ -320,7 +330,7 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
               html += "<li><i class=\"fa fa-minus\"></i>";
               html += `
             <label  class="inline custom-control custom-checkbox block label-desactivado"><input  id="${data.id_atributo}_atributo" value=${data.id_atributo} name='atributo_padre' type="checkbox"  class="custom-control-input selector-atributo desactivado" >
-            <span  class="custom-control-indicator"></span><span class="custom-control-description ml-0"> ${data.glosa_atributo}</span></label>`;
+            <span  class="custom-control-indicator"></span><span class="custom-control-description ml-0"> ${this.escapeHtml(data.glosa_atributo)}</span></label>`;
               if (typeof data.subatributo !== 'undefined') {
                 html += this.arbolSubatributo(data.subatributo);
               } else {
@@ -349,7 +359,7 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
     if (typeof subatributo !== 'undefined') {
       $.each(subatributo, (i: any, data: any) => {
         html += `<li><i class='fa fa-minus'></i> 
-        <label  class="inline custom-control custom-checkbox block"><input id="${data.id_atributo}_atributo" value=${data.id_atributo} name='atributo_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input selector-atributo" ><span  class="custom-control-indicator"></span><span class="custom-control-description ml-0"> ${data.glosa_atributo}</span></label>`;
+        <label  class="inline custom-control custom-checkbox block"><input id="${data.id_atributo}_atributo" value=${data.id_atributo} name='atributo_padre' type="checkbox" formcontrolname="visible_tienda" class="custom-control-input selector-atributo" ><span  class="custom-control-indicator"></span><span class="custom-control-description ml-0"> ${this.escapeHtml(data.glosa_atributo)}</span></label>`;
         if (typeof data.subatributo !== 'undefined') {
           html += this.arbolSubatributo(data.subatributo);
         } else {

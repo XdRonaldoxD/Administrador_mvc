@@ -56,7 +56,8 @@ export class LoginService {
 
   LoginUsuario(user: any, getToken: any = null): Observable<any> {
     const formData = new FormData();
-    formData.append('email', user.email);
+    // Se envía como 'dni' (el login es por DNI). El backend lo busca por DNI o correo.
+    formData.append('dni', user.dni);
     formData.append('password', user.password);
     if (getToken != null) {
       formData.append('getToken', user.getToken);

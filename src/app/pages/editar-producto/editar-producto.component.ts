@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ModalMarcaComponent } from '../modals/modal-marca/modal-marca.component';
 import { ToastrService } from 'ngx-toastr';
 import { HelpersService } from 'src/app/services/helpers.service';
+import { MarcaService } from 'src/app/services/marca.service';
 import { QuillViewComponent } from 'ngx-quill';
 declare var $: any;
 declare var document: any;
@@ -67,7 +68,8 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private toastr: ToastrService,
     private el: ElementRef,
-    private helper: HelpersService
+    private helper: HelpersService,
+    private marca_serv: MarcaService
   ) {
     this.modulesQuill = this.helper.getToolbarConfig();
     this.token = this.servicio_login.getToken();
@@ -117,11 +119,17 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
       this.informacionForm.get('glosa_producto')?.setValue(this.res.glosa_producto);
       this.informacionForm.get('descripcion_corta')?.setValue(this.res.detalle_producto);
       this.informacionForm.get('descripcion_extendida')?.setValue(this.res.detallelargo_producto);
-      this.marcas = [{
-        id_marca: this.res.id_marca,
-        glosa_marca: this.res.glosa_marca
-      }];
-      this.informacionForm.get('id_marca')?.setValue(this.res.id_marca);
+      // [CACHE] Carga TODAS las marcas activas (de cache si existe) para que el
+      // select las muestre todas. Asegura que la marca actual del producto esté
+      // en la lista aunque ya no esté vigente.
+      this.marca_serv.TodasMarcas().pipe(takeUntil(this.Unsuscribe)).subscribe((marcas: any[]) => {
+        const lista = marcas ? [...marcas] : [];
+        if (this.res.id_marca != null && !lista.some((m: any) => m.id_marca == this.res.id_marca)) {
+          lista.unshift({ id_marca: this.res.id_marca, glosa_marca: this.res.glosa_marca });
+        }
+        this.marcas = lista;
+        this.informacionForm.get('id_marca')?.setValue(this.res.id_marca);
+      });
       this.arregloColor = this.res.arreglo_color;
       this.arregloEspecificacion = this.res.arreglo_especificacion;
       this.imagenes_producto = this.res.arreglo_imagen;
@@ -565,7 +573,8 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
   limpiarSeleccion(tipo: string) {
     switch (tipo) {
       case 'marca':
-        this.marcas = [];
+        // Solo limpia la selección; conserva la lista completa precargada en cache.
+        this.informacionForm.get('id_marca')?.setValue(null);
         break;
       case 'producto-relacionado':
         this.listaProductosRelacionado = [];
@@ -706,8 +715,12 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
 
 
   manejarRespuesta(respuesta: any) {
-    console.log("PADRE", respuesta) // Manejar la respuesta aquí
-    this.marcas = [respuesta];
+    // Marca recién creada desde el módulo de producto: la agregamos al cache y a
+    // la lista en memoria (sin recargar del backend) y la dejamos seleccionada.
+    this.marca_serv.agregarMarcaCache(respuesta);
+    if (!this.marcas.some((m: any) => m.id_marca == respuesta.id_marca)) {
+      this.marcas = [respuesta, ...this.marcas];
+    }
     this.informacionForm.get('id_marca')?.setValue(respuesta.id_marca);
   }
   AbrirModal() {

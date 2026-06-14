@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ModalMarcaComponent } from '../modals/modal-marca/modal-marca.component';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { HelpersService } from 'src/app/services/helpers.service';
+import { MarcaService } from 'src/app/services/marca.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 declare var $: any;
 declare var document: any;
@@ -76,6 +77,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
     private toastr: ToastrService,
     private route: ActivatedRoute,
     private helper: HelpersService,
+    private marca_serv: MarcaService,
   ) {
     this.modulesQuill = this.helper.getToolbarConfig();
     this.informacionForm = this.fb.group({
@@ -113,6 +115,12 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
+    // [CACHE] Precarga TODAS las marcas activas (de localStorage si existe, si no
+    // una sola consulta) para que el ng-select de marca las muestre todas y filtre
+    // del lado del cliente, sin pegarle al backend en cada búsqueda.
+    this.marca_serv.TodasMarcas().pipe(takeUntil(this.Unsuscribe)).subscribe((marcas: any[]) => {
+      this.marcas = marcas || [];
+    });
     $("[data-dismiss='modal']").click();
 
     $("#t-crear-categoria-producto").children("div").remove();
@@ -682,7 +690,8 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
   limpiarSeleccion(tipo: string) {
     switch (tipo) {
       case 'marca':
-        this.marcas = [];
+        // Solo limpia la selección; conserva la lista completa precargada en cache.
+        this.informacionForm.get('id_marca')?.setValue(null);
         break;
       case 'producto-relacionado':
         this.listaProductosRelacionado = [];
@@ -692,8 +701,12 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
     }
   }
   manejarRespuesta(respuesta: any) {
-    console.log("PADRE", respuesta) // Manejar la respuesta aquí
-    this.marcas = [respuesta];
+    // Marca recién creada desde el módulo de producto: la agregamos al cache y a
+    // la lista en memoria (sin recargar del backend) y la dejamos seleccionada.
+    this.marca_serv.agregarMarcaCache(respuesta);
+    if (!this.marcas.some((m: any) => m.id_marca == respuesta.id_marca)) {
+      this.marcas = [respuesta, ...this.marcas];
+    }
     this.informacionForm.get('id_marca')?.setValue(respuesta.id_marca);
   }
   AbrirModal() {

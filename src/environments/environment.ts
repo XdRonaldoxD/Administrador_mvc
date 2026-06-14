@@ -2,9 +2,20 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+// [CONFIG] Parámetros separados para el despliegue. Para pasar a producción
+// solo se cambian estas dos líneas (o las del environment.prod.ts):
+//   - apiUrl:    URL base del backend (MVC_CRM)
+//   - dominioUrl: valor del parámetro ?dominio= (multi-tenant)
+// api_url se compone de ambos. TODOS los servicios usan environment.api_url,
+// por lo que el cambio aquí afecta a todo el sistema en un solo lugar.
+const apiUrl = "http://localhost/MVC_CRM/";
+const dominioUrl = "localhost";
+
 export const environment = {
   production: false,
-  api_url:"http://localhost/MVC_CRM/?dominio=localhost"
+  apiUrl,
+  dominioUrl,
+  api_url: `${apiUrl}?dominio=${dominioUrl}`
 };
 
 /*

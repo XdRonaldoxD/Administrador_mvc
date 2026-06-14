@@ -29,7 +29,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.pattern('^[0-9]{8}$')]],
+      // El login es por DNI (8 dígitos), no por correo. El backend acepta DNI o correo.
+      dni: ['', [Validators.required, Validators.pattern('^[0-9]{8}$')]],
       password: ['', [Validators.required]]
     });
 

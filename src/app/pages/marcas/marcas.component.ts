@@ -220,6 +220,8 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
 
   EstadoMarca(estado: any, id_marca: any) {
     this.servicio_marca.Habilitar_Deshabilitar_Marca(this.token, id_marca, estado).pipe(takeUntil(this.Unsuscribe),finalize(()=>{
+      // [CACHE] Cambió el estado (vigencia) de una marca: invalida el cache.
+      try { this.servicio_marca.invalidarCacheMarcas(); } catch (e) { }
       try { this.recargarTablaActiva(); } catch (e) { }
     })).subscribe({
       next: resp => {
@@ -258,7 +260,9 @@ export class MarcasComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   manejarRespuesta(respuesta: any) {
-    console.log(respuesta);
+    // [CACHE] Se creó/editó una marca desde el módulo Marcas: invalida el cache
+    // para que Nuevo Producto recargue el listado actualizado en su próxima carga.
+    this.servicio_marca.invalidarCacheMarcas();
     this.recargarTablaActiva();
   }
 

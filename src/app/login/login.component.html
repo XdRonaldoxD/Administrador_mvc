@@ -9,14 +9,14 @@
                     <h3 class="box-title m-b-20">Iniciar sesión</h3>
                     <div class="form-group ">
                         <div class="col-xs-12">
-                            <input id="signin-email" type="text" inputmode="numeric" maxlength="8" class="form-control" formControlName="email"
-                                [class.is-invalid]="loginForm.controls['email']|isInvalid" [autocomplete]="false"
+                            <input id="signin-dni" type="text" inputmode="numeric" maxlength="8" class="form-control" formControlName="dni"
+                                [class.is-invalid]="loginForm.controls['dni']|isInvalid" [autocomplete]="false"
                                 placeholder="DNI">
                             <div class="text-danger">
-                                <div *ngIf="loginForm.controls['email']|hasError:'required'">
+                                <div *ngIf="loginForm.controls['dni']|hasError:'required'">
                                     Ingresa tu DNI
                                 </div>
-                                <div *ngIf="loginForm.controls['email']|hasError:'pattern'">
+                                <div *ngIf="loginForm.controls['dni']|hasError:'pattern'">
                                     El DNI debe tener 8 dígitos
                                 </div>
                             </div>
@@ -54,16 +54,16 @@
         <div class="signin-signup">
             <form class="sign-in-form" [formGroup]="loginForm" autocomplete="nope">
                 <h2 class="title">Iniciar Sesión</h2>
-                <div class="input-field" [class.is-invalid]="loginForm.controls['email']|isInvalid">
+                <div class="input-field" [class.is-invalid]="loginForm.controls['dni']|isInvalid">
                     <i class="fa fa-user" aria-hidden="true"></i>
-                    <input type="text" inputmode="numeric" maxlength="8" formControlName="email" [autocomplete]="true"
+                    <input type="text" inputmode="numeric" maxlength="8" formControlName="dni" [autocomplete]="true"
                         placeholder="DNI" />
                 </div>
                 <div class="text-danger">
-                    <div style="font-weight: 700;" *ngIf="loginForm.controls['email']|hasError:'required'">
+                    <div style="font-weight: 700;" *ngIf="loginForm.controls['dni']|hasError:'required'">
                         Ingresa tu DNI
                     </div>
-                    <div style="font-weight: 700;" *ngIf="loginForm.controls['email']|hasError:'pattern'">
+                    <div style="font-weight: 700;" *ngIf="loginForm.controls['dni']|hasError:'pattern'">
                         El DNI debe tener 8 dígitos
                     </div>
                 </div>

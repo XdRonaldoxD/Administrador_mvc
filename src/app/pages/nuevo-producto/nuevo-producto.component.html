@@ -116,10 +116,8 @@
                                                     <div class="form-group">
                                                         <label for="id_marca">Marca</label>
                                                         <ng-select [searchable]="true" [items]="marcas"
-                                                            [multiple]="false" [loading]="isLoading"
-                                                            (search)="buscarMarca($event.term)"
-                                                            placeholder="Escriba para buscar una marca"
-                                                            [typeToSearchText]="'Escriba para buscar...'"
+                                                            [multiple]="false"
+                                                            placeholder="Seleccione o busque una marca"
                                                             bindLabel="glosa_marca" bindValue="id_marca"
                                                             (clear)="limpiarSeleccion('marca')"
                                                             formControlName="id_marca"

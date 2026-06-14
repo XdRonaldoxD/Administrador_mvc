@@ -1,6 +1,18 @@
 ::ng-deep ::ng-deep table.dataTable td.dataTables_empty {
   display: none;
 }
+
+/* [POS] Estado deshabilitado de "Confirmar Pago": gris claro y "no permitido",
+   en vez del celeste translúcido por defecto de Bootstrap. */
+.btn-confirmar-pago:disabled,
+.btn-confirmar-pago[disabled] {
+  background-color: #c7ccd4 !important;
+  border-color: #c7ccd4 !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+}
 .content-tabla {
   height: calc(100vh - 210px);
 }

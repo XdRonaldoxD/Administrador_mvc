@@ -259,7 +259,10 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
   Mostrar_Medio_Pago() {
     this.nota_venta.ListaMediosPagos().pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: resp => {
-        this.MedioPago = resp;
+        this.MedioPago = resp || [];
+        // [POS] Medio de pago por defecto = EFECTIVO (no el último de la lista).
+        const efectivo = this.MedioPago.find((m: any) => (m.glosa_medio_pago || '').toUpperCase().includes('EFECTIVO'));
+        this.id_medio_pago = String(efectivo ? efectivo.id_medio_pago : (this.MedioPago.length ? this.MedioPago[0].id_medio_pago : 1));
       },
       error: error => {
         this.toast.error(`Verificar los Pagos.`, 'Medio Pago');

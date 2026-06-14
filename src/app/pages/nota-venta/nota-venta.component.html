@@ -323,16 +323,8 @@
                                                         <select [(ngModel)]="id_medio_pago" class="form-control"
                                                             (change)="MedioPagoSeleccionado()" name="medio_pago"
                                                             id="medio_pago">
-                                                            <ng-container *ngFor="let item of MedioPago;let i=index">
-                                                                <ng-container *ngIf="i==0; else elseTemplate">
-                                                                    <option selected value="{{item.id_medio_pago}}">
-                                                                        {{item.glosa_medio_pago}}</option>
-                                                                </ng-container>
-                                                                <ng-template #elseTemplate>
-                                                                    <option value="{{item.id_medio_pago}}">
-                                                                        {{item.glosa_medio_pago}}</option>
-                                                                </ng-template>
-                                                            </ng-container>
+                                                            <option *ngFor="let item of MedioPago"
+                                                                [value]="item.id_medio_pago">{{item.glosa_medio_pago}}</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -495,8 +487,9 @@
                                             <button type="button" class="btn btn-success" (click)="VolverPagina()"
                                                 value="create-product" style="padding-right: 15px;"> VOLVER
                                             </button>
-                                            <button type="button" class="btn btn-primary ml-1"
+                                            <button type="button" class="btn btn-primary ml-1 btn-confirmar-pago"
                                                 (click)="ConfirmarPagoNotaVenta()" value="create-product"
+                                                [disabled]="Totales_pagados.total_pagar <= 0 || (Totales_pagados.total_pagar - Totales_pagados.total_pagado) > 0.009"
                                                 style="padding-right: 15px;"> CONFIRMAR PAGO <i
                                                     class='bx bx-right-arrow-alt'></i></button>
                                         </div>

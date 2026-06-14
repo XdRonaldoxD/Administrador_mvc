@@ -17,11 +17,17 @@
   padding: 6px 12px;
 }
 
+/* El logo (verde) va dentro de un recuadro blanco redondeado para que concuerde
+   y resalte sobre la barra azul, en vez de quedar el verde directo sobre el azul. */
 .logo-empresa {
-  max-height: 48px;
-  max-width: 200px;
+  max-height: 42px;
+  max-width: 190px;
   width: auto;
   height: auto;
   object-fit: contain;
   display: block;
+  background: #ffffff;
+  padding: 6px 14px;
+  border-radius: 10px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.18);
 }

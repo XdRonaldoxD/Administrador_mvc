@@ -55,6 +55,9 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
   // que se renderizan con app-extended-pdf (pdf.js), que sí se ve en celular.
   url_pdf: string = '';
   url_ticket: string = '';
+  // [FIX PDF] Solo se crea el visor del tab activo (A4 o TICKET). Crear ambos a la vez
+  // hace que pdf.js mida 0px en el oculto y el activo salga en blanco.
+  tabComprobante: string = 'TICKET';
   // [FIX PDF móvil] Flag para distinguir el modo del modal #ajax-mostrar-pdf:
   //  - false => comprobantes estáticos: usa app-extended-pdf (url_pdf/url_ticket).
   //  - true  => detalle de caja (PDF dinámico de API): mantiene <embed> porque el
@@ -357,6 +360,7 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
         const modalPdf = $('#ajax-mostrar-pdf');
         modalPdf.off('shown.bs.modal.verpdf').on('shown.bs.modal.verpdf', () => {
           this.zone.run(() => {
+            this.tabComprobante = 'TICKET';      // tab activo por defecto
             this.url_pdf = encodeURI(pdf);       // encodeURI por el espacio de "NOTA VENTA"
             this.url_ticket = encodeURI(ticket);
           });
@@ -407,24 +411,22 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
       showConfirmButton: false,
       onOpen: () => {
         Swal.showLoading();
-        // [FIX PDF móvil] CASO DINÁMICO (detalle de caja): el endpoint PHP genera el
-        // PDF al vuelo y puede NO soportar fetch con Range, por lo que NO se usa
-        // app-extended-pdf (pdf.js descarga por Range). Se mantiene <embed>, pero la
-        // URL se envuelve en encodeURI. Usa contenedores propios (#..._caja) para no
-        // chocar con los de app-extended-pdf del modo estático (mismo modal).
+        // [FIX PDF] El detalle/resumen de caja ahora se muestra con app-extended-pdf
+        // (pdf.js), igual que TODO el resto. Antes usaba <embed>, que el navegador
+        // BLOQUEA porque index.php envía 'X-Frame-Options: DENY' (no se puede enmarcar
+        // un recurso cross-origin) → salía el ícono de PDF roto. pdf.js descarga por
+        // fetch (CORS permitido) y dibuja en canvas, sin enmarcar, así que sí carga.
         const urlTicket = encodeURI(`${environment.api_url}&controller=Caja&action=TraerDetalleCaja&id_caja=${this.id_caja}&id_empresa=${this.usuario.id_empresa}&Formato=TICKET&Authorization=${this.token}`);
         const urlPdf = encodeURI(`${environment.api_url}&controller=Caja&action=TraerDetalleCaja&id_caja=${this.id_caja}&id_empresa=${this.usuario.id_empresa}&Formato=DOCUMENTO&Authorization=${this.token}`);
-        const htmlticket = `<embed src="${urlTicket}" frameborder="0" width="100%" height="400px">`;
-        const htmlpdf = `<embed src="${urlPdf}" frameborder="0" width="100%" height="400px">`;
-        this.caja_dinamica = true;
+        this.caja_dinamica = false; // usar el visor pdf.js, no <embed>
         $(".imprimirTicket").addClass('active');
         $(".imprimirTicketcontent").addClass('active');
         const modalPdf = $('#ajax-mostrar-pdf');
         modalPdf.off('shown.bs.modal.verpdf').on('shown.bs.modal.verpdf', () => {
-          // El flag caja_dinamica ya está en true; los contenedores propios existen.
           this.zone.run(() => {
-            $("#viewjs2_negocio_caja").html(htmlticket);
-            $("#viewjs_negocio_caja").html(htmlpdf);
+            this.tabComprobante = 'TICKET';
+            this.url_ticket = urlTicket;
+            this.url_pdf = urlPdf;
           });
         });
         setTimeout(() => {

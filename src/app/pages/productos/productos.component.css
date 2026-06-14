@@ -1,6 +1,9 @@
 ::ng-deep table.dataTable td.dataTables_empty {
     display: none;
 }
+
+/* (Los estilos para igualar los ng-select del modal están en src/styles.css, global,
+   porque el ::ng-deep a nivel de componente no pisaba el tema de ng-select.) */
 .color-strong{
     font-weight: 600;
 }

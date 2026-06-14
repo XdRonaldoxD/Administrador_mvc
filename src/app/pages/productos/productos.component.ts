@@ -62,6 +62,12 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
   color: any;
   Producto: any;
   tipo_movimiento: any = null;
+  // [STOCK] Opciones de la acción para el ng-select (abre al primer click, a diferencia
+  // del <select> nativo dentro del modal Bootstrap que exigía 2 clicks).
+  accionesOpts: any[] = [
+    { id: '1', glosa: 'Añadir' },
+    { id: '2', glosa: 'Quitar' },
+  ];
   usuario: any = null;
   id_producto: any = null;
   bodega: any = [];
@@ -82,14 +88,20 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
       id_tipo_inventario: [""]
     });
     this.GestionarStock = this.fb.group({
-      accion: ['', [Validators.required]],
+      // [FIX] null (no '') para que el ng-select muestre el placeholder "Seleccionar
+      // Opción" en vez de quedar en blanco. ng-select trata '' como un valor elegido.
+      accion: [null, [Validators.required]],
+      // [STOCK] Cada precio se actualiza solo si su propio check está marcado
+      // (compra y venta por separado); por eso ya no son obligatorios.
+      actualizar_compra: [false],
+      actualizar_venta: [false],
       precio_compra: [null],
-      precio_venta: [null,[Validators.required]],
+      precio_venta: [null],
       cantidad: ['', [Validators.required]],
       stock_final: [''],
       stock_producto: [''],
       comentario: [''],
-      id_bodega: ['',[Validators.required]],
+      id_bodega: [null,[Validators.required]],
       id_usuario: [this.usuario.sub],
       id_producto: [null]
     });
@@ -473,21 +485,27 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
   AbrirModalGestionarStock(datos_producto: any) {
     this.Producto = datos_producto;
     this.GestionarStock.reset();
+    // [FIX] Resetear el estado del modal para que al reabrir NO queden pegados los
+    // precios ni la acción anterior.
+    this.tipo_movimiento = null;
+    this.GestionarStock.get('actualizar_compra')!.setValue(false);
+    this.GestionarStock.get('actualizar_venta')!.setValue(false);
+    this.GestionarStock.get('precio_compra')!.setValue(null);
+    this.GestionarStock.get('precio_venta')!.setValue(null);
+    this.GestionarStock.get('cantidad')!.setValue('');
+    if (this.cantidad) { this.cantidad.nativeElement.setAttribute('disabled', ''); }
     this.GestionarStock.get('id_producto')!.setValue(datos_producto.id_producto)
     this.GestionarStock.get('id_usuario')!.setValue(this.usuario.sub);
-    this.GestionarStock.get('accion')!.setValue('')
-    this.GestionarStock.get('id_bodega')!.setValue('')
+    this.GestionarStock.get('accion')!.setValue(null)
+    this.GestionarStock.get('id_bodega')!.setValue(null)
     this.servicio_producto.TraerBodegaStock(datos_producto.id_producto).pipe(takeUntil(this.destroy), finalize(() => {
       $('#exampleModalCenter').modal('show');
     })).subscribe({
       next: (res) => {
         this.bodega = res.stock_producto_bodega;
         if (this.bodega.length === 1) {
-          let valor = {
-            value: this.bodega[0].id_bodega
-          };
-          this.EscogerBodega(valor);
-          this.GestionarStock.get('id_bodega')!.setValue(this.bodega[0].id_bodega)
+          this.GestionarStock.get('id_bodega')!.setValue(this.bodega[0].id_bodega);
+          this.EscogerBodega(this.bodega[0].id_bodega);
         }
         if (res.producto_imagen) {
           this.url_producto_imagen = res.producto_imagen.url_producto_imagen;
@@ -503,8 +521,10 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
       }
     })
   }
-  EscogerBodega(bodega: any) {
-    let stock_bodega = this.bodega.find((item: any) => item.id_bodega == bodega.value)
+  EscogerBodega(idBodega?: any) {
+    // Acepta un id explícito (preselección) o lo toma del form (ng-select).
+    const id = (idBodega !== undefined && idBodega !== null) ? idBodega : this.GestionarStock.value.id_bodega;
+    let stock_bodega = this.bodega.find((item: any) => item.id_bodega == id)
     if (stock_bodega) {
       this.GestionarStock.get('stock_final')!.setValue(stock_bodega.total_stock_producto_bodega ?? 0)
       this.GestionarStock.get('stock_producto')!.setValue(stock_bodega.total_stock_producto_bodega ?? 0)
@@ -547,8 +567,11 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
     // Recarga las tablas de listado (activa + deshabilitado) MANTENIENDO su página
     // (ajax.reload(null, false)). slice(0,2) excluye la tabla de historial (índice 2+).
     const tablas = this.dtElements ? this.dtElements.toArray().slice(0, 2) : [];
-    if (tablas.length) {
-      tablas.forEach((el: any) =>
+    // [FIX] Algunas tablas (ej. "Deshabilitado", aún no abierta) no tienen dtInstance
+    // todavía → antes `el.dtInstance.then` lanzaba "Cannot read 'then' of undefined".
+    const conInstancia = tablas.filter((el: any) => el && el.dtInstance && typeof el.dtInstance.then === 'function');
+    if (conInstancia.length) {
+      conInstancia.forEach((el: any) =>
         el.dtInstance
           .then((dtInstance: any) => dtInstance.ajax.reload(null, false))
           .catch(() => {})
@@ -558,16 +581,21 @@ export class ProductosComponent implements AfterViewInit, OnDestroy, OnInit {
     }
   }
 
-  CambioMovimientos(valor: any) {
-    if (valor.value == 1 || valor.value == 2) {
-      this.tipo_movimiento = valor.value;
-      this.cantidad.nativeElement.removeAttribute('disabled');
-      this.cantidad.nativeElement.value = '';
+  CambioMovimientos() {
+    // [STOCK] Lee la acción desde el form (ng-select actualiza el control antes del change).
+    const accion = this.GestionarStock.value.accion;
+    if (accion == 1 || accion == 2) {
+      this.tipo_movimiento = accion;
+      if (this.cantidad) { this.cantidad.nativeElement.removeAttribute('disabled'); }
     } else {
-      this.cantidad.nativeElement.setAttribute("disabled", "");
+      if (this.cantidad) { this.cantidad.nativeElement.setAttribute("disabled", ""); }
       this.tipo_movimiento = null;
     }
-
+    // [PRECIOS] La actualización de precios solo aplica al "Añadir": al cambiar de
+    // acción se desmarcan ambos checks (y se limpia la cantidad escrita).
+    this.GestionarStock.get('actualizar_compra')!.setValue(false);
+    this.GestionarStock.get('actualizar_venta')!.setValue(false);
+    this.GestionarStock.get('cantidad')!.setValue('');
     this.GestionarStock.get('stock_final')!.setValue(this.GestionarStock.value.stock_producto);
   }
   Cantidades(valor: any) {

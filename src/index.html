@@ -59,6 +59,18 @@
   <!-- Bootstrap tether Core JavaScript -->
   <script src="assets/assets/plugins/bootstrap/js/popper.min.js" type="text/javascript"></script>
   <script src="assets/assets/plugins/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+  <!-- [FIX] Dentro de un modal (tabindex="-1") los <select> nativos exigían DOS clicks
+       para desplegarse: el enforceFocus del modal de Bootstrap roba el foco al abrir el
+       desplegable. Se desactiva enforceFocus para que el select abra al PRIMER click. -->
+  <script type="text/javascript">
+    (function () {
+      try {
+        if (window.jQuery && jQuery.fn.modal && jQuery.fn.modal.Constructor) {
+          jQuery.fn.modal.Constructor.prototype._enforceFocus = function () {};
+        }
+      } catch (e) {}
+    })();
+  </script>
 
   <!-- slimscrollbar scrollbar JavaScript -->
   <script src="assets/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>

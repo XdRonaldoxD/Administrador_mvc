@@ -72,6 +72,9 @@ export class BajaComprobantesComponent implements OnInit {
   Correo_ticket: string = '';
   url_pdf: string = '';
   url_ticket: string = '';
+  // [FIX PDF] Solo se crea el visor del tab activo (A4 o TICKET); crear ambos a la vez
+  // hace que pdf.js mida 0px en el oculto y el visible salga en blanco.
+  tabComprobante: string = 'TICKET';
   busquedafactura: boolean = false;
 
 
@@ -283,6 +286,7 @@ export class BajaComprobantesComponent implements OnInit {
             const modalPdf = $('#ajax-mostrar-pdf');
             modalPdf.off('shown.bs.modal.verpdf').on('shown.bs.modal.verpdf', () => {
               this.zone.run(() => {
+                this.tabComprobante = 'TICKET';      // tab activo por defecto
                 this.url_pdf = encodeURI(respuesta.pdf);
                 this.url_ticket = encodeURI(respuesta.ticket);
               });

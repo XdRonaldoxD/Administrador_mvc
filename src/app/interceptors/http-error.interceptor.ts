@@ -26,7 +26,12 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401 || error.status === 403) {
+        // [FIX] Solo el 401 (sesión inválida/expirada) cierra sesión y redirige al login.
+        // El 403 = "autenticado pero SIN permiso a ESTE recurso" (p. ej. un no-admin que
+        // pega a un lookup de otro módulo): NO debe cerrar sesión ni botar al usuario,
+        // solo se deja fallar esa llamada. Antes el 403 deslogueaba, por eso a un
+        // farmacéutico lo botaba al entrar a módulos que usan lookups de otros módulos.
+        if (error.status === 401) {
           localStorage.removeItem('UserIdentificado');
           localStorage.removeItem('token');
           this.router.navigate(['/IniciarSession']);

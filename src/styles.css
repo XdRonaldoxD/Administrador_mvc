@@ -12,6 +12,40 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     height: 100px;
 }
 
+/* [STOCK] Iguala el look de los ng-select del modal Gestionar Stock al .form-control de
+   ESTA plantilla (Bootstrap antiguo): mismo alto calc(2.25rem+2px), MISMO borde suave
+   rgba(0,0,0,.15) (antes se veía con borde gris más fuerte #ccc), radio y padding. */
+#exampleModalCenter .ng-select.ng-select-single .ng-select-container,
+#exampleModalCenter .ng-select .ng-select-container {
+    min-height: calc(2.25rem + 2px) !important;
+    height: calc(2.25rem + 2px) !important;
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+    border-radius: 0.25rem !important;
+    font-size: 1rem;
+    line-height: 1.25;
+    color: #495057;
+    background-color: #fff;
+    align-items: center;
+    box-shadow: none !important;
+}
+#exampleModalCenter .ng-select .ng-select-container .ng-value-container {
+    padding-left: 0.75rem;
+}
+#exampleModalCenter .ng-select .ng-select-container:hover {
+    box-shadow: none !important;
+}
+#exampleModalCenter .ng-select .ng-placeholder {
+    color: #919aa3;
+}
+#exampleModalCenter .ng-select.ng-select-focused:not(.ng-select-opened) > .ng-select-container,
+#exampleModalCenter .ng-select.ng-select-opened > .ng-select-container {
+    border-color: rgba(0, 0, 0, 0.15) !important;
+    box-shadow: none !important;
+}
+#exampleModalCenter .ng-select.ng-invalid.ng-touched .ng-select-container {
+    border-color: #dc3545 !important;
+}
+
 /* ============================================================
    [UI] Sistema de tokens de diseño — punto ÚNICO para rebrandear.
    El color primario se mantiene en el azul que ya usaba la app

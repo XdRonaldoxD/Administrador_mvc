@@ -260,25 +260,19 @@
                         <div class="col-md-4 col-12">
                             <div class="form-group">
                                 <label for="accion_gestionar">Acción <strong class="text-danger">(*)</strong></label>
-                                <select (change)="CambioMovimientos($event.target)" formControlName="accion"
-                                    [class.is-invalid]="GestionarStock.controls['accion']|isInvalid"
-                                    class="form-control" name="accion_gestionar">
-                                    <option value="">Seleccionar Opción</option>
-                                    <option value="1">Añadir</option>
-                                    <option value="2">Quitar</option>
-                                </select>
+                                <ng-select [items]="accionesOpts" bindValue="id" bindLabel="glosa"
+                                    formControlName="accion" [clearable]="false" placeholder="Seleccionar Opción"
+                                    (change)="CambioMovimientos()">
+                                </ng-select>
                             </div>
                         </div>
                         <div class="col-md-4 col-12">
                             <div class="form-group">
                                 <label for="accion_gestionar">Bodega <strong class="text-danger">(*)</strong></label>
-                                <select (change)="EscogerBodega($event.target)" formControlName="id_bodega"
-                                    [class.is-invalid]="GestionarStock.controls['id_bodega']|isInvalid"
-                                    class="form-control">
-                                    <option value="">Seleccionar Bodega</option>
-                                    <option [selected]="bodega.length==1" value="{{item.id_bodega}}"
-                                        *ngFor="let item of bodega">{{item.glosa_bodega}}</option>
-                                </select>
+                                <ng-select [items]="bodega" bindValue="id_bodega" bindLabel="glosa_bodega"
+                                    formControlName="id_bodega" [clearable]="false" placeholder="Seleccionar Bodega"
+                                    (change)="EscogerBodega()">
+                                </ng-select>
                             </div>
                         </div>
                         <div class="col-md-4 col-12">
@@ -291,29 +285,50 @@
                             </div>
                         </div>
                     </div>
+                    <!-- [STOCK] Stock actual (lo que hay) y Stock final (resultado tras la cantidad) -->
                     <div class="row">
-                        <div class="col-md-4 col-12" *ngIf="tipo_movimiento == 1">
+                        <div class="col-md-6 col-12">
                             <div class="form-group">
-                                <label for="precio_compra">Precio de compra</label>
-                                <input type="number" formControlName="precio_compra"
-                                    [class.is-invalid]="GestionarStock.controls['precio_compra']|isInvalid"
-                                    placeholder="ingrese precio de compra" class="form-control">
+                                <label>Stock actual</label>
+                                <input type="text" class="form-control bg-light" formControlName="stock_producto"
+                                    readonly>
                             </div>
                         </div>
-                        <div class="col-md-4 col-12" *ngIf="tipo_movimiento == 1">
+                        <div class="col-md-6 col-12">
                             <div class="form-group">
-                                <label for="precio_venta">Precio de venta <span class="text-danger">(*)</span></label>
-                                <input type="text" formControlName="precio_venta" (input)="onInput($event)"
-                                    [class.is-invalid]="GestionarStock.controls['precio_venta']|isInvalid"
-                                    placeholder="ingrese precio de compra" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-12">
-                            <div class="form-group ">
-                                <label for="stock_gestionar">Stock final </label>
+                                <label>Stock final</label>
                                 <input type="text" placeholder="Stock final" class="form-control"
-                                    formControlName="stock_final"
-                                    [class.is-invalid]="GestionarStock.controls['stock_final']|isInvalid" readonly>
+                                    formControlName="stock_final" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- [PRECIOS] Solo aplican al AÑADIR (entrada/compra). Cada precio tiene su
+                         propio check independiente; el campo aparece solo si su check está marcado.
+                         En "Quitar" no se muestran porque una salida no cambia precios. -->
+                    <div class="row" *ngIf="tipo_movimiento == 1">
+                        <div class="col-md-6 col-12">
+                            <div class="custom-control custom-checkbox mb-2">
+                                <input type="checkbox" class="custom-control-input" id="chk_actualizar_compra"
+                                    formControlName="actualizar_compra">
+                                <label class="custom-control-label" for="chk_actualizar_compra">Actualizar precio de
+                                    compra</label>
+                            </div>
+                            <div class="form-group" *ngIf="GestionarStock.get('actualizar_compra')?.value">
+                                <input type="number" formControlName="precio_compra"
+                                    placeholder="ingrese precio de compra" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="custom-control custom-checkbox mb-2">
+                                <input type="checkbox" class="custom-control-input" id="chk_actualizar_venta"
+                                    formControlName="actualizar_venta">
+                                <label class="custom-control-label" for="chk_actualizar_venta">Actualizar precio de
+                                    venta</label>
+                            </div>
+                            <div class="form-group" *ngIf="GestionarStock.get('actualizar_venta')?.value">
+                                <input type="text" formControlName="precio_venta" (input)="onInput($event)"
+                                    placeholder="ingrese precio de venta" class="form-control">
                             </div>
                         </div>
                     </div>

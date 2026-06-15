@@ -287,8 +287,8 @@ export class BajaComprobantesComponent implements OnInit {
             modalPdf.off('shown.bs.modal.verpdf').on('shown.bs.modal.verpdf', () => {
               this.zone.run(() => {
                 this.tabComprobante = 'TICKET';      // tab activo por defecto
-                this.url_pdf = encodeURI(respuesta.pdf);
-                this.url_ticket = encodeURI(respuesta.ticket);
+                this.url_pdf = encodeURI(this.NormalizarUrlComprobante(respuesta.pdf));
+                this.url_ticket = encodeURI(this.NormalizarUrlComprobante(respuesta.ticket));
               });
             });
             modalPdf.modal('show');
@@ -302,6 +302,18 @@ export class BajaComprobantesComponent implements OnInit {
         })
       },
     });
+  }
+
+  // [FIX PDF host] Reemplaza el host/base que arma el backend (RUTA_ARCHIVO,
+  // p.ej. http://localhost/MVC_CRM/) por environment.apiUrl, conservando la ruta
+  // desde "archivo/". Así el visor descarga el PDF del servidor del environment y
+  // no de localhost. Si no encuentra "archivo/", devuelve la URL tal cual.
+  private NormalizarUrlComprobante(url: string): string {
+    if (!url) { return url; }
+    const i = url.indexOf('archivo/');
+    if (i === -1) { return url; }
+    const base = environment.apiUrl.endsWith('/') ? environment.apiUrl : environment.apiUrl + '/';
+    return base + url.substring(i);
   }
 
   LimpiarInformacion() {

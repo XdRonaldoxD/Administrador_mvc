@@ -927,8 +927,13 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
             const modalPdf = $('#ajax-mostrar-pdf');
             modalPdf.off('shown.bs.modal.verpdf').on('shown.bs.modal.verpdf', () => {
               this.zone.run(() => {
-                this.url_pdf = respuesta.pdf;
-                this.url_ticket = respuesta.ticket;
+                // [FIX PDF host] El backend arma la URL con su propio RUTA_ARCHIVO,
+                // que en el servidor (HTTP por IP) sale como http://localhost/MVC_CRM/
+                // y el visor no puede descargar el PDF ("Invalid PDF structure").
+                // Reconstruimos el host/base usando environment.apiUrl y conservamos
+                // la ruta a partir de "archivo/" que devuelve el backend.
+                this.url_pdf = this.NormalizarUrlComprobante(respuesta.pdf);
+                this.url_ticket = this.NormalizarUrlComprobante(respuesta.ticket);
               });
             });
             modalPdf.modal('show');
@@ -963,6 +968,18 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     this.VolverPagina();
   }
 
+
+  // [FIX PDF host] Reemplaza el host/base que arma el backend (RUTA_ARCHIVO, p.ej.
+  // http://localhost/MVC_CRM/) por environment.apiUrl, conservando la ruta desde
+  // "archivo/". Así el visor siempre descarga el PDF del servidor configurado en el
+  // environment y no de localhost. Si no encuentra "archivo/", devuelve la URL tal cual.
+  private NormalizarUrlComprobante(url: string): string {
+    if (!url) { return url; }
+    const i = url.indexOf('archivo/');
+    if (i === -1) { return url; }
+    const base = environment.apiUrl.endsWith('/') ? environment.apiUrl : environment.apiUrl + '/';
+    return base + url.substring(i);
+  }
 
   private escapeHtml(value: any): string {
     if (value === null || value === undefined) { return ''; }

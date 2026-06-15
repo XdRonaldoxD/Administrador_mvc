@@ -257,8 +257,8 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
         const modalPdf = $('#ajax-mostrar-pdf');
         modalPdf.off('shown.bs.modal.verpdf').on('shown.bs.modal.verpdf', () => {
           this.zone.run(() => {
-            this.url_pdf = encodeURI(pdf);      // encodeURI por el espacio de "NOTA VENTA"
-            this.url_ticket = encodeURI(ticket);
+            this.url_pdf = encodeURI(this.NormalizarUrlComprobante(pdf));      // encodeURI por el espacio de "NOTA VENTA"
+            this.url_ticket = encodeURI(this.NormalizarUrlComprobante(ticket));
           });
         });
         modalPdf.modal('show');
@@ -323,6 +323,18 @@ export class VentasComponent implements AfterViewInit, OnDestroy, OnInit {
       },
     });
 
+  }
+
+  // [FIX PDF host] Reemplaza el host/base que arma el backend (item.ruta_archivo,
+  // p.ej. http://localhost/MVC_CRM/) por environment.apiUrl, conservando la ruta
+  // desde "archivo/". Así el visor descarga el PDF del servidor del environment y
+  // no de localhost. Si no encuentra "archivo/", devuelve la URL tal cual.
+  private NormalizarUrlComprobante(url: string): string {
+    if (!url) { return url; }
+    const i = url.indexOf('archivo/');
+    if (i === -1) { return url; }
+    const base = environment.apiUrl.endsWith('/') ? environment.apiUrl : environment.apiUrl + '/';
+    return base + url.substring(i);
   }
 
   private escapeHtml(value: any): string {

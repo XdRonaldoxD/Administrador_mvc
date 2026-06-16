@@ -50,6 +50,7 @@ import { QuillModule } from 'ngx-quill';
 import { PermisosComponent } from './permisos/permisos.component';
 import { MayusculaDirective } from '../directives/mayuscula.directive';
 import { KardexComponent } from './kardex/kardex.component';
+import { AvatarGeneroComponent } from './avatar-genero/avatar-genero.component';
 
 @NgModule({
   declarations: [
@@ -90,7 +91,8 @@ import { KardexComponent } from './kardex/kardex.component';
     PromocionComponent,
     ExtendedPdfComponent,
     ReporteVentaProductoComponent,
-    KardexComponent
+    KardexComponent,
+    AvatarGeneroComponent
   ],
   exports: [
     IsInvalidPipe,

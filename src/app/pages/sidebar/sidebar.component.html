@@ -5,8 +5,8 @@
         <nav class="sidebar-nav">
             <ul id="sidebarnav">
                 <li class="user-profile">
-                    <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><img
-                            src="assets/assets/images/users/profile.png" alt="user" /><span
+                    <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><app-avatar-genero
+                            [sexo]="identificacion?.sexo" [size]="38"></app-avatar-genero><span
                             class="hide-menu">{{identificacion.nombre}} </span></a>
                     <ul aria-expanded="false" class="collapse">
                         <li><a routerLink="/Datos-Personales/{{identificacion.sub}}">Mi Perfil </a></li>

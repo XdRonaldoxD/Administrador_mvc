@@ -262,7 +262,9 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
         this.MedioPago = resp || [];
         // [POS] Medio de pago por defecto = EFECTIVO (no el último de la lista).
         const efectivo = this.MedioPago.find((m: any) => (m.glosa_medio_pago || '').toUpperCase().includes('EFECTIVO'));
-        this.id_medio_pago = String(efectivo ? efectivo.id_medio_pago : (this.MedioPago.length ? this.MedioPago[0].id_medio_pago : 1));
+        // Sin String(): ng-select compara el valor del modelo contra bindValue
+        // (id_medio_pago) con ===, así que el default debe ser el mismo tipo (number).
+        this.id_medio_pago = efectivo ? efectivo.id_medio_pago : (this.MedioPago.length ? this.MedioPago[0].id_medio_pago : 1);
       },
       error: error => {
         this.toast.error(`Verificar los Pagos.`, 'Medio Pago');
@@ -292,7 +294,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
           })
         } else {
           element.cantidad_seleccionado = parseInt(element.cantidad_seleccionado) + 1;
-          element.precio_venta_producto = element.precioventa_stock_producto_bodega * element.cantidad_seleccionado;
+          element.precio_venta_producto = this.redondear2(element.precioventa_stock_producto_bodega * element.cantidad_seleccionado);
         }
         existeProducto = true;
       }
@@ -300,7 +302,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!existeProducto) {
       const mantencion = {
         cantidad_seleccionado: 1,
-        precio_venta_producto: datos.precioventa_stock_producto_bodega
+        precio_venta_producto: this.redondear2(datos.precioventa_stock_producto_bodega)
       };
       Object.assign(datos, mantencion);
       this.ProductoSeleccionados.push(datos);
@@ -334,7 +336,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     e.target.parentElement.parentElement.firstElementChild.value = cantidad;
     this.ProductoSeleccionados[indice].cantidad_seleccionado = cantidad;
-    this.ProductoSeleccionados[indice].precio_venta_producto = this.ProductoSeleccionados[indice].precioventa_stock_producto_bodega * this.ProductoSeleccionados[indice].cantidad_seleccionado;
+    this.ProductoSeleccionados[indice].precio_venta_producto = this.redondear2(this.ProductoSeleccionados[indice].precioventa_stock_producto_bodega * this.ProductoSeleccionados[indice].cantidad_seleccionado);
     this.CacularTotales();
   }
   DisminuirNumeroGeneral(e: any, indice: any) {
@@ -347,7 +349,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
       e.target.parentElement.parentElement.firstElementChild.value = cantidad;
       this.ProductoSeleccionados[indice].cantidad_seleccionado = cantidad;
     }
-    this.ProductoSeleccionados[indice].precio_venta_producto = this.ProductoSeleccionados[indice].precioventa_stock_producto_bodega * this.ProductoSeleccionados[indice].cantidad_seleccionado;
+    this.ProductoSeleccionados[indice].precio_venta_producto = this.redondear2(this.ProductoSeleccionados[indice].precioventa_stock_producto_bodega * this.ProductoSeleccionados[indice].cantidad_seleccionado);
 
     this.CacularTotales();
 
@@ -374,7 +376,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
       this.ProductoSeleccionados[indice].cantidad_seleccionado = cantidad;
       e.target.value = cantidad;
     }
-    this.ProductoSeleccionados[indice].precio_venta_producto = this.ProductoSeleccionados[indice].precioventa_stock_producto_bodega * this.ProductoSeleccionados[indice].cantidad_seleccionado;
+    this.ProductoSeleccionados[indice].precio_venta_producto = this.redondear2(this.ProductoSeleccionados[indice].precioventa_stock_producto_bodega * this.ProductoSeleccionados[indice].cantidad_seleccionado);
     this.CacularTotales();
   }
   EscribirProducto(e: any) {
@@ -428,6 +430,12 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
+  // Redondea a 2 decimales evitando el ruido de coma flotante (ej. 0.1*3 = 0.30000000000000004).
+  private redondear2(valor: any): number {
+    const n = Number(valor);
+    return isNaN(n) ? 0 : Number(n.toFixed(2));
+  }
+
   CacularTotales() {
     let total = 0;
     let totalexonerado = 0;
@@ -435,9 +443,9 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     let subtotal = 0;
     this.ProductoSeleccionados.forEach((element: any) => {
       if (element.id_tipo_afectacion == 1) {
-        total += element.precio_venta_producto;
+        total += Number(element.precio_venta_producto) || 0;
       } else {
-        totalexonerado += element.precio_venta_producto;
+        totalexonerado += Number(element.precio_venta_producto) || 0;
       }
 
     });
@@ -448,7 +456,7 @@ export class NotaVentaComponent implements OnInit, AfterViewInit, OnDestroy {
     subtotal += totalexonerado;
     this.Totales.igv = igv.toFixed(2);
     this.Totales.subtotal = subtotal.toFixed(2);
-    this.Totales.total = total + totalexonerado;
+    this.Totales.total = this.redondear2(total + totalexonerado);
     this.Totales_pagados.total_pagar = this.Totales.total;
     if (this.Totales_pagados.total_pagado >= this.Totales_pagados.total_pagar) {
       this.MontoPagarCliente = 0;

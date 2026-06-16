@@ -112,9 +112,9 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
       this.informacionForm.get('id_unidad')?.setValue(`${this.res.id_unidad ?? ''}`);
       this.informacionForm.get('id_tipo_concentracion')?.setValue(`${this.res.id_tipo_concentracion ?? ''}`);
       this.informacionForm.get('codigo_producto')?.setValue(this.res.codigo_producto);
-      this.informacionForm.get('tipo_inventario')?.setValue(this.res.id_tipo_inventario);
+      this.informacionForm.get('tipo_inventario')?.setValue(`${this.res.id_tipo_inventario ?? ''}`);
       this.informacionForm.get('visible_tienda')?.setValue(this.res.visibleonline_producto);
-      this.informacionForm.get('id_tipo_afectacion')?.setValue(this.res.id_tipo_afectacion);
+      this.informacionForm.get('id_tipo_afectacion')?.setValue(`${this.res.id_tipo_afectacion ?? ''}`);
       this.informacionForm.get('codigo_barra_producto')?.setValue(this.res.codigo_barra_producto);
       this.informacionForm.get('glosa_producto')?.setValue(this.res.glosa_producto);
       this.informacionForm.get('descripcion_corta')?.setValue(this.res.detalle_producto);
@@ -134,7 +134,13 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
       this.arregloEspecificacion = this.res.arreglo_especificacion;
       this.imagenes_producto = this.res.arreglo_imagen;
       this.listarProductoRelacionados = this.res.arreglo_relacionado;
-      this.arregloBodegas = this.res.stock_producto_bodega;
+      this.arregloBodegas = (this.res.stock_producto_bodega || []).map((b: any) => ({
+        ...b,
+        // precios con 2 decimales; el stock es cantidad entera (sin decimales)
+        ultimopreciocompra_stock_producto_bodega: this.redondear2(b.ultimopreciocompra_stock_producto_bodega),
+        precioventa_stock_producto_bodega: this.redondear2(b.precioventa_stock_producto_bodega),
+        total_stock_producto_bodega: Math.round(Number(b.total_stock_producto_bodega) || 0),
+      }));
       $(document).trigger("enhance.tablesaw");
     })
   }
@@ -174,6 +180,7 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
     //----------------------------------------------------------------------------
   }
   ngOnInit(): void {
+    setTimeout(() => window.scrollTo(0, 0)); // diferido: gana al render tardío (Quill/categorías)
     $("[data-dismiss='modal']").click();
     // PRIMERO SE INICIALIZA CON NGINIT EL COMPONENTE
     this.listarCategorias(this.res.id_tipo_inventario, true);
@@ -252,11 +259,12 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
 
   }
 
-  listarCategorias(valor_inventario: any, listarinicio = false) {
+  listarCategorias(valor_inventario?: any, listarinicio = false) {
     if (listarinicio) {
       this.id_tipo_inventario = valor_inventario;
     } else {
-      this.id_tipo_inventario = valor_inventario.value;
+      // ng-select ya actualizó el form control; leemos el valor desde el formulario.
+      this.id_tipo_inventario = this.informacionForm.value.tipo_inventario;
     }
     this.servicio_categoria.CargarCategoria(this.token, this.id_tipo_inventario).pipe(finalize(() => {
     })).subscribe(
@@ -588,6 +596,11 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
 
   GuardarProductoCompleto() {
     this.informacionForm.markAllAsTouched()
+    this.arregloBodegas = (this.arregloBodegas || []).map((b: any) => ({
+      ...b,
+      ultimopreciocompra_stock_producto_bodega: this.redondear2(b.ultimopreciocompra_stock_producto_bodega),
+      precioventa_stock_producto_bodega: this.redondear2(b.precioventa_stock_producto_bodega),
+    }));
     this.PrecioStockForm.get('stock')?.setValue(this.arregloBodegas);
     if (this.informacionForm.invalid) {
       Swal.fire({
@@ -613,7 +626,7 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
     if (this.checked_atributo.length > 0) {
       let cantidad = 0;
       this.checked_atributo.forEach((element: any) => {
-        cantidad += element.cantidad;
+        cantidad += Number(element.cantidad) || 0;
       });
       if (cantidad > this.PrecioStockForm.value.stock) {
         Swal.fire({
@@ -737,6 +750,14 @@ export class EditarProductoComponent implements OnInit, OnDestroy {
     const inputElement: any = event.target as HTMLInputElement;
     const valor = this.helper.validarNumeroDecimal(event);
     inputElement.value = valor;
+  }
+
+  // Redondea a 2 decimales evitando el "ruido" de los FLOAT (ej. 1.7000000476837158 -> 1.7).
+  // Devuelve el valor original si viene vacío/no numérico.
+  private redondear2(valor: any): any {
+    if (valor === null || valor === undefined || valor === '') { return valor; }
+    const n = Number(valor);
+    return isNaN(n) ? valor : Number(n.toFixed(2));
   }
 
   InputChangeMayuscula(event: any,tipo:string) {

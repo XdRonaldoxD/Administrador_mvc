@@ -1,0 +1,33 @@
+.avatar-genero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #fff;
+  line-height: 1;
+  vertical-align: middle;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .18);
+}
+
+/* Femenino: rosa */
+.avatar-genero--f { background: linear-gradient(135deg, #ff7eb3, #e0457b); }
+/* Masculino: azul */
+.avatar-genero--m { background: linear-gradient(135deg, #4f9cf0, #1f6fd6); }
+/* Neutro (sexo desconocido): gris */
+.avatar-genero--n { background: linear-gradient(135deg, #9aa6b2, #6b7785); }
+
+/* Reset contra los estilos del sidebar del template (.sidebar-nav > ul > li > a i),
+   que forzaban width:31px, font-size:24px y color gris, descentrando el ícono. */
+.avatar-genero i {
+  display: block;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: inherit !important;
+  line-height: 1 !important;
+  color: #fff !important;
+  text-align: center;
+  vertical-align: middle;
+}

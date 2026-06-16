@@ -69,6 +69,16 @@ export class HelpersService {
     return finalValue;
   }
 
+  validarNumeroEntero(event: any): any {
+    const inputElement = event.target as HTMLInputElement;
+    let inputValue: string = inputElement.value;
+
+    // Remover todo lo que no sea dígito (sin punto decimal): solo enteros
+    inputValue = inputValue.replace(/[^0-9]/g, '');
+
+    return inputValue;
+  }
+
   getToolbarConfig(): any {
     return {
       toolbar: [

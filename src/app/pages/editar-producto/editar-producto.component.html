@@ -76,6 +76,7 @@
                                                         <label for="emailAddress1">Nombre<strong
                                                                 class="text-danger">(*)</strong></label>
                                                         <input type="email" class="form-control"
+                                                            style="text-transform: uppercase;"
                                                             formControlName="glosa_producto"
                                                             placeholder="Nombre del producto"
                                                             (blur)="InputChangeMayuscula($event,'NOMBRE')"
@@ -93,12 +94,12 @@
                                                     <div class="form-group">
                                                         <label for="id_tipo_afectacion">Tipo Afectación<strong
                                                                 class="text-danger">(*)</strong></label>
-                                                        <select formControlName="id_tipo_afectacion"
-                                                            [class.is-invalid]="informacionForm.controls['id_tipo_afectacion']|isInvalid"
-                                                            class="form-control">
-                                                            <option value="">Seleccionar Afectación</option>
-                                                            <option value="{{item.id_tipo_afectacion}}" *ngFor="let item of tipo_afectacion">{{item.descripcion}}</option>
-                                                        </select>
+                                                        <ng-select formControlName="id_tipo_afectacion"
+                                                            placeholder="Seleccionar Afectación" [clearable]="false"
+                                                            [class.is-invalid]="informacionForm.controls['id_tipo_afectacion']|isInvalid">
+                                                            <ng-option value="{{item.id_tipo_afectacion}}"
+                                                                *ngFor="let item of tipo_afectacion">{{item.descripcion}}</ng-option>
+                                                        </ng-select>
                                                         <div class="text-danger">
                                                             <div
                                                                 *ngIf="informacionForm.controls['id_tipo_afectacion']|hasError:'required'">
@@ -127,35 +128,17 @@
                                                             class="fa fa-plus-circle" aria-hidden="true"></i></button>
                                                 </div>
 
-                                                <div class="col-md-12 col-12">
-                                                    <div class="form-group">
-                                                        <label for="location1">Descripción Extendida</label>
-                                                            <quill-editor formControlName="descripcion_extendida" #descripcion_extendida
-                                                            [modules]="modulesQuill"></quill-editor>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12 col-12">
-                                                    <div class="form-group">
-                                                        <label for="phoneNumber1">Descripción Corta</label>
-                                                        <quill-editor formControlName="descripcion_corta" #descripcion_corta
-                                                            [modules]="modulesQuill"></quill-editor>
-                                                    </div>
-                                                </div>
                                                 <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label for="date1">Tipo Inventario<strong
                                                                 class="text-danger">(*)</strong></label>
-                                                        <select (change)="listarCategorias($event.target)"
-                                                            formControlName="tipo_inventario"
-                                                            [class.is-invalid]="informacionForm.controls['tipo_inventario']|isInvalid"
-                                                            class="form-control">
-                                                            <option value="">Seleccionar Inventario</option>
-                                                            <option *ngFor="let item of tipo_inventario"
-                                                                value="{{item.id_tipo_inventario}}">
-                                                                {{item.glosa_tipo_inventario}}</option>
-                                                        </select>
+                                                        <ng-select formControlName="tipo_inventario"
+                                                            (change)="listarCategorias()"
+                                                            placeholder="Seleccionar Inventario" [clearable]="false"
+                                                            [class.is-invalid]="informacionForm.controls['tipo_inventario']|isInvalid">
+                                                            <ng-option value="{{item.id_tipo_inventario}}"
+                                                                *ngFor="let item of tipo_inventario">{{item.glosa_tipo_inventario}}</ng-option>
+                                                        </ng-select>
                                                         <div class="text-danger">
                                                             <div
                                                                 *ngIf="informacionForm.controls['tipo_inventario']|hasError:'required'">
@@ -203,6 +186,22 @@
                                                                 *ngFor="let item of arregloTipoConcentracion">
                                                                 {{item.glosa_tipo_concentracion}}</ng-option>
                                                         </ng-select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                    <div class="form-group">
+                                                        <label for="location1">Descripción Extendida</label>
+                                                            <quill-editor formControlName="descripcion_extendida" #descripcion_extendida
+                                                            [modules]="modulesQuill"></quill-editor>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 col-12">
+                                                    <div class="form-group">
+                                                        <label for="phoneNumber1">Descripción Corta</label>
+                                                        <quill-editor formControlName="descripcion_corta" #descripcion_corta
+                                                            [modules]="modulesQuill"></quill-editor>
                                                     </div>
                                                 </div>
                                             </div>

@@ -76,7 +76,7 @@ export class CajaComponent implements AfterViewInit, OnDestroy, OnInit {
     this.usuario = servicio_login.getIdentity();
     this.FiltroCajaBuscar = this.fb.group({
       fechacreacion_caja_fin: [this.pipe.transform(Date.now(), 'yyyy-MM-dd'), Validators.required],
-      fechacreacion_caja_inicio: [this.pipe.transform(Date.now(), 'yyyy-MM-dd'), Validators.required]
+      fechacreacion_caja_inicio: [this.pipe.transform(new Date(this.today.getFullYear(), this.today.getMonth(), 1), 'yyyy-MM-dd'), Validators.required]
     });
     this.CajaNueva = this.fb.group({
       id_usuario: [this.usuario.sub, [Validators.required]],

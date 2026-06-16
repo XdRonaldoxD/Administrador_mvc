@@ -17,11 +17,11 @@
                             </div>
                         </div>
                     </div>
-                    <ul class="nav nav-pills m-t-30 m-b-30">
-                        <li class=" nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab"
+                    <ul class="nav nav-pills status-pills m-t-30 m-b-30">
+                        <li class=" nav-item"> <a href="#navpills-1" class="nav-link pill-activos active" data-toggle="tab"
                                 aria-expanded="false">Activos</a> </li>
-                        <li class="nav-item"> <a href="#navpills-2" class="nav-link" data-toggle="tab"
-                                aria-expanded="false" (click)="cargarDeshabilitados()">Deshabilitado</a> </li>
+                        <li class="nav-item"> <a href="#navpills-2" class="nav-link pill-desactivados" data-toggle="tab"
+                                aria-expanded="false" (click)="cargarDeshabilitados()">Desactivados</a> </li>
                     </ul>
                     <div class="tab-content br-n pn">
                         <div id="navpills-1" class="tab-pane active">
@@ -57,13 +57,13 @@
                                                         <div class="button-group">
                                                             <button type="button" style="width: 20px;height: 20px;"
                                                                 class="btn btn-sm btn-info btn-circle"
-                                                                tooltip="Editar Usuario" placement="top"
+                                                                tooltip="Editar Sucursal" placement="top"
                                                                 [showDelay]="50" [hideDelay]="50"
                                                                 (click)="EditarSucursal(e)">
                                                                 <i class="fa  fa-edit "></i> </button>
                                                             <button type="button" style="width: 20px;height: 20px;"
                                                                 class="btn btn-sm btn-danger btn-circle"
-                                                                tooltip="Deshabilitar Usuario" placement="top"
+                                                                tooltip="Deshabilitar Sucursal" placement="top"
                                                                 (click)="EstadoSucursal('DESHABILITAR',e.id_sucursal)"
                                                                 [showDelay]="50" [hideDelay]="50">
                                                                 <i class="fa fa-times"></i>
@@ -118,13 +118,13 @@
                                                         <div class="button-group">
                                                             <button type="button" style="width: 20px;height: 20px;"
                                                                 class="btn btn-sm btn-info btn-circle"
-                                                                tooltip="Editar Usuario" placement="top"
+                                                                tooltip="Editar Sucursal" placement="top"
                                                                 [showDelay]="50" [hideDelay]="50"
                                                                 (click)="EditarSucursal(e)">
                                                                 <i class="fa  fa-edit "></i> </button>
                                                             <button type="button" style="width: 20px;height: 20px;"
                                                                 class="btn btn-sm btn-success btn-circle"
-                                                                tooltip="habilitar Usuario" placement="top"
+                                                                tooltip="Habilitar Sucursal" placement="top"
                                                                 (click)="EstadoSucursal('ACTIVAR',e.id_sucursal)"
                                                                 [showDelay]="50" [hideDelay]="50">
                                                                 <i class="fa fa-check"></i>

@@ -320,12 +320,16 @@
                                                     <label for="medio_pago" class="col-sm-12 control-label">Medio de
                                                         Pago</label>
                                                     <div class="col-sm-12">
-                                                        <select [(ngModel)]="id_medio_pago" class="form-control"
-                                                            (change)="MedioPagoSeleccionado()" name="medio_pago"
-                                                            id="medio_pago">
-                                                            <option *ngFor="let item of MedioPago"
-                                                                [value]="item.id_medio_pago">{{item.glosa_medio_pago}}</option>
-                                                        </select>
+                                                        <!-- [FIX 2 clicks] Se cambió el <select> nativo por ng-select
+                                                             (igual que Cliente/Departamento): abre a un solo clic. El
+                                                             nativo dentro de este panel requería dos clics para desplegar. -->
+                                                        <ng-select [items]="MedioPago"
+                                                            bindLabel="glosa_medio_pago" bindValue="id_medio_pago"
+                                                            [(ngModel)]="id_medio_pago" name="medio_pago" id="medio_pago"
+                                                            [clearable]="false" [searchable]="false"
+                                                            (change)="MedioPagoSeleccionado()"
+                                                            placeholder="Seleccione medio de pago">
+                                                        </ng-select>
                                                     </div>
                                                 </div>
                                             </div>

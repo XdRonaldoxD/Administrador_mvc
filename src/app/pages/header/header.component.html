@@ -63,13 +63,13 @@
                 <!-- ============================================================== -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false"><img src="assets/assets/images/users/1.jpg"
-                            alt="user" class="profile-pic" /></a>
+                        aria-haspopup="true" aria-expanded="false"><app-avatar-genero
+                            [sexo]="identificacion?.sexo" [size]="36"></app-avatar-genero></a>
                     <div class="dropdown-menu dropdown-menu-right animated flipInY">
                         <ul class="dropdown-user">
                             <li>
                                 <div class="dw-user-box">
-                                    <div class="u-img"><img src="assets/assets/images/users/1.jpg" alt="user"></div>
+                                    <div class="u-img"><app-avatar-genero [sexo]="identificacion?.sexo" [size]="60"></app-avatar-genero></div>
                                     <div class="u-text">
                                         <h4>{{identificacion.nombre}} {{identificacion.apellido_paterno}}
                                             {{identificacion.apellido_materno}}</h4>

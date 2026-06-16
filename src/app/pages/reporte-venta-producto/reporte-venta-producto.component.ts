@@ -41,11 +41,13 @@ export class ReporteVentaProductoComponent implements AfterViewInit, OnDestroy, 
     private helper: HelpersService
   ) {
     const today = new Date();
+    const primerDiaMes = new Date(today.getFullYear(), today.getMonth(), 1);
     const formattedDate = this.helper.formatDate(today);
+    const formattedPrimerDia = this.helper.formatDate(primerDiaMes);
     this.token = this.servicio_login.getToken();
     this.identity = this.servicio_login.getIdentity();
     this.filtrarForm = this.fb.group({
-      fecha_inicio: [formattedDate],
+      fecha_inicio: [formattedPrimerDia],
       fecha_fin: [formattedDate],
       id_usuario:[this.identity.sub]
     });
@@ -102,7 +104,11 @@ export class ReporteVentaProductoComponent implements AfterViewInit, OnDestroy, 
           environment.api_url + "&controller=ReporteVentaProducto&action=tablaReporteVenta",
           dataTablesParameters, { headers: headers }
         ).subscribe((resp) => {
-          this.productovendidos = resp.data;
+          // La cantidad es entera (unidades); DECIMAL llega como "2.000", lo normalizamos a entero.
+          this.productovendidos = (resp.data || []).map((e: any) => ({
+            ...e,
+            cantidad_negocio_detalle: Math.round(Number(e.cantidad_negocio_detalle) || 0)
+          }));
           this.renderizarPastel();//CREAMOS EL DIAGRAMA DE PASTEL
           callback({
             recordsTotal: resp.recordsTotal,
@@ -236,9 +242,11 @@ export class ReporteVentaProductoComponent implements AfterViewInit, OnDestroy, 
   }
 
   obtenerDatosDinamicos(): { labels: string[], data: number[] } {
-    //SEPARA MOS LA GLOSA Y LA CANTIDAD 
+    //SEPARA MOS LA GLOSA Y LA CANTIDAD
+    // ApexCharts requiere NÚMEROS en series; las columnas DECIMAL llegan como string (ej. "2.000"),
+    // por eso se castea con Number(); si no, dibuja la leyenda pero no las rebanadas del pastel.
     const glosaProductos = this.productovendidos.slice(0, 10).map((item: any) => item.glosa_producto);
-    const cantidades = this.productovendidos.slice(0, 10).map((item: any) => item.cantidad_negocio_detalle);
+    const cantidades = this.productovendidos.slice(0, 10).map((item: any) => Number(item.cantidad_negocio_detalle) || 0);
     return {
       labels: glosaProductos,
       data: cantidades

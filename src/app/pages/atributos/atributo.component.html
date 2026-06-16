@@ -18,11 +18,11 @@
 
                         </div>
                     </div>
-                    <ul class="nav nav-pills m-t-30 m-b-30">
-                        <li class=" nav-item"> <a href="#navpills-1" class="nav-link active" data-toggle="tab"
+                    <ul class="nav nav-pills status-pills m-t-30 m-b-30">
+                        <li class=" nav-item"> <a href="#navpills-1" class="nav-link pill-activos active" data-toggle="tab"
                                 aria-expanded="false">Activos</a> </li>
-                        <li class="nav-item"> <a href="#navpills-2" class="nav-link" data-toggle="tab"
-                                aria-expanded="false" (click)="cargarDeshabilitados()">Deshabilitado</a> </li>
+                        <li class="nav-item"> <a href="#navpills-2" class="nav-link pill-desactivados" data-toggle="tab"
+                                aria-expanded="false" (click)="cargarDeshabilitados()">Desactivados</a> </li>
                     </ul>
                     <div class="tab-content br-n pn">
                         <div id="navpills-1" class="tab-pane active">
@@ -47,7 +47,7 @@
                                                             <button (click)="TraerCategoria(e.id_atributo)"
                                                                 type="button" style="width: 20px;height: 20px;"
                                                                 class="btn btn-sm btn-info btn-circle"
-                                                                tooltip="Editar Categoria" placement="top"
+                                                                tooltip="Editar Atributo" placement="top"
                                                                 [showDelay]="100"
                                                                 ><i
                                                                     class="fa fa-pencil-square"></i> </button>
@@ -55,7 +55,7 @@
                                                                 (click)="Habilitar_Deshabilitar_Categoria(e.id_atributo,'desactivado')"
                                                                 type="button" style="width: 20px;height: 20px;"
                                                                 class="btn btn-sm btn-danger btn-circle"
-                                                                tooltip="Deshabilitar Categoria" placement="top"
+                                                                tooltip="Deshabilitar Atributo" placement="top"
                                                                 [showDelay]="100"
                                                                 ><i
                                                                     class="fa fa-times-circle"></i> </button>
@@ -98,14 +98,14 @@
                                                         <div class="button-group">
                                                             <button (click)="TraerCategoria(e.id_atributo)"
                                                                 type="button" style="width: 20px;height: 20px;"
-                                                                tooltip="Editar Categoria" placement="top"
+                                                                tooltip="Editar Atributo" placement="top"
                                                                 [showDelay]="100"
                                                                 class="btn btn-sm btn-info btn-circle"><i
                                                                     class="fa fa-pencil-square"></i> </button>
                                                             <button
                                                                 (click)="Habilitar_Deshabilitar_Categoria(e.id_atributo,'activado')"
                                                                 type="button" style="width: 20px;height: 20px;"
-                                                                tooltip="Activar Categoria" placement="top"
+                                                                tooltip="Activar Atributo" placement="top"
                                                                 [showDelay]="100"
                                                                 class="btn btn-sm btn-success btn-circle"><i
                                                                     class="fa fa-check"></i> </button>

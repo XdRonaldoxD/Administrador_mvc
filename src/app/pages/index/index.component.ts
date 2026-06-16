@@ -115,7 +115,7 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
     if (elMes && this.data?.por_mes) {
       const opts: any = {
         chart: { type: 'bar', height: 300, toolbar: { show: false }, fontFamily: 'inherit' },
-        series: [{ name: 'Ventas', data: this.data.por_mes.data }],
+        series: [{ name: 'Ventas', data: (this.data.por_mes.data || []).map((v: any) => Number(v) || 0) }],
         xaxis: { categories: this.data.por_mes.labels },
         colors: [azul],
         plotOptions: { bar: { borderRadius: 4, columnWidth: '55%' } },
@@ -134,7 +134,7 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
     if (elUsr && this.data?.es_admin && this.data?.por_usuario?.data?.length) {
       const opts: any = {
         chart: { type: 'donut', height: 300, fontFamily: 'inherit' },
-        series: this.data.por_usuario.data,
+        series: (this.data.por_usuario.data || []).map((v: any) => Number(v) || 0),
         labels: this.data.por_usuario.labels,
         colors: paleta,
         legend: { position: 'bottom' },
@@ -151,7 +151,7 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
     if (elTop && this.data?.top_productos?.data?.length) {
       const opts: any = {
         chart: { type: 'bar', height: 300, toolbar: { show: false }, fontFamily: 'inherit' },
-        series: [{ name: 'Vendido', data: this.data.top_productos.data }],
+        series: [{ name: 'Vendido', data: (this.data.top_productos.data || []).map((v: any) => Number(v) || 0) }],
         xaxis: { categories: this.data.top_productos.labels },
         colors: ['#39DA8A'],
         plotOptions: { bar: { horizontal: true, borderRadius: 4 } },

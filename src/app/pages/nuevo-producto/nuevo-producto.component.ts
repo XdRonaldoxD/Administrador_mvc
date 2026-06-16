@@ -103,6 +103,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
       this.arregloBodegas = respuesta.datos.bodegas;
       this.arregloFormaFarmaceutica = respuesta.datos.unidad;
       this.arregloTipoConcentracion = respuesta.datos.tipo_concentracion;
+      this.preseleccionarAfectacionGravada();
     })
   }
 
@@ -115,6 +116,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
+    setTimeout(() => window.scrollTo(0, 0)); // diferido: gana al render tardío (Quill/categorías)
     // [CACHE] Precarga TODAS las marcas activas (de localStorage si existe, si no
     // una sola consulta) para que el ng-select de marca las muestre todas y filtre
     // del lado del cliente, sin pegarle al backend en cada búsqueda.
@@ -216,9 +218,35 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
     $(".color_agregar").append(color);
   }
 
-  listarCategorias(valor_inventario: any) {
-    this.id_tipo_inventario = valor_inventario.value;
-    this.servicio_categoria.CargarCategoria(this.token, valor_inventario.value).pipe(finalize(() => {
+  // En un producto nuevo, la afectación por defecto es OP. GRAVADAS (18%) (caso más
+  // común en botica). Solo se aplica si aún no hay una afectación seleccionada, para
+  // no pisar otra elección (p. ej. medicamentos exonerados).
+  private preseleccionarAfectacionGravada(): void {
+    const afectacionActual = this.informacionForm.controls['id_tipo_afectacion'].value;
+    if (afectacionActual) { return; }
+
+    const gravada = (this.tipo_afectacion || []).find(
+      (item: any) => /GRAVAD/i.test(item.descripcion || '')
+    );
+    if (gravada) {
+      // ng-option usa valores string (interpolación): setValue como string para que haga match.
+      this.informacionForm.controls['id_tipo_afectacion'].setValue(`${gravada.id_tipo_afectacion}`);
+    }
+  }
+
+  // Redondea a 2 decimales evitando el "ruido" de los FLOAT (ej. 1.7000000476837158 -> 1.7).
+  // Devuelve el valor original si viene vacío/no numérico.
+  private redondear2(valor: any): any {
+    if (valor === null || valor === undefined || valor === '') { return valor; }
+    const n = Number(valor);
+    return isNaN(n) ? valor : Number(n.toFixed(2));
+  }
+
+  listarCategorias() {
+    // ng-select ya actualizó el form control; leemos el valor desde el formulario.
+    const valor_inventario = this.informacionForm.value.tipo_inventario;
+    this.id_tipo_inventario = valor_inventario;
+    this.servicio_categoria.CargarCategoria(this.token, valor_inventario).pipe(finalize(() => {
     })).subscribe(
       {
         next: (arreglo) => {
@@ -527,6 +555,11 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
 
     //
     this.informacionForm.markAllAsTouched()
+    this.arregloBodegas = (this.arregloBodegas || []).map((b: any) => ({
+      ...b,
+      ultimopreciocompra_stock_producto_bodega: this.redondear2(b.ultimopreciocompra_stock_producto_bodega),
+      precioventa_stock_producto_bodega: this.redondear2(b.precioventa_stock_producto_bodega),
+    }));
     this.PrecioStockForm.get('stock')?.setValue(this.arregloBodegas);
     if (this.informacionForm.invalid) {
       Swal.fire({
@@ -566,7 +599,7 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
     if (this.checked_atributo.length > 0) {
       let cantidad = 0;
       this.checked_atributo.forEach((element: any) => {
-        cantidad += element.cantidad;
+        cantidad += Number(element.cantidad) || 0;
       });
 
       if (cantidad > this.PrecioStockForm.value.stock) {
@@ -740,6 +773,20 @@ export class NuevoProductoComponent implements OnInit, OnDestroy {
   onInput(event: any): void {
     const inputElement: any = event.target as HTMLInputElement;
     inputElement.value = this.helper.validarNumeroDecimal(event);
+  }
+
+  // Precios: máximo 2 decimales. Limpia el valor y sincroniza el modelo.
+  onInputDecimal(element: any, campo: string, event: any): void {
+    const valor: any = this.helper.validarNumeroDecimal(event);
+    element[campo] = valor;
+    event.target.value = valor;
+  }
+
+  // Cantidad/stock: solo enteros, no permite decimales. Sincroniza el modelo.
+  onInputEntero(element: any, campo: string, event: any): void {
+    const valor: any = this.helper.validarNumeroEntero(event);
+    element[campo] = valor;
+    event.target.value = valor;
   }
 
 

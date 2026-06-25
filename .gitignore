@@ -43,3 +43,8 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Claude Code (config local / formato universal redundante)
+.claude/settings.json
+.claude/settings.local.json
+.agents/

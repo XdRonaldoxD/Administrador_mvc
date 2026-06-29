@@ -34,6 +34,7 @@
                             class="mdi mdi-cash"></i><span class="hide-menu">PAGOS</span></a>
                     <ul aria-expanded="false" class="collapse" #EventoClick>
                         <li *ngIf="permiso.puedeVer('PAGO NOTA VENTA')"><a (click)="Seleccionar($event.target)" class="desactivar" routerLinkActive="active" routerLink="/Nota-Venta" href="javascript:void()"> <i class="mdi mdi-square-inc-cash"></i> PAGO NOTA VENTA</a></li>
+                        <li *ngIf="permiso.puedeVer('PAGO NOTA VENTA')"><a (click)="Seleccionar($event.target)" class="desactivar" routerLinkActive="active" routerLink="/Venta-Silicona" href="javascript:void()"> <i class="fa fa-tint"></i> VENTA SILICONA</a></li>
                         <li *ngIf="permiso.puedeVer('VENTAS')"><a (click)="Seleccionar($event.target)" class="desactivar" routerLinkActive="active" routerLink="/Ventas" href="javascript:void()"> <i class="mdi mdi-note-multiple"></i> VENTAS</a></li>
                         <li *ngIf="permiso.puedeVer('CAJA')"><a (click)="Seleccionar($event.target)" class="desactivar" routerLinkActive="active" routerLink="/Caja" href="javascript:void()"><i class="mdi mdi-clipboard-flow"></i> CAJA</a></li>
                         <li *ngIf="permiso.puedeVer('ANULAR DOCUMENTOS')"><a (click)="Seleccionar($event.target)" class="desactivar" routerLinkActive="active" routerLink="/Baja-Comprobantes" href="javascript:void()"><i class="mdi mdi-clipboard-flow"></i> ANULAR DOCUMENTOS</a></li>

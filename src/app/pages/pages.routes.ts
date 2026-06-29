@@ -35,6 +35,7 @@ import { ReporteVentaProductoComponent } from './reporte-venta-producto/reporte-
 import { PermisosComponent } from './permisos/permisos.component';
 import { PermisoGuard } from '../guards/permiso.guard';
 import { KardexComponent } from './kardex/kardex.component';
+import { VentaSiliconaComponent } from './venta-silicona/venta-silicona.component';
 
 
 const pagesRoutes: Routes = [
@@ -76,6 +77,7 @@ const pagesRoutes: Routes = [
       { path: 'chatBox', component: ChatBoxComponent, canActivate: [PermisoGuard], data: { modulo: 'CHAT CLIENTE' } },
       { path: 'Importar-Inventario', component: MigrarproductoComponent, canActivate: [PermisoGuard], data: { modulo: 'REPORTE PRODUCTOS' } },
       { path: 'Nota-Venta', component: NotaVentaComponent, canActivate: [PermisoGuard], data: { modulo: 'PAGO NOTA VENTA' } },
+      { path: 'Venta-Silicona', component: VentaSiliconaComponent, canActivate: [PermisoGuard], data: { modulo: 'PAGO NOTA VENTA' } },
       { path: 'Caja', component: CajaComponent, canActivate: [PermisoGuard], data: { modulo: 'CAJA' } },
       { path: 'Ventas', component: VentasComponent, canActivate: [PermisoGuard], data: { modulo: 'VENTAS' } },
 

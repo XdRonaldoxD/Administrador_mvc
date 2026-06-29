@@ -51,6 +51,7 @@ import { PermisosComponent } from './permisos/permisos.component';
 import { MayusculaDirective } from '../directives/mayuscula.directive';
 import { KardexComponent } from './kardex/kardex.component';
 import { AvatarGeneroComponent } from './avatar-genero/avatar-genero.component';
+import { VentaSiliconaComponent } from './venta-silicona/venta-silicona.component';
 
 @NgModule({
   declarations: [
@@ -92,7 +93,8 @@ import { AvatarGeneroComponent } from './avatar-genero/avatar-genero.component';
     ExtendedPdfComponent,
     ReporteVentaProductoComponent,
     KardexComponent,
-    AvatarGeneroComponent
+    AvatarGeneroComponent,
+    VentaSiliconaComponent
   ],
   exports: [
     IsInvalidPipe,

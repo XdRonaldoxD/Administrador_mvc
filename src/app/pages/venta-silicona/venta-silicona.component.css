@@ -1,0 +1,41 @@
+/* Solo estilos propios mínimos; el layout/responsive lo da Bootstrap 4 del sistema. */
+
+.vs-flav {
+  border: 2px solid;
+  border-radius: 12px;
+  padding: 14px 12px;
+  min-height: 74px;
+  white-space: normal;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+.vs-flav:hover { filter: brightness(0.98); }
+.vs-flav--sel { outline: 4px solid #185FA5; outline-offset: -2px; }
+.vs-flav-nombre { font-size: 18px; font-weight: 600; }
+.vs-flav-stock { font-size: 12px; opacity: .75; }
+
+.vs-stepper {
+  background: #F1EFE8;
+  border-radius: 14px;
+  padding: 10px 16px;
+}
+.vs-step {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid #B4B2A9;
+  background: #fff;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+}
+.vs-step:active { background: #E9E7E0; }
+.vs-onzas-num { font-size: 36px; font-weight: 700; line-height: 1; }
+
+.vs-total { font-size: 32px; font-weight: 700; color: #185FA5; line-height: 1; }
+
+.vs-size { min-height: 60px; border-radius: 12px; padding: 8px; }
+.vs-size small { font-size: 12px; }
